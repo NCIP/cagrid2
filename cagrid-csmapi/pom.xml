@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.cagrid</groupId>
+		<artifactId>cagrid-osgi</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cagrid-csmapi</artifactId>
+	<packaging>bundle</packaging>
+	<name>caGrid CSMAPI repackaging</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Embed-Dependency>csmapi</Embed-Dependency>
+						<Export-Package>
+							gov.nih.nci.security,
+							gov.nih.nci.security.authentication,
+							gov.nih.nci.security.authentication.callback,
+							gov.nih.nci.security.authentication.helper,
+							gov.nih.nci.security.authentication.loginmodules,
+							gov.nih.nci.security.authentication.principal,
+							gov.nih.nci.security.authorization,
+							gov.nih.nci.security.authorization.domainobjects,
+							gov.nih.nci.security.authorization.jaas,
+							gov.nih.nci.security.constants,
+							gov.nih.nci.security.dao,
+							gov.nih.nci.security.dao.hibernate,
+							gov.nih.nci.security.exceptions,
+							gov.nih.nci.security.exceptions.internal,
+							gov.nih.nci.security.junk,
+							gov.nih.nci.security.provisioning,
+							gov.nih.nci.security.system,
+							gov.nih.nci.security.util
+						</Export-Package>
+						<Import-Package>*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>gov.nih.nci.security</groupId>
+			<artifactId>csmapi</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/csmapi.jar</systemPath>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GTS" targetNamespace="http://cagrid.nci.nih.gov/GTS/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:binding="http://cagrid.nci.nih.gov/GTS/bindings" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/GTS/bindings" location="GTS_bindings.wsdl"/>
+  <wsdl:service name="GTSService">
+    <wsdl:port name="GTSPortTypePort" binding="binding:GTSPortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

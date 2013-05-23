@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="defaultPropertiesPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:META-INF/spring/gridgrouper.properties" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<bean id="database" class="org.cagrid.tools.database.Database">
+		<constructor-arg value="${cagrid.gridgrouper.service.db.host}" />
+		<constructor-arg value="${cagrid.gridgrouper.service.db.port}" />
+		<constructor-arg value="${cagrid.gridgrouper.service.db.user}" />
+		<constructor-arg value="${cagrid.gridgrouper.service.db.password}" />
+		<constructor-arg value="${cagrid.gridgrouper.service.name}" />
+	</bean>
+
+	<bean id="gridGrouperService" class="org.cagrid.gridgrouper.service.impl.GridGrouperServiceImpl"/>
+</beans>

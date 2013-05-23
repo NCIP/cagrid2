@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.cds.service">
+		<prop key="cagrid.cds.service.name">cds</prop>
+
+        <prop key="cagrid.cds.service.db.host">localhost</prop>
+		<prop key="cagrid.cds.service.db.port">3306</prop>
+		<prop key="cagrid.cds.service.db.user">root</prop>
+		<prop key="cagrid.cds.service.db.password"></prop>
+
+        <prop key="cagrid.cds.service.max.delegation.path.length">0</prop>
+        <prop key="cagrid.cds.service.dbkeymanager.key.encyption.password">password</prop>
+		<prop key="cagrid.cds.service.metadata.url">serviceMetadata.xml</prop>
+        <prop key="cagrid.cds.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
+        <prop key="cagrid.cds.service.security.delegated.metadata.url">delegated-serviceSecurityMetadata.xml</prop>
+	</osgix:cm-properties>
+
+	<ctx:property-placeholder properties-ref="preProps" />
+
+	<osgi:service ref="cds" interface="org.cagrid.cds.service.CredentialDelegationService" />
+    <osgi:service ref="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.DelegatedCredentialService" />
+
+</beans>

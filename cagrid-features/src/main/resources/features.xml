@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<features>
+	<feature name="cagrid" version="${project.version}">
+		<!-- <bundle>mvn:${project.groupId}/cagrid-csmapi/${project.version}</bundle> -->
+		<bundle>mvn:${project.groupId}/cagrid-metadata-model/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-opensaml-api/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-core/${project.version}</bundle>
+	</feature>
+</features>

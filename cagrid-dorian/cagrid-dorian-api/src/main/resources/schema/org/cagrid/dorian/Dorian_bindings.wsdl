@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:porttype="http://cagrid.nci.nih.gov/Dorian" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/Dorian" location="./Dorian.wsdl"/>
+  <wsdl:binding name="DorianPortTypeSOAPBinding" type="porttype:DorianPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="registerWithIdP">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RegisterWithIdPRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserPropertyFault">
+        <soap:fault name="InvalidUserPropertyFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findLocalUsers">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/FindLocalUsersRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateLocalUser">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UpdateLocalUserRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NoSuchUserFault">
+        <soap:fault name="NoSuchUserFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeLocalUser">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RemoveLocalUserRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createProxy">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/CreateProxyRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidAssertionFault">
+        <soap:fault name="InvalidAssertionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidProxyFault">
+        <soap:fault name="InvalidProxyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserPolicyFault">
+        <soap:fault name="UserPolicyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCACertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetCACertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTrustedIdPs">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetTrustedIdPsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addTrustedIdP">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/AddTrustedIdPRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidTrustedIdPFault">
+        <soap:fault name="InvalidTrustedIdPFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateTrustedIdP">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UpdateTrustedIdPRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidTrustedIdPFault">
+        <soap:fault name="InvalidTrustedIdPFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeTrustedIdP">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RemoveTrustedIdPRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidTrustedIdPFault">
+        <soap:fault name="InvalidTrustedIdPFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findGridUsers">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/FindGridUsersRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateGridUser">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UpdateGridUserRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserFault">
+        <soap:fault name="InvalidUserFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeGridUser">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RemoveGridUserRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserFault">
+        <soap:fault name="InvalidUserFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGridUserPolicies">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetGridUserPoliciesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addAdmin">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/AddAdminRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeAdmin">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RemoveAdminRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAdmins">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetAdminsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="requestHostCertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RequestHostCertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidHostCertificateFault">
+        <soap:fault name="InvalidHostCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidHostCertificateRequestFault">
+        <soap:fault name="InvalidHostCertificateRequestFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getOwnedHostCertificates">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetOwnedHostCertificatesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="approveHostCertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/ApproveHostCertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidHostCertificateFault">
+        <soap:fault name="InvalidHostCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findHostCertificates">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/FindHostCertificatesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateHostCertificateRecord">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UpdateHostCertificateRecordRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidHostCertificateFault">
+        <soap:fault name="InvalidHostCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="renewHostCertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RenewHostCertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidHostCertificateFault">
+        <soap:fault name="InvalidHostCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="changeIdPUserPassword">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/ChangeIdPUserPasswordRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserPropertyFault">
+        <soap:fault name="InvalidUserPropertyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="doesLocalUserExist">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/DoesLocalUserExistRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="changeLocalUserPassword">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/ChangeLocalUserPasswordRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserPropertyFault">
+        <soap:fault name="InvalidUserPropertyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateUserCertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UpdateUserCertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserCertificateFault">
+        <soap:fault name="InvalidUserCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="requestUserCertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RequestUserCertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidAssertionFault">
+        <soap:fault name="InvalidAssertionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="UserPolicyFault">
+        <soap:fault name="UserPolicyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findUserCertificates">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/FindUserCertificatesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserCertificateFault">
+        <soap:fault name="InvalidUserCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeUserCertificate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RemoveUserCertificateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserCertificateFault">
+        <soap:fault name="InvalidUserCertificateFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="performFederationAudit">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/PerformFederationAuditRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="performIdentityProviderAudit">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/PerformIdentityProviderAuditRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="registerLocalUser">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/RegisterLocalUserRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserPropertyFault">
+        <soap:fault name="InvalidUserPropertyFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="userSearch">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UserSearchRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hostSearch">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/HostSearchRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAccountProfile">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetAccountProfileRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateAccountProfile">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/UpdateAccountProfileRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NoSuchUserFault">
+        <soap:fault name="NoSuchUserFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidUserPropertyFault">
+        <soap:fault name="InvalidUserPropertyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="setPublish">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/SetPublishRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidTrustedIdPFault">
+        <soap:fault name="InvalidTrustedIdPFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getPublish">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/Dorian/GetPublishRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidTrustedIdPFault">
+        <soap:fault name="InvalidTrustedIdPFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DorianInternalFault">
+        <soap:fault name="DorianInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceSecurityMetadata">
+      <soap:operation soapAction="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="authenticateUser">
+      <soap:operation soapAction="http://authentication.gaards.cagrid.org/AuthenticationService/AuthenticateUserRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="AuthenticationProviderFault">
+        <soap:fault name="AuthenticationProviderFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientAttributeFault">
+        <soap:fault name="InsufficientAttributeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="CredentialNotSupportedFault">
+        <soap:fault name="CredentialNotSupportedFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidCredentialFault">
+        <soap:fault name="InvalidCredentialFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceProperty">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="QueryResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnknownQueryExpressionDialectFault">
+        <soap:fault name="UnknownQueryExpressionDialectFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidQueryExpressionFault">
+        <soap:fault name="InvalidQueryExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="QueryEvaluationErrorFault">
+        <soap:fault name="QueryEvaluationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

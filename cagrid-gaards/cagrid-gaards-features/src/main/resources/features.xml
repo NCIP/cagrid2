@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<features>
+	<feature name="cagrid-gaards" version="${project.version}">
+		<bundle>mvn:${project.groupId}/cagrid-gaards-api/${project.version}</bundle>
+	</feature>
+</features>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.dorian.service">
+		<prop key="cagrid.dorian.service.name">DORIAN</prop>
+		<prop key="cagrid.dorian.service.db.host">localhost</prop>
+		<prop key="cagrid.dorian.service.db.port">3306</prop>
+		<prop key="cagrid.dorian.service.db.user">root</prop>
+		<prop key="cagrid.dorian.service.db.password"></prop>
+		<prop key="cagrid.dorian.service.idp.name">Dorian</prop>
+		<prop key="cagrid.dorian.service.idp.renew.asserting.credentials">true</prop>
+		<prop key="cagrid.dorian.service.idp.asserting.credentials.password">idpkey</prop>
+		<prop key="cagrid.dorian.service.idp.min.uid">4</prop>
+		<prop key="cagrid.dorian.service.idp.max.uid">10</prop>
+		<prop key="cagrid.dorian.service.idp.password.min.length">10</prop>
+		<prop key="cagrid.dorian.service.idp.password.max.length">20</prop>
+		<prop key="cagrid.dorian.service.idp.password.lock.hours">4</prop>
+		<prop key="cagrid.dorian.service.idp.password.lock.minutes">0</prop>
+		<prop key="cagrid.dorian.service.idp.password.lock.seconds">0</prop>
+		<prop key="cagrid.dorian.service.idp.password.cons.invalid.login">5</prop>
+		<prop key="cagrid.dorian.service.idp.password.max.invalid.login">500</prop>
+		<prop key="cagrid.dorian.service.idp.account.modification.policy">Admin</prop>
+		<prop key="cagrid.dorian.service.federation.identity.policy">name</prop>
+		<prop key="cagrid.dorian.service.federation.min.idp.name.length">3</prop>
+		<prop key="cagrid.dorian.service.federation.max.idp.name.length">50</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.years">1</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.months">0</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.days">0</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.hours">0</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.minutes">0</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.seconds">0</prop>
+		<prop key="cagrid.dorian.service.federation.auto.host.certificate.approval">false</prop>
+		<prop key="cagrid.dorian.service.federation.host.certificate.renewal.policy">Admin</prop>
+		<prop key="cagrid.dorian.service.federation.user.certificate.lifetime.hours">12</prop>
+		<prop key="cagrid.dorian.service.federation.user.certificate.lifetime.minutes">0</prop>
+		<prop key="cagrid.dorian.service.federation.user.certificate.lifetime.seconds">0</prop>
+		<prop key="cagrid.dorian.service.federation.user.search.policy">Admin</prop>
+		<prop key="cagrid.dorian.service.federation.host.search.policy">Admin</prop>
+		<prop key="cagrid.dorian.service.federation.crl.publish"></prop>
+		<prop key="cagrid.dorian.service.ca.password">admin</prop>
+		<prop key="cagrid.dorian.service.ca.policy.oid"></prop>
+		<prop key="cagrid.dorian.service.ca.issued.cert.key.size">1024</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create">true</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.subject">C=US,O=abc,OU=xyz,OU=caGrid,CN=caGrid Dorian CA</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.key.size">2048</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.years">10</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.months">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.days">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.hours">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.minutes">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.seconds">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew">true</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.years">10</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.months">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.days">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.hours">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.minutes">0</prop>
+		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.seconds">0</prop>
+		<prop key="cagrid.dorian.service.metadata.url">serviceMetadata.xml</prop>
+		<prop key="cagrid.dorian.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
+	</osgix:cm-properties>
+
+	<ctx:property-placeholder properties-ref="preProps" />
+
+	<osgi:service ref="dorian" interface="org.cagrid.dorian.service.Dorian" />
+
+</beans>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<features>
+	<feature name="cagrid-cds" version="${project.version}">
+		<bundle>mvn:${project.groupId}/cagrid-cds-api/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-cds-service/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-cds-soap-client/${project.version}</bundle>
+	</feature>
+	<feature name="cagrid-cds-client" version="${project.version}">
+		<bundle>mvn:${project.groupId}/cagrid-cds-api/${project.version}</bundle>
+	</feature>
+</features>

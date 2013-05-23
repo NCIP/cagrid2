@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="defaultPropertiesPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:META-INF/spring/cds.properties" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<bean id="database" class="org.cagrid.tools.database.Database">
+		<constructor-arg value="${cagrid.cds.service.db.host}" />
+		<constructor-arg value="${cagrid.cds.service.db.port}" />
+		<constructor-arg value="${cagrid.cds.service.db.user}" />
+		<constructor-arg value="${cagrid.cds.service.db.password}" />
+		<constructor-arg value="${cagrid.cds.service.name}" />
+	</bean>
+
+    <!-- ADD POLICY HANDLER BEANS HERE -->
+
+    <bean id="identityPolicyHandler" class="org.cagrid.cds.service.impl.policy.IdentityPolicyHandler">
+        <constructor-arg ref="database" />
+    </bean>
+
+    <!-- TODO: pending migration of grid grouper
+    <bean id="groupPolicyHandler" class="org.cagrid.cds.service.impl.policy.GroupPolicyHandler">
+        <constructor-arg ref="database" />
+
+        make sure you also uncomment in the delegatedCredentialManager in this file
+    </bean>
+    -->
+
+    <!-- SPECIFY KEY MANAGER HERE -->
+
+    <bean id="keyManager" class="org.cagrid.cds.service.impl.manager.DBKeyManager">
+        <constructor-arg ref="database" />
+        <property name="keyEncryptionPassword" value="${cagrid.cds.service.dbkeymanager.key.encyption.password}" />
+    </bean>
+
+    <!-- SPECIFY EVENT MANAGER HERE -->
+
+    <bean id="delegatedCredentialAuditor" class="org.cagrid.tools.events.EventAuditor">
+        <constructor-arg index="0" value="delegatedCredentialAuditor" />
+        <constructor-arg index="1" ref="database" />
+        <constructor-arg index="2" value="DELEGATED_CREDENTIAL_AUDITOR" />
+    </bean>
+
+    <bean id="eventManager" class="org.cagrid.tools.events.EventManager">
+        <constructor-arg index="0">
+            <list>
+                <ref bean="delegatedCredentialAuditor" />
+            </list>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <list>
+
+                <bean
+                        class="org.cagrid.tools.events.EventToHandlerMapping">
+                    <constructor-arg index="0" value="DelegationInitiated" />
+                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
+                </bean>
+                <bean
+                        class="org.cagrid.tools.events.EventToHandlerMapping">
+                    <constructor-arg index="0" value="DelegationApproved" />
+                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
+                </bean>
+                <bean
+                        class="org.cagrid.tools.events.EventToHandlerMapping">
+                    <constructor-arg index="0" value="DelegationStatusUpdated" />
+                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
+                </bean>
+                <bean
+                        class="org.cagrid.tools.events.EventToHandlerMapping">
+                    <constructor-arg index="0" value="DelegatedCredentialIssued" />
+                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
+                </bean>
+                <bean
+                        class="org.cagrid.tools.events.EventToHandlerMapping">
+                    <constructor-arg index="0" value="DelegatedCredentialAccessDenied" />
+                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
+                </bean>
+            </list>
+
+        </constructor-arg>
+    </bean>
+
+    <bean id="propertyManager" class="org.cagrid.cds.service.impl.manager.PropertyManager">
+        <constructor-arg ref="database" />
+    </bean>
+
+    <bean id="groupManager" class="org.cagrid.tools.groups.GroupManager">
+        <constructor-arg ref="database" />
+    </bean>
+
+    <bean id="proxyPolicy" class="org.cagrid.cds.service.impl.util.ProxyPolicy">
+        <property name="maxDelegationPathLength" value="${cagrid.cds.service.max.delegation.path.length}" />
+        <property name="supportedKeySizes">
+            <set>
+                <value>1024</value>
+                <value>2048</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="delegatedCredentialManager" class="org.cagrid.cds.service.impl.manager.DelegatedCredentialManager">
+        <constructor-arg ref="database" />
+        <constructor-arg ref="propertyManager" />
+        <constructor-arg ref="keyManager" />
+        <constructor-arg>
+            <list>
+                <ref bean="identityPolicyHandler" />
+                <!-- TODO pending migration of grid grouper
+                <ref bean="groupPolicyHandler" />
+                -->
+            </list>
+        </constructor-arg>
+        <constructor-arg ref="proxyPolicy" />
+        <constructor-arg ref="eventManager" />
+    </bean>
+
+    <bean id="delegationManager" class="org.cagrid.cds.service.impl.manager.DelegationManager">
+        <constructor-arg ref="propertyManager" />
+        <constructor-arg ref="delegatedCredentialManager" />
+        <constructor-arg ref="groupManager" />
+    </bean>
+
+    <bean id="cdsProperties" class="org.cagrid.cds.service.impl.CDSProperties">
+		<constructor-arg ref="database" />
+		<constructor-arg ref="delegationManager" />
+        <constructor-arg ref="eventManager" />
+	</bean>
+
+	<bean id="jaxbResourceProperties" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="serviceMetadata" value="${cagrid.cds.service.metadata.url}" />
+                <entry key="serviceSecurityMetadata" value="${cagrid.cds.service.security.metadata.url}" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="cds" class="org.cagrid.cds.service.impl.CDSImpl" init-method="initialize">
+		<constructor-arg ref="cdsProperties" />
+		<constructor-arg ref="jaxbResourceProperties" />
+	</bean>
+
+    <bean id="dcJaxbResourceProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="serviceSecurityMetadata" value="${cagrid.cds.service.security.delegated.metadata.url}" />
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="delegatedCredentialService" class="org.cagrid.cds.service.impl.delegatedcredential.DCImpl" init-method="initialize">
+        <constructor-arg ref="dcJaxbResourceProperties" />
+    </bean>
+</beans>

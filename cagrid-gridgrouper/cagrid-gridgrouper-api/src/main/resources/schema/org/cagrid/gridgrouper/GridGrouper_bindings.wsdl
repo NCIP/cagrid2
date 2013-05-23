@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GridGrouper" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:porttype="http://cagrid.nci.nih.gov/GridGrouper" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/GridGrouper" location="GridGrouper.wsdl"/>
+  <wsdl:binding name="GridGrouperPortTypeSOAPBinding" type="porttype:GridGrouperPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getStem">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetStemRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getChildStems">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetChildStemsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getParentStem">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetParentStemRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateStem">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/UpdateStemRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="StemModifyFault">
+        <soap:fault name="StemModifyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getSubjectsWithStemPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetSubjectsWithStemPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getStemPrivileges">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetStemPrivilegesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hasStemPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/HasStemPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="grantStemPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GrantStemPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GrantPrivilegeFault">
+        <soap:fault name="GrantPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="revokeStemPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/RevokeStemPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="RevokePrivilegeFault">
+        <soap:fault name="RevokePrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addChildStem">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/AddChildStemRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="StemAddFault">
+        <soap:fault name="StemAddFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteStem">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/DeleteStemRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="StemDeleteFault">
+        <soap:fault name="StemDeleteFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroup">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetGroupRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getChildGroups">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetChildGroupsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="StemNotFoundFault">
+        <soap:fault name="StemNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addChildGroup">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/AddChildGroupRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupAddFault">
+        <soap:fault name="GroupAddFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteGroup">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/DeleteGroupRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupDeleteFault">
+        <soap:fault name="GroupDeleteFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateGroup">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/UpdateGroupRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupModifyFault">
+        <soap:fault name="GroupModifyFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addMember">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/AddMemberRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MemberAddFault">
+        <soap:fault name="MemberAddFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMembers">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetMembersRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="isMemberOf">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/IsMemberOfRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMemberships">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetMembershipsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteMember">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/DeleteMemberRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MemberDeleteFault">
+        <soap:fault name="MemberDeleteFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addCompositeMember">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/AddCompositeMemberRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MemberAddFault">
+        <soap:fault name="MemberAddFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteCompositeMember">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/DeleteCompositeMemberRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="MemberDeleteFault">
+        <soap:fault name="MemberDeleteFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="grantGroupPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GrantGroupPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GrantPrivilegeFault">
+        <soap:fault name="GrantPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="revokeGroupPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/RevokeGroupPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="RevokePrivilegeFault">
+        <soap:fault name="RevokePrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="SchemaFault">
+        <soap:fault name="SchemaFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getSubjectsWithGroupPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetSubjectsWithGroupPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getGroupPrivileges">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetGroupPrivilegesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="hasGroupPrivilege">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/HasGroupPrivilegeRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GroupNotFoundFault">
+        <soap:fault name="GroupNotFoundFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="isMember">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/IsMemberRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMember">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetMemberRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getMembersGroups">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetMembersGroupsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InsufficientPrivilegeFault">
+        <soap:fault name="InsufficientPrivilegeFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GridGrouperRuntimeFault">
+        <soap:fault name="GridGrouperRuntimeFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addMembershipRequest">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/AddMembershipRequestRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateMembershipRequest">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/UpdateMembershipRequestRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMembershipRequests">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/GetMembershipRequestsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="enableMembershipRequests">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/EnableMembershipRequestsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="disableMembershipRequests">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/DisableMembershipRequestsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="isMembershipRequestEnabled">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GridGrouper/IsMembershipRequestEnabledRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceSecurityMetadata">
+      <soap:operation soapAction="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceProperty">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="QueryResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnknownQueryExpressionDialectFault">
+        <soap:fault name="UnknownQueryExpressionDialectFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidQueryExpressionFault">
+        <soap:fault name="InvalidQueryExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="QueryEvaluationErrorFault">
+        <soap:fault name="QueryEvaluationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

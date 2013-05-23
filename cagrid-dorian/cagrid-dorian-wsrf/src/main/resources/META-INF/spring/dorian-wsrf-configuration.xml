@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:wsa="http://cxf.apache.org/ws/addressing" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+	                    http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+	                    http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+	                    http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<bean id="defaultPropertiesPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:META-INF/spring/dorian-wsrf.properties" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+
+	<httpj:engine-factory bus="cxf">
+		<httpj:engine port="${cagrid.dorian.wsrf.port}">
+
+			<httpj:tlsServerParameters>
+				<sec:keyManagers keyPassword="${cagrid.dorian.wsrf.key.password}">
+					<sec:keyStore type="JKS"
+						password="${cagrid.dorian.wsrf.keystore.password}" file="${cagrid.dorian.wsrf.keystore.path}" />
+				</sec:keyManagers>
+				<sec:trustManagers>
+					<sec:keyStore type="JKS"
+						password="${cagrid.dorian.wsrf.truststore.password}" file="${cagrid.dorian.wsrf.truststore.path}" />
+				</sec:trustManagers>
+
+				<sec:cipherSuitesFilter>
+					<sec:include>.*_WITH_3DES_.*</sec:include>
+					<sec:include>.*_WITH_DES_.*</sec:include>
+					<sec:include>.*_EXPORT_.*</sec:include>
+					<sec:include>.*_EXPORT1024_.*</sec:include>
+					<sec:include>.*_WITH_NULL_.*</sec:include>
+					<sec:exclude>.*_DH_anon_.*</sec:exclude>
+				</sec:cipherSuitesFilter>
+
+				<sec:clientAuthentication want="true"
+					required="false" />
+			</httpj:tlsServerParameters>
+		</httpj:engine>
+
+		<httpj:engine port="${cagrid.dorian.legacy-wsrf.port}">
+
+			<httpj:tlsServerParameters>
+				<sec:keyManagers keyPassword="${cagrid.dorian.wsrf.key.password}">
+					<sec:keyStore type="JKS"
+						password="${cagrid.dorian.wsrf.keystore.password}" file="${cagrid.dorian.wsrf.keystore.path}" />
+				</sec:keyManagers>
+				<sec:trustManagers>
+					<sec:keyStore type="JKS"
+						password="${cagrid.dorian.wsrf.truststore.password}" file="${cagrid.dorian.wsrf.truststore.path}" />
+				</sec:trustManagers>
+
+				<sec:cipherSuitesFilter>
+					<sec:include>.*_WITH_3DES_.*</sec:include>
+					<sec:include>.*_WITH_DES_.*</sec:include>
+					<sec:include>.*_EXPORT_.*</sec:include>
+					<sec:include>.*_EXPORT1024_.*</sec:include>
+					<sec:include>.*_WITH_NULL_.*</sec:include>
+					<sec:exclude>.*_DH_anon_.*</sec:exclude>
+				</sec:cipherSuitesFilter>
+
+				<sec:clientAuthentication want="true"
+					required="false" />
+			</httpj:tlsServerParameters>
+
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<property name="port" value="${cagrid.dorian.legacy-wsrf.port}" />
+					<property name="keystore" value="${cagrid.dorian.wsrf.keystore.path}" />
+					<property name="password" value="${cagrid.dorian.wsrf.keystore.password}" />
+					<property name="keyPassword" value="${cagrid.dorian.wsrf.key.password}" />
+					<property name="truststore" value="${cagrid.dorian.wsrf.truststore.path}" />
+					<property name="trustPassword" value="${cagrid.dorian.wsrf.truststore.password}" />
+					<property name="wantClientAuth" value="true" />
+					<property name="needClientAuth" value="false" />
+					<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
+				</bean>
+			</httpj:connector>
+		</httpj:engine>
+	</httpj:engine-factory>
+
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+		<property name="marshallerProperties" ref="propertiesMap" />
+	</bean>
+	<util:map id="propertiesMap">
+		<entry key="jaxb.formatted.output">
+			<value type="java.lang.Boolean">true</value>
+		</entry>
+	</util:map>
+
+	<bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
+		<constructor-arg index="0" ref="dorianService" />
+	</bean>
+
+	<bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
+		<constructor-arg index="0" ref="dorianService" />
+	</bean>
+
+	<bean id="dummyLegacyDorianWSRF" class="org.cagrid.dorian.DorianPortTypeImpl">
+	</bean>
+
+	<jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service"
+		xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="dorianWSRFEP"
+		implementor="#dorianWSRF" bus="cxf" endpointName="e:DorianPortTypePort"
+		serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}"
+		wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
+	</jaxws:endpoint>
+
+	<jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service"
+		xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="legacyDorianWSRFEP"
+		implementor="#legacyDorianWSRF" bus="cxf" endpointName="e:DorianPortTypePort"
+		serviceName="s:DorianService" address="${cagrid.dorian.legacy-wsrf.url}"
+		wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
+	</jaxws:endpoint>
+</beans>

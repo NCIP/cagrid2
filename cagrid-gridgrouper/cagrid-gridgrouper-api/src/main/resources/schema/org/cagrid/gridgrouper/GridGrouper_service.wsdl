@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GridGrouper" targetNamespace="http://cagrid.nci.nih.gov/GridGrouper/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:binding="http://cagrid.nci.nih.gov/GridGrouper/bindings" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/GridGrouper/bindings" location="GridGrouper_bindings.wsdl"/>
+  <wsdl:service name="GridGrouperService">
+    <wsdl:port name="GridGrouperPortTypePort" binding="binding:GridGrouperPortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

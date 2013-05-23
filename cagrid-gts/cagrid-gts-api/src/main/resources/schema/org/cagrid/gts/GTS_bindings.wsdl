@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GTS" targetNamespace="http://cagrid.nci.nih.gov/GTS/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:porttype="http://cagrid.nci.nih.gov/GTS" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/GTS" location="GTS.wsdl"/>
+  <wsdl:binding name="GTSPortTypeSOAPBinding" type="porttype:GTSPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="addTrustedAuthority">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/AddTrustedAuthorityRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalTrustedAuthorityFault">
+        <soap:fault name="IllegalTrustedAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findTrustedAuthorities">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/FindTrustedAuthoritiesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeTrustedAuthority">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/RemoveTrustedAuthorityRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidTrustedAuthorityFault">
+        <soap:fault name="InvalidTrustedAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addPermission">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/AddPermissionRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalPermissionFault">
+        <soap:fault name="IllegalPermissionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findPermissions">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/FindPermissionsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="revokePermission">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/RevokePermissionRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidPermissionFault">
+        <soap:fault name="InvalidPermissionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateTrustedAuthority">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/UpdateTrustedAuthorityRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalTrustedAuthorityFault">
+        <soap:fault name="IllegalTrustedAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidTrustedAuthorityFault">
+        <soap:fault name="InvalidTrustedAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addTrustLevel">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/AddTrustLevelRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalTrustLevelFault">
+        <soap:fault name="IllegalTrustLevelFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateTrustLevel">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/UpdateTrustLevelRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalTrustLevelFault">
+        <soap:fault name="IllegalTrustLevelFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidTrustLevelFault">
+        <soap:fault name="InvalidTrustLevelFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTrustLevels">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/GetTrustLevelsRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeTrustLevel">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/RemoveTrustLevelRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalTrustLevelFault">
+        <soap:fault name="IllegalTrustLevelFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidTrustLevelFault">
+        <soap:fault name="InvalidTrustLevelFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="addAuthority">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/AddAuthorityRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalAuthorityFault">
+        <soap:fault name="IllegalAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateAuthority">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/UpdateAuthorityRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalAuthorityFault">
+        <soap:fault name="IllegalAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidAuthorityFault">
+        <soap:fault name="InvalidAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateAuthorityPriorities">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/UpdateAuthorityPrioritiesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalAuthorityFault">
+        <soap:fault name="IllegalAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAuthorities">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/GetAuthoritiesRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeAuthority">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/RemoveAuthorityRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidAuthorityFault">
+        <soap:fault name="InvalidAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateCRL">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/UpdateCRLRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IllegalTrustedAuthorityFault">
+        <soap:fault name="IllegalTrustedAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidTrustedAuthorityFault">
+        <soap:fault name="InvalidTrustedAuthorityFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="PermissionDeniedFault">
+        <soap:fault name="PermissionDeniedFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="validate">
+      <soap:operation soapAction="http://cagrid.nci.nih.gov/GTS/ValidateRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="CertificateValidationFault">
+        <soap:fault name="CertificateValidationFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="GTSInternalFault">
+        <soap:fault name="GTSInternalFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getServiceSecurityMetadata">
+      <soap:operation soapAction="http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity/GetServiceSecurityMetadataRequest"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMultipleResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetResourceProperty">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="QueryResourceProperties">
+      <soap:operation soapAction="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="UnknownQueryExpressionDialectFault">
+        <soap:fault name="UnknownQueryExpressionDialectFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidResourcePropertyQNameFault">
+        <soap:fault name="InvalidResourcePropertyQNameFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="InvalidQueryExpressionFault">
+        <soap:fault name="InvalidQueryExpressionFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="QueryEvaluationErrorFault">
+        <soap:fault name="QueryEvaluationErrorFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ResourceUnknownFault">
+        <soap:fault name="ResourceUnknownFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+</wsdl:definitions>

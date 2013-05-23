@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.cagrid</groupId>
+		<artifactId>cagrid-osgi</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cagrid-gridgrouper</artifactId>
+	<packaging>pom</packaging>
+	<name>caGrid GridGrouper</name>
+
+	<dependencyManagement>
+		<dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-gridgrouper-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-gridgrouper-internet2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-gridgrouper-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gaards-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-metadata-model</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${wsrf.group}</groupId>
+				<artifactId>wsrf-faults-api</artifactId>
+				<version>${wsrf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${wsrf.group}</groupId>
+				<artifactId>wsrf-properties-api</artifactId>
+				<version>${wsrf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mysql.jdbc</groupId>
+				<artifactId>com.springsource.com.mysql.jdbc</artifactId>
+				<version>5.1.6</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>cagrid-gridgrouper-api</module>
+                <module>cagrid-gridgrouper-internet2</module>
+		<module>cagrid-gridgrouper-service</module>
+<!--
+ 		<module>cagrid-gridgrouper-wsrf</module>
+		<module>cagrid-gridgrouper-soap-client</module>
+-->
+		<module>cagrid-gridgrouper-features</module>
+	</modules>
+</project>

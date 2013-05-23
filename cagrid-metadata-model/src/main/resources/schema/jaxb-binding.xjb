@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/jaxb/bindingschema_2_0.xsd"
+	version="2.1">
+	<jxb:globalBindings>
+		<jxb:serializable />
+		<jxb:javaType name="java.util.Calendar" xmlType="xs:dateTime"
+			parseMethod="org.cagrid.xml.adapter.CalendarAdapter.parseCalendar"
+			printMethod="org.cagrid.xml.adapter.CalendarAdapter.printCalendar" />
+	</jxb:globalBindings>
+	<jxb:bindings schemaLocation="org/cagrid/metadata/caGridMetadata.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="gov.nih.nci.cagrid.metadata" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="org/cagrid/metadata/caGridVersion.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="org.cagrid.metadata.version" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="org/cagrid/metadata/common/common.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="gov.nih.nci.cagrid.metadata.common" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="org/cagrid/metadata/data/data.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="gov.nih.nci.cagrid.metadata.dataservice" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="org/cagrid/metadata/security/security.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="gov.nih.nci.cagrid.metadata.security" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+	<jxb:bindings schemaLocation="org/cagrid/metadata/service/servicemodel.xsd">
+		<jxb:schemaBindings>
+			<jxb:package name="gov.nih.nci.cagrid.metadata.service" />
+		</jxb:schemaBindings>
+	</jxb:bindings>
+</jxb:bindings>

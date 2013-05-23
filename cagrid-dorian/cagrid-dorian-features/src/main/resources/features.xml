@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<features>
+	<feature name="cagrid-dorian" version="${project.version}">
+		<bundle>mvn:${project.groupId}/cagrid-dorian-api/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-dorian-service/${project.version}</bundle>
+	</feature>
+	<feature name="cagrid-dorian-client" version="${project.version}">
+		<bundle>mvn:${project.groupId}/cagrid-dorian-api/${project.version}</bundle>
+	</feature>
+</features>

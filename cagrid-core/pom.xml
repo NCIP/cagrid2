@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.cagrid</groupId>
+		<artifactId>cagrid-osgi</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cagrid-core</artifactId>
+	<packaging>bundle</packaging>
+	<name>caGrid Common Core</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package>
+							gov.nih.nci.cagrid.common,
+							gov.nih.nci.cagrid.common.security,
+							gov.nih.nci.cagrid.metadata,
+							gov.nih.nci.cagrid.metadata.exceptions,
+							org.cagrid.core.cache,
+							org.cagrid.core.common,
+							org.cagrid.core.metadata,
+							org.cagrid.core.resource,
+							org.cagrid.core.soapclient,
+							org.cagrid.tools.database,
+							org.cagrid.tools.events,
+							org.cagrid.tools.groups
+						</Export-Package>
+						<Import-Package>
+							gov.nih.nci.cagrid.common.security,
+							gov.nih.nci.cagrid.metadata,
+							gov.nih.nci.cagrid.metadata.exceptions,
+							org.cagrid.core.cache,
+							org.cagrid.core.common,
+							org.cagrid.core.metadata,
+							org.cagrid.core.resource,
+							org.cagrid.core.soapclient,
+							org.cagrid.tools.database,
+							org.cagrid.tools.events,
+							org.cagrid.tools.groups,
+							*
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${wsrf.group}</groupId>
+			<artifactId>wsrf-jglobus</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>${wsrf.group}</groupId>
+			<artifactId>wsrf-properties-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.commons-dbcp</artifactId>
+			<version>1.4_1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>3.3.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Dorian" targetNamespace="http://cagrid.nci.nih.gov/Dorian/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:binding="http://cagrid.nci.nih.gov/Dorian/bindings" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://cagrid.nci.nih.gov/Dorian/bindings" location="./Dorian_bindings.wsdl"/>
+  <wsdl:service name="DorianService">
+    <wsdl:port name="DorianPortTypePort" binding="binding:DorianPortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.cagrid</groupId>
+		<artifactId>cagrid-cds</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cagrid-cds-wsrf</artifactId>
+	<packaging>bundle</packaging>
+	<name>caGrid CDS WSRF SOAP Endpoint</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package></Export-Package>
+						<Private-Package>org.cagrid.cds.service.wsrf</Private-Package>
+						<Import-Package>
+							schema.org.cagrid.cds,
+							META-INF.cxf,
+							META-INF.cxf.osgi,
+							org.apache.cxf.bus.spring,
+							org.apache.cxf.jaxws.spi,
+							*
+						</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-cds-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-core</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.2</version>
+        </dependency>
+	</dependencies>
+</project>

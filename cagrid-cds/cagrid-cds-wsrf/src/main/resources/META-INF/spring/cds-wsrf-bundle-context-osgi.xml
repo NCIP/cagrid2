@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.cds.wsrf">
+		<prop key="cagrid.cds.wsrf.host">localhost</prop>
+		<prop key="cagrid.cds.wsrf.port">7735</prop>
+		<prop key="cagrid.cds.wsrf.path">cds</prop>
+        <prop key="cagrid.cds.delegated.wsrf.path">dcs</prop>
+		<prop key="cagrid.cds.wsrf.url">http://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
+        <prop key="cagrid.cds.delegated.wsrf.url">http://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
+		<prop key="cagrid.cds.wsrf.keystore.path">${karaf.base}/etc/cagrid-cds-wsrf/cagrid-cds-wsrf-host.jks</prop>
+		<prop key="cagrid.cds.wsrf.keystore.password">changeit</prop>
+		<prop key="cagrid.cds.wsrf.keystore.alias">host</prop>
+		<prop key="cagrid.cds.wsrf.keystore.alias-password">changeit</prop>
+		<prop key="cagrid.cds.wsrf.truststore.path">${karaf.base}/etc/cagrid-cds-wsrf/truststore.jks</prop>
+		<prop key="cagrid.cds.wsrf.truststore.password">changeit</prop>
+	</osgix:cm-properties>
+
+	<ctx:property-placeholder properties-ref="preProps" />
+
+	<osgi:reference id="cds" interface="org.cagrid.cds.service.CredentialDelegationService" />
+    <osgi:reference id="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.CredentialDelegationService" />
+</beans>
