@@ -9,7 +9,7 @@ caGrid provides the technology that enables collaborating institutions to share 
 efficiently and securely, while also allowing investigators to easily contribute to and leverage the resources of a 
 national-scale, multi-institutional environment.
 
-caGrid2 is an open source project development in JAVA, and levereages or supports:
+caGrid2 is an open source project development in JAVA, and leverages or supports:
  * WS* web service standards
  * SHA2 digest algorithm for PKI certificates 
  * Central Authentication Service (CAS, from JA-SIG)
@@ -30,4 +30,4 @@ You will find more details about caGrid-core in the following links:
     *  Wiki: https://wiki.cagrid.org
     *  https://github.com/NCIP/caGrid2
 
-Please join us in further developing and improving caGrid2
+Please join us in further developing and improving caGrid2!
