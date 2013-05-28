@@ -255,7 +255,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
-			<artifactId>jce-jdk13</artifactId>
+			<artifactId>bcprov-jdk14</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>

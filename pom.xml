@@ -238,8 +238,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
-				<artifactId>jce-jdk13</artifactId>
-				<version>1.25</version>
+				<artifactId>bcprov-jdk14</artifactId>
+				<version>1.38</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-lang</groupId>
