@@ -1,0 +1,515 @@
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!-- ViewVC :: http://www.viewvc.org/ -->
+<head>
+<title>[Java COG] Log of /puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java</title>
+<meta name="generator" content="ViewVC 1.0.1" />
+<link rel="stylesheet" href="/viewcvs.cgi/*docroot*/styles.css" type="text/css" />
+
+</head>
+<body>
+<div class="vc_navheader">
+
+<form method="get" action="/viewcvs.cgi/">
+
+<table style="padding:0.1em;">
+<tr>
+<td>
+<strong>
+
+<a href="/viewcvs.cgi/?root=Java+COG">
+
+[Java COG]</a>
+/
+
+<a href="/viewcvs.cgi/puretls-0.9b4/?root=Java+COG">
+
+puretls-0.9b4</a>
+/
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/?root=Java+COG">
+
+src</a>
+/
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/?root=Java+COG">
+
+COM</a>
+/
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/?root=Java+COG">
+
+claymoresystems</a>
+/
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/?root=Java+COG">
+
+ptls</a>
+/
+
+
+
+SSLuint32.java
+
+
+</strong>
+
+</td>
+<td style="text-align:right;">
+
+
+<strong>Repository:</strong>
+<select name="root" onchange="submit()">
+
+
+<option value="*viewroots*">Repository Listing</option>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<optgroup label="CVS Repositories"><option>Alliance Website</option><option>COGKIT</option><option>Globus Packages</option><option selected="selected">Java COG</option></optgroup>
+
+
+</select>
+<input type="submit" value="Go" />
+
+</td>
+</tr>
+</table>
+
+</form>
+
+</div>
+<div style="float: right; padding: 5px;"><a href="http://www.viewvc.org/"><img src="/viewcvs.cgi/*docroot*/images/logo.png" alt="ViewVC logotype" width="128" height="48" /></a></div>
+<h1>Log of /puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java</h1>
+
+<p style="margin:0;">
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/?root=Java+COG"><img src="/viewcvs.cgi/*docroot*/images/back_small.png" width="16" height="16" alt="Parent Directory" /> Parent Directory</a>
+
+
+| <a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;view=graph"><img src="/viewcvs.cgi/*docroot*/images/cvsgraph_16x16.png" width="16" height="16" alt="View Revision Graph" /> Revision Graph</a>
+
+
+
+</p>
+
+<hr />
+<table class="auto">
+
+<tr>
+<td>Default branch:</td>
+<td><a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=puretls">puretls</a>
+</td>
+</tr>
+
+
+
+<tr>
+<td>Links to HEAD:</td>
+<td>
+(<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=markup&amp;root=Java+COG">view</a>)
+(<a href="/viewcvs.cgi/*checkout*/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG">download</a>)
+(<a href="/viewcvs.cgi/*checkout*/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;content-type=text%2Fplain">as text</a>)
+(<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=annotate&amp;root=Java+COG">annotate</a>)
+</td>
+</tr>
+
+
+
+<tr>
+<td>Sticky Tag:</td>
+<td><form method="get" action="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java" style="display: inline">
+<input type="hidden" name="view" value="log" /><input type="hidden" name="root" value="Java COG" />
+
+
+<select name="pathrev" onchange="submit()">
+<option value=""></option>
+
+<optgroup label="Branches">
+
+
+<option>puretls</option>
+
+
+
+<option>bug_5665_branch</option>
+
+
+
+<option>Tbug_5613_3</option>
+
+
+
+<option>MAIN</option>
+
+
+</optgroup>
+
+<optgroup label="Non-branch tags">
+
+
+<option>start</option>
+
+
+
+<option>original</option>
+
+
+
+<option>globus_3_9_5</option>
+
+
+
+<option>globus_3_9_3</option>
+
+
+
+<option>bug_5665_tag</option>
+
+
+
+<option>Tbug_5613_3_tag</option>
+
+
+
+<option>HEAD</option>
+
+
+</optgroup>
+
+</select>
+
+<input type="submit" value="Set" />
+</form>
+
+</td>
+</tr>
+</table>
+ 
+
+
+
+
+
+
+
+
+<div>
+<hr />
+
+<a name="rev1.1.1.1"></a>
+<a name="start"></a>
+<a name="globus_3_9_3"></a>
+<a name="globus_3_9_5"></a>
+<a name="Tbug_5613_3_tag"></a>
+<a name="original"></a>
+<a name="bug_5665_tag"></a>
+<a name="HEAD"></a>
+
+<a name="MAIN"></a>
+<a name="puretls"></a>
+
+Revision <strong>1.1.1.1</strong> -
+
+(<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=markup&amp;revision=1.1.1.1&amp;root=Java+COG">view</a>)
+
+(<a href="/viewcvs.cgi/*checkout*/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?revision=1.1.1.1&amp;root=Java+COG">download</a>)
+(<a href="/viewcvs.cgi/*checkout*/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;revision=1.1.1.1&amp;content-type=text%2Fplain">as text</a>)
+(<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?annotate=1.1.1.1&amp;root=Java+COG">annotate</a>)
+
+
+
+- <a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;r1=1.1.1.1&amp;view=log">[select for diffs]</a>
+
+
+
+
+<em>(vendor branch)</em>
+
+<br />
+
+<em>Fri May  9 20:36:14 2003 UTC</em> (10 years ago) by <em>gawor</em>
+
+
+<br />Branch:
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=MAIN"><strong>MAIN</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=puretls"><strong>puretls</strong></a>
+
+
+
+<br />CVS Tags:
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=HEAD"><strong>HEAD</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=Tbug_5613_3_tag"><strong>Tbug_5613_3_tag</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=bug_5665_tag"><strong>bug_5665_tag</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=globus_3_9_3"><strong>globus_3_9_3</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=globus_3_9_5"><strong>globus_3_9_5</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=original"><strong>original</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=start"><strong>start</strong></a>
+
+
+
+<br />Branch point for:
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=Tbug_5613_3"><strong>Tbug_5613_3</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=bug_5665_branch"><strong>bug_5665_branch</strong></a>
+
+
+
+
+
+<br />Changes since <strong>1.1: +0 -0 lines</strong>
+
+
+
+
+
+
+
+<br />Diff to <a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;r1=1.1&amp;r2=1.1.1.1">previous 1.1</a>
+
+
+
+
+
+
+
+
+
+
+<pre class="vc_log">imported sources
+</pre>
+</div>
+
+
+
+<div>
+<hr />
+
+<a name="rev1.1"></a>
+
+
+Revision <strong>1.1</strong> -
+
+(<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=markup&amp;revision=1.1&amp;root=Java+COG">view</a>)
+
+(<a href="/viewcvs.cgi/*checkout*/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?revision=1.1&amp;root=Java+COG">download</a>)
+(<a href="/viewcvs.cgi/*checkout*/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;revision=1.1&amp;content-type=text%2Fplain">as text</a>)
+(<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?annotate=1.1&amp;root=Java+COG">annotate</a>)
+
+
+
+- <a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?root=Java+COG&amp;r1=1.1&amp;view=log">[select for diffs]</a>
+
+
+
+
+<br />
+
+<em>Fri May  9 20:36:14 2003 UTC</em> (10 years ago) by <em>gawor</em>
+
+
+
+
+<br />Branch point for:
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=MAIN"><strong>MAIN</strong></a>,
+
+<a href="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java?view=log&amp;root=Java+COG&amp;pathrev=puretls"><strong>puretls</strong></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<pre class="vc_log">Initial revision
+</pre>
+</div>
+
+ 
+
+
+
+ <hr />
+<p><a name="diff"></a>
+This form allows you to request diffs between any two revisions of this file.
+For each of the two "sides" of the diff,
+
+select a symbolic revision name using the selection box, or choose
+'Use Text Field' and enter a numeric revision.
+
+</p>
+<form method="get" action="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java" name="diff_select">
+<table cellpadding="2" cellspacing="0" class="auto">
+<tr>
+<td>&nbsp;</td>
+<td>
+<input type="hidden" name="root" value="Java COG" /><input type="hidden" name="view" value="diff" />
+Diffs between
+
+<select name="r1">
+<option value="text" selected="selected">Use Text Field</option>
+
+<option value="1.1.1.1:start">start</option>
+
+<option value="1.1.1.1:puretls">puretls</option>
+
+<option value="1.1.1.1:original">original</option>
+
+<option value="1.1.1.1:globus_3_9_5">globus_3_9_5</option>
+
+<option value="1.1.1.1:globus_3_9_3">globus_3_9_3</option>
+
+<option value="1.1.1.1:bug_5665_tag">bug_5665_tag</option>
+
+<option value="1.1.1.1:bug_5665_branch">bug_5665_branch</option>
+
+<option value="1.1.1.1:Tbug_5613_3_tag">Tbug_5613_3_tag</option>
+
+<option value="1.1.1.1:Tbug_5613_3">Tbug_5613_3</option>
+
+<option value="1.1.1.1:MAIN">MAIN</option>
+
+<option value="1.1.1.1:HEAD">HEAD</option>
+
+</select>
+<input type="text" size="12" name="tr1"
+value="1.1.1.1"
+onchange="document.diff_select.r1.selectedIndex=0" />
+
+and
+
+<select name="r2">
+<option value="text" selected="selected">Use Text Field</option>
+
+<option value="1.1.1.1:start">start</option>
+
+<option value="1.1.1.1:puretls">puretls</option>
+
+<option value="1.1.1.1:original">original</option>
+
+<option value="1.1.1.1:globus_3_9_5">globus_3_9_5</option>
+
+<option value="1.1.1.1:globus_3_9_3">globus_3_9_3</option>
+
+<option value="1.1.1.1:bug_5665_tag">bug_5665_tag</option>
+
+<option value="1.1.1.1:bug_5665_branch">bug_5665_branch</option>
+
+<option value="1.1.1.1:Tbug_5613_3_tag">Tbug_5613_3_tag</option>
+
+<option value="1.1.1.1:Tbug_5613_3">Tbug_5613_3</option>
+
+<option value="1.1.1.1:MAIN">MAIN</option>
+
+<option value="1.1.1.1:HEAD">HEAD</option>
+
+</select>
+<input type="text" size="12" name="tr2"
+value="1.1"
+onchange="document.diff_select.r1.selectedIndex=0" />
+
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+Type of Diff should be a
+<select name="diff_format" onchange="submit()">
+<option value="h" selected="selected">Colored Diff</option>
+<option value="l" >Long Colored Diff</option>
+<option value="u" >Unidiff</option>
+<option value="c" >Context Diff</option>
+<option value="s" >Side by Side</option>
+</select>
+<input type="submit" value=" Get Diffs " />
+</td>
+</tr>
+</table>
+</form>
+
+
+<form method="get" action="/viewcvs.cgi/puretls-0.9b4/src/COM/claymoresystems/ptls/SSLuint32.java">
+<div>
+<hr />
+<a name="logsort"></a>
+<input type="hidden" name="root" value="Java COG" /><input type="hidden" name="view" value="log" />
+Sort log by:
+<select name="logsort" onchange="submit()">
+<option value="cvs" >Not sorted</option>
+<option value="date" selected="selected">Commit date</option>
+<option value="rev" >Revision</option>
+</select>
+<input type="submit" value=" Sort " />
+</div>
+</form>
+
+
+<hr />
+<table>
+<tr>
+<td><address><a href="mailto:webmaster@mcs.anl.gov">Webmaster</a></address></td>
+<td style="text-align: right;"><strong><a href="/viewcvs.cgi/*docroot*/help_log.html">ViewVC Help</a></strong></td>
+</tr>
+<tr>
+<td>Powered by <a href="http://viewvc.tigris.org/">ViewVC 1.0.1</a></td>
+<td style="text-align: right;">&nbsp;</td>
+</tr>
+</table>
+</body>
+</html>
+
+

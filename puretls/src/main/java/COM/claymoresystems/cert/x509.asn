@@ -1,0 +1,214 @@
+-- x509.asn --
+-- modified by EKR <ekr@rtfm.com> from the version in the
+-- Cryptix ASN.1 kit
+-- new items are tagged by an [EKR] comment
+-- sun.asn: contains the asn.1 X509v3 definition
+-- From: Søren Hilmer <hilmer@teliamail.dk>
+-- Object identifiers
+-------------------------------------------------------------------
+
+pkcs-1 OBJECT IDENTIFIER ::= {
+    iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1
+}
+
+-- This object identifier identifies RSA public and private
+-- keys and the RSA encryption and decryption processes.
+
+rsaEncryption OBJECT IDENTIFIER ::= { pkcs-1 1 }
+
+
+-- These object identifiers identify respectively, the
+-- "MD2 with RSA," "MD4 with RSA," and "MD5 with RSA" signature
+-- and verification processes.
+
+md2WithRSAEncryption OBJECT IDENTIFIER ::= { pkcs-1 2 }
+md4WithRSAEncryption OBJECT IDENTIFIER ::= { pkcs-1 3 }
+md5WithRSAEncryption OBJECT IDENTIFIER ::= { pkcs-1 4 }
+
+
+md2 OBJECT IDENTIFIER ::= {
+    iso(1) member-body(2) us(840) rsadsi(113549) digestAlgorithmId(2) 2
+}
+
+md4 OBJECT IDENTIFIER ::= {
+    iso(1) member-body(2) us(840) rsadsi(113549) digestAlgorithmId(2) 4
+}
+
+md5 OBJECT IDENTIFIER ::= {
+    iso(1) member-body(2) us(840) rsadsi(113549) digestAlgorithmId(2) 5
+}
+
+ds OBJECT IDENTIFIER ::= { joint-iso-ccitt(2) 5 }
+
+id-at                         OBJECT IDENTIFIER ::= { ds 4 }
+id-at-commonName              OBJECT IDENTIFIER ::= { id-at  3 }
+id-at-countryName             OBJECT IDENTIFIER ::= { id-at  6 }
+id-at-organizationName        OBJECT IDENTIFIER ::= { id-at 10 }
+id-at-organizationalUnitName  OBJECT IDENTIFIER ::= { id-at 11 }
+
+
+-- RSA Public and Private keys
+-------------------------------------------------------------------
+
+RSAPublicKey ::= SEQUENCE {
+    modulus         INTEGER, -- the modulus n
+    publicExponent  INTEGER  -- the public exponent e
+}
+
+RSAPrivateKey ::= SEQUENCE {
+    version         Version, -- the version number, for compatibility
+                             -- with future revisions of this standard.
+                             -- It shall be 0 for this version of the
+                             -- standard.
+    modulus         INTEGER, -- the modulus n
+    publicExponent  INTEGER, -- the public exponent e
+    privateExponent INTEGER, -- the private exponent d
+    prime1          INTEGER, -- the prime factor p of n
+    prime2          INTEGER, -- the prime factor q of n
+    exponent1       INTEGER, -- d mod (p-1)
+    exponent2       INTEGER, -- d mod (q-1)
+    coefficient     INTEGER  -- (inverse of q) mod p
+}
+
+-- Version ::= INTEGER
+Version ::= INTEGER { v1(0), v2(1), v3(2) } -- used also in Certificate
+
+
+DSAParameters ::= SEQUENCE {
+     p INTEGER,
+     q INTEGER,
+     g INTEGER
+}
+
+DSSSignature ::= SEQUENCE {
+     r INTEGER,
+     s INTEGER
+}
+
+DSAKey ::= INTEGER
+
+EAYDSAPrivateKey ::= SEQUENCE {
+	version INTEGER,
+	p INTEGER,
+	q INTEGER,
+	g INTEGER,
+	y INTEGER,
+	x INTEGER
+}	
+	      
+-- Signature algorithms
+-------------------------------------------------------------------
+
+DigestInfo ::= SEQUENCE {
+    -- Identifies the message-digest algorithm (and any associated
+    -- parameters). For this application, it should identify the
+    -- selected message-digest algorithm, MD2, MD4 or MD5. For
+    -- reference, the relevant object identifiers are given earlier
+    -- in this module.
+    digestAlgorithm       DigestAlgorithmIdentifier,
+
+    -- The result of the message-digesting process, i.e., the message
+    -- digest MD.
+    digest                Digest
+}
+
+DigestAlgorithmIdentifier ::= AlgorithmIdentifier
+
+Digest ::= OCTET STRING
+
+
+-- PKCS-6 Appendix A (X.509 certificate)
+-------------------------------------------------------------------
+
+Certificate  ::=  SEQUENCE  {
+     tbsCertificate       TBSCertificate,
+     signatureAlgorithm   AlgorithmIdentifier,
+     signature            BIT STRING
+}
+
+TBSCertificate  ::=  SEQUENCE  {
+     version         [0]  EXPLICIT Version OPTIONAL, -- This should be DEFAULT v1, but the kit
+						     -- doesn't know how
+     serialNumber         CertificateSerialNumber,
+     signature            AlgorithmIdentifier,
+     issuer               Name,
+     validity             Validity,
+     subject              Name,
+     subjectPublicKeyInfo SubjectPublicKeyInfo,
+     issuerUniqueID  [1]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version must be v2 or v3
+     subjectUniqueID [2]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version must be v2 or v3
+     extensions      [3]  EXPLICIT Extensions OPTIONAL
+                          -- If present, version must be v3
+     }
+
+
+UsefulCertificate ::= SEQUENCE {
+     tbsCertificate [UNIVERSAL 16] IMPLICIT ANY DEFINED BY ekr,
+     signatureAlgorithm AlgorithmIdentifier,
+     signature BIT STRING
+}
+
+RawName ::= [UNIVERSAL 16] IMPLICIT ANY DEFINED BY ekr
+RawName2 ::= [UNIVERSAL 16] IMPLICIT ANY DEFINED BY ekr
+RawSubjectPublicKeyInfo ::= [UNIVERSAL 16] IMPLICIT ANY DEFINED BY ekr
+
+UsefulTBSCertificate  ::=  SEQUENCE  {
+        version              [0] Version DEFAULT v1,
+     serialNumber         CertificateSerialNumber,
+     signature            AlgorithmIdentifier,
+     issuer               RawName,
+     validity             Validity,
+     subject              RawName,
+     subjectPublicKeyInfo RawSubjectPublicKeyInfo,
+     issuerUniqueID  [1]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version must be v2 or v3
+     subjectUniqueID [2]  IMPLICIT UniqueIdentifier OPTIONAL,
+                          -- If present, version must be v2 or v3
+     extensions      [3]  EXPLICIT Extensions OPTIONAL
+                          -- If present, version must be v3
+     }
+
+UniqueIdentifier  ::=  BIT STRING
+
+Extensions  ::=  SEQUENCE OF ANY
+-- Extensions  ::=  SEQUENCE OF Extension
+
+Extension  ::=  SEQUENCE  {
+   extnID      OBJECT IDENTIFIER,
+   critical    BOOLEAN OPTIONAL,
+   extnValue   OCTET STRING
+}
+
+CertificateSerialNumber ::= INTEGER
+
+Validity ::= SEQUENCE {
+    notBefore  UTCTime,
+    notAfter   UTCTime
+}
+
+SubjectPublicKeyInfo ::= SEQUENCE {
+    algorithm         AlgorithmIdentifier,
+    subjectPublicKey  BIT STRING
+}
+
+AlgorithmIdentifier ::= SEQUENCE {
+    algorithm   OBJECT IDENTIFIER,
+    parameters  ANY DEFINED BY algorithm OPTIONAL
+}
+
+Name ::= RDNSequence
+
+RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+
+RelativeDistinguishedName ::= SET OF AttributeValueAssertion
+
+AttributeValueAssertion ::= SEQUENCE {
+    attributeType     AttributeType,
+    attributeValue    AttributeValue
+}
+
+AttributeType ::= OBJECT IDENTIFIER
+
+AttributeValue ::= PrintableString

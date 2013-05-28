@@ -356,5 +356,6 @@
 		<module>cagrid-cds</module>
 		<module>cagrid-gts</module>
 		<module>cagrid-gridgrouper</module>
+		<module>puretls</module>
 	</modules>
 </project>
