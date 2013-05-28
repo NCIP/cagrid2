@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <features>
 	<feature name="cagrid-third-party" version="${project.version}">
-		<bundle>wrap:mvn:org.bouncycastle/jce-jdk13/${org.bouncycastle/jce-jdk13/version}</bundle>
+		<bundle>wrap:mvn:org.bouncycastle/bcprov-jdk14/${org.bouncycastle/bcprov-jdk14/version}</bundle>
 		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/version}</bundle>
 		<bundle>mvn:commons-io/commons-io/${commons-io/commons-io/version}</bundle>
 		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/version}</bundle>
