@@ -29,6 +29,7 @@
                         </Export-Package>
 						<Private-Package>
                             net.sf.hibernate*,
+                            net.sf.ehcache*,
                             org.apache.commons.digester*,
                             org.apache.commons.beanutils*,
                             org.apache.commons.math*

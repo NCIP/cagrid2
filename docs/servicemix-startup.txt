@@ -7,15 +7,15 @@ Make sure mysql is running, root / nopassword.
 
 Execute the following on the console:
 
-features:addurl mvn:org.cagrid/cagrid-third-party-features/1.0.0-SNAPSHOT/xml/features
+features:addurl mvn:org.cagrid/cagrid-third-party-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid-third-party
 features:addurl mvn:org.cagrid.wsrf/wsrf-draft-features/2.0.3-SNAPSHOT/xml/features
 features:install wsrf-draft
-features:addurl mvn:org.cagrid/cagrid-features/1.0.0-SNAPSHOT/xml/features
+features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid
-features:addurl mvn:org.cagrid/cagrid-gaards-features/1.0.0-SNAPSHOT/xml/features
+features:addurl mvn:org.cagrid/cagrid-gaards-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid-gaards
-features:addurl mvn:org.cagrid/cagrid-dorian-features/1.0.0-SNAPSHOT/xml/features
+features:addurl mvn:org.cagrid/cagrid-dorian-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid-dorian
 
 The soap endpoint isn't installed by default yet, so
@@ -28,8 +28,8 @@ Hit http://localhost:7734/dorian?WSDL and you should get a WSDL.
 Bring up gaards-ui, configured for http://localhost:7735/dorian.  It takes several minutes to connect.
 The only thing you can do now is search for local users (look for username dorian).
 
-grid grouper (https://wiki.inventrio.com/display/cagrid/Grid+Grouper):
-----------------------------------------------------------------------
+grid grouper (see https://wiki.inventrio.com/display/cagrid/Grid+Grouper):
+--------------------------------------------------------------------------------------
 Initialize Grid Grouper Database;
 $> cd $PROJECT_HOME/cagrid-gridgrouper-internet2
 $> mvn clean install -P GrouperInit
@@ -37,6 +37,10 @@ $> mvn clean install -P GrouperInit
 Add GridGrouper Admin:
 $> cd $PROJECT_HOME/cagrid-gridgrouper-service
 $> mvn clean install -P AddAdmin
+
+features:addurl mvn:org.cagrid/cagrid-gridgrouper-features/2.0.0-SNAPSHOT/xml/features
+features:install cagrid-gridgrouper
+--------------------------------------------------------------------------------------
 
 
 *NOTE: Depending on what version of Fuse/SMX you use, you may need to edit the etc/jre.properties to add com.sun.jndi.ldap to the system packages list
