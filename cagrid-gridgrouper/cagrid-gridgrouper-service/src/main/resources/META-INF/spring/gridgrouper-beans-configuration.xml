@@ -18,5 +18,16 @@
 		<constructor-arg value="${cagrid.gridgrouper.service.name}" />
 	</bean>
 
-	<bean id="gridGrouperService" class="org.cagrid.gridgrouper.service.impl.GridGrouperServiceImpl"/>
+    <bean id="jaxbResourceProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="serviceMetadata" value="${cagrid.gridgrouper.service.metadata.url}" />
+                <entry key="serviceSecurityMetadata" value="${cagrid.gridgrouper.service.security.metadata.url}" />
+            </map>
+        </constructor-arg>
+    </bean>
+
+	<bean id="gridGrouperService" class="org.cagrid.gridgrouper.service.impl.GridGrouperServiceImpl" init-method="initialize">
+        <constructor-arg ref="jaxbResourceProperties" />
+    </bean>
 </beans>
