@@ -63,12 +63,10 @@
 
 	<modules>
 		<module>cagrid-gridgrouper-api</module>
-        <module>cagrid-gridgrouper-internet2</module>
+        	<module>cagrid-gridgrouper-internet2</module>
 		<module>cagrid-gridgrouper-service</module>
  		<module>cagrid-gridgrouper-wsrf</module>
- 		<!--
 		<module>cagrid-gridgrouper-soap-client</module>
--->
 		<module>cagrid-gridgrouper-features</module>
 	</modules>
 </project>
