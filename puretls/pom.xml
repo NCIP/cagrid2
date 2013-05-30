@@ -28,7 +28,12 @@
 							COM.claymoresystems.sslg,
 							COM.claymoresystems.util
 						</Export-Package>
-						<Import-Package>javax.security.auth.x500</Import-Package>
+						<Import-Package>
+							javax.naming,
+							javax.naming.directory,
+							javax.naming.ldap,
+							javax.security.auth.x500
+						</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
