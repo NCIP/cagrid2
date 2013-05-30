@@ -137,6 +137,7 @@ import org.cagrid.dorian.ifs.TrustedIdP;
 import org.cagrid.dorian.ifs.UserCertificateFilter;
 import org.cagrid.dorian.ifs.UserCertificateRecord;
 import org.cagrid.dorian.ifs.UserCertificateUpdate;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.dorian.types.DorianInternalException;
 import org.cagrid.dorian.types.InvalidAssertionException;
@@ -191,35 +192,39 @@ import org.w3c.dom.Node;
 public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 
 	private final static String ANONYMOUS_ID = "anonymous";
-	private final static String ADMIN_ID = "/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=langella";
 
-	private final static Logger logger = LoggerFactory
-			.getLogger(DorianServiceWSRFImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(DorianServiceWSRFImpl.class);
 
 	private final Dorian dorian;
 	private final ResourceHome resourceHome;
 
+	private CertificateSignatureAlgorithm signingAlgorithm = CertificateSignatureAlgorithm.SHA2;
 	@javax.annotation.Resource
 	private WebServiceContext wsContext;
 
-	public DorianServiceWSRFImpl(Dorian dorian) {
+	public DorianServiceWSRFImpl(Dorian dorian, String signatureAlgorithm) {
 		this.dorian = dorian;
 		resourceHome = dorian.getResourceHome();
+
+		if (signatureAlgorithm != null) {
+			try {
+				this.signingAlgorithm = CertificateSignatureAlgorithm.fromValue(signatureAlgorithm);
+			} catch (IllegalArgumentException e) {
+				logger.error(e.getMessage(), e);
+			}
+		}
+
 	}
 
 	@Override
-	public GetMultipleResourcePropertiesResponse getMultipleResourceProperties(
-			GetMultipleResourceProperties getMultipleResourcePropertiesRequest)
-			throws ResourceUnknownFault, InvalidResourcePropertyQNameFault {
-		// TODO
-		return super
-				.getMultipleResourceProperties(getMultipleResourcePropertiesRequest);
-	}
-
-	@Override
-	public GetResourcePropertyResponse getResourceProperty(
-			QName resourcePropertyQName) throws ResourceUnknownFault,
+	public GetMultipleResourcePropertiesResponse getMultipleResourceProperties(GetMultipleResourceProperties getMultipleResourcePropertiesRequest) throws ResourceUnknownFault,
 			InvalidResourcePropertyQNameFault {
+		// TODO
+		return super.getMultipleResourceProperties(getMultipleResourcePropertiesRequest);
+	}
+
+	@Override
+	public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws ResourceUnknownFault, InvalidResourcePropertyQNameFault {
 		logger.info("getResourceProperty " + resourcePropertyQName);
 		Exception e = null;
 		GetResourcePropertyResponse response = null;
@@ -227,15 +232,12 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 			Resource resource = resourceHome.find(null);
 			if (resource instanceof ResourcePropertySet) {
 				ResourcePropertySet resourcePropertySet = (ResourcePropertySet) resource;
-				ResourceProperty<?> resourceProperty = resourcePropertySet
-						.get(resourcePropertyQName);
+				ResourceProperty<?> resourceProperty = resourcePropertySet.get(resourcePropertyQName);
 				if (resourceProperty != null) {
 					Object resourcePropertyValue = resourceProperty.get(0);
-					logger.info("getResourceProperty " + resourcePropertyQName
-							+ " returning " + resourcePropertyValue);
+					logger.info("getResourceProperty " + resourcePropertyQName + " returning " + resourcePropertyValue);
 					if (!(resourcePropertyValue instanceof Node) && !(resourcePropertyValue instanceof JAXBElement<?>)) {
-						resourcePropertyValue = JAXBUtils
-								.wrap(resourcePropertyValue);
+						resourcePropertyValue = JAXBUtils.wrap(resourcePropertyValue);
 					}
 					response = new GetResourcePropertyResponse();
 					response.getAny().add(resourcePropertyValue);
@@ -249,18 +251,14 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 			e = re;
 		}
 		if ((response == null) || (e != null)) {
-			throw new ResourceUnknownFault("No resource for '"
-					+ resourcePropertyQName + "'", e);
+			throw new ResourceUnknownFault("No resource for '" + resourcePropertyQName + "'", e);
 		}
 		return response;
 	}
 
 	@Override
-	public QueryResourcePropertiesResponse queryResourceProperties(
-			org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.QueryResourceProperties queryResourcePropertiesRequest)
-			throws QueryEvaluationErrorFault, InvalidQueryExpressionFault,
-			ResourceUnknownFault, InvalidResourcePropertyQNameFault,
-			UnknownQueryExpressionDialectFault {
+	public QueryResourcePropertiesResponse queryResourceProperties(org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.QueryResourceProperties queryResourcePropertiesRequest)
+			throws QueryEvaluationErrorFault, InvalidQueryExpressionFault, ResourceUnknownFault, InvalidResourcePropertyQNameFault, UnknownQueryExpressionDialectFault {
 		// TODO
 		QueryResourcePropertiesResponse response = null;
 		response = new QueryResourcePropertiesResponse();
@@ -268,20 +266,16 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public GetServiceSecurityMetadataResponse getServiceSecurityMetadata(
-			GetServiceSecurityMetadataRequest getServiceSecurityMetadataRequest) {
+	public GetServiceSecurityMetadataResponse getServiceSecurityMetadata(GetServiceSecurityMetadataRequest getServiceSecurityMetadataRequest) {
 		logger.info("getServiceSecurityMetadata");
-		ServiceSecurityMetadata serviceSecurityMetadata = dorian
-				.getServiceSecurityMetadata();
+		ServiceSecurityMetadata serviceSecurityMetadata = dorian.getServiceSecurityMetadata();
 		GetServiceSecurityMetadataResponse response = new GetServiceSecurityMetadataResponse();
 		response.setServiceSecurityMetadata(serviceSecurityMetadata);
 		return response;
 	}
 
 	@Override
-	public GetPublishResponse getPublish(GetPublishRequest getPublishRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
+	public GetPublishResponse getPublish(GetPublishRequest getPublishRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
 		String message = "getPublish";
 		logger.info(message);
 
@@ -296,8 +290,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidTrustedIdPException itidpe) {
-			throw new InvalidTrustedIdPFaultFaultMessage(message,
-					itidpe.getFault());
+			throw new InvalidTrustedIdPFaultFaultMessage(message, itidpe.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -305,9 +298,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public SetPublishResponse setPublish(SetPublishRequest setPublishRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
+	public SetPublishResponse setPublish(SetPublishRequest setPublishRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
 		String message = "setPublish";
 		boolean publish = setPublishRequest.isPublish();
 		logger.info(message + ": " + publish);
@@ -321,8 +312,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidTrustedIdPException itidpe) {
-			throw new InvalidTrustedIdPFaultFaultMessage(message,
-					itidpe.getFault());
+			throw new InvalidTrustedIdPFaultFaultMessage(message, itidpe.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -330,9 +320,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public DoesLocalUserExistResponse doesLocalUserExist(
-			DoesLocalUserExistRequest doesLocalUserExistRequest)
-			throws DorianInternalFaultFaultMessage {
+	public DoesLocalUserExistResponse doesLocalUserExist(DoesLocalUserExistRequest doesLocalUserExistRequest) throws DorianInternalFaultFaultMessage {
 
 		String message = "doesLocalUserExist";
 		String userId = doesLocalUserExistRequest.getUserId();
@@ -341,8 +329,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		DoesLocalUserExistResponse response = null;
 		try {
 			boolean localUserExists = dorian.doesLocalUserExist(userId);
-			logger.info(message + ": " + userId + " returning "
-					+ localUserExists);
+			logger.info(message + ": " + userId + " returning " + localUserExists);
 			response = new DoesLocalUserExistResponse();
 			response.setResponse(localUserExists);
 		} catch (DorianInternalException die) {
@@ -353,14 +340,10 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public FindLocalUsersResponse findLocalUsers(
-			FindLocalUsersRequest findLocalUsersRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public FindLocalUsersResponse findLocalUsers(FindLocalUsersRequest findLocalUsersRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 
 		String message = "findLocalUsers";
-		LocalUserFilter filter = findLocalUsersRequest.getF()
-				.getLocalUserFilter();
+		LocalUserFilter filter = findLocalUsersRequest.getF().getLocalUserFilter();
 		logger.info(message + ": " + filter);
 
 		String gridId = getCallerId();
@@ -379,23 +362,18 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public UserSearchResponse userSearch(UserSearchRequest userSearchRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public UserSearchResponse userSearch(UserSearchRequest userSearchRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "userSearch";
 		logger.info(message);
 
-		GridUserSearchCriteria gridUserSearchCriteria = userSearchRequest
-				.getGridUserSearchCriteria().getGridUserSearchCriteria();
+		GridUserSearchCriteria gridUserSearchCriteria = userSearchRequest.getGridUserSearchCriteria().getGridUserSearchCriteria();
 		String gridId = getCallerId();
 		UserSearchResponse response = new UserSearchResponse();
 		try {
-			List<GridUserRecord> gridUserRecords = dorian.userSearch(gridId,
-					gridUserSearchCriteria);
+			List<GridUserRecord> gridUserRecords = dorian.userSearch(gridId, gridUserSearchCriteria);
 			response.getGridUserRecord().addAll(gridUserRecords);
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -405,15 +383,11 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RegisterLocalUserResponse registerLocalUser(
-			RegisterLocalUserRequest registerLocalUserRequest)
-			throws DorianInternalFaultFaultMessage,
-			InvalidUserPropertyFaultFaultMessage {
+	public RegisterLocalUserResponse registerLocalUser(RegisterLocalUserRequest registerLocalUserRequest) throws DorianInternalFaultFaultMessage, InvalidUserPropertyFaultFaultMessage {
 		String message = "registerLocalUser";
 		logger.info(message);
 
-		Application application = registerLocalUserRequest.getA()
-				.getApplication();
+		Application application = registerLocalUserRequest.getA().getApplication();
 		RegisterLocalUserResponse response = null;
 		String userId = registerLocalUserInternal(message, application);
 		response = new RegisterLocalUserResponse();
@@ -421,26 +395,21 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		return response;
 	}
 
-	private String registerLocalUserInternal(String message,
-			Application application) throws DorianInternalFaultFaultMessage,
-			InvalidUserPropertyFaultFaultMessage {
+	private String registerLocalUserInternal(String message, Application application) throws DorianInternalFaultFaultMessage, InvalidUserPropertyFaultFaultMessage {
 		String userId = null;
 		try {
 			userId = dorian.registerLocalUser(application);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidUserPropertyException iupe) {
-			throw new InvalidUserPropertyFaultFaultMessage(message,
-					iupe.getFault());
+			throw new InvalidUserPropertyFaultFaultMessage(message, iupe.getFault());
 		}
 		return userId;
 	}
 
 	@Override
-	public UpdateLocalUserResponse updateLocalUser(
-			UpdateLocalUserRequest updateLocalUserRequest)
-			throws DorianInternalFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage, NoSuchUserFaultFaultMessage {
+	public UpdateLocalUserResponse updateLocalUser(UpdateLocalUserRequest updateLocalUserRequest) throws DorianInternalFaultFaultMessage, PermissionDeniedFaultFaultMessage,
+			NoSuchUserFaultFaultMessage {
 		String message = "updateLocalUser";
 		logger.info(message);
 
@@ -457,36 +426,27 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (NoSuchUserException nsue) {
 			throw new NoSuchUserFaultFaultMessage(message, nsue.getFault());
 		} catch (InvalidUserPropertyException iupe) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ iupe.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + iupe.getMessage());
 		}
 		return response;
 	}
 
 	@Override
-	public ChangeLocalUserPasswordResponse changeLocalUserPassword(
-			ChangeLocalUserPasswordRequest changeLocalUserPasswordRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
-			InvalidUserPropertyFaultFaultMessage {
+	public ChangeLocalUserPasswordResponse changeLocalUserPassword(ChangeLocalUserPasswordRequest changeLocalUserPasswordRequest) throws PermissionDeniedFaultFaultMessage,
+			DorianInternalFaultFaultMessage, InvalidUserPropertyFaultFaultMessage {
 		String message = "changeLocalUserPassword";
 		logger.info(message);
 
-		BasicAuthentication basicAuthentication = changeLocalUserPasswordRequest
-				.getCredential().getBasicAuthentication();
+		BasicAuthentication basicAuthentication = changeLocalUserPasswordRequest.getCredential().getBasicAuthentication();
 		String newPassword = changeLocalUserPasswordRequest.getNewPassword();
 		ChangeLocalUserPasswordResponse response = null;
-		changeLocalUserPasswordInternal(message, basicAuthentication,
-				newPassword);
+		changeLocalUserPasswordInternal(message, basicAuthentication, newPassword);
 		response = new ChangeLocalUserPasswordResponse();
 		return response;
 	}
 
-	private void changeLocalUserPasswordInternal(String message,
-			BasicAuthentication basicAuthentication, String newPassword)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
-			InvalidUserPropertyFaultFaultMessage {
+	private void changeLocalUserPasswordInternal(String message, BasicAuthentication basicAuthentication, String newPassword) throws PermissionDeniedFaultFaultMessage,
+			DorianInternalFaultFaultMessage, InvalidUserPropertyFaultFaultMessage {
 		try {
 			dorian.changeLocalUserPassword(basicAuthentication, newPassword);
 		} catch (DorianInternalException die) {
@@ -494,15 +454,11 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		} catch (InvalidUserPropertyException iupe) {
-			throw new InvalidUserPropertyFaultFaultMessage(message,
-					iupe.getFault());
+			throw new InvalidUserPropertyFaultFaultMessage(message, iupe.getFault());
 		}
 	}
 
-	public RemoveLocalUserResponse removeLocalUser(
-			RemoveLocalUserRequest removeLocalUserRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public RemoveLocalUserResponse removeLocalUser(RemoveLocalUserRequest removeLocalUserRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "removeLocalUser";
 		logger.info(message);
 
@@ -521,14 +477,11 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public HostSearchResponse hostSearch(HostSearchRequest hostSearchRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public HostSearchResponse hostSearch(HostSearchRequest hostSearchRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "hostSearch";
 		logger.info(message);
 
-		HostSearchCriteria criteria = hostSearchRequest.getHostSearchCriteria()
-				.getHostSearchCriteria();
+		HostSearchCriteria criteria = hostSearchRequest.getHostSearchCriteria().getHostSearchCriteria();
 		String gridId = getCallerId();
 		HostSearchResponse response = null;
 		try {
@@ -536,8 +489,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 			response = new HostSearchResponse();
 			response.getHostRecord().addAll(hostRecords);
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -547,10 +499,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public GetTrustedIdPsResponse getTrustedIdPs(
-			GetTrustedIdPsRequest getTrustedIdPsRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public GetTrustedIdPsResponse getTrustedIdPs(GetTrustedIdPsRequest getTrustedIdPsRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "getTrustedIdPs";
 		logger.info(message);
 
@@ -570,15 +519,11 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 
 	@Override
 	// Duplicates registerLocalUser
-	public RegisterWithIdPResponse registerWithIdP(
-			RegisterWithIdPRequest registerWithIdPRequest)
-			throws DorianInternalFaultFaultMessage,
-			InvalidUserPropertyFaultFaultMessage {
+	public RegisterWithIdPResponse registerWithIdP(RegisterWithIdPRequest registerWithIdPRequest) throws DorianInternalFaultFaultMessage, InvalidUserPropertyFaultFaultMessage {
 		String message = "registerWithIdP";
 		logger.info(message);
 
-		Application application = registerWithIdPRequest.getApplication()
-				.getApplication();
+		Application application = registerWithIdPRequest.getApplication().getApplication();
 		RegisterWithIdPResponse response = null;
 		String userId = registerLocalUserInternal(message, application);
 		response = new RegisterWithIdPResponse();
@@ -588,32 +533,24 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 
 	@Override
 	// Duplicates changeLocalUserPassword
-	public ChangeIdPUserPasswordResponse changeIdPUserPassword(
-			ChangeIdPUserPasswordRequest changeIdPUserPasswordRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
+	public ChangeIdPUserPasswordResponse changeIdPUserPassword(ChangeIdPUserPasswordRequest changeIdPUserPasswordRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage,
 			InvalidUserPropertyFaultFaultMessage {
 		String message = "changeIdPUserPassword";
 		logger.info(message);
 
-		BasicAuthCredential basicAuthCredential = changeIdPUserPasswordRequest
-				.getCredential().getBasicAuthCredential();
+		BasicAuthCredential basicAuthCredential = changeIdPUserPasswordRequest.getCredential().getBasicAuthCredential();
 		BasicAuthentication basicAuthentication = new BasicAuthentication();
 		basicAuthentication.setUserId(basicAuthCredential.getUserId());
 		basicAuthentication.setPassword(basicAuthCredential.getPassword());
 		String newPassword = changeIdPUserPasswordRequest.getNewPassword();
 		ChangeIdPUserPasswordResponse response = null;
-		changeLocalUserPasswordInternal(message, basicAuthentication,
-				newPassword);
+		changeLocalUserPasswordInternal(message, basicAuthentication, newPassword);
 		response = new ChangeIdPUserPasswordResponse();
 		return response;
 	}
 
 	@Override
-	public AddTrustedIdPResponse addTrustedIdP(
-			AddTrustedIdPRequest addTrustedIdPRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
+	public AddTrustedIdPResponse addTrustedIdP(AddTrustedIdPRequest addTrustedIdPRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
 		String message = "addTrustedIdP";
 		logger.info(message);
 
@@ -627,8 +564,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidTrustedIdPException itidpe) {
-			throw new InvalidTrustedIdPFaultFaultMessage(message,
-					itidpe.getFault());
+			throw new InvalidTrustedIdPFaultFaultMessage(message, itidpe.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -636,15 +572,12 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public UpdateTrustedIdPResponse updateTrustedIdP(
-			UpdateTrustedIdPRequest updateTrustedIdPRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
+	public UpdateTrustedIdPResponse updateTrustedIdP(UpdateTrustedIdPRequest updateTrustedIdPRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage,
+			InvalidTrustedIdPFaultFaultMessage {
 		String message = "updateTrustedIdP";
 		logger.info(message);
 
-		TrustedIdP idp = updateTrustedIdPRequest.getTrustedIdP()
-				.getTrustedIdP();
+		TrustedIdP idp = updateTrustedIdPRequest.getTrustedIdP().getTrustedIdP();
 		String gridId = getCallerId();
 		UpdateTrustedIdPResponse response = null;
 		try {
@@ -653,8 +586,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidTrustedIdPException itidpe) {
-			throw new InvalidTrustedIdPFaultFaultMessage(message,
-					itidpe.getFault());
+			throw new InvalidTrustedIdPFaultFaultMessage(message, itidpe.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -662,15 +594,12 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RemoveTrustedIdPResponse removeTrustedIdP(
-			RemoveTrustedIdPRequest removeTrustedIdPRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage, InvalidTrustedIdPFaultFaultMessage {
+	public RemoveTrustedIdPResponse removeTrustedIdP(RemoveTrustedIdPRequest removeTrustedIdPRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage,
+			InvalidTrustedIdPFaultFaultMessage {
 		String message = "removeTrustedIdP";
 		logger.info(message);
 
-		TrustedIdP tip = removeTrustedIdPRequest.getTrustedIdP()
-				.getTrustedIdP();
+		TrustedIdP tip = removeTrustedIdPRequest.getTrustedIdP().getTrustedIdP();
 		String gridId = getCallerId();
 		RemoveTrustedIdPResponse response = null;
 		try {
@@ -679,8 +608,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidTrustedIdPException itidpe) {
-			throw new InvalidTrustedIdPFaultFaultMessage(message,
-					itidpe.getFault());
+			throw new InvalidTrustedIdPFaultFaultMessage(message, itidpe.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -688,20 +616,15 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public PerformFederationAuditResponse performFederationAudit(
-			PerformFederationAuditRequest performFederationAuditRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public PerformFederationAuditResponse performFederationAudit(PerformFederationAuditRequest performFederationAuditRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "performFederationAudit";
 		logger.info(message);
 
-		FederationAuditFilter filter = performFederationAuditRequest.getF()
-				.getFederationAuditFilter();
+		FederationAuditFilter filter = performFederationAuditRequest.getF().getFederationAuditFilter();
 		String gridId = getCallerId();
 		PerformFederationAuditResponse response = null;
 		try {
-			List<FederationAuditRecord> federationAuditRecords = dorian
-					.performFederationAudit(gridId, filter);
+			List<FederationAuditRecord> federationAuditRecords = dorian.performFederationAudit(gridId, filter);
 			response = new PerformFederationAuditResponse();
 			response.getFederationAuditRecord().addAll(federationAuditRecords);
 		} catch (DorianInternalException die) {
@@ -713,23 +636,18 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public PerformIdentityProviderAuditResponse performIdentityProviderAudit(
-			PerformIdentityProviderAuditRequest performIdentityProviderAuditRequest)
-			throws PermissionDeniedFaultFaultMessage,
+	public PerformIdentityProviderAuditResponse performIdentityProviderAudit(PerformIdentityProviderAuditRequest performIdentityProviderAuditRequest) throws PermissionDeniedFaultFaultMessage,
 			DorianInternalFaultFaultMessage {
 		String message = "performIdentityProviderAudit";
 		logger.info(message);
 
-		IdentityProviderAuditFilter filter = performIdentityProviderAuditRequest
-				.getF().getIdentityProviderAuditFilter();
+		IdentityProviderAuditFilter filter = performIdentityProviderAuditRequest.getF().getIdentityProviderAuditFilter();
 		String gridId = getCallerId();
 		PerformIdentityProviderAuditResponse response = null;
 		try {
-			List<IdentityProviderAuditRecord> identityProviderAuditRecords = dorian
-					.performIdentityProviderAudit(gridId, filter);
+			List<IdentityProviderAuditRecord> identityProviderAuditRecords = dorian.performIdentityProviderAudit(gridId, filter);
 			response = new PerformIdentityProviderAuditResponse();
-			response.getIdentityProviderAuditRecord().addAll(
-					identityProviderAuditRecords);
+			response.getIdentityProviderAuditRecord().addAll(identityProviderAuditRecords);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -739,32 +657,23 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RequestUserCertificateResponse requestUserCertificate(
-			RequestUserCertificateRequest requestUserCertificateRequest)
-			throws DorianInternalFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage,
-			InvalidAssertionFaultFaultMessage, UserPolicyFaultFaultMessage {
+	public RequestUserCertificateResponse requestUserCertificate(RequestUserCertificateRequest requestUserCertificateRequest) throws DorianInternalFaultFaultMessage,
+			PermissionDeniedFaultFaultMessage, InvalidAssertionFaultFaultMessage, UserPolicyFaultFaultMessage {
 		String message = "requestUserCertificate";
 		logger.info(message);
 
-		AssertionType assertion = requestUserCertificateRequest.getSaml()
-				.getAssertion();
-		CertificateLifetime lifetime = requestUserCertificateRequest
-				.getLifetime().getCertificateLifetime();
+		AssertionType assertion = requestUserCertificateRequest.getSaml().getAssertion();
+		CertificateLifetime lifetime = requestUserCertificateRequest.getLifetime().getCertificateLifetime();
 		RequestUserCertificateResponse response = null;
 		try {
-			PublicKey publicKey = KeyUtil
-					.loadPublicKey(requestUserCertificateRequest.getKey()
-							.getPublicKey().getKeyAsString());
-			Element assertionElement = JAXBUtils.marshalToElement(assertion,
-					SAMLUtils.ASSERTION_QNAME);
+			PublicKey publicKey = KeyUtil.loadPublicKey(requestUserCertificateRequest.getKey().getPublicKey().getKeyAsString());
+			Element assertionElement = JAXBUtils.marshalToElement(assertion, SAMLUtils.ASSERTION_QNAME);
 			SAMLUtils.canonicalizeAssertion(assertionElement);
 			SAMLAssertion samlAssertion = new SAMLAssertion(assertionElement);
 			// Must regenerate internal DOM!
 			samlAssertion.toString();
 			X509Certificate cert = new X509Certificate();
-			cert.setCertificateAsString(CertUtil.writeCertificate(dorian
-					.requestUserCertificate(samlAssertion, publicKey, lifetime)));
+			cert.setCertificateAsString(CertUtil.writeCertificate(dorian.requestUserCertificate(samlAssertion, publicKey, lifetime, signingAlgorithm)));
 			response = new RequestUserCertificateResponse();
 			response.setX509Certificate(cert);
 		} catch (DorianInternalException die) {
@@ -776,47 +685,36 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		} catch (IOException ioe) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ ioe.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + ioe.getMessage());
 		} catch (GeneralSecurityException gse) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ gse.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + gse.getMessage());
 		} catch (JAXBException jaxbe) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ jaxbe.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + jaxbe.getMessage());
 		} catch (SAMLException samle) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ samle.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + samle.getMessage());
 		} catch (ParserConfigurationException pce) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ pce.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + pce.getMessage());
 		}
 		return response;
 	}
 
 	@Override
-	public FindUserCertificatesResponse findUserCertificates(
-			FindUserCertificatesRequest findUserCertificatesRequest)
-			throws DorianInternalFaultFaultMessage,
-			InvalidUserCertificateFaultFaultMessage,
+	public FindUserCertificatesResponse findUserCertificates(FindUserCertificatesRequest findUserCertificatesRequest) throws DorianInternalFaultFaultMessage, InvalidUserCertificateFaultFaultMessage,
 			PermissionDeniedFaultFaultMessage {
 		String message = "findUserCertificates";
 		logger.info(message);
 
-		UserCertificateFilter filter = findUserCertificatesRequest
-				.getUserCertificateFilter().getUserCertificateFilter();
+		UserCertificateFilter filter = findUserCertificatesRequest.getUserCertificateFilter().getUserCertificateFilter();
 		String gridId = getCallerId();
 		FindUserCertificatesResponse response = null;
 		try {
-			List<UserCertificateRecord> userCertificateRecords = dorian
-					.findUserCertificateRecords(gridId, filter);
+			List<UserCertificateRecord> userCertificateRecords = dorian.findUserCertificateRecords(gridId, filter);
 			response = new FindUserCertificatesResponse();
 			response.getUserCertificateRecord().addAll(userCertificateRecords);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidUserCertificateException iuce) {
-			throw new InvalidUserCertificateFaultFaultMessage(message,
-					iuce.getFault());
+			throw new InvalidUserCertificateFaultFaultMessage(message, iuce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -824,16 +722,12 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public UpdateUserCertificateResponse updateUserCertificate(
-			UpdateUserCertificateRequest updateUserCertificateRequest)
-			throws DorianInternalFaultFaultMessage,
-			InvalidUserCertificateFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage {
+	public UpdateUserCertificateResponse updateUserCertificate(UpdateUserCertificateRequest updateUserCertificateRequest) throws DorianInternalFaultFaultMessage,
+			InvalidUserCertificateFaultFaultMessage, PermissionDeniedFaultFaultMessage {
 		String message = "updateUserCertificate";
 		logger.info(message);
 
-		UserCertificateUpdate update = updateUserCertificateRequest.getUpdate()
-				.getUserCertificateUpdate();
+		UserCertificateUpdate update = updateUserCertificateRequest.getUpdate().getUserCertificateUpdate();
 		String gridId = getCallerId();
 		UpdateUserCertificateResponse response = null;
 		try {
@@ -842,8 +736,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidUserCertificateException iuce) {
-			throw new InvalidUserCertificateFaultFaultMessage(message,
-					iuce.getFault());
+			throw new InvalidUserCertificateFaultFaultMessage(message, iuce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -851,16 +744,12 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RemoveUserCertificateResponse removeUserCertificate(
-			RemoveUserCertificateRequest removeUserCertificateRequest)
-			throws DorianInternalFaultFaultMessage,
-			InvalidUserCertificateFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage {
+	public RemoveUserCertificateResponse removeUserCertificate(RemoveUserCertificateRequest removeUserCertificateRequest) throws DorianInternalFaultFaultMessage,
+			InvalidUserCertificateFaultFaultMessage, PermissionDeniedFaultFaultMessage {
 		String message = "removeUserCertificate";
 		logger.info(message);
 
-		long serialNumber = Long.parseLong(removeUserCertificateRequest
-				.getSerialNumber());
+		long serialNumber = Long.parseLong(removeUserCertificateRequest.getSerialNumber());
 		String gridId = getCallerId();
 		RemoveUserCertificateResponse response = null;
 		try {
@@ -869,8 +758,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidUserCertificateException iuce) {
-			throw new InvalidUserCertificateFaultFaultMessage(message,
-					iuce.getFault());
+			throw new InvalidUserCertificateFaultFaultMessage(message, iuce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -878,15 +766,11 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public FindGridUsersResponse findGridUsers(
-			FindGridUsersRequest findGridUserRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public FindGridUsersResponse findGridUsers(FindGridUsersRequest findGridUserRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "findGridUsers";
 		logger.info(message);
 
-		GridUserFilter filter = findGridUserRequest.getFilter()
-				.getGridUserFilter();
+		GridUserFilter filter = findGridUserRequest.getFilter().getGridUserFilter();
 		String gridId = getCallerId();
 		FindGridUsersResponse response = null;
 		try {
@@ -902,10 +786,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public UpdateGridUserResponse updateGridUser(
-			UpdateGridUserRequest updateGridUserRequest)
-			throws DorianInternalFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage, InvalidUserFaultFaultMessage {
+	public UpdateGridUserResponse updateGridUser(UpdateGridUserRequest updateGridUserRequest) throws DorianInternalFaultFaultMessage, PermissionDeniedFaultFaultMessage, InvalidUserFaultFaultMessage {
 		String message = "updateGridUser";
 		logger.info(message);
 
@@ -926,10 +807,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RemoveGridUserResponse removeGridUser(
-			RemoveGridUserRequest removeGridUserRequest)
-			throws DorianInternalFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage, InvalidUserFaultFaultMessage {
+	public RemoveGridUserResponse removeGridUser(RemoveGridUserRequest removeGridUserRequest) throws DorianInternalFaultFaultMessage, PermissionDeniedFaultFaultMessage, InvalidUserFaultFaultMessage {
 		String message = "removeGridUser";
 		logger.info(message);
 
@@ -950,32 +828,24 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RequestHostCertificateResponse requestHostCertificate(
-			RequestHostCertificateRequest requestHostCertificateRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
-			InvalidHostCertificateRequestFaultFaultMessage,
-			InvalidHostCertificateFaultFaultMessage {
+	public RequestHostCertificateResponse requestHostCertificate(RequestHostCertificateRequest requestHostCertificateRequest) throws PermissionDeniedFaultFaultMessage,
+			DorianInternalFaultFaultMessage, InvalidHostCertificateRequestFaultFaultMessage, InvalidHostCertificateFaultFaultMessage {
 		String message = "requestHostCertificate";
 		logger.info(message);
 
-		HostCertificateRequest hostCertificateRequest = requestHostCertificateRequest
-				.getReq().getHostCertificateRequest();
+		HostCertificateRequest hostCertificateRequest = requestHostCertificateRequest.getReq().getHostCertificateRequest();
 		String gridId = getCallerId();
 		RequestHostCertificateResponse response = null;
 		try {
-			HostCertificateRecord hostCertificateRecord = dorian
-					.requestHostCertificate(gridId, hostCertificateRequest);
+			HostCertificateRecord hostCertificateRecord = dorian.requestHostCertificate(gridId, hostCertificateRequest);
 			response = new RequestHostCertificateResponse();
 			response.setHostCertificateRecord(hostCertificateRecord);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidHostCertificateRequestException ihcre) {
-			throw new InvalidHostCertificateRequestFaultFaultMessage(message,
-					ihcre.getFault());
+			throw new InvalidHostCertificateRequestFaultFaultMessage(message, ihcre.getFault());
 		} catch (InvalidHostCertificateException ihce) {
-			throw new InvalidHostCertificateFaultFaultMessage(message,
-					ihce.getFault());
+			throw new InvalidHostCertificateFaultFaultMessage(message, ihce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -983,9 +853,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public GetOwnedHostCertificatesResponse getOwnedHostCertificates(
-			GetOwnedHostCertificatesRequest getOwnedHostCertificatesRequest)
-			throws PermissionDeniedFaultFaultMessage,
+	public GetOwnedHostCertificatesResponse getOwnedHostCertificates(GetOwnedHostCertificatesRequest getOwnedHostCertificatesRequest) throws PermissionDeniedFaultFaultMessage,
 			DorianInternalFaultFaultMessage {
 		String message = "getOwnedHostCertificates";
 		logger.info(message);
@@ -993,11 +861,9 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		String gridId = getCallerId();
 		GetOwnedHostCertificatesResponse response = null;
 		try {
-			HostCertificateRecord[] hostCertificateRecords = dorian
-					.getOwnedHostCertificates(gridId);
+			HostCertificateRecord[] hostCertificateRecords = dorian.getOwnedHostCertificates(gridId);
 			response = new GetOwnedHostCertificatesResponse();
-			response.getHostCertificateRecord().addAll(
-					Arrays.asList(hostCertificateRecords));
+			response.getHostCertificateRecord().addAll(Arrays.asList(hostCertificateRecords));
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1007,23 +873,17 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public FindHostCertificatesResponse findHostCertificates(
-			FindHostCertificatesRequest findHostCertificatesRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public FindHostCertificatesResponse findHostCertificates(FindHostCertificatesRequest findHostCertificatesRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "findHostCertificates";
 		logger.info(message);
 
-		HostCertificateFilter filter = findHostCertificatesRequest
-				.getHostCertificateFilter().getHostCertificateFilter();
+		HostCertificateFilter filter = findHostCertificatesRequest.getHostCertificateFilter().getHostCertificateFilter();
 		String gridId = getCallerId();
 		FindHostCertificatesResponse response = null;
 		try {
-			HostCertificateRecord[] hostCertificateRecords = dorian
-					.findHostCertificates(gridId, filter);
+			HostCertificateRecord[] hostCertificateRecords = dorian.findHostCertificates(gridId, filter);
 			response = new FindHostCertificatesResponse();
-			response.getHostCertificateRecord().addAll(
-					Arrays.asList(hostCertificateRecords));
+			response.getHostCertificateRecord().addAll(Arrays.asList(hostCertificateRecords));
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1033,11 +893,8 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public ApproveHostCertificateResponse approveHostCertificate(
-			ApproveHostCertificateRequest approveHostCertificateRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
-			InvalidHostCertificateFaultFaultMessage {
+	public ApproveHostCertificateResponse approveHostCertificate(ApproveHostCertificateRequest approveHostCertificateRequest) throws PermissionDeniedFaultFaultMessage,
+			DorianInternalFaultFaultMessage, InvalidHostCertificateFaultFaultMessage {
 		String message = "approveHostCertificate";
 		logger.info(message);
 
@@ -1045,15 +902,13 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		String gridId = getCallerId();
 		ApproveHostCertificateResponse response = null;
 		try {
-			HostCertificateRecord hostCertificateRecord = dorian
-					.approveHostCertificate(gridId, recordId);
+			HostCertificateRecord hostCertificateRecord = dorian.approveHostCertificate(gridId, recordId);
 			response = new ApproveHostCertificateResponse();
 			response.setHostCertificateRecord(hostCertificateRecord);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidHostCertificateException ihce) {
-			throw new InvalidHostCertificateFaultFaultMessage(message,
-					ihce.getFault());
+			throw new InvalidHostCertificateFaultFaultMessage(message, ihce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -1061,10 +916,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RenewHostCertificateResponse renewHostCertificate(
-			RenewHostCertificateRequest renewHostCertificateRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
+	public RenewHostCertificateResponse renewHostCertificate(RenewHostCertificateRequest renewHostCertificateRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage,
 			InvalidHostCertificateFaultFaultMessage {
 		String message = "renewHostCertificate";
 		logger.info(message);
@@ -1073,15 +925,13 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		String gridId = getCallerId();
 		RenewHostCertificateResponse response = null;
 		try {
-			HostCertificateRecord hostCertificateRecord = dorian
-					.renewHostCertificate(gridId, recordId);
+			HostCertificateRecord hostCertificateRecord = dorian.renewHostCertificate(gridId, recordId);
 			response = new RenewHostCertificateResponse();
 			response.setHostCertificateRecord(hostCertificateRecord);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidHostCertificateException ihce) {
-			throw new InvalidHostCertificateFaultFaultMessage(message,
-					ihce.getFault());
+			throw new InvalidHostCertificateFaultFaultMessage(message, ihce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -1089,16 +939,12 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public UpdateHostCertificateRecordResponse updateHostCertificateRecord(
-			UpdateHostCertificateRecordRequest updateHostCertificateRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage,
-			InvalidHostCertificateFaultFaultMessage {
+	public UpdateHostCertificateRecordResponse updateHostCertificateRecord(UpdateHostCertificateRecordRequest updateHostCertificateRequest) throws PermissionDeniedFaultFaultMessage,
+			DorianInternalFaultFaultMessage, InvalidHostCertificateFaultFaultMessage {
 		String message = "updateHostCertificate";
 		logger.info(message);
 
-		HostCertificateUpdate update = updateHostCertificateRequest
-				.getHostCertificateUpdate().getHostCertificateUpdate();
+		HostCertificateUpdate update = updateHostCertificateRequest.getHostCertificateUpdate().getHostCertificateUpdate();
 		String gridId = getCallerId();
 		UpdateHostCertificateRecordResponse response = null;
 		try {
@@ -1107,8 +953,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidHostCertificateException ihce) {
-			throw new InvalidHostCertificateFaultFaultMessage(message,
-					ihce.getFault());
+			throw new InvalidHostCertificateFaultFaultMessage(message, ihce.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		}
@@ -1116,10 +961,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public GetAccountProfileResponse getAccountProfile(
-			GetAccountProfileRequest getAccountProfileRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public GetAccountProfileResponse getAccountProfile(GetAccountProfileRequest getAccountProfileRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "getAccountProfile";
 		logger.info(message);
 
@@ -1128,8 +970,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		try {
 			dorian.getAccountProfile(gridId);
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1139,29 +980,23 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public UpdateAccountProfileResponse updateAccountProfile(
-			UpdateAccountProfileRequest updateAccountProfileRequest)
-			throws DorianInternalFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage, NoSuchUserFaultFaultMessage,
-			InvalidUserPropertyFaultFaultMessage {
+	public UpdateAccountProfileResponse updateAccountProfile(UpdateAccountProfileRequest updateAccountProfileRequest) throws DorianInternalFaultFaultMessage, PermissionDeniedFaultFaultMessage,
+			NoSuchUserFaultFaultMessage, InvalidUserPropertyFaultFaultMessage {
 		String message = "updateAccountProfile";
 		logger.info(message);
 
-		AccountProfile profile = updateAccountProfileRequest.getProfile()
-				.getAccountProfile();
+		AccountProfile profile = updateAccountProfileRequest.getProfile().getAccountProfile();
 		String gridId = getCallerId();
 		UpdateAccountProfileResponse response = null;
 		try {
 			dorian.updateAccountProfile(gridId, profile);
 			response = new UpdateAccountProfileResponse();
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidUserPropertyException iupe) {
-			throw new InvalidUserPropertyFaultFaultMessage(message,
-					iupe.getFault());
+			throw new InvalidUserPropertyFaultFaultMessage(message, iupe.getFault());
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		} catch (NoSuchUserException nsue) {
@@ -1171,21 +1006,16 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public GetGridUserPoliciesResponse getGridUserPolicies(
-			GetGridUserPoliciesRequest getGridUserPoliciesRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public GetGridUserPoliciesResponse getGridUserPolicies(GetGridUserPoliciesRequest getGridUserPoliciesRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "getGridUserPolicies";
 		logger.info(message);
 
 		String gridId = getCallerId();
 		GetGridUserPoliciesResponse response = null;
 		try {
-			GridUserPolicy[] gridUserPolicies = dorian
-					.getGridUserPolicies(gridId);
+			GridUserPolicy[] gridUserPolicies = dorian.getGridUserPolicies(gridId);
 			response = new GetGridUserPoliciesResponse();
-			response.getGridUserPolicy()
-					.addAll(Arrays.asList(gridUserPolicies));
+			response.getGridUserPolicy().addAll(Arrays.asList(gridUserPolicies));
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1195,69 +1025,53 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public AuthenticateUserResponse authenticateUser(
-			AuthenticateUserRequest authenticateUserRequest)
-			throws InsufficientAttributeFaultFaultMessage,
-			AuthenticationProviderFaultFaultMessage,
-			InvalidCredentialFaultFaultMessage,
-			CredentialNotSupportedFaultFaultMessage {
+	public AuthenticateUserResponse authenticateUser(AuthenticateUserRequest authenticateUserRequest) throws InsufficientAttributeFaultFaultMessage, AuthenticationProviderFaultFaultMessage,
+			InvalidCredentialFaultFaultMessage, CredentialNotSupportedFaultFaultMessage {
 		String message = "authenticateUser";
 		logger.info(message);
 
-		Credential credential = authenticateUserRequest.getCredential()
-				.getCredential();
+		Credential credential = authenticateUserRequest.getCredential().getCredential();
 
 		AuthenticateUserResponse response = null;
 
 		try {
 			SAMLAssertion samlAssertion = dorian.authenticate(credential);
 			String samlXML = samlAssertion.toString();
-			AssertionType assertion = JAXBUtils.unmarshal(AssertionType.class,
-					samlXML);
+			AssertionType assertion = JAXBUtils.unmarshal(AssertionType.class, samlXML);
 			response = new AuthenticateUserResponse();
 			response.setAssertion(assertion);
 		} catch (AuthenticationProviderException ape) {
-			throw new AuthenticationProviderFaultFaultMessage(message,
-					ape.getFault());
+			throw new AuthenticationProviderFaultFaultMessage(message, ape.getFault());
 		} catch (InvalidCredentialException ice) {
-			throw new InvalidCredentialFaultFaultMessage(message,
-					ice.getFault());
+			throw new InvalidCredentialFaultFaultMessage(message, ice.getFault());
 		} catch (CredentialNotSupportedException cnse) {
-			throw new CredentialNotSupportedFaultFaultMessage(message,
-					cnse.getFault());
+			throw new CredentialNotSupportedFaultFaultMessage(message, cnse.getFault());
 		} catch (JAXBException jaxbe) {
-			throw new AuthenticationProviderFaultFaultMessage(message + ": "
-					+ jaxbe.getMessage());
+			throw new AuthenticationProviderFaultFaultMessage(message + ": " + jaxbe.getMessage());
 		}
 		return response;
 	}
 
-	public GetCACertificateResponse getCACertificate(
-			GetCACertificateRequest getCACertificateRequest)
-			throws DorianInternalFaultFaultMessage {
+	public GetCACertificateResponse getCACertificate(GetCACertificateRequest getCACertificateRequest) throws DorianInternalFaultFaultMessage {
 		String message = "getCACertificate";
 		logger.info(message);
 
 		GetCACertificateResponse response = null;
 		try {
 			X509Certificate cert = new X509Certificate();
-			cert.setCertificateAsString(CertUtil.writeCertificate(dorian
-					.getCACertificate()));
+			cert.setCertificateAsString(CertUtil.writeCertificate(dorian.getCACertificate()));
 			response = new GetCACertificateResponse();
 			response.setX509Certificate(cert);
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (IOException ioe) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ ioe.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + ioe.getMessage());
 		}
 		return response;
 	}
 
 	@Override
-	public GetAdminsResponse getAdmins(GetAdminsRequest getAdminsRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public GetAdminsResponse getAdmins(GetAdminsRequest getAdminsRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "getAdmins";
 		logger.info(message);
 
@@ -1268,8 +1082,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 			response = new GetAdminsResponse();
 			response.getResponse().addAll(Arrays.asList(adminIds));
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1279,9 +1092,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public AddAdminResponse addAdmin(AddAdminRequest addAdminRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public AddAdminResponse addAdmin(AddAdminRequest addAdminRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "addAdmin";
 		logger.info(message);
 
@@ -1292,8 +1103,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 			dorian.addAdmin(gridId, adminIdentity);
 			response = new AddAdminResponse();
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1303,9 +1113,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public RemoveAdminResponse removeAdmin(RemoveAdminRequest removeAdminRequest)
-			throws PermissionDeniedFaultFaultMessage,
-			DorianInternalFaultFaultMessage {
+	public RemoveAdminResponse removeAdmin(RemoveAdminRequest removeAdminRequest) throws PermissionDeniedFaultFaultMessage, DorianInternalFaultFaultMessage {
 		String message = "removeAdmin";
 		logger.info(message);
 
@@ -1316,8 +1124,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 			dorian.removeAdmin(gridId, adminId);
 			response = new RemoveAdminResponse();
 		} catch (RemoteException re) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ re.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + re.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (PermissionDeniedException pde) {
@@ -1327,36 +1134,27 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 	}
 
 	@Override
-	public CreateProxyResponse createProxy(CreateProxyRequest createProxyRequest)
-			throws DorianInternalFaultFaultMessage,
-			PermissionDeniedFaultFaultMessage,
-			InvalidAssertionFaultFaultMessage, UserPolicyFaultFaultMessage,
-			InvalidProxyFaultFaultMessage {
+	public CreateProxyResponse createProxy(CreateProxyRequest createProxyRequest) throws DorianInternalFaultFaultMessage, PermissionDeniedFaultFaultMessage, InvalidAssertionFaultFaultMessage,
+			UserPolicyFaultFaultMessage, InvalidProxyFaultFaultMessage {
 		String message = "createProxy";
 		logger.info(message);
 
-		String samlXML = createProxyRequest.getSaml().getSAMLAssertion()
-				.getXml();
-		ProxyLifetime proxyLifetime = createProxyRequest.getLifetime()
-				.getProxyLifetime();
+		String samlXML = createProxyRequest.getSaml().getSAMLAssertion().getXml();
+		ProxyLifetime proxyLifetime = createProxyRequest.getLifetime().getProxyLifetime();
 		CertificateLifetime lifetime = new CertificateLifetime();
 		lifetime.setHours(proxyLifetime.getHours());
 		lifetime.setMinutes(proxyLifetime.getMinutes());
 		lifetime.setSeconds(proxyLifetime.getSeconds());
 		CreateProxyResponse response = null;
 		try {
-			SAMLAssertion samlAssertion = new SAMLAssertion(
-					new ByteArrayInputStream(samlXML.getBytes("UTF-8")));
-			PublicKey publicKey = KeyUtil.loadPublicKey(createProxyRequest
-					.getPublicKey().getPublicKey().getKeyAsString());
+			SAMLAssertion samlAssertion = new SAMLAssertion(new ByteArrayInputStream(samlXML.getBytes("UTF-8")));
+			PublicKey publicKey = KeyUtil.loadPublicKey(createProxyRequest.getPublicKey().getPublicKey().getKeyAsString());
 			X509Certificate cert = new X509Certificate();
-			cert.setCertificateAsString(CertUtil.writeCertificate(dorian
-					.requestUserCertificate(samlAssertion, publicKey, lifetime)));
+			cert.setCertificateAsString(CertUtil.writeCertificate(dorian.requestUserCertificate(samlAssertion, publicKey, lifetime, signingAlgorithm)));
 			response = new CreateProxyResponse();
 			response.getX509Certificate().add(cert);
 		} catch (IOException ioe) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ ioe.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + ioe.getMessage());
 		} catch (DorianInternalException die) {
 			throw new DorianInternalFaultFaultMessage(message, die.getFault());
 		} catch (InvalidAssertionException iae) {
@@ -1366,11 +1164,9 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		} catch (PermissionDeniedException pde) {
 			throw new PermissionDeniedFaultFaultMessage(message, pde.getFault());
 		} catch (GeneralSecurityException gse) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ gse.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + gse.getMessage());
 		} catch (SAMLException samle) {
-			throw new DorianInternalFaultFaultMessage(message + ": "
-					+ samle.getMessage());
+			throw new DorianInternalFaultFaultMessage(message + ": " + samle.getMessage());
 		}
 		return response;
 	}

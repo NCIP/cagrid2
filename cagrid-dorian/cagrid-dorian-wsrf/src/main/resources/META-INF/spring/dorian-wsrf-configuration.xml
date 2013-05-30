@@ -48,18 +48,32 @@
 				<sec:clientAuthentication want="true"
 					required="false" />
 			</httpj:tlsServerParameters>
+			
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<property name="port" value="${cagrid.dorian.wsrf.port}" />
+					<property name="keystore" value="${cagrid.dorian.wsrf.keystore.path}" />
+					<property name="password" value="${cagrid.dorian.wsrf.keystore.password}" />
+					<property name="keyPassword" value="${cagrid.dorian.wsrf.key.password}" />
+					<property name="truststore" value="${cagrid.dorian.wsrf.truststore.path}" />
+					<property name="trustPassword" value="${cagrid.dorian.wsrf.truststore.password}" />
+					<property name="wantClientAuth" value="true" />
+					<property name="needClientAuth" value="false" />
+					<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
+				</bean>
+			</httpj:connector>
 		</httpj:engine>
 
 		<httpj:engine port="${cagrid.dorian.legacy-wsrf.port}">
 
 			<httpj:tlsServerParameters>
-				<sec:keyManagers keyPassword="${cagrid.dorian.wsrf.key.password}">
+				<sec:keyManagers keyPassword="${cagrid.dorian.legacy-wsrf.key.password}">
 					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.wsrf.keystore.password}" file="${cagrid.dorian.wsrf.keystore.path}" />
+						password="${cagrid.dorian.legacy-wsrf.keystore.password}" file="${cagrid.dorian.legacy-wsrf.keystore.path}" />
 				</sec:keyManagers>
 				<sec:trustManagers>
 					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.wsrf.truststore.password}" file="${cagrid.dorian.wsrf.truststore.path}" />
+						password="${cagrid.dorian.legacy-wsrf.truststore.password}" file="${cagrid.dorian.legacy-wsrf.truststore.path}" />
 				</sec:trustManagers>
 
 				<sec:cipherSuitesFilter>
@@ -78,11 +92,11 @@
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
 					<property name="port" value="${cagrid.dorian.legacy-wsrf.port}" />
-					<property name="keystore" value="${cagrid.dorian.wsrf.keystore.path}" />
-					<property name="password" value="${cagrid.dorian.wsrf.keystore.password}" />
-					<property name="keyPassword" value="${cagrid.dorian.wsrf.key.password}" />
-					<property name="truststore" value="${cagrid.dorian.wsrf.truststore.path}" />
-					<property name="trustPassword" value="${cagrid.dorian.wsrf.truststore.password}" />
+					<property name="keystore" value="${cagrid.dorian.legacy-wsrf.keystore.path}" />
+					<property name="password" value="${cagrid.dorian.legacy-wsrf.keystore.password}" />
+					<property name="keyPassword" value="${cagrid.dorian.legacy-wsrf.key.password}" />
+					<property name="truststore" value="${cagrid.dorian.legacy-wsrf.truststore.path}" />
+					<property name="trustPassword" value="${cagrid.dorian.legacy-wsrf.truststore.password}" />
 					<property name="wantClientAuth" value="true" />
 					<property name="needClientAuth" value="false" />
 					<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
@@ -102,10 +116,12 @@
 
 	<bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
 		<constructor-arg index="0" ref="dorianService" />
+		<constructor-arg index="1" value="SHA2" />
 	</bean>
 
 	<bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
 		<constructor-arg index="0" ref="dorianService" />
+		<constructor-arg index="1" value="SHA1" />
 	</bean>
 
 	<bean id="dummyLegacyDorianWSRF" class="org.cagrid.dorian.DorianPortTypeImpl">

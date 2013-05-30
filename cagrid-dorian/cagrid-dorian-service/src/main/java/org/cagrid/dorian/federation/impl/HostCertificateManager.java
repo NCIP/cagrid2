@@ -25,6 +25,7 @@ import org.cagrid.dorian.ifs.HostCertificateUpdate;
 import org.cagrid.dorian.ifs.HostRecord;
 import org.cagrid.dorian.ifs.HostSearchCriteria;
 import org.cagrid.dorian.ifs.PublicKey;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.util.PreparedStatementBuilder;
 import org.cagrid.dorian.types.DorianInternalException;
 import org.cagrid.dorian.types.InvalidHostCertificateException;
@@ -48,8 +49,7 @@ public class HostCertificateManager {
 	public static final String PUBLIC_KEY = "PUBLIC_KEY";
 	public static final String EXPIRATION = "EXPIRATION";
 
-	private final static Logger logger = LoggerFactory
-			.getLogger(HostCertificateManager.class);
+	private final static Logger logger = LoggerFactory.getLogger(HostCertificateManager.class);
 
 	private boolean dbBuilt = false;
 	private Database db;
@@ -58,9 +58,7 @@ public class HostCertificateManager {
 	private Publisher publisher;
 	private CertificateBlacklistManager blackList;
 
-	public HostCertificateManager(Database db,
-			IdentityFederationProperties conf, CertificateAuthority ca,
-			Publisher publisher, CertificateBlacklistManager blackList) {
+	public HostCertificateManager(Database db, IdentityFederationProperties conf, CertificateAuthority ca, Publisher publisher, CertificateBlacklistManager blackList) {
 		this.db = db;
 		this.ca = ca;
 		this.conf = conf;
@@ -68,50 +66,36 @@ public class HostCertificateManager {
 		this.blackList = blackList;
 	}
 
-	private void publishCRLIfNeeded(HostCertificateStatus s1,
-			HostCertificateStatus s2) {
-		if ((s1.equals(HostCertificateStatus.ACTIVE))
-				&& (s2.equals(HostCertificateStatus.SUSPENDED))) {
+	private void publishCRLIfNeeded(HostCertificateStatus s1, HostCertificateStatus s2) {
+		if ((s1.equals(HostCertificateStatus.ACTIVE)) && (s2.equals(HostCertificateStatus.SUSPENDED))) {
 			publisher.publishCRL();
-		} else if ((s1.equals(HostCertificateStatus.ACTIVE))
-				&& (s2.equals(HostCertificateStatus.COMPROMISED))) {
+		} else if ((s1.equals(HostCertificateStatus.ACTIVE)) && (s2.equals(HostCertificateStatus.COMPROMISED))) {
 			publisher.publishCRL();
-		} else if ((s1.equals(HostCertificateStatus.SUSPENDED))
-				&& (s2.equals(HostCertificateStatus.ACTIVE))) {
+		} else if ((s1.equals(HostCertificateStatus.SUSPENDED)) && (s2.equals(HostCertificateStatus.ACTIVE))) {
 			publisher.publishCRL();
 		}
 
 	}
 
-	public synchronized HostCertificateRecord renewHostCertificate(long id)
-			throws DorianInternalException, InvalidHostCertificateException {
+	public synchronized HostCertificateRecord renewHostCertificate(long id) throws DorianInternalException, InvalidHostCertificateException {
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
 		if (!record.getStatus().equals(HostCertificateStatus.ACTIVE)) {
-			InvalidHostCertificateException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateException.class,
-							"Only active host certificates may be renewed.");
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class, "Only active host certificates may be renewed.");
 			throw fault;
 		}
 
 		Connection c = null;
 		try {
-			java.security.cert.X509Certificate oldCert = CertUtil
-					.loadCertificate(record.getCertificate()
-							.getCertificateAsString());
-			blackList.addCertificateToBlackList(oldCert,
-					CertificateBlacklistManager.CERTIFICATE_RENEWED);
-			java.security.PublicKey key = KeyUtil.loadPublicKey(record
-					.getPublicKey().getKeyAsString());
+			java.security.cert.X509Certificate oldCert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+			blackList.addCertificateToBlackList(oldCert, CertificateBlacklistManager.CERTIFICATE_RENEWED);
+			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			Date start = new Date();
 			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
-			Date end = org.cagrid.dorian.service.util.Utils
-					.getExpiredDate(lifetime);
+			Date end = org.cagrid.dorian.service.util.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-			java.security.cert.X509Certificate cert = ca.signHostCertificate(
-					record.getHost(), key, start, end);
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(record.getHost(), key, start, end, CertificateSignatureAlgorithm.SHA2);
 			record.setSerialNumber(cert.getSerialNumber().longValue());
 			record.setSubject(cert.getSubjectDN().getName());
 			X509Certificate x509 = new X509Certificate();
@@ -119,10 +103,7 @@ public class HostCertificateManager {
 			record.setCertificate(x509);
 			c = db.getConnection();
 
-			PreparedStatement s = c.prepareStatement("update " + TABLE
-					+ " SET " + SERIAL + " = ? , " + SUBJECT + " = ? , "
-					+ EXPIRATION + " = ? , " + CERTIFICATE + " = ? WHERE " + ID
-					+ "= ?");
+			PreparedStatement s = c.prepareStatement("update " + TABLE + " SET " + SERIAL + " = ? , " + SUBJECT + " = ? , " + EXPIRATION + " = ? , " + CERTIFICATE + " = ? WHERE " + ID + "= ?");
 			s.setLong(1, record.getSerialNumber());
 			s.setString(2, record.getSubject());
 			s.setLong(3, cert.getNotAfter().getTime());
@@ -132,9 +113,7 @@ public class HostCertificateManager {
 			return record;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 
@@ -143,33 +122,26 @@ public class HostCertificateManager {
 		}
 	}
 
-	public synchronized HostCertificateRecord approveHostCertifcate(long id)
-			throws DorianInternalException, InvalidHostCertificateException {
+	public synchronized HostCertificateRecord approveHostCertifcate(long id) throws DorianInternalException, InvalidHostCertificateException {
 		Connection c = null;
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
 
 		// Check to see if the status is pending.
 		if (!record.getStatus().equals(HostCertificateStatus.PENDING)) {
-			InvalidHostCertificateException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateException.class,
-							"Only pending host certificates may be approved.");
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class, "Only pending host certificates may be approved.");
 			throw fault;
 		}
 		try {
-			java.security.PublicKey key = KeyUtil.loadPublicKey(record
-					.getPublicKey().getKeyAsString());
+			java.security.PublicKey key = KeyUtil.loadPublicKey(record.getPublicKey().getKeyAsString());
 			String host = record.getHost();
 
 			Date start = new Date();
 			Lifetime lifetime = this.conf.getIssuedCertificateLifetime();
-			Date end = org.cagrid.dorian.service.util.Utils
-					.getExpiredDate(lifetime);
+			Date end = org.cagrid.dorian.service.util.Utils.getExpiredDate(lifetime);
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-			java.security.cert.X509Certificate cert = ca.signHostCertificate(
-					host, key, start, end);
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(host, key, start, end, CertificateSignatureAlgorithm.SHA2);
 
 			record.setSerialNumber(cert.getSerialNumber().longValue());
 			record.setSubject(cert.getSubjectDN().getName());
@@ -178,10 +150,8 @@ public class HostCertificateManager {
 			x509.setCertificateAsString(CertUtil.writeCertificate(cert));
 			record.setCertificate(x509);
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("update " + TABLE
-					+ " SET " + SERIAL + " = ? , " + SUBJECT + " = ? , "
-					+ STATUS + " = ? , " + EXPIRATION + " = ?, " + CERTIFICATE
-					+ " = ? WHERE " + ID + "= ?");
+			PreparedStatement s = c.prepareStatement("update " + TABLE + " SET " + SERIAL + " = ? , " + SUBJECT + " = ? , " + STATUS + " = ? , " + EXPIRATION + " = ?, " + CERTIFICATE + " = ? WHERE "
+					+ ID + "= ?");
 			s.setLong(1, record.getSerialNumber());
 			s.setString(2, record.getSubject());
 			s.setString(3, record.getStatus().value());
@@ -191,9 +161,7 @@ public class HostCertificateManager {
 			s.execute();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 
@@ -203,43 +171,28 @@ public class HostCertificateManager {
 		return record;
 	}
 
-	public synchronized long requestHostCertifcate(String owner,
-			HostCertificateRequest req) throws DorianInternalException,
-			InvalidHostCertificateRequestException {
+	public synchronized long requestHostCertifcate(String owner, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException {
 
 		if (Utils.clean(req.getHostname()) == null) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"No host specified.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "No host specified.");
 			throw fault;
 		}
 
 		if (req.getPublicKey() == null) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"No public key specified.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "No public key specified.");
 			throw fault;
 		}
 
 		if (Utils.clean(req.getPublicKey().getKeyAsString()) == null) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"No public key specified.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "No public key specified.");
 			throw fault;
 		}
 
 		// 1) We need to verify that a certificate for this host has never been
 		// requested, unless it was compromised or rejected.
 		if (certificateCannotBeRequested(req.getHostname())) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"A host certificate cannot be request for "
-									+ req.getHostname()
-									+ " a certificate for that host already exists.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class,
+					"A host certificate cannot be request for " + req.getHostname() + " a certificate for that host already exists.");
 			throw fault;
 		}
 
@@ -247,18 +200,12 @@ public class HostCertificateManager {
 		try {
 			key = KeyUtil.loadPublicKey(req.getPublicKey().getKeyAsString());
 		} catch (Exception e) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"Invalid Public Key provided.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "Invalid Public Key provided.");
 			throw fault;
 		}
 
 		if (key == null) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"Invalid Public Key provided.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "Invalid Public Key provided.");
 			throw fault;
 		}
 
@@ -270,20 +217,15 @@ public class HostCertificateManager {
 		for (int i = 0; i < records.size(); i++) {
 			java.security.PublicKey oldKey = null;
 			try {
-				oldKey = KeyUtil.loadPublicKey(records.get(i).getPublicKey()
-						.getKeyAsString());
+				oldKey = KeyUtil.loadPublicKey(records.get(i).getPublicKey().getKeyAsString());
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
-				DorianInternalException fault = FaultHelper
-						.createFaultException(DorianInternalException.class,
-								"An unexpected error occurred validating the public key.");
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred validating the public key.");
 				throw fault;
 			}
 			if (oldKey.equals(key)) {
-				InvalidHostCertificateRequestException fault = FaultHelper
-						.createFaultException(
-								InvalidHostCertificateRequestException.class,
-								"The public key provided is not acceptable it was determined that this key was compromised.");
+				InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class,
+						"The public key provided is not acceptable it was determined that this key was compromised.");
 				throw fault;
 			}
 		}
@@ -291,22 +233,16 @@ public class HostCertificateManager {
 		int keySize = ca.getProperties().getIssuedCertificateKeySize();
 		int size = ((RSAPublicKey) key).getModulus().bitLength();
 		if (keySize != size) {
-			InvalidHostCertificateRequestException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateRequestException.class,
-							"The size of the public key specified is " + size
-									+ " bits and is required to be " + keySize
-									+ " bits.");
+			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "The size of the public key specified is " + size
+					+ " bits and is required to be " + keySize + " bits.");
 			throw fault;
 		}
 		Connection c = null;
 		long id = -1;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
-					+ " SET " + SERIAL + "= ?," + HOST + "= ?," + SUBJECT
-					+ "= ?," + OWNER + "= ?," + STATUS + "= ?," + PUBLIC_KEY
-					+ "= ?," + CERTIFICATE + "= ?");
+			PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE + " SET " + SERIAL + "= ?," + HOST + "= ?," + SUBJECT + "= ?," + OWNER + "= ?," + STATUS + "= ?," + PUBLIC_KEY + "= ?,"
+					+ CERTIFICATE + "= ?");
 			s.setLong(1, -1);
 			s.setString(2, req.getHostname());
 			s.setString(3, "");
@@ -318,9 +254,7 @@ public class HostCertificateManager {
 			id = db.getLastAutoId(c);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -330,16 +264,14 @@ public class HostCertificateManager {
 
 	}
 
-	public List<HostCertificateRecord> findHostCertificates(
-			HostCertificateFilter f) throws DorianInternalException {
+	public List<HostCertificateRecord> findHostCertificates(HostCertificateFilter f) throws DorianInternalException {
 		this.buildDatabase();
 		Connection c = null;
 		List<HostCertificateRecord> hosts = new ArrayList<HostCertificateRecord>();
 
 		try {
 			c = db.getConnection();
-			PreparedStatementBuilder select = new PreparedStatementBuilder(
-					TABLE);
+			PreparedStatementBuilder select = new PreparedStatementBuilder(TABLE);
 			select.addSelectField(ID);
 			select.addSelectField(HOST);
 			select.addSelectField(OWNER);
@@ -364,12 +296,10 @@ public class HostCertificateManager {
 				}
 
 				if (f.getSubject() != null) {
-					select.addWhereField(SUBJECT, "LIKE", "%" + f.getSubject()
-							+ "%");
+					select.addWhereField(SUBJECT, "LIKE", "%" + f.getSubject() + "%");
 				}
 				if (f.getOwner() != null) {
-					select.addWhereField(OWNER, "LIKE", "%" + f.getOwner()
-							+ "%");
+					select.addWhereField(OWNER, "LIKE", "%" + f.getOwner() + "%");
 				}
 
 				if (f.getStatus() != null) {
@@ -380,11 +310,9 @@ public class HostCertificateManager {
 					Calendar cal = new GregorianCalendar();
 					long time = cal.getTimeInMillis();
 					if (f.isIsExpired().booleanValue()) {
-						select.addClause("(" + EXPIRATION + ">0 AND "
-								+ EXPIRATION + "<" + Long.valueOf(time) + ")");
+						select.addClause("(" + EXPIRATION + ">0 AND " + EXPIRATION + "<" + Long.valueOf(time) + ")");
 					} else {
-						select.addClause("(" + EXPIRATION + ">0 AND "
-								+ EXPIRATION + ">" + Long.valueOf(time) + ")");
+						select.addClause("(" + EXPIRATION + ">0 AND " + EXPIRATION + ">" + Long.valueOf(time) + ")");
 					}
 				}
 
@@ -398,8 +326,7 @@ public class HostCertificateManager {
 				record.setOwner(rs.getString(OWNER));
 				record.setSubject(rs.getString(SUBJECT));
 				record.setSerialNumber(rs.getLong(SERIAL));
-				record.setStatus(HostCertificateStatus.fromValue(rs
-						.getString(STATUS)));
+				record.setStatus(HostCertificateStatus.fromValue(rs.getString(STATUS)));
 				String keyStr = Utils.clean(rs.getString(PUBLIC_KEY));
 				if (keyStr != null) {
 					PublicKey pk = new PublicKey();
@@ -419,9 +346,7 @@ public class HostCertificateManager {
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -430,42 +355,35 @@ public class HostCertificateManager {
 		return hosts;
 	}
 
-	public List<HostRecord> getHostRecords(HostSearchCriteria f)
-			throws DorianInternalException {
+	public List<HostRecord> getHostRecords(HostSearchCriteria f) throws DorianInternalException {
 		this.buildDatabase();
 		Connection c = null;
 		List<HostRecord> hosts = new ArrayList<HostRecord>();
 
 		try {
 			c = db.getConnection();
-			PreparedStatementBuilder select = new PreparedStatementBuilder(
-					TABLE);
+			PreparedStatementBuilder select = new PreparedStatementBuilder(TABLE);
 			select.addSelectField(HOST);
 			select.addSelectField(OWNER);
 			select.addSelectField(SUBJECT);
 
 			if (f != null) {
-				select.addWhereField(STATUS, "=",
-						HostCertificateStatus.ACTIVE.value());
+				select.addWhereField(STATUS, "=", HostCertificateStatus.ACTIVE.value());
 
 				if (f.getHostname() != null) {
-					select.addWhereField(HOST, "LIKE", "%" + f.getHostname()
-							+ "%");
+					select.addWhereField(HOST, "LIKE", "%" + f.getHostname() + "%");
 				}
 				if (f.getIdentity() != null) {
-					String subject = CommonUtils.identityToSubject(f
-							.getIdentity());
+					String subject = CommonUtils.identityToSubject(f.getIdentity());
 					select.addWhereField(SUBJECT, "LIKE", "%" + subject + "%");
 				}
 
 				if (f.getHostCertificateSubject() != null) {
-					select.addWhereField(SUBJECT, "LIKE",
-							"%" + f.getHostCertificateSubject() + "%");
+					select.addWhereField(SUBJECT, "LIKE", "%" + f.getHostCertificateSubject() + "%");
 				}
 
 				if (f.getOwner() != null) {
-					select.addWhereField(OWNER, "LIKE", "%" + f.getOwner()
-							+ "%");
+					select.addWhereField(OWNER, "LIKE", "%" + f.getOwner() + "%");
 				}
 			}
 			PreparedStatement s = select.prepareStatement(c);
@@ -474,8 +392,7 @@ public class HostCertificateManager {
 				HostRecord record = new HostRecord();
 				record.setHostname(rs.getString(HOST));
 				record.setOwner(rs.getString(OWNER));
-				record.setIdentity(CommonUtils.subjectToIdentity(rs
-						.getString(SUBJECT)));
+				record.setIdentity(CommonUtils.subjectToIdentity(rs.getString(SUBJECT)));
 				record.setHostCertificateSubject(rs.getString(SUBJECT));
 				hosts.add(record);
 			}
@@ -484,9 +401,7 @@ public class HostCertificateManager {
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -495,15 +410,13 @@ public class HostCertificateManager {
 		return hosts;
 	}
 
-	public List<HostCertificateRecord> getHostCertificateRecords(String owner)
-			throws DorianInternalException {
+	public List<HostCertificateRecord> getHostCertificateRecords(String owner) throws DorianInternalException {
 		this.buildDatabase();
 		List<HostCertificateRecord> records = new ArrayList<HostCertificateRecord>();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select " + ID + " from  "
-					+ TABLE + " WHERE " + OWNER + " = ?");
+			PreparedStatement s = c.prepareStatement("select " + ID + " from  " + TABLE + " WHERE " + OWNER + " = ?");
 			s.setString(1, owner);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
@@ -513,9 +426,7 @@ public class HostCertificateManager {
 			s.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -524,16 +435,13 @@ public class HostCertificateManager {
 		return records;
 	}
 
-	public List<Long> getHostCertificateRecordsSerialNumbers(String owner)
-			throws DorianInternalException {
+	public List<Long> getHostCertificateRecordsSerialNumbers(String owner) throws DorianInternalException {
 		this.buildDatabase();
 		List<Long> sn = new ArrayList<Long>();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select " + SERIAL
-					+ " from  " + TABLE + " WHERE " + OWNER + " = ? AND "
-					+ STATUS + " <> ? AND " + STATUS + " <> ? ");
+			PreparedStatement s = c.prepareStatement("select " + SERIAL + " from  " + TABLE + " WHERE " + OWNER + " = ? AND " + STATUS + " <> ? AND " + STATUS + " <> ? ");
 			s.setString(1, owner);
 			s.setString(2, HostCertificateStatus.PENDING.value());
 			s.setString(3, HostCertificateStatus.REJECTED.value());
@@ -545,9 +453,7 @@ public class HostCertificateManager {
 			s.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -556,16 +462,13 @@ public class HostCertificateManager {
 		return sn;
 	}
 
-	public List<Long> getDisabledHostCertificatesSerialNumbers()
-			throws DorianInternalException {
+	public List<Long> getDisabledHostCertificatesSerialNumbers() throws DorianInternalException {
 		this.buildDatabase();
 		List<Long> entries = new ArrayList<Long>();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select " + SERIAL
-					+ " from  " + TABLE + " WHERE " + STATUS + " = ? OR "
-					+ STATUS + " = ? ");
+			PreparedStatement s = c.prepareStatement("select " + SERIAL + " from  " + TABLE + " WHERE " + STATUS + " = ? OR " + STATUS + " = ? ");
 			s.setString(1, HostCertificateStatus.SUSPENDED.value());
 			s.setString(2, HostCertificateStatus.COMPROMISED.value());
 			ResultSet rs = s.executeQuery();
@@ -577,9 +480,7 @@ public class HostCertificateManager {
 			s.close();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -588,17 +489,14 @@ public class HostCertificateManager {
 		return entries;
 	}
 
-	public HostCertificateRecord getHostCertificateRecord(long id)
-			throws DorianInternalException, InvalidHostCertificateException {
+	public HostCertificateRecord getHostCertificateRecord(long id) throws DorianInternalException, InvalidHostCertificateException {
 		buildDatabase();
 		Connection c = null;
 		HostCertificateRecord record = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select " + ID + ","
-					+ HOST + "," + SUBJECT + "," + OWNER + "," + SERIAL + ","
-					+ STATUS + "," + PUBLIC_KEY + "," + CERTIFICATE + " from "
-					+ TABLE + " WHERE " + ID + "= ?");
+			PreparedStatement s = c.prepareStatement("select " + ID + "," + HOST + "," + SUBJECT + "," + OWNER + "," + SERIAL + "," + STATUS + "," + PUBLIC_KEY + "," + CERTIFICATE + " from " + TABLE
+					+ " WHERE " + ID + "= ?");
 			s.setLong(1, id);
 
 			ResultSet rs = s.executeQuery();
@@ -608,8 +506,7 @@ public class HostCertificateManager {
 				record.setHost(rs.getString(HOST));
 				record.setOwner(rs.getString(OWNER));
 				record.setSerialNumber(rs.getLong(SERIAL));
-				record.setStatus(HostCertificateStatus.fromValue(rs
-						.getString(STATUS)));
+				record.setStatus(HostCertificateStatus.fromValue(rs.getString(STATUS)));
 				record.setSubject(rs.getString(SUBJECT));
 				String keyStr = Utils.clean(rs.getString(PUBLIC_KEY));
 				if (keyStr != null) {
@@ -627,9 +524,7 @@ public class HostCertificateManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -637,71 +532,50 @@ public class HostCertificateManager {
 		}
 
 		if (record == null) {
-			InvalidHostCertificateException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateException.class,
-							"No such host certificate exists.");
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class, "No such host certificate exists.");
 			throw fault;
 		}
 
 		return record;
 	}
 
-	public synchronized void updateHostCertificateRecord(
-			HostCertificateUpdate update) throws DorianInternalException,
-			InvalidHostCertificateException {
+	public synchronized void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianInternalException, InvalidHostCertificateException {
 
 		if (!determineIfRecordExistById(update.getId())) {
-			InvalidHostCertificateException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateException.class,
-							"Could not update host certificate record, no such host certificate exists.");
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class,
+					"Could not update host certificate record, no such host certificate exists.");
 			throw fault;
 		}
 		HostCertificateRecord record = getHostCertificateRecord(update.getId());
 		// First see if the certificate has been compromised, if it has NO
 		// updates are allowed.
 		if (record.getStatus().equals(HostCertificateStatus.COMPROMISED)) {
-			InvalidHostCertificateException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateException.class,
-							"Could not update host certificate record, the host certificate has been compromised.");
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class,
+					"Could not update host certificate record, the host certificate has been compromised.");
 			throw fault;
 		}
 
 		if (record.getStatus().equals(HostCertificateStatus.REJECTED)) {
-			InvalidHostCertificateException fault = FaultHelper
-					.createFaultException(
-							InvalidHostCertificateException.class,
-							"Could not update host certificate record, the host certificate request was rejected.");
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class,
+					"Could not update host certificate record, the host certificate request was rejected.");
 			throw fault;
 		}
 
 		boolean updateStatus = false;
-		if ((update.getStatus() != null)
-				&& (!update.getStatus().equals(record.getStatus()))) {
+		if ((update.getStatus() != null) && (!update.getStatus().equals(record.getStatus()))) {
 			if (update.getStatus().equals(HostCertificateStatus.PENDING)) {
-				InvalidHostCertificateException fault = FaultHelper
-						.createFaultException(
-								InvalidHostCertificateException.class,
-								"Could not update host certificate record, the status of a host certificate cannot be change to "
-										+ HostCertificateStatus.PENDING
-										+ " once it has been approved.");
+				InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class,
+						"Could not update host certificate record, the status of a host certificate cannot be change to " + HostCertificateStatus.PENDING + " once it has been approved.");
 				throw fault;
-			} else if (record.getStatus().equals(HostCertificateStatus.PENDING)
-					&& (!update.getStatus().equals(
-							HostCertificateStatus.REJECTED))) {
-				InvalidHostCertificateException fault = FaultHelper
-						.createFaultException(
-								InvalidHostCertificateException.class,
-								"Could not update the status of a host certificate record until it has been approved or rejected.");
+			} else if (record.getStatus().equals(HostCertificateStatus.PENDING) && (!update.getStatus().equals(HostCertificateStatus.REJECTED))) {
+				InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class,
+						"Could not update the status of a host certificate record until it has been approved or rejected.");
 				throw fault;
 			}
 			updateStatus = true;
 		}
 		boolean updateOwner = false;
-		if ((update.getOwner() != null)
-				&& (!update.getOwner().equals(record.getOwner()))) {
+		if ((update.getOwner() != null) && (!update.getOwner().equals(record.getOwner()))) {
 			updateOwner = true;
 		}
 
@@ -740,9 +614,7 @@ public class HostCertificateManager {
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
-				DorianInternalException fault = FaultHelper
-						.createFaultException(DorianInternalException.class,
-								"An unexpected error occurred.");
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 				FaultHelper.addMessage(fault, e.getMessage());
 				throw fault;
 			} finally {
@@ -752,15 +624,13 @@ public class HostCertificateManager {
 
 	}
 
-	private boolean determineIfRecordExistById(long id)
-			throws DorianInternalException {
+	private boolean determineIfRecordExistById(long id) throws DorianInternalException {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ TABLE + " WHERE " + ID + "= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + TABLE + " WHERE " + ID + "= ?");
 			s.setLong(1, id);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -771,8 +641,7 @@ public class HostCertificateManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class, "Unexpected Database Error");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected Database Error");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -781,16 +650,13 @@ public class HostCertificateManager {
 		return exists;
 	}
 
-	private boolean certificateCannotBeRequested(String host)
-			throws DorianInternalException {
+	private boolean certificateCannotBeRequested(String host) throws DorianInternalException {
 		buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ TABLE + " WHERE " + HOST + "= ? AND " + STATUS
-					+ " <> ? AND " + STATUS + " <> ? ");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + TABLE + " WHERE " + HOST + "= ? AND " + STATUS + " <> ? AND " + STATUS + " <> ? ");
 			s.setString(1, host);
 			s.setString(2, HostCertificateStatus.REJECTED.value());
 			s.setString(3, HostCertificateStatus.COMPROMISED.value());
@@ -803,9 +669,7 @@ public class HostCertificateManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -819,23 +683,15 @@ public class HostCertificateManager {
 			try {
 				if (!this.db.tableExists(TABLE)) {
 
-					String certificates = "CREATE TABLE " + TABLE + " (" + ID
-							+ " INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-							+ SERIAL + " BIGINT," + HOST
-							+ " VARCHAR(255) NOT NULL," + SUBJECT + " TEXT,"
-							+ STATUS + " VARCHAR(15) NOT NULL," + OWNER
-							+ " TEXT NOT NULL," + EXPIRATION + " BIGINT,"
-							+ CERTIFICATE + " TEXT," + PUBLIC_KEY
-							+ " TEXT NOT NULL, "
+					String certificates = "CREATE TABLE " + TABLE + " (" + ID + " INT NOT NULL AUTO_INCREMENT PRIMARY KEY," + SERIAL + " BIGINT," + HOST + " VARCHAR(255) NOT NULL," + SUBJECT
+							+ " TEXT," + STATUS + " VARCHAR(15) NOT NULL," + OWNER + " TEXT NOT NULL," + EXPIRATION + " BIGINT," + CERTIFICATE + " TEXT," + PUBLIC_KEY + " TEXT NOT NULL, "
 							+ "INDEX document_index (ID));";
 					db.update(certificates);
 
 				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
-				DorianInternalException fault = FaultHelper
-						.createFaultException(DorianInternalException.class,
-								"An unexpected database error occurred.");
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected database error occurred.");
 				FaultHelper.addMessage(fault, e.getMessage());
 				throw fault;
 			}
@@ -849,9 +705,7 @@ public class HostCertificateManager {
 			db.update("delete from " + TABLE);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected database error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected database error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}

@@ -96,7 +96,7 @@ public interface Dorian {
 			throws DorianInternalException, PermissionDeniedException;
 
 	public X509Certificate requestUserCertificate(SAMLAssertion saml,
-			PublicKey publicKey, CertificateLifetime lifetime)
+			PublicKey publicKey, CertificateLifetime lifetime, CertificateSignatureAlgorithm sa)
 			throws DorianInternalException, InvalidAssertionException, UserPolicyException,
 			PermissionDeniedException;
 

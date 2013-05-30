@@ -9,12 +9,13 @@
                         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.dorian.wsrf">
+
 		<prop key="cagrid.dorian.wsrf.host">localhost</prop>
 		<prop key="cagrid.dorian.wsrf.port">7734</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.port">7735</prop>
+
 		<prop key="cagrid.dorian.wsrf.path">dorian</prop>
-		<prop key="cagrid.dorian.wsrf.url">https://${cagrid.dorian.wsrf.host}:${cagrid.dorian.wsrf.port}/${cagrid.dorian.wsrf.path}</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.url">https://${cagrid.dorian.wsrf.host}:${cagrid.dorian.legacy-wsrf.port}/${cagrid.dorian.wsrf.path}</prop>
+		<prop key="cagrid.dorian.wsrf.url">https://${cagrid.dorian.wsrf.host}:${cagrid.dorian.wsrf.port}/${cagrid.dorian.wsrf.path}
+		</prop>
 		<prop key="cagrid.dorian.wsrf.keystore.path">${karaf.base}/etc/dorian/dorian-host.jks</prop>
 		<prop key="cagrid.dorian.wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.dorian.wsrf.keystore.alias">host</prop>
@@ -27,6 +28,15 @@
 			SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,
 			SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA,TLS_EMPTY_RENEGOTIATION_INFO_SCSV,SSL_RSA_WITH_NULL_MD5
 		</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.url">https://${cagrid.dorian.wsrf.host}:${cagrid.dorian.legacy-wsrf.port}/${cagrid.dorian.wsrf.path}
+		</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.port">7735</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.keystore.path">${karaf.base}/etc/dorian/dorian-host.jks</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.keystore.password">changeit</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.keystore.alias">host</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.key.password">changeit</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.truststore.path">${karaf.base}/etc/dorian/truststore.jks</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.truststore.password">changeit</prop>
 		<prop key="cagrid.dorian.wsrf.legacy-endpoint">dorianLegacyWSRF</prop>
 	</osgix:cm-properties>
 

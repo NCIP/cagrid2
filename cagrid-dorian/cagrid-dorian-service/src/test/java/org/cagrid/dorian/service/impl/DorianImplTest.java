@@ -11,6 +11,7 @@ import javax.xml.namespace.QName;
 import org.cagrid.core.common.JAXBUtils;
 import org.cagrid.dorian.ifs.CertificateLifetime;
 import org.cagrid.dorian.ifs.TrustedIdentityProviders;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.dorian.types.DorianInternalException;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest;
@@ -54,20 +55,15 @@ public class DorianImplTest {
 	}
 
 	@Test
-	public void testGetTrustedIdentityProviders()
-			throws DorianInternalException, NoSuchResourceException,
-			InvalidResourceKeyException, ResourceException {
+	public void testGetTrustedIdentityProviders() throws DorianInternalException, NoSuchResourceException, InvalidResourceKeyException, ResourceException {
 		Assert.assertNotNull(dorian.getTrustedIdentityProviders());
 
 		ResourceHome resourceHome = dorian.getResourceHome();
-		ResourcePropertySet resourceImpl = (ResourcePropertySet) resourceHome
-				.find(null);
+		ResourcePropertySet resourceImpl = (ResourcePropertySet) resourceHome.find(null);
 		@SuppressWarnings("unchecked")
-		ResourceProperty<TrustedIdentityProviders> trustedIdentityProvidersProperty = (ResourceProperty<TrustedIdentityProviders>) resourceImpl
-				.get(new QName("http://cagrid.nci.nih.gov/1/dorian-ifs",
-						"TrustedIdentityProviders"));
-		TrustedIdentityProviders trustedIdentityProviders = trustedIdentityProvidersProperty
-				.get(0);
+		ResourceProperty<TrustedIdentityProviders> trustedIdentityProvidersProperty = (ResourceProperty<TrustedIdentityProviders>) resourceImpl.get(new QName("http://cagrid.nci.nih.gov/1/dorian-ifs",
+				"TrustedIdentityProviders"));
+		TrustedIdentityProviders trustedIdentityProviders = trustedIdentityProvidersProperty.get(0);
 		Assert.assertNotNull(trustedIdentityProviders);
 	}
 
@@ -92,37 +88,30 @@ public class DorianImplTest {
 		lifetime.setHours(6);
 
 		// Test that SAMLAssertion to String and back is OK.
-		SAMLAssertion _samlAssertionX = new SAMLAssertion(
-				new ByteArrayInputStream(samlXML.getBytes("UTF-8")));
-		SAMLAssertion samlAssertionX = SAMLUtils
-				.canonicalizeSAMLAssertion(_samlAssertionX);
+		SAMLAssertion _samlAssertionX = new SAMLAssertion(new ByteArrayInputStream(samlXML.getBytes("UTF-8")));
+		SAMLAssertion samlAssertionX = SAMLUtils.canonicalizeSAMLAssertion(_samlAssertionX);
 		Assert.assertNotSame(_samlAssertionX, samlAssertionX);
 		System.out.println("samlXML canonicalized");
 		System.out.println(samlAssertionX);
 		System.out.println();
-		X509Certificate certificate = dorian.requestUserCertificate(
-				samlAssertionX, keyPair.getPublic(), lifetime);
+		X509Certificate certificate = dorian.requestUserCertificate(samlAssertionX, keyPair.getPublic(), lifetime, CertificateSignatureAlgorithm.SHA2);
 		Assert.assertNotNull(certificate);
 
 		// Test round-trip through AssertionType
-		AssertionType assertion = JAXBUtils.unmarshal(AssertionType.class,
-				samlXML);
+		AssertionType assertion = JAXBUtils.unmarshal(AssertionType.class, samlXML);
 		Assert.assertNotNull(assertion);
-		String assertionXML = JAXBUtils.marshal(assertion,
-				SAMLUtils.ASSERTION_QNAME);
+		String assertionXML = JAXBUtils.marshal(assertion, SAMLUtils.ASSERTION_QNAME);
 		System.out.println("assertionXML");
 		System.out.println(assertionXML);
 		System.out.println();
-		Element assertionElement = JAXBUtils.marshalToElement(assertion,
-				SAMLUtils.ASSERTION_QNAME);
+		Element assertionElement = JAXBUtils.marshalToElement(assertion, SAMLUtils.ASSERTION_QNAME);
 		_samlAssertionX = new SAMLAssertion(assertionElement);
 		samlAssertionX = SAMLUtils.canonicalizeSAMLAssertion(_samlAssertionX);
 		Assert.assertNotSame(_samlAssertionX, samlAssertionX);
 		System.out.println("samlXML canonicalized via Assertion");
 		System.out.println(samlAssertionX);
 		System.out.println();
-		certificate = dorian.requestUserCertificate(samlAssertionX,
-				keyPair.getPublic(), lifetime);
+		certificate = dorian.requestUserCertificate(samlAssertionX, keyPair.getPublic(), lifetime, CertificateSignatureAlgorithm.SHA2);
 		Assert.assertNotNull(certificate);
 	}
 }

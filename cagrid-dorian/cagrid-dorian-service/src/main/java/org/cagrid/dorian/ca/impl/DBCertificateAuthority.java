@@ -1,9 +1,12 @@
 package org.cagrid.dorian.ca.impl;
 
 import java.security.PrivateKey;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
 import org.cagrid.core.common.FaultHelper;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
+import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.SecurityUtil;
 import org.cagrid.tools.database.Database;
 import org.slf4j.Logger;
@@ -18,17 +21,15 @@ import org.slf4j.LoggerFactory;
  */
 public class DBCertificateAuthority extends CertificateAuthority {
 
-	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSAEncryption";
+	public static final String SIGNATURE_ALGORITHM = CertUtil.SHA2_SIGNATURE_ALGORITHM;
 
 	public static final String CA_ALIAS = "dorianca";
 
-	private final static Logger logger = LoggerFactory
-			.getLogger(DBCertificateAuthority.class);
+	private final static Logger logger = LoggerFactory.getLogger(DBCertificateAuthority.class);
 
 	private CredentialsManager manager;
 
-	public DBCertificateAuthority(Database db,
-			CertificateAuthorityProperties properties) {
+	public DBCertificateAuthority(Database db, CertificateAuthorityProperties properties) {
 		super(properties);
 		SecurityUtil.init();
 		this.manager = new CredentialsManager(db);
@@ -46,8 +47,16 @@ public class DBCertificateAuthority extends CertificateAuthority {
 		return "BC";
 	}
 
-	public String getSignatureAlgorithm() {
-		return SIGNATURE_ALGORITHM;
+	public String getSignatureAlgorithm(CertificateSignatureAlgorithm alg) throws CertificateAuthorityException {
+		if (alg.equals(CertificateSignatureAlgorithm.SHA1)) {
+			return CertUtil.SHA1_SIGNATURE_ALGORITHM;
+		} else if (alg.equals(CertificateSignatureAlgorithm.SHA2)) {
+			return CertUtil.SHA2_SIGNATURE_ALGORITHM;
+		} else {
+			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "The signature algorithm " + alg.value()
+					+ " is not supported by the certificate authority " + getClass().getName() + ".");
+			throw fault;
+		}
 	}
 
 	public void deleteCACredentials() throws CertificateAuthorityException {
@@ -55,23 +64,17 @@ public class DBCertificateAuthority extends CertificateAuthority {
 			manager.deleteCredentials(CA_ALIAS);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			CertificateAuthorityException fault = FaultHelper
-					.createFaultException(CertificateAuthorityException.class,
-							"An unexpected error occurred, could not delete the CA credentials.");
+			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "An unexpected error occurred, could not delete the CA credentials.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
 
 	}
 
-	public X509Certificate getCertificate()
-			throws CertificateAuthorityException {
+	public X509Certificate getCertificate() throws CertificateAuthorityException {
 		try {
 			if (!hasCACredentials()) {
-				CertificateAuthorityException fault = FaultHelper
-						.createFaultException(
-								CertificateAuthorityException.class,
-								"The CA certificate does not exist.");
+				CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "The CA certificate does not exist.");
 				throw fault;
 			} else {
 				return manager.getCertificate(CA_ALIAS);
@@ -80,23 +83,17 @@ public class DBCertificateAuthority extends CertificateAuthority {
 			throw f;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			CertificateAuthorityException fault = FaultHelper
-					.createFaultException(CertificateAuthorityException.class,
-							"Unexpected Error, could not obtain the certificate.");
+			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "Unexpected Error, could not obtain the certificate.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
 
 	}
 
-	public PrivateKey getPrivateKey(String password)
-			throws CertificateAuthorityException {
+	public PrivateKey getPrivateKey(String password) throws CertificateAuthorityException {
 		try {
 			if (!hasCACredentials()) {
-				CertificateAuthorityException fault = FaultHelper
-						.createFaultException(
-								CertificateAuthorityException.class,
-								"The CA private key does not exist.");
+				CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "The CA private key does not exist.");
 				throw fault;
 			} else {
 				return manager.getPrivateKey(CA_ALIAS, password);
@@ -105,9 +102,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 			throw f;
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			CertificateAuthorityException fault = FaultHelper
-					.createFaultException(CertificateAuthorityException.class,
-							"Unexpected Error, could not obtain the private key.");
+			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "Unexpected Error, could not obtain the private key.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
@@ -118,31 +113,23 @@ public class DBCertificateAuthority extends CertificateAuthority {
 			return this.manager.hasCredentials(CA_ALIAS);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			CertificateAuthorityException fault = FaultHelper
-					.createFaultException(CertificateAuthorityException.class,
-							"An unexpected error occurred, could not determine if credentials exist.");
+			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "An unexpected error occurred, could not determine if credentials exist.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
 	}
 
-	public void setCACredentials(X509Certificate cert, PrivateKey key,
-			String password) throws CertificateAuthorityException {
+	public void setCACredentials(X509Certificate cert, PrivateKey key, String password) throws CertificateAuthorityException {
 		try {
 
 			if (hasCACredentials()) {
-				CertificateAuthorityException fault = FaultHelper
-						.createFaultException(
-								CertificateAuthorityException.class,
-								"Credentials already exist for the CA.");
+				CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "Credentials already exist for the CA.");
 				throw fault;
 			}
 			manager.addCredentials(CA_ALIAS, password, cert, key);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			CertificateAuthorityException fault = FaultHelper
-					.createFaultException(CertificateAuthorityException.class,
-							"An unexpected error occurred, could not add CA credentials.");
+			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "An unexpected error occurred, could not add CA credentials.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}

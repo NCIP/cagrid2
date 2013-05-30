@@ -2,10 +2,12 @@ package org.cagrid.dorian.service.tools;
 
 import java.util.Properties;
 
+import org.cagrid.dorian.ca.impl.CertificateAuthority;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
 import org.cagrid.dorian.federation.impl.IdentityFederationProperties;
 import org.cagrid.dorian.idp.impl.IdentityProviderProperties;
 import org.cagrid.dorian.service.Dorian;
+import org.cagrid.tools.database.Database;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.AbstractResource;
@@ -14,15 +16,15 @@ import org.springframework.core.io.FileSystemResource;
 
 public class SpringUtils {
 
-	private static final ClassPathResource CONFIGURATION = new ClassPathResource(
-			"META-INF/spring/dorian-configuration.xml");
-	private static final FileSystemResource PROPERTIES = new FileSystemResource(
-			"src/main/resources/dorian.properties");
+	private static final ClassPathResource CONFIGURATION = new ClassPathResource("META-INF/spring/dorian-configuration.xml");
+	private static final FileSystemResource PROPERTIES = new FileSystemResource("src/main/resources/dorian.properties");
 	private static String DORIAN = "dorian";
 	private static String CA_PROPERTIES = "caProperties";
+	private static String CA = "certificateAuthority";
+	private static String DATABASE = "database";
 	private static String IDP_PROPERTIES = "identityProviderProperties";
 	private static String IFS_PROPERTIES = "identityFederationProperties";
-	
+
 	private XmlBeanFactory context;
 
 	public SpringUtils() {
@@ -54,15 +56,25 @@ public class SpringUtils {
 	public Dorian getDorian() {
 		return (Dorian) getBean(DORIAN);
 	}
+
 	public IdentityFederationProperties getIdentityFederationProperties() {
 		return (IdentityFederationProperties) getBean(IFS_PROPERTIES);
 	}
+
 	public IdentityProviderProperties getIdentityProviderProperties() {
 		return (IdentityProviderProperties) getBean(IDP_PROPERTIES);
 	}
-	
+
 	public CertificateAuthorityProperties getCertificateAuthorityProperties() {
 		return (CertificateAuthorityProperties) getBean(CA_PROPERTIES);
+	}
+
+	public CertificateAuthority getCertificateAuthority() {
+		return (CertificateAuthority) getBean(CA);
+	}
+
+	public Database getDatabase() {
+		return (Database) getBean(DATABASE);
 	}
 
 	private Object getBean(String bean) {

@@ -29,6 +29,7 @@ import org.cagrid.dorian.ca.impl.CertificateAuthority;
 import org.cagrid.dorian.ca.impl.WrappedKey;
 import org.cagrid.dorian.ca.impl.WrappingCertificateAuthority;
 import org.cagrid.dorian.common.SAMLConstants;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.types.DorianInternalException;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
@@ -50,8 +51,7 @@ public class AssertionCredentialsManager {
 
 	public final static String CERT_DN = "Dorian IdP Authentication Asserter";
 
-	private final static Logger log = LoggerFactory
-			.getLogger(AssertionCredentialsManager.class);
+	private final static Logger log = LoggerFactory.getLogger(AssertionCredentialsManager.class);
 
 	private CertificateAuthority ca;
 
@@ -61,9 +61,7 @@ public class AssertionCredentialsManager {
 
 	private boolean dbBuilt = false;
 
-	public AssertionCredentialsManager(IdentityProviderProperties conf,
-			CertificateAuthority ca, Database db)
-			throws DorianInternalException {
+	public AssertionCredentialsManager(IdentityProviderProperties conf, CertificateAuthority ca, Database db) throws DorianInternalException {
 		try {
 			this.ca = ca;
 			this.conf = conf;
@@ -78,23 +76,19 @@ public class AssertionCredentialsManager {
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Error initializing the IDP Asserting Manager.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Error initializing the IDP Asserting Manager.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
 	}
 
-	private synchronized boolean hasAssertingCredentials()
-			throws DorianInternalException {
+	private synchronized boolean hasAssertingCredentials() throws DorianInternalException {
 		this.buildDatabase();
 		Connection c = null;
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + CREDENTIALS_TABLE + " where ALIAS= ?");
 			s.setString(1, CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -107,9 +101,7 @@ public class AssertionCredentialsManager {
 			s.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"Unexpected error determining if the Dorian IdP has asserting credentials");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error determining if the Dorian IdP has asserting credentials");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -118,8 +110,7 @@ public class AssertionCredentialsManager {
 		return exists;
 	}
 
-	public synchronized void storeCredentials(X509Certificate cert,
-			PrivateKey key) throws Exception {
+	public synchronized void storeCredentials(X509Certificate cert, PrivateKey key) throws Exception {
 		this.buildDatabase();
 		Connection c = null;
 
@@ -130,10 +121,7 @@ public class AssertionCredentialsManager {
 					WrappedKey wk = wca.wrap(key);
 					String certStr = CertUtil.writeCertificate(cert);
 					c = db.getConnection();
-					PreparedStatement s = c
-							.prepareStatement("INSERT INTO "
-									+ CREDENTIALS_TABLE
-									+ " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?,IV= ?");
+					PreparedStatement s = c.prepareStatement("INSERT INTO " + CREDENTIALS_TABLE + " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?,IV= ?");
 					s.setString(1, CERT_DN);
 					s.setString(2, certStr);
 					s.setBytes(3, wk.getWrappedKeyData());
@@ -143,26 +131,17 @@ public class AssertionCredentialsManager {
 				} else {
 					String certStr = CertUtil.writeCertificate(cert);
 					c = db.getConnection();
-					PreparedStatement s = c.prepareStatement("INSERT INTO "
-							+ CREDENTIALS_TABLE
-							+ " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?");
+					PreparedStatement s = c.prepareStatement("INSERT INTO " + CREDENTIALS_TABLE + " SET ALIAS= ?,CERTIFICATE= ?,PRIVATE_KEY= ?");
 					s.setString(1, CERT_DN);
 					s.setString(2, certStr);
-					s.setBytes(
-							3,
-							KeyUtil.writePrivateKey(
-									key,
-									conf.getAssertingCredentialsEncryptionPassword())
-									.getBytes());
+					s.setBytes(3, KeyUtil.writePrivateKey(key, conf.getAssertingCredentialsEncryptionPassword()).getBytes());
 					s.execute();
 					s.close();
 				}
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Could not store IdP asserting credentials.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Could not store IdP asserting credentials.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -181,8 +160,7 @@ public class AssertionCredentialsManager {
 		KeyPair pair = KeyUtil.generateRSAKeyPair1024();
 		GregorianCalendar cal = new GregorianCalendar();
 		Date start = cal.getTime();
-		X509Certificate cert = ca.signCertificate(subject, pair.getPublic(),
-				start, cacert.getNotAfter());
+		X509Certificate cert = ca.signCertificate(subject, pair.getPublic(), start, cacert.getNotAfter(), CertificateSignatureAlgorithm.SHA2);
 		storeCredentials(cert, pair.getPrivate());
 	}
 
@@ -194,9 +172,7 @@ public class AssertionCredentialsManager {
 			// force updating expiring credentials
 			getIdPCertificate();
 			c = db.getConnection();
-			PreparedStatement s = c
-					.prepareStatement("select PRIVATE_KEY, IV from "
-							+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c.prepareStatement("select PRIVATE_KEY, IV from " + CREDENTIALS_TABLE + " where ALIAS= ?");
 			s.setString(1, CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -207,42 +183,33 @@ public class AssertionCredentialsManager {
 					WrappedKey wk = new WrappedKey(wrapped, iv);
 					key = wca.unwrap(wk);
 				} else {
-					key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(
-							wrapped), conf
-							.getAssertingCredentialsEncryptionPassword());
+					key = KeyUtil.loadPrivateKey(new ByteArrayInputStream(wrapped), conf.getAssertingCredentialsEncryptionPassword());
 				}
 			}
 			rs.close();
 			s.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Error obtaining the IDP Asserting Key.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Error obtaining the IDP Asserting Key.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
 		}
 		if (key == null) {
-			DorianInternalException fault = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"No private key for the Dorian IdP asserting credentials could be found.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "No private key for the Dorian IdP asserting credentials could be found.");
 			throw fault;
 		}
 		return key;
 	}
 
-	public synchronized X509Certificate getIdPCertificate()
-			throws DorianInternalException {
+	public synchronized X509Certificate getIdPCertificate() throws DorianInternalException {
 		return getIdPCertificate(true);
 	}
 
-	public synchronized SAMLAssertion getAuthenticationAssertion(String uid,
-			String firstName, String lastName, String email)
-			throws DorianInternalException {
+	public synchronized SAMLAssertion getAuthenticationAssertion(String uid, String firstName, String lastName, String email) throws DorianInternalException {
 		try {
-//			org.apache.xml.security.Init.init();
+			// org.apache.xml.security.Init.init();
 			X509Certificate cert = getIdPCertificate();
 			PrivateKey key = getIdPKey();
 			GregorianCalendar cal = new GregorianCalendar();
@@ -254,48 +221,33 @@ public class AssertionCredentialsManager {
 			String ipAddress = null;
 			String subjectDNS = null;
 
-			SAMLNameIdentifier ni1 = new SAMLNameIdentifier(uid, federation,
-					"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+			SAMLNameIdentifier ni1 = new SAMLNameIdentifier(uid, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLSubject sub = new SAMLSubject(ni1, null, null, null);
 			sub.addConfirmationMethod(SAMLSubject.CONF_BEARER);
-			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(uid, federation,
-					"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
+			SAMLNameIdentifier ni2 = new SAMLNameIdentifier(uid, federation, "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified");
 			SAMLSubject sub2 = new SAMLSubject(ni2, null, null, null);
 			sub2.addConfirmationMethod(SAMLSubject.CONF_BEARER);
-			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(
-					sub, "urn:oasis:names:tc:SAML:1.0:am:password", new Date(),
-					ipAddress, subjectDNS, null);
+			SAMLAuthenticationStatement auth = new SAMLAuthenticationStatement(sub, "urn:oasis:names:tc:SAML:1.0:am:password", new Date(), ipAddress, subjectDNS, null);
 
-			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.UID_ATTRIBUTE);
+			QName quid = new QName(SAMLConstants.UID_ATTRIBUTE_NAMESPACE, SAMLConstants.UID_ATTRIBUTE);
 			List<String> vals1 = new ArrayList<String>();
 			vals1.add(uid);
-			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(),
-					quid.getNamespaceURI(), null, 0, vals1);
+			SAMLAttribute uidAtt = new SAMLAttribute(quid.getLocalPart(), quid.getNamespaceURI(), null, 0, vals1);
 
-			QName qfirst = new QName(
-					SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.FIRST_NAME_ATTRIBUTE);
+			QName qfirst = new QName(SAMLConstants.FIRST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.FIRST_NAME_ATTRIBUTE);
 			List<String> vals2 = new ArrayList<String>();
 			vals2.add(firstName);
-			SAMLAttribute firstNameAtt = new SAMLAttribute(
-					qfirst.getLocalPart(), qfirst.getNamespaceURI(), null, 0,
-					vals2);
+			SAMLAttribute firstNameAtt = new SAMLAttribute(qfirst.getLocalPart(), qfirst.getNamespaceURI(), null, 0, vals2);
 
-			QName qLast = new QName(
-					SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.LAST_NAME_ATTRIBUTE);
+			QName qLast = new QName(SAMLConstants.LAST_NAME_ATTRIBUTE_NAMESPACE, SAMLConstants.LAST_NAME_ATTRIBUTE);
 			List<String> vals3 = new ArrayList<String>();
 			vals3.add(lastName);
-			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(),
-					qLast.getNamespaceURI(), null, 0, vals3);
+			SAMLAttribute lastNameAtt = new SAMLAttribute(qLast.getLocalPart(), qLast.getNamespaceURI(), null, 0, vals3);
 
-			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE,
-					SAMLConstants.EMAIL_ATTRIBUTE);
+			QName qemail = new QName(SAMLConstants.EMAIL_ATTRIBUTE_NAMESPACE, SAMLConstants.EMAIL_ATTRIBUTE);
 			List<String> vals4 = new ArrayList<String>();
 			vals4.add(email);
-			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(),
-					qemail.getNamespaceURI(), null, 0, vals4);
+			SAMLAttribute emailAtt = new SAMLAttribute(qemail.getLocalPart(), qemail.getNamespaceURI(), null, 0, vals4);
 
 			List<SAMLAttribute> atts = new ArrayList<SAMLAttribute>();
 			atts.add(uidAtt);
@@ -303,15 +255,13 @@ public class AssertionCredentialsManager {
 			atts.add(lastNameAtt);
 			atts.add(emailAtt);
 
-			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2,
-					atts);
+			SAMLAttributeStatement attState = new SAMLAttributeStatement(sub2, atts);
 
 			List<SAMLSubjectStatement> l = new ArrayList<SAMLSubjectStatement>();
 			l.add(auth);
 			l.add(attState);
 
-			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null,
-					null, l);
+			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
 			List<X509Certificate> a = new ArrayList<X509Certificate>();
 			a.add(cert);
 			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a);
@@ -319,9 +269,7 @@ public class AssertionCredentialsManager {
 			return saml;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Error creating SAML Assertion.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Error creating SAML Assertion.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 
@@ -329,15 +277,13 @@ public class AssertionCredentialsManager {
 
 	}
 
-	private synchronized X509Certificate getIdPCertificate(boolean firstTime)
-			throws DorianInternalException {
+	private synchronized X509Certificate getIdPCertificate(boolean firstTime) throws DorianInternalException {
 		this.buildDatabase();
 		Connection c = null;
 		X509Certificate cert = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select CERTIFICATE from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ?");
+			PreparedStatement s = c.prepareStatement("select CERTIFICATE from " + CREDENTIALS_TABLE + " where ALIAS= ?");
 			s.setString(1, CERT_DN);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -348,35 +294,27 @@ public class AssertionCredentialsManager {
 			s.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"Unexpected error obtaining the Dorian IdP asserting credentials certificate.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error obtaining the Dorian IdP asserting credentials certificate.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
 			db.releaseConnection(c);
 		}
 		if (cert == null) {
-			DorianInternalException fault = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"No Dorian IdP asserting credentials certificate could be found.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "No Dorian IdP asserting credentials certificate could be found.");
 			throw fault;
 		}
 
 		try {
 
 			Date now = new Date();
-			if (now.before(cert.getNotBefore())
-					|| (now.after(cert.getNotAfter()))) {
+			if (now.before(cert.getNotBefore()) || (now.after(cert.getNotAfter()))) {
 				if ((firstTime) && (conf.autoRenewAssertingCredentials())) {
 					deleteAssertingCredentials();
 					createNewCredentials();
 					return getIdPCertificate(false);
 				} else {
-					DorianInternalException fault = FaultHelper
-							.createFaultException(
-									DorianInternalException.class,
-									"IDP Asserting Certificate expired.");
+					DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "IDP Asserting Certificate expired.");
 					throw fault;
 				}
 			} else {
@@ -384,31 +322,25 @@ public class AssertionCredentialsManager {
 			}
 
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Error obtaining the IDP Asserting Certificate.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Error obtaining the IDP Asserting Certificate.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
 
 	}
 
-	public synchronized void deleteAssertingCredentials()
-			throws DorianInternalException {
+	public synchronized void deleteAssertingCredentials() throws DorianInternalException {
 		this.buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("delete from "
-					+ CREDENTIALS_TABLE + " where ALIAS= ? ");
+			PreparedStatement s = c.prepareStatement("delete from " + CREDENTIALS_TABLE + " where ALIAS= ? ");
 			s.setString(1, CERT_DN);
 			s.execute();
 			s.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"Unexpected error deleting the Dorian IdP asserting credentials.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error deleting the Dorian IdP asserting credentials.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -420,19 +352,14 @@ public class AssertionCredentialsManager {
 		if (!dbBuilt) {
 			try {
 				if (!this.db.tableExists(CREDENTIALS_TABLE)) {
-					String users = "CREATE TABLE " + CREDENTIALS_TABLE + " ("
-							+ "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY,"
-							+ "CERTIFICATE TEXT NOT NULL,"
-							+ "PRIVATE_KEY BLOB," + "IV BLOB,"
+					String users = "CREATE TABLE " + CREDENTIALS_TABLE + " (" + "ALIAS VARCHAR(255) NOT NULL PRIMARY KEY," + "CERTIFICATE TEXT NOT NULL," + "PRIVATE_KEY BLOB," + "IV BLOB,"
 							+ "INDEX document_index (ALIAS));";
 					db.update(users);
 				}
 				this.dbBuilt = true;
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				DorianInternalException fault = FaultHelper
-						.createFaultException(DorianInternalException.class,
-								"Unexpected error creating the CA database");
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error creating the CA database");
 				FaultHelper.addMessage(fault, e.getMessage());
 				throw fault;
 			}
@@ -445,9 +372,7 @@ public class AssertionCredentialsManager {
 			db.update("delete from " + CREDENTIALS_TABLE);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected database error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected database error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}

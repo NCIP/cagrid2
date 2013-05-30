@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.core.common.JAXBUtils;
@@ -70,6 +69,7 @@ import org.cagrid.dorian.ifs.UserCertificateFilter;
 import org.cagrid.dorian.ifs.UserCertificateRecord;
 import org.cagrid.dorian.ifs.UserCertificateUpdate;
 import org.cagrid.dorian.policy.DorianPolicy;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.dorian.service.PropertyManager;
 import org.cagrid.dorian.types.DorianInternalException;
@@ -109,8 +109,7 @@ public class DorianImpl implements Dorian {
 	private final static Logger log = LoggerFactory.getLogger(DorianImpl.class);
 
 	private final ResourceImpl resource = new ResourceImpl(null);
-	private final ResourceHome resourceHome = new SingletonResourceHomeImpl(
-			resource);
+	private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
 
 	private final DorianProperties dorianProperties;
 	private final Map<String, String> jaxbResourcePropertiesMap;
@@ -126,8 +125,7 @@ public class DorianImpl implements Dorian {
 	private ResourceProperty<ServiceMetadata> serviceMetadataResourceProperty;
 	private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
 
-	public DorianImpl(DorianProperties dorianProperties,
-			Map<String, String> jaxbResourcePropertiesMap) {
+	public DorianImpl(DorianProperties dorianProperties, Map<String, String> jaxbResourcePropertiesMap) {
 		this.dorianProperties = dorianProperties;
 		this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
 	}
@@ -137,9 +135,7 @@ public class DorianImpl implements Dorian {
 		try {
 			return ca.getCACertificate();
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"An unexpected error occurred, in obtaining the CA certificate.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred, in obtaining the CA certificate.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
@@ -151,231 +147,171 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public void changeLocalUserPassword(BasicAuthentication credential,
-			String newPassword) throws DorianInternalException,
-			PermissionDeniedException, InvalidUserPropertyException {
+	public void changeLocalUserPassword(BasicAuthentication credential, String newPassword) throws DorianInternalException, PermissionDeniedException, InvalidUserPropertyException {
 		identityProvider.changePassword(credential, newPassword);
 	}
 
 	@Override
-	public LocalUser[] findLocalUsers(String gridIdentity,
-			LocalUserFilter filter) throws DorianInternalException,
-			PermissionDeniedException {
+	public LocalUser[] findLocalUsers(String gridIdentity, LocalUserFilter filter) throws DorianInternalException, PermissionDeniedException {
 		String uid = null;
 		try {
-			uid = ifm.getUserIdVerifyTrustedIdP(
-					identityProvider.getIdPCertificate(), gridIdentity);
+			uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			String message = "Permission to find local users was denied, caller is not a valid user.";
-			eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID,
-					IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
-			PermissionDeniedException fault = FaultHelper.createFaultException(
-					PermissionDeniedException.class, message);
+			eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
+			PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, message);
 			throw fault;
 		}
 		return this.identityProvider.findUsers(uid, filter);
 	}
 
 	@Override
-	public void updateLocalUser(String gridIdentity, LocalUser u)
-			throws DorianInternalException, PermissionDeniedException,
-			NoSuchUserException, InvalidUserPropertyException {
+	public void updateLocalUser(String gridIdentity, LocalUser u) throws DorianInternalException, PermissionDeniedException, NoSuchUserException, InvalidUserPropertyException {
 		String uid = null;
 		try {
-			uid = ifm.getUserIdVerifyTrustedIdP(
-					identityProvider.getIdPCertificate(), gridIdentity);
+			uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			String message = "Permission to update a user was denied, caller is not a valid user.";
-			this.eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID,
-					IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
-			PermissionDeniedException fault = FaultHelper.createFaultException(
-					PermissionDeniedException.class, message);
+			this.eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
+			PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, message);
 			throw fault;
 		}
 		this.identityProvider.updateUser(uid, u);
 	}
 
 	@Override
-	public void removeLocalUser(String gridIdentity, String userId)
-			throws DorianInternalException, PermissionDeniedException {
+	public void removeLocalUser(String gridIdentity, String userId) throws DorianInternalException, PermissionDeniedException {
 		String uid = null;
 		try {
-			uid = ifm.getUserIdVerifyTrustedIdP(
-					identityProvider.getIdPCertificate(), gridIdentity);
+			uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			String message = "Permission to remove a user was denied, caller is not a valid user.";
-			this.eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID,
-					IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
-			PermissionDeniedException fault = FaultHelper.createFaultException(
-					PermissionDeniedException.class, message);
+			this.eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
+			PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, message);
 			throw fault;
 		}
 		this.identityProvider.removeUser(uid, userId);
-		this.ifm.removeUserByLocalIdIfExists(
-				identityProvider.getIdPCertificate(), userId);
+		this.ifm.removeUserByLocalIdIfExists(identityProvider.getIdPCertificate(), userId);
 	}
 
 	@Override
-	public List<IdentityProviderAuditRecord> performIdentityProviderAudit(
-			String gridIdentity, IdentityProviderAuditFilter f)
-			throws DorianInternalException, PermissionDeniedException {
+	public List<IdentityProviderAuditRecord> performIdentityProviderAudit(String gridIdentity, IdentityProviderAuditFilter f) throws DorianInternalException, PermissionDeniedException {
 		String uid = null;
 		try {
-			uid = ifm.getUserIdVerifyTrustedIdP(
-					identityProvider.getIdPCertificate(), gridIdentity);
+			uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			String message = "Permission to perform an audit was denied, caller is not a valid user.";
-			this.eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID,
-					IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
-			PermissionDeniedException fault = FaultHelper.createFaultException(
-					PermissionDeniedException.class, message);
+			this.eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
+			PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, message);
 			throw fault;
 		}
 		return this.identityProvider.performAudit(uid, f);
 	}
 
 	@Override
-	public SAMLAssertion authenticate(Credential credential)
-			throws AuthenticationProviderException, InvalidCredentialException,
-			CredentialNotSupportedException {
+	public SAMLAssertion authenticate(Credential credential) throws AuthenticationProviderException, InvalidCredentialException, CredentialNotSupportedException {
 		return identityProvider.authenticate(credential);
 	}
 
 	@Override
-	public String registerLocalUser(Application a)
-			throws DorianInternalException, InvalidUserPropertyException {
+	public String registerLocalUser(Application a) throws DorianInternalException, InvalidUserPropertyException {
 		return this.identityProvider.register(a);
 	}
 
 	@Override
-	public GridUserPolicy[] getGridUserPolicies(String callerGridIdentity)
-			throws DorianInternalException, PermissionDeniedException {
+	public GridUserPolicy[] getGridUserPolicies(String callerGridIdentity) throws DorianInternalException, PermissionDeniedException {
 		return ifm.getUserPolicies(callerGridIdentity);
 	}
 
 	@Override
-	public X509Certificate requestUserCertificate(
-			gov.nih.nci.cagrid.opensaml.SAMLAssertion saml,
-			PublicKey publicKey, CertificateLifetime lifetime)
-			throws DorianInternalException, InvalidAssertionException,
-			UserPolicyException, PermissionDeniedException {
-		return ifm.requestUserCertificate(saml, publicKey, lifetime);
+	public X509Certificate requestUserCertificate(gov.nih.nci.cagrid.opensaml.SAMLAssertion saml, PublicKey publicKey, CertificateLifetime lifetime, CertificateSignatureAlgorithm sa)
+			throws DorianInternalException, InvalidAssertionException, UserPolicyException, PermissionDeniedException {
+		return ifm.requestUserCertificate(saml, publicKey, lifetime, sa);
 	}
 
 	@Override
-	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity)
-			throws DorianInternalException, PermissionDeniedException {
+	public TrustedIdP[] getTrustedIdPs(String callerGridIdentity) throws DorianInternalException, PermissionDeniedException {
 		return ifm.getTrustedIdPs(callerGridIdentity);
 	}
 
 	@Override
-	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalException, InvalidTrustedIdPException,
-			PermissionDeniedException {
+	public TrustedIdP addTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalException, InvalidTrustedIdPException, PermissionDeniedException {
 		return ifm.addTrustedIdP(callerGridIdentity, idp);
 	}
 
 	@Override
-	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalException, InvalidTrustedIdPException,
-			PermissionDeniedException {
+	public void updateTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalException, InvalidTrustedIdPException, PermissionDeniedException {
 		ifm.updateTrustedIdP(callerGridIdentity, idp);
 	}
 
 	@Override
-	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalException, InvalidTrustedIdPException,
-			PermissionDeniedException {
+	public void removeTrustedIdP(String callerGridIdentity, TrustedIdP idp) throws DorianInternalException, InvalidTrustedIdPException, PermissionDeniedException {
 		ifm.removeTrustedIdP(callerGridIdentity, idp.getId());
 	}
 
 	@Override
-	public GridUser[] findGridUsers(String callerGridIdentity,
-			GridUserFilter filter) throws DorianInternalException,
-			PermissionDeniedException {
+	public GridUser[] findGridUsers(String callerGridIdentity, GridUserFilter filter) throws DorianInternalException, PermissionDeniedException {
 		return ifm.findUsers(callerGridIdentity, filter);
 	}
 
 	@Override
-	public void updateGridUser(String callerGridIdentity, GridUser usr)
-			throws DorianInternalException, InvalidUserException,
-			PermissionDeniedException {
+	public void updateGridUser(String callerGridIdentity, GridUser usr) throws DorianInternalException, InvalidUserException, PermissionDeniedException {
 		ifm.updateUser(callerGridIdentity, usr);
 	}
 
 	@Override
-	public void removeGridUser(String callerGridIdentity, GridUser user)
-			throws DorianInternalException, InvalidUserException,
-			PermissionDeniedException {
+	public void removeGridUser(String callerGridIdentity, GridUser user) throws DorianInternalException, InvalidUserException, PermissionDeniedException {
 		ifm.removeUser(callerGridIdentity, user);
 	}
 
 	@Override
-	public void addAdmin(String callerGridIdentity, String gridIdentity)
-			throws RemoteException, DorianInternalException,
-			PermissionDeniedException {
+	public void addAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalException, PermissionDeniedException {
 		ifm.addAdmin(callerGridIdentity, gridIdentity);
 	}
 
 	@Override
-	public void removeAdmin(String callerGridIdentity, String gridIdentity)
-			throws RemoteException, DorianInternalException,
-			PermissionDeniedException {
+	public void removeAdmin(String callerGridIdentity, String gridIdentity) throws RemoteException, DorianInternalException, PermissionDeniedException {
 		ifm.removeAdmin(callerGridIdentity, gridIdentity);
 	}
 
 	@Override
-	public String[] getAdmins(String callerGridIdentity)
-			throws RemoteException, DorianInternalException,
-			PermissionDeniedException {
+	public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalException, PermissionDeniedException {
 		return ifm.getAdmins(callerGridIdentity);
 	}
 
 	@Override
-	public HostCertificateRecord requestHostCertificate(String callerGridId,
-			HostCertificateRequest req) throws DorianInternalException,
-			InvalidHostCertificateRequestException,
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException,
 			InvalidHostCertificateException, PermissionDeniedException {
 		return ifm.requestHostCertificate(callerGridId, req);
 	}
 
 	@Override
-	public HostCertificateRecord[] getOwnedHostCertificates(String callerGridId)
-			throws DorianInternalException, PermissionDeniedException {
+	public HostCertificateRecord[] getOwnedHostCertificates(String callerGridId) throws DorianInternalException, PermissionDeniedException {
 		return ifm.getHostCertificatesForCaller(callerGridId);
 	}
 
 	@Override
-	public HostCertificateRecord approveHostCertificate(String callerGridId,
-			long recordId) throws DorianInternalException,
-			InvalidHostCertificateException, PermissionDeniedException {
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
 		return ifm.approveHostCertificate(callerGridId, recordId);
 	}
 
 	@Override
-	public HostCertificateRecord[] findHostCertificates(String callerGridId,
-			HostCertificateFilter hostCertificateFilter)
-			throws DorianInternalException, PermissionDeniedException {
+	public HostCertificateRecord[] findHostCertificates(String callerGridId, HostCertificateFilter hostCertificateFilter) throws DorianInternalException, PermissionDeniedException {
 		return ifm.findHostCertificates(callerGridId, hostCertificateFilter);
 	}
 
 	@Override
-	public void updateHostCertificateRecord(String callerGridId,
-			HostCertificateUpdate update) throws DorianInternalException,
-			InvalidHostCertificateException, PermissionDeniedException {
+	public void updateHostCertificateRecord(String callerGridId, HostCertificateUpdate update) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
 		ifm.updateHostCertificateRecord(callerGridId, update);
 	}
 
 	@Override
-	public HostCertificateRecord renewHostCertificate(String callerGridId,
-			long recordId) throws DorianInternalException,
-			InvalidHostCertificateException, PermissionDeniedException {
+	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
 		return ifm.renewHostCertificate(callerGridId, recordId);
 	}
 
 	@Override
-	public boolean doesLocalUserExist(String userId)
-			throws DorianInternalException {
+	public boolean doesLocalUserExist(String userId) throws DorianInternalException {
 		return identityProvider.doesUserExist(userId);
 	}
 
@@ -399,88 +335,65 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public TrustedIdentityProviders getTrustedIdentityProviders()
-			throws DorianInternalException {
+	public TrustedIdentityProviders getTrustedIdentityProviders() throws DorianInternalException {
 		return ifm.getTrustedIdentityProviders();
 	}
 
 	@Override
-	public List<UserCertificateRecord> findUserCertificateRecords(
-			String callerIdentity, UserCertificateFilter f)
-			throws DorianInternalException, InvalidUserCertificateException,
+	public List<UserCertificateRecord> findUserCertificateRecords(String callerIdentity, UserCertificateFilter f) throws DorianInternalException, InvalidUserCertificateException,
 			PermissionDeniedException {
 		return ifm.findUserCertificateRecords(callerIdentity, f);
 	}
 
 	@Override
-	public void updateUserCertificateRecord(String callerIdentity,
-			UserCertificateUpdate update) throws DorianInternalException,
-			InvalidUserCertificateException, PermissionDeniedException {
+	public void updateUserCertificateRecord(String callerIdentity, UserCertificateUpdate update) throws DorianInternalException, InvalidUserCertificateException, PermissionDeniedException {
 		ifm.updateUserCertificateRecord(callerIdentity, update);
 	}
 
 	@Override
-	public void removeUserCertificate(String callerIdentity, long serialNumber)
-			throws DorianInternalException, InvalidUserCertificateException,
-			PermissionDeniedException {
+	public void removeUserCertificate(String callerIdentity, long serialNumber) throws DorianInternalException, InvalidUserCertificateException, PermissionDeniedException {
 		ifm.removeUserCertificate(callerIdentity, serialNumber);
 	}
 
 	@Override
-	public List<FederationAuditRecord> performFederationAudit(
-			String callerIdentity, FederationAuditFilter f)
-			throws DorianInternalException, PermissionDeniedException {
+	public List<FederationAuditRecord> performFederationAudit(String callerIdentity, FederationAuditFilter f) throws DorianInternalException, PermissionDeniedException {
 		return ifm.performAudit(callerIdentity, f);
 	}
 
 	@Override
-	public List<GridUserRecord> userSearch(String callerIdentity,
-			GridUserSearchCriteria criteria) throws RemoteException,
-			DorianInternalException, PermissionDeniedException {
+	public List<GridUserRecord> userSearch(String callerIdentity, GridUserSearchCriteria criteria) throws RemoteException, DorianInternalException, PermissionDeniedException {
 		return ifm.userSearch(callerIdentity, criteria);
 	}
 
 	@Override
-	public List<HostRecord> hostSearch(String callerIdentity,
-			HostSearchCriteria criteria) throws RemoteException,
-			DorianInternalException, PermissionDeniedException {
+	public List<HostRecord> hostSearch(String callerIdentity, HostSearchCriteria criteria) throws RemoteException, DorianInternalException, PermissionDeniedException {
 		return ifm.hostSearch(callerIdentity, criteria);
 	}
 
 	@Override
-	public AccountProfile getAccountProfile(String gridIdentity)
-			throws RemoteException, DorianInternalException,
-			PermissionDeniedException {
+	public AccountProfile getAccountProfile(String gridIdentity) throws RemoteException, DorianInternalException, PermissionDeniedException {
 		String uid = null;
 		try {
-			uid = ifm.getUserIdVerifyTrustedIdP(
-					identityProvider.getIdPCertificate(), gridIdentity);
+			uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			String message = "Permission to get the account profile for the user was denied, caller is not a valid user.";
-			eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID,
-					IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
-			PermissionDeniedException fault = FaultHelper.createFaultException(
-					PermissionDeniedException.class, message);
+			eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
+			PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, message);
 			throw fault;
 		}
 		return this.identityProvider.getAccountProfile(uid);
 	}
 
 	@Override
-	public void updateAccountProfile(String gridIdentity, AccountProfile profile)
-			throws RemoteException, DorianInternalException,
-			InvalidUserPropertyException, PermissionDeniedException,
+	public void updateAccountProfile(String gridIdentity, AccountProfile profile) throws RemoteException, DorianInternalException, InvalidUserPropertyException, PermissionDeniedException,
 			NoSuchUserException {
 		String uid = null;
 		try {
-			uid = ifm.getUserIdVerifyTrustedIdP(
-					identityProvider.getIdPCertificate(), gridIdentity);
+			uid = ifm.getUserIdVerifyTrustedIdP(identityProvider.getIdPCertificate(), gridIdentity);
 		} catch (Exception e) {
 			String message = "Permission to update the account profile for the user was denied, caller is not a valid user.";
-			eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID,
-					IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
-			PermissionDeniedException fault = FaultHelper.createFaultException(
-					PermissionDeniedException.class, message);
+			eventManager.logEvent(gridIdentity, AuditConstants.SYSTEM_ID, IdentityProviderAudit.LOCAL_ACCESS_DENIED.value(), message);
+			PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, message);
 			throw fault;
 		}
 		this.identityProvider.updateAccountProfile(uid, profile);
@@ -495,30 +408,24 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public void setPublish(String callerGridIdentity, TrustedIdP idp,
-			boolean publish) throws DorianInternalException,
-			InvalidTrustedIdPException, PermissionDeniedException {
+	public void setPublish(String callerGridIdentity, TrustedIdP idp, boolean publish) throws DorianInternalException, InvalidTrustedIdPException, PermissionDeniedException {
 		ifm.setPublish(callerGridIdentity, idp, publish);
 	}
 
 	@Override
-	public boolean getPublish(String callerGridIdentity, TrustedIdP idp)
-			throws DorianInternalException, InvalidTrustedIdPException,
-			PermissionDeniedException {
+	public boolean getPublish(String callerGridIdentity, TrustedIdP idp) throws DorianInternalException, InvalidTrustedIdPException, PermissionDeniedException {
 		return ifm.getPublish(callerGridIdentity, idp);
 	}
 
 	@Override
 	public ServiceMetadata getServiceMetadata() {
-		return (serviceMetadataResourceProperty != null) ? serviceMetadataResourceProperty
-				.get(0) : null;
+		return (serviceMetadataResourceProperty != null) ? serviceMetadataResourceProperty.get(0) : null;
 	}
 
 	@Override
 	public AuthenticationProfiles getAuthenticationProfiles() {
 		AuthenticationProfiles authProfiles = new AuthenticationProfiles();
-		QName basicAuthenticationQName = JAXBUtils
-				.getQName(BasicAuthentication.class);
+		QName basicAuthenticationQName = JAXBUtils.getQName(BasicAuthentication.class);
 		authProfiles.getProfile().add(basicAuthenticationQName);
 		return authProfiles;
 	}
@@ -533,14 +440,11 @@ public class DorianImpl implements Dorian {
 	 */
 	private Element getAuthenticationProfilesElement() {
 		AuthenticationProfiles authProfiles = getAuthenticationProfiles();
-		QName authProfilesQName = JAXBUtils
-				.getQName(AuthenticationProfiles.class);
+		QName authProfilesQName = JAXBUtils.getQName(AuthenticationProfiles.class);
 		String authProfilesNamespace = authProfilesQName.getNamespaceURI();
 
 		// New QName for marshalling
-		authProfilesQName = new QName(authProfilesNamespace,
-				authProfilesQName.getLocalPart(),
-				AUTHENTICATION_PROFILES_PREFIX);
+		authProfilesQName = new QName(authProfilesNamespace, authProfilesQName.getLocalPart(), AUTHENTICATION_PROFILES_PREFIX);
 
 		// New QName elements
 		List<QName> oldQNames = authProfiles.getProfile();
@@ -548,8 +452,7 @@ public class DorianImpl implements Dorian {
 		for (QName oldQName : oldQNames) {
 			QName newQName = oldQName;
 			if (authProfilesNamespace.equals(oldQName.getNamespaceURI())) {
-				newQName = new QName(authProfilesNamespace,
-						oldQName.getLocalPart(), AUTHENTICATION_PROFILES_PREFIX);
+				newQName = new QName(authProfilesNamespace, oldQName.getLocalPart(), AUTHENTICATION_PROFILES_PREFIX);
 			}
 			newQNames.add(newQName);
 		}
@@ -559,8 +462,7 @@ public class DorianImpl implements Dorian {
 		// Marshal to element with, hopefully, consistent prefixes.
 		Element authProfilesElement = null;
 		try {
-			authProfilesElement = JAXBUtils.marshalToElement(authProfiles,
-					authProfilesQName);
+			authProfilesElement = JAXBUtils.marshalToElement(authProfiles, authProfilesQName);
 		} catch (Exception e) {
 			log.error("Exception marshalling AuthenticationProfiles", e);
 		}
@@ -574,12 +476,10 @@ public class DorianImpl implements Dorian {
 
 	@Override
 	public ServiceSecurityMetadata getServiceSecurityMetadata() {
-		return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty
-				.get(0) : null;
+		return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty.get(0) : null;
 	}
 
-	public void initialize() throws JAXBException, DatabaseException,
-			DorianInternalException, IOException {
+	public void initialize() throws JAXBException, DatabaseException, DorianInternalException, IOException {
 		eventManager = dorianProperties.getEventManager();
 		UserManager.ADMIN_USER_ID = IDP_ADMIN_USER_ID;
 		UserManager.ADMIN_PASSWORD = IDP_ADMIN_PASSWORD;
@@ -587,39 +487,24 @@ public class DorianImpl implements Dorian {
 		db.createDatabaseIfNeeded();
 		propertyManager = new PropertyManager(db);
 		if (propertyManager.getCertificateAuthorityType() == null) {
-			propertyManager.setCertificateAuthorityType(dorianProperties
-					.getCertificateAuthority().getClass().getName());
-		} else if (!propertyManager.getCertificateAuthorityType()
-				.equals(dorianProperties.getCertificateAuthority().getClass()
-						.getName())) {
-			DorianInternalException fault = FaultHelper
-					.createFaultException(
-							DorianInternalException.class,
-							"Certificate Authority type conflict detected, this Dorian was created using a "
-									+ propertyManager
-											.getCertificateAuthorityType()
-									+ " CA but the configuration file specifies the usage of a "
-									+ dorianProperties
-											.getCertificateAuthority()
-											.getClass().getName() + " CA.");
+			propertyManager.setCertificateAuthorityType(dorianProperties.getCertificateAuthority().getClass().getName());
+		} else if (!propertyManager.getCertificateAuthorityType().equals(dorianProperties.getCertificateAuthority().getClass().getName())) {
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Certificate Authority type conflict detected, this Dorian was created using a "
+					+ propertyManager.getCertificateAuthorityType() + " CA but the configuration file specifies the usage of a " + dorianProperties.getCertificateAuthority().getClass().getName()
+					+ " CA.");
 			throw fault;
 		}
 		ca = dorianProperties.getCertificateAuthority();
-		identityProvider = new IdentityProvider(
-				dorianProperties.getIdentityProviderProperties(), db, ca,
-				eventManager);
+		identityProvider = new IdentityProvider(dorianProperties.getIdentityProviderProperties(), db, ca, eventManager);
 
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(dorianProperties.getIdentityProviderProperties().getName());
-		idp.setDisplayName(dorianProperties.getIdentityProviderProperties()
-				.getName());
+		idp.setDisplayName(dorianProperties.getIdentityProviderProperties().getName());
 		SAMLAuthenticationMethod[] methods = new SAMLAuthenticationMethod[1];
-		methods[0] = SAMLAuthenticationMethod
-				.fromValue("urn:oasis:names:tc:SAML:1.0:am:password");
+		methods[0] = SAMLAuthenticationMethod.fromValue("urn:oasis:names:tc:SAML:1.0:am:password");
 		idp.getAuthenticationMethod().addAll(Arrays.asList(methods));
 		idp.setUserPolicyClass(AutoApprovalPolicy.class.getName());
-		idp.setIdPCertificate(CertUtil.writeCertificate(identityProvider
-				.getIdPCertificate()));
+		idp.setIdPCertificate(CertUtil.writeCertificate(identityProvider.getIdPCertificate()));
 		idp.setStatus(TrustedIdPStatus.ACTIVE);
 		// TODO
 		final String serviceId = "https://localhost";
@@ -646,8 +531,7 @@ public class DorianImpl implements Dorian {
 
 		GridUser usr = null;
 		try {
-			LocalUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID,
-					IDP_ADMIN_USER_ID);
+			LocalUser idpUsr = identityProvider.getUser(IDP_ADMIN_USER_ID, IDP_ADMIN_USER_ID);
 			usr = new GridUser();
 			usr.setUID(idpUsr.getUserId());
 			usr.setFirstName(idpUsr.getFirstName());
@@ -661,55 +545,40 @@ public class DorianImpl implements Dorian {
 		FederationDefaults defaults = new FederationDefaults(idp, usr);
 		// TODO
 		final boolean ignoreCRL = true;
-		ifm = new IdentityFederationManager(ifsConfiguration, db,
-				propertyManager, ca, this.eventManager, defaults, ignoreCRL);
+		ifm = new IdentityFederationManager(ifsConfiguration, db, propertyManager, ca, this.eventManager, defaults, ignoreCRL);
 
-		if (!propertyManager.getVersion().equals(
-				PropertyManager.CURRENT_VERSION)) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Version conflict detected, your are running Dorian "
-							+ PropertyManager.CURRENT_VERSION
-							+ " against a Dorian "
-							+ propertyManager.getVersion() + " database.");
+		if (!propertyManager.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Version conflict detected, your are running Dorian " + PropertyManager.CURRENT_VERSION
+					+ " against a Dorian " + propertyManager.getVersion() + " database.");
 			throw fault;
 		}
 
 		// What resource properties should we know about?
-		Collection<ResourcePropertyDescriptor<?>> resourcePropertyDescriptors = ResourcePropertyDescriptor
-				.analyzeResourcePropertiesHolder(DorianResourceProperties.class);
+		Collection<ResourcePropertyDescriptor<?>> resourcePropertyDescriptors = ResourcePropertyDescriptor.analyzeResourcePropertiesHolder(DorianResourceProperties.class);
 
 		// Map them by field.
-		Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor
-				.mapByField(resourcePropertyDescriptors);
+		Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor.mapByField(resourcePropertyDescriptors);
 
 		// Load the static jaxb resource properties.
-		JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(
-				getClass().getClassLoader(), descriptorsByField,
-				jaxbResourcePropertiesMap);
+		JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(getClass().getClassLoader(), descriptorsByField, jaxbResourcePropertiesMap);
 
 		// The serviceMetadata property is static.
 		@SuppressWarnings("unchecked")
-		ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField
-				.get("serviceMetadata");
+		ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField.get("serviceMetadata");
 		if (serviceMetadataDescriptor != null) {
 			@SuppressWarnings("unchecked")
-			ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties
-					.getResourceProperties().get(serviceMetadataDescriptor);
+			ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties.getResourceProperties().get(serviceMetadataDescriptor);
 			serviceMetadataResourceProperty = resourceProperty;
 			resource.add(serviceMetadataResourceProperty);
 		}
 
 		// The rest of the properties are callbacks.
 		@SuppressWarnings("unchecked")
-		ResourcePropertyDescriptor<AuthenticationProfiles> authenticationProfilesDescriptor = (ResourcePropertyDescriptor<AuthenticationProfiles>) descriptorsByField
-				.get("authenticationProfiles");
+		ResourcePropertyDescriptor<AuthenticationProfiles> authenticationProfilesDescriptor = (ResourcePropertyDescriptor<AuthenticationProfiles>) descriptorsByField.get("authenticationProfiles");
 		if (authenticationProfilesDescriptor != null) {
 			// Must treat auth profiles as Element!
-			ResourcePropertyDescriptor<Element> authenticationProfilesElementDescriptor = new ResourcePropertyDescriptor<Element>(
-					authenticationProfilesDescriptor.getResourcePropertyQName(),
-					Element.class, authenticationProfilesDescriptor
-							.getFieldName());
+			ResourcePropertyDescriptor<Element> authenticationProfilesElementDescriptor = new ResourcePropertyDescriptor<Element>(authenticationProfilesDescriptor.getResourcePropertyQName(),
+					Element.class, authenticationProfilesDescriptor.getFieldName());
 
 			ExternalSingletonResourcePropertyValue<Element> propertyValue = new ExternalSingletonResourcePropertyValue<Element>() {
 				@Override
@@ -717,8 +586,7 @@ public class DorianImpl implements Dorian {
 					return getAuthenticationProfilesElement();
 				}
 			};
-			ResourceProperty<Element> resourceProperty = new ExternalSingletonResourceProperty<Element>(
-					authenticationProfilesElementDescriptor, propertyValue);
+			ResourceProperty<Element> resourceProperty = new ExternalSingletonResourceProperty<Element>(authenticationProfilesElementDescriptor, propertyValue);
 			resource.add(resourceProperty);
 		}
 
@@ -737,14 +605,12 @@ public class DorianImpl implements Dorian {
 					return trustedIdentityProviders;
 				}
 			};
-			ResourceProperty<TrustedIdentityProviders> resourceProperty = new ExternalSingletonResourceProperty<TrustedIdentityProviders>(
-					trustedIdentityProvidersDescriptor, propertyValue);
+			ResourceProperty<TrustedIdentityProviders> resourceProperty = new ExternalSingletonResourceProperty<TrustedIdentityProviders>(trustedIdentityProvidersDescriptor, propertyValue);
 			resource.add(resourceProperty);
 		}
 
 		@SuppressWarnings("unchecked")
-		ResourcePropertyDescriptor<DorianPolicy> dorianPolicyDescriptor = (ResourcePropertyDescriptor<DorianPolicy>) descriptorsByField
-				.get("dorianPolicy");
+		ResourcePropertyDescriptor<DorianPolicy> dorianPolicyDescriptor = (ResourcePropertyDescriptor<DorianPolicy>) descriptorsByField.get("dorianPolicy");
 		if (dorianPolicyDescriptor != null) {
 			ExternalSingletonResourcePropertyValue<DorianPolicy> propertyValue = new ExternalSingletonResourcePropertyValue<DorianPolicy>() {
 				@Override
@@ -752,8 +618,7 @@ public class DorianImpl implements Dorian {
 					return getDorianPolicy();
 				}
 			};
-			ResourceProperty<DorianPolicy> resourceProperty = new ExternalSingletonResourceProperty<DorianPolicy>(
-					dorianPolicyDescriptor, propertyValue);
+			ResourceProperty<DorianPolicy> resourceProperty = new ExternalSingletonResourceProperty<DorianPolicy>(dorianPolicyDescriptor, propertyValue);
 			resource.add(resourceProperty);
 		}
 
@@ -761,8 +626,7 @@ public class DorianImpl implements Dorian {
 		 * ServiceSecurityMetadata isn't a resource property, but use that
 		 * framework to handle it.
 		 */
-		String serviceSecurityMetadataURLString = jaxbResourcePropertiesMap
-				.get("serviceSecurityMetadata");
+		String serviceSecurityMetadataURLString = jaxbResourcePropertiesMap.get("serviceSecurityMetadata");
 		if (serviceSecurityMetadataURLString != null) {
 			URL url = null;
 			try {
@@ -770,19 +634,13 @@ public class DorianImpl implements Dorian {
 			} catch (MalformedURLException ignored) {
 			}
 			if (url == null) {
-				url = getClass().getClassLoader().getResource(
-						serviceSecurityMetadataURLString);
+				url = getClass().getClassLoader().getResource(serviceSecurityMetadataURLString);
 			}
 			if (url != null) {
-				QName serviceSecurityMetadataQName = new QName(
-						DorianImpl.class.getName(), "serviceSecurityMetadata");
-				ResourcePropertyDescriptor<ServiceSecurityMetadata> serviceSecurityMetadataDescriptor = new ResourcePropertyDescriptor<ServiceSecurityMetadata>(
-						serviceSecurityMetadataQName,
-						ServiceSecurityMetadata.class,
-						"serviceSecurityMetadata");
-				serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport
-						.createJAXBResourceProperty(
-								serviceSecurityMetadataDescriptor, url);
+				QName serviceSecurityMetadataQName = new QName(DorianImpl.class.getName(), "serviceSecurityMetadata");
+				ResourcePropertyDescriptor<ServiceSecurityMetadata> serviceSecurityMetadataDescriptor = new ResourcePropertyDescriptor<ServiceSecurityMetadata>(serviceSecurityMetadataQName,
+						ServiceSecurityMetadata.class, "serviceSecurityMetadata");
+				serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport.createJAXBResourceProperty(serviceSecurityMetadataDescriptor, url);
 			}
 		}
 	}
