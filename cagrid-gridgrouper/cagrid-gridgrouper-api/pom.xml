@@ -190,6 +190,7 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>
                             schema.org.cagrid.gridgrouper,
+                            org.cagrid.gridgrouper.client,
                             org.cagrid.gridgrouper.model,
                             org.cagrid.gridgrouper.service,
                             org.cagrid.gridgrouper.service.exception,

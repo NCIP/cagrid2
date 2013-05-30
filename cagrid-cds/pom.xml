@@ -32,6 +32,11 @@
 				<artifactId>cagrid-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-gridgrouper-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>${wsrf.group}</groupId>
 				<artifactId>wsrf-faults-api</artifactId>
