@@ -188,9 +188,16 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<!-- <Export-Package> schema.org.cagrid.dorian, org.cagrid.dorian, 
-							org.cagrid.dorian.common, org.cagrid.dorian.idp, org.cagrid.dorian.ifs, org.cagrid.dorian.policy, 
-							org.cagrid.dorian.service, org.cagrid.dorian.types </Export-Package> <Import-Package> 
+						<Export-Package>
+                            schema.org.cagrid.gridgrouper,
+                            org.cagrid.gridgrouper.model,
+                            org.cagrid.gridgrouper.service,
+                            org.cagrid.gridgrouper.service.exception,
+                            org.cagrid.gridgrouper.types,
+                            org.cagrid.gridgrouper.wsrf.service,
+                            org.cagrid.gridgrouper.wsrf.stubs
+                        </Export-Package>
+                        <!--<Import-Package>
 							schema.org.cagrid.dorian, org.cagrid.dorian, org.cagrid.dorian.common, org.cagrid.dorian.idp, 
 							org.cagrid.dorian.ifs, org.cagrid.dorian.policy, org.cagrid.dorian.service, 
 							org.cagrid.dorian.types, * </Import-Package> -->

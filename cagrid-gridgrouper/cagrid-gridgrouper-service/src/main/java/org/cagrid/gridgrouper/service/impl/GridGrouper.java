@@ -148,7 +148,7 @@ public class GridGrouper {
     }
 
 
-    public List<StemDescriptor> getChildStems(String gridIdentity, StemIdentifier parentStemId) throws RemoteException,
+    public List<StemDescriptor> getChildStems(String gridIdentity, StemIdentifier parentStemId) throws 
             GridGrouperRuntimeException, StemNotFoundException {
         GrouperSession session = null;
         try {
@@ -179,7 +179,7 @@ public class GridGrouper {
     }
 
 
-    public StemDescriptor getParentStem(String gridIdentity, StemIdentifier childStemId) throws RemoteException,
+    public StemDescriptor getParentStem(String gridIdentity, StemIdentifier childStemId) throws 
             GridGrouperRuntimeException, StemNotFoundException {
         GrouperSession session = null;
         try {
@@ -253,7 +253,7 @@ public class GridGrouper {
 
 
     public List<String> getSubjectsWithStemPrivilege(String gridIdentity, StemIdentifier stem, StemPrivilegeType privilege)
-            throws RemoteException, GridGrouperRuntimeException, StemNotFoundException {
+            throws  GridGrouperRuntimeException, StemNotFoundException {
         GrouperSession session = null;
         try {
             Subject subject = SubjectFinder.findById(gridIdentity);
@@ -294,7 +294,7 @@ public class GridGrouper {
 
 
     public List<StemPrivilege> getStemPrivileges(String gridIdentity, StemIdentifier stem, String subject)
-            throws RemoteException, GridGrouperRuntimeException, StemNotFoundException {
+            throws  GridGrouperRuntimeException, StemNotFoundException {
         GrouperSession session = null;
         try {
 
@@ -554,7 +554,7 @@ public class GridGrouper {
 
 
     public GroupDescriptor addChildGroup(String gridIdentity, StemIdentifier stem,
-                                                                             String extension, String displayExtension) throws RemoteException, StemNotFoundException, GridGrouperRuntimeException, GroupAddException,
+                                                                             String extension, String displayExtension) throws  StemNotFoundException, GridGrouperRuntimeException, GroupAddException,
             InsufficientPrivilegeException {
         GrouperSession session = null;
         try {
@@ -726,7 +726,7 @@ public class GridGrouper {
 
 
     public List<MemberDescriptor> getMembers(String gridIdentity, GroupIdentifier group, MemberFilter filter)
-            throws RemoteException, GridGrouperRuntimeException, GroupNotFoundException {
+            throws  GridGrouperRuntimeException, GroupNotFoundException {
         GrouperSession session = null;
         try {
             Subject caller = SubjectFinder.findById(gridIdentity);
@@ -825,7 +825,7 @@ public class GridGrouper {
 
 
     public List<MembershipDescriptor> getMemberships(String gridIdentity, GroupIdentifier group, MemberFilter filter)
-            throws RemoteException, GridGrouperRuntimeException, GroupNotFoundException{
+            throws  GridGrouperRuntimeException, GroupNotFoundException{
         GrouperSession session = null;
         try {
             Subject caller = SubjectFinder.findById(gridIdentity);
@@ -998,7 +998,7 @@ public class GridGrouper {
     }
 
 
-    public void deleteMember(String gridIdentity, GroupIdentifier group, String member) throws RemoteException,
+    public void deleteMember(String gridIdentity, GroupIdentifier group, String member) throws 
             GridGrouperRuntimeException, InsufficientPrivilegeException, GroupNotFoundException, MemberDeleteException {
         GrouperSession session = null;
         try {
@@ -1151,7 +1151,7 @@ public class GridGrouper {
 
 
     public void revokeGroupPrivilege(String gridIdentity, GroupIdentifier group, String subject,
-                                     GroupPrivilegeType privilege) throws RemoteException, GridGrouperRuntimeException, GroupNotFoundException,
+                                     GroupPrivilegeType privilege) throws  GridGrouperRuntimeException, GroupNotFoundException,
             RevokePrivilegeException, InsufficientPrivilegeException, SchemaException {
         GrouperSession session = null;
         try {
@@ -1188,7 +1188,7 @@ public class GridGrouper {
 
 
     public List<String> getSubjectsWithGroupPrivilege(String gridIdentity, GroupIdentifier group,
-                                                  GroupPrivilegeType privilege) throws RemoteException, GridGrouperRuntimeException, GroupNotFoundException {
+                                                  GroupPrivilegeType privilege) throws  GridGrouperRuntimeException, GroupNotFoundException {
         GrouperSession session = null;
         try {
             Subject subject = SubjectFinder.findById(gridIdentity);
@@ -1572,7 +1572,7 @@ public class GridGrouper {
     }
 
     public List<MembershipRequestDescriptor> getMembershipRequests(String gridIdentity, GroupIdentifier group, MembershipRequestStatus status)
-            throws RemoteException, GridGrouperRuntimeException, GroupNotFoundException {
+            throws  GridGrouperRuntimeException, GroupNotFoundException {
         GrouperSession session = null;
         try {
             Subject caller = SubjectFinder.findById(gridIdentity);
@@ -1696,7 +1696,7 @@ public class GridGrouper {
     }
 
 
-    public void disableMembershipRequests(String gridIdentity, GroupIdentifier group) throws RemoteException, GridGrouperRuntimeException, GroupNotFoundException,
+    public void disableMembershipRequests(String gridIdentity, GroupIdentifier group) throws  GridGrouperRuntimeException, GroupNotFoundException,
             RevokePrivilegeException, InsufficientPrivilegeException, SchemaException {
         GrouperSession session = null;
         try {

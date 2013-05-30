@@ -354,4 +354,22 @@ public class StemDescriptor
         this.modifyTime = value;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("StemDescriptor{");
+        sb.append("uuid='").append(uuid).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", displayName='").append(displayName).append('\'');
+        sb.append(", extension='").append(extension).append('\'');
+        sb.append(", displayExtension='").append(displayExtension).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", createSource='").append(createSource).append('\'');
+        sb.append(", createSubject='").append(createSubject).append('\'');
+        sb.append(", createTime=").append(createTime);
+        sb.append(", modifySource='").append(modifySource).append('\'');
+        sb.append(", modifySubject='").append(modifySubject).append('\'');
+        sb.append(", modifyTime=").append(modifyTime);
+        sb.append('}');
+        return sb.toString();
+    }
 }

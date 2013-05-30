@@ -69,6 +69,7 @@ public class SpringUtils {
 		return (CertificateAuthorityProperties) getBean(CA_PROPERTIES);
 	}
 
+
 	public CertificateAuthority getCertificateAuthority() {
 		return (CertificateAuthority) getBean(CA);
 	}
@@ -78,6 +79,7 @@ public class SpringUtils {
 	}
 
 	private Object getBean(String bean) {
+
 		if (context != null) {
 			return context.getBean(bean);
 		} else {

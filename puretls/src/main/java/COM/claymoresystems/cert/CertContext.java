@@ -48,6 +48,9 @@ import cryptix.asn1.lang.ASNSpecification;
 import cryptix.asn1.lang.Parser;
 import java.util.Vector;
 import java.io.*;
+
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
 import javax.security.auth.x500.X500Principal;
 
 /**
@@ -61,6 +64,8 @@ public class CertContext {
 
 	static Parser parser;
 	static ASNSpecification spec;
+
+	final static LdapNameComparator ldapComparator = new LdapNameComparator();
 
 	// TODO: Make this a loaded byte string
 	// static String defs="/users/ekr/java/COM/claymoresystems/cert/x509.asn";
@@ -127,8 +132,9 @@ public class CertContext {
 		return false;
 	}
 
-	public X509Cert signedByRoot(byte[] issuer) {
+	public X509Cert signedByRoot(byte[] issuer) throws InvalidNameException {
 		X500Principal issuerPrincipal = new X500Principal(issuer);
+		LdapName issuerName = new LdapName(issuerPrincipal.getName());
 
 		for (int i = 0; i < root_list.size(); i++) {
 			X509Cert root;
@@ -136,7 +142,8 @@ public class CertContext {
 			root = (X509Cert) root_list.elementAt(i);
 			byte[] subject = root.getSubjectDER();
 			X500Principal subjectPrincipal = new X500Principal(subject);
-			if (issuerPrincipal.equals(subjectPrincipal)) return root;
+			LdapName subjectName = new LdapName(subjectPrincipal.getName());
+			if (ldapComparator.compare(subjectName, issuerName) == 0) return root;
 //			if (cryptix.util.core.ArrayUtil.areEqual(issuer, subject))
 //				return root;
 		}

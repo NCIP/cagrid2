@@ -72,6 +72,11 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.io.*;
 
+import javax.naming.InvalidNameException;
+import javax.naming.NamingException;
+import javax.naming.ldap.LdapName;
+import javax.security.auth.x500.X500Principal;
+
 /**
  * A single X509 Certificate.
  * <P>
@@ -80,6 +85,8 @@ import java.io.*;
  * it.
  */
 public class X509Cert implements Certificate {
+	private final static LdapNameComparator ldapComparator = new LdapNameComparator();
+
 	ASNObject signedCert;
 	ASNObject unsignedCert;
 	ASNObject issuer;
@@ -425,7 +432,12 @@ public class X509Cert implements Certificate {
 				} else {
 					SSLDebug.debug(SSLDebug.DEBUG_CERT,
 							"Trying to find root with DN", cert.getIssuerDER());
-					last = ctx.signedByRoot(cert.getIssuerDER());
+					try {
+						last = ctx.signedByRoot(cert.getIssuerDER());
+					} catch (InvalidNameException ine) {
+						// Shouldn't occur, and means a match isn't possible anyway.
+						SSLDebug.debug(SSLDebug.DEBUG_CERT, "Name exception: " + ine.getMessage());
+					}
 					if (last == null) {
 						SSLDebug.debug(SSLDebug.DEBUG_CERT, "Nope");
 						continue;
@@ -438,8 +450,20 @@ public class X509Cert implements Certificate {
 
 			// Now check that the signer's subjectName is the same
 			// as the issuerName
-			if (!cryptix.util.core.ArrayUtil.areEqual(last.getSubjectDER(),
-					cert.getIssuerDER())) {
+			LdapName issuerName = null;
+			LdapName subjectName = null;
+			try {
+			X500Principal issuerPrincipal = new X500Principal(cert.getIssuerDER());
+			issuerName = new LdapName(issuerPrincipal.getName());
+			X500Principal subjectPrincipal = new X500Principal(last.getSubjectDER());
+			subjectName = new LdapName(subjectPrincipal.getName());
+			} catch (NamingException ne) {
+				throw new CertificateVerifyException("Certificate naming exception: " + ne.getMessage());
+			}
+			
+			if (ldapComparator.compare(subjectName, issuerName) != 0) {
+//			if (!cryptix.util.core.ArrayUtil.areEqual(last.getSubjectDER(),
+//					cert.getIssuerDER())) {
 				String subject = cert.getSubjectName().getNameString();
 				throw new CertificateVerifyException(
 						"Invalid certificate chain at '"
