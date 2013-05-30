@@ -65,7 +65,7 @@ public class SpringUtils {
 		return (CertificateAuthorityProperties) getBean(CA_PROPERTIES);
 	}
 
-	private Object getBean(String bean) {
+	public Object getBean(String bean) {
 		if (context != null) {
 			return context.getBean(bean);
 		} else {
