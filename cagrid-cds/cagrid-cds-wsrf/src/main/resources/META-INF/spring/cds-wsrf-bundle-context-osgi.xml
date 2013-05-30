@@ -11,7 +11,7 @@
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.cds.wsrf">
 		<prop key="cagrid.cds.wsrf.host">localhost</prop>
-		<prop key="cagrid.cds.wsrf.port">7735</prop>
+		<prop key="cagrid.cds.wsrf.port">7736</prop>
 		<prop key="cagrid.cds.wsrf.path">cds</prop>
         <prop key="cagrid.cds.delegated.wsrf.path">dcs</prop>
 		<prop key="cagrid.cds.wsrf.url">http://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
