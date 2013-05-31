@@ -9,7 +9,6 @@
 	<artifactId>cagrid-gts</artifactId>
 	<packaging>pom</packaging>
 	<name>caGrid GTS</name>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -22,7 +21,6 @@
 				<artifactId>cagrid-metadata-model</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-core</artifactId>
@@ -46,12 +44,11 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<modules>
 		<module>cagrid-gts-api</module>
 		<module>cagrid-gts-service</module>
-<!-- 		<module>cagrid-gts-wsrf</module>
-		<module>cagrid-gts-soap-client</module> -->
+		<!-- <module>cagrid-gts-wsrf</module> -->
+		<module>cagrid-gts-soap-client</module>
 		<module>cagrid-gts-features</module>
 	</modules>
 </project>
