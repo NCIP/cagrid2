@@ -84,6 +84,10 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-gaards-api</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cagrid-gridgrouper-api</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-metadata-model</artifactId>
