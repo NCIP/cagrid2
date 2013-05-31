@@ -44,3 +44,9 @@ features:install cagrid-gridgrouper
 
 
 *NOTE: Depending on what version of Fuse/SMX you use, you may need to edit the etc/jre.properties to add com.sun.jndi.ldap to the system packages list
+
+Reserved ports:
+
+Dorian: 7734, 7735
+CDS: 7736
+GridGrouper: 7737

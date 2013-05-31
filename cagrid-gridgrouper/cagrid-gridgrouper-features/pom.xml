@@ -69,5 +69,15 @@
 			<artifactId>cagrid-gridgrouper-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cagrid-gridgrouper-wsrf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cagrid-gridgrouper-soap-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 	</dependencies>
 </project>

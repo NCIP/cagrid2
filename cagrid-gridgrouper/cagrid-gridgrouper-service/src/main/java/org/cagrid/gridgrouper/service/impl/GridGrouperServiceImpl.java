@@ -1,5 +1,12 @@
 package org.cagrid.gridgrouper.service.impl;
 
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
+import org.cagrid.core.resource.JAXBResourceProperties;
+import org.cagrid.core.resource.JAXBResourcePropertySupport;
+import org.cagrid.core.resource.ResourceImpl;
+import org.cagrid.core.resource.ResourcePropertyDescriptor;
+import org.cagrid.core.resource.SingletonResourceHomeImpl;
 import org.cagrid.gridgrouper.model.GroupCompositeType;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
 import org.cagrid.gridgrouper.model.GroupIdentifier;
@@ -35,16 +42,37 @@ import org.cagrid.gridgrouper.service.exception.StemAddException;
 import org.cagrid.gridgrouper.service.exception.StemDeleteException;
 import org.cagrid.gridgrouper.service.exception.StemModifyException;
 import org.cagrid.gridgrouper.service.exception.StemNotFoundException;
+import org.cagrid.gridgrouper.wsrf.stubs.GridGrouperResourceProperties;
+import org.cagrid.wsrf.properties.ResourceHome;
+import org.cagrid.wsrf.properties.ResourceProperty;
 
-import java.rmi.RemoteException;
+import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class GridGrouperServiceImpl implements GridGrouperService {
 
     GridGrouper gridGrouper;
 
-    public GridGrouperServiceImpl() throws GridGrouperRuntimeException {
+    private ResourceProperty<ServiceMetadata> serviceMetadataResourceProperty;
+    private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
+    private final Map<String, String> jaxbResourcePropertiesMap;
+    private final ResourceImpl resource = new ResourceImpl(null);
+    private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
+
+    public GridGrouperServiceImpl(Map<String, String> jaxbResourcePropertiesMap) throws GridGrouperRuntimeException {
         this.gridGrouper = new GridGrouper();
+        this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
+    }
+
+    @Override
+    public ServiceSecurityMetadata getServiceSecurityMetadata() {
+        return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty
+                .get(0) : null;
     }
 
     @Override
@@ -53,22 +81,22 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public List<StemDescriptor> getChildStems(String callerIdentity, StemIdentifier parentStem) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException {
+    public List<StemDescriptor> getChildStems(String callerIdentity, StemIdentifier parentStem) throws GridGrouperRuntimeException, StemNotFoundException {
         return gridGrouper.getChildStems(callerIdentity, parentStem);
     }
 
     @Override
-    public StemDescriptor getParentStem(String callerIdentity, StemIdentifier childStem) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException {
+    public StemDescriptor getParentStem(String callerIdentity, StemIdentifier childStem) throws GridGrouperRuntimeException, StemNotFoundException {
         return gridGrouper.getParentStem(callerIdentity, childStem);
     }
 
     @Override
-    public List<String> getSubjectsWithStemPrivilege(String callerIdentity, StemIdentifier stem, StemPrivilegeType privilege) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException {
+    public List<String> getSubjectsWithStemPrivilege(String callerIdentity, StemIdentifier stem, StemPrivilegeType privilege) throws GridGrouperRuntimeException, StemNotFoundException {
         return gridGrouper.getSubjectsWithStemPrivilege(callerIdentity, stem, privilege);
     }
 
     @Override
-    public List<StemPrivilege> getStemPrivileges(String callerIdentity, StemIdentifier stem, String subject) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException {
+    public List<StemPrivilege> getStemPrivileges(String callerIdentity, StemIdentifier stem, String subject) throws GridGrouperRuntimeException, StemNotFoundException {
         return gridGrouper.getStemPrivileges(callerIdentity, stem, subject);
     }
 
@@ -108,7 +136,7 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public GroupDescriptor addChildGroup(String callerIdentity, StemIdentifier stem, String extension, String displayExtension) throws RemoteException, GroupAddException, InsufficientPrivilegeException, StemNotFoundException, GridGrouperRuntimeException {
+    public GroupDescriptor addChildGroup(String callerIdentity, StemIdentifier stem, String extension, String displayExtension) throws GroupAddException, InsufficientPrivilegeException, StemNotFoundException, GridGrouperRuntimeException {
         return gridGrouper.addChildGroup(callerIdentity, stem, extension, displayExtension);
     }
 
@@ -133,7 +161,7 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public List<MemberDescriptor> getMembers(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException {
+    public List<MemberDescriptor> getMembers(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, GroupNotFoundException {
         return gridGrouper.getMembers(callerIdentity, group, filter);
     }
 
@@ -143,12 +171,12 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public List<MembershipDescriptor> getMemberships(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException {
+    public List<MembershipDescriptor> getMemberships(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, GroupNotFoundException {
         return this.gridGrouper.getMemberships(callerIdentity, group, filter);
     }
 
     @Override
-    public void deleteMember(String callerIdentity, GroupIdentifier group, String member) throws RemoteException, GroupNotFoundException, InsufficientPrivilegeException, MemberDeleteException, GridGrouperRuntimeException {
+    public void deleteMember(String callerIdentity, GroupIdentifier group, String member) throws GroupNotFoundException, InsufficientPrivilegeException, MemberDeleteException, GridGrouperRuntimeException {
         gridGrouper.deleteMember(callerIdentity, group, member);
     }
 
@@ -168,12 +196,12 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public void revokeGroupPrivilege(String callerIdentity, GroupIdentifier group, String subject, GroupPrivilegeType privilege) throws RemoteException, GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException {
+    public void revokeGroupPrivilege(String callerIdentity, GroupIdentifier group, String subject, GroupPrivilegeType privilege) throws GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException {
         gridGrouper.revokeGroupPrivilege(callerIdentity, group, subject, privilege);
     }
 
     @Override
-    public List<String> getSubjectsWithGroupPrivilege(String callerIdentity, GroupIdentifier group, GroupPrivilegeType privilege) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException {
+    public List<String> getSubjectsWithGroupPrivilege(String callerIdentity, GroupIdentifier group, GroupPrivilegeType privilege) throws GridGrouperRuntimeException, GroupNotFoundException {
         return gridGrouper.getSubjectsWithGroupPrivilege(callerIdentity, group, privilege);
     }
 
@@ -213,7 +241,7 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public List<MembershipRequestDescriptor> getMembershipRequests(String callerIdentity, GroupIdentifier group, MembershipRequestStatus status) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException {
+    public List<MembershipRequestDescriptor> getMembershipRequests(String callerIdentity, GroupIdentifier group, MembershipRequestStatus status) throws GridGrouperRuntimeException, GroupNotFoundException {
         return gridGrouper.getMembershipRequests(callerIdentity, group, status);
     }
 
@@ -223,12 +251,72 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
-    public void disableMembershipRequests(String callerIdentity, GroupIdentifier group) throws RemoteException, GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException {
+    public void disableMembershipRequests(String callerIdentity, GroupIdentifier group) throws GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException {
         gridGrouper.disableMembershipRequests(callerIdentity, group);
     }
 
     @Override
     public boolean isMembershipRequestEnabled(String callerIdentity, GroupIdentifier group) throws GrantPrivilegeException, InsufficientPrivilegeException, GroupNotFoundException, GridGrouperRuntimeException {
         return gridGrouper.isMembershipRequestEnabled(callerIdentity, group);
+    }
+
+    @Override
+    public ResourceHome getResourceHome() {
+        return resourceHome;
+    }
+
+    private void initialize() throws JAXBException {
+        // What resource properties should we know about?
+        Collection<ResourcePropertyDescriptor<?>> resourcePropertyDescriptors = ResourcePropertyDescriptor
+                .analyzeResourcePropertiesHolder(GridGrouperResourceProperties.class);
+
+        // Map them by field.
+        Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor
+                .mapByField(resourcePropertyDescriptors);
+
+        // Load the static jaxb resource properties.
+        JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(
+                getClass().getClassLoader(), descriptorsByField, jaxbResourcePropertiesMap);
+
+        // The serviceMetadata property is static.
+        @SuppressWarnings("unchecked")
+        ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField
+                .get("serviceMetadata");
+        if (serviceMetadataDescriptor != null) {
+            @SuppressWarnings("unchecked")
+            ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties
+                    .getResourceProperties().get(serviceMetadataDescriptor);
+            serviceMetadataResourceProperty = resourceProperty;
+            resource.add(serviceMetadataResourceProperty);
+        }
+
+		/*
+		 * ServiceSecurityMetadata isn't a resource property, but use that
+		 * framework to handle it.
+		 */
+        String serviceSecurityMetadataURLString = jaxbResourcePropertiesMap
+                .get("serviceSecurityMetadata");
+        if (serviceSecurityMetadataURLString != null) {
+            URL url = null;
+            try {
+                url = new URL(serviceSecurityMetadataURLString);
+            } catch (MalformedURLException ignored) {
+            }
+            if (url == null) {
+                url = getClass().getClassLoader().getResource(
+                        serviceSecurityMetadataURLString);
+            }
+            if (url != null) {
+                QName serviceSecurityMetadataQName = new QName(
+                        getClass().getName(), "serviceSecurityMetadata");
+                ResourcePropertyDescriptor<ServiceSecurityMetadata> serviceSecurityMetadataDescriptor = new ResourcePropertyDescriptor<ServiceSecurityMetadata>(
+                        serviceSecurityMetadataQName,
+                        ServiceSecurityMetadata.class,
+                        "serviceSecurityMetadata");
+                serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport
+                        .createJAXBResourceProperty(
+                                serviceSecurityMetadataDescriptor, url);
+            }
+        }
     }
 }

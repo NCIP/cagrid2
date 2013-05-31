@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <features>
 	<feature name="cagrid-gridgrouper" version="${project.version}">
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
+        <feature version="${project.version}">cagrid-gridgrouper-client</feature>
+
 		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}</bundle>
 
         <!-- internet2 stuff -->
         <bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}</bundle>
@@ -12,5 +14,6 @@
 	</feature>
 	<feature name="cagrid-gridgrouper-client" version="${project.version}">
 		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-soap-client/${project.version}</bundle>
 	</feature>
 </features>

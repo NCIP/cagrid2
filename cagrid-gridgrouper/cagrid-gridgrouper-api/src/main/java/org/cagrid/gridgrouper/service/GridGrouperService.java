@@ -1,5 +1,6 @@
 package org.cagrid.gridgrouper.service;
 
+import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import org.cagrid.gridgrouper.model.GroupCompositeType;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
 import org.cagrid.gridgrouper.model.GroupIdentifier;
@@ -34,21 +35,23 @@ import org.cagrid.gridgrouper.service.exception.StemAddException;
 import org.cagrid.gridgrouper.service.exception.StemDeleteException;
 import org.cagrid.gridgrouper.service.exception.StemModifyException;
 import org.cagrid.gridgrouper.service.exception.StemNotFoundException;
+import org.cagrid.wsrf.properties.ResourceHome;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 public interface GridGrouperService {
 
+    public ServiceSecurityMetadata getServiceSecurityMetadata();
+
     public StemDescriptor getStem(String callerIdentity, StemIdentifier stem) throws GridGrouperRuntimeException, StemNotFoundException;
 
-    public List<StemDescriptor> getChildStems(String callerIdentity, StemIdentifier parentStem) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException;
+    public List<StemDescriptor> getChildStems(String callerIdentity, StemIdentifier parentStem) throws GridGrouperRuntimeException,  StemNotFoundException;
 
-    public StemDescriptor getParentStem(String callerIdentity, StemIdentifier childStem) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException;
+    public StemDescriptor getParentStem(String callerIdentity, StemIdentifier childStem) throws GridGrouperRuntimeException,  StemNotFoundException;
 
-    public List<String> getSubjectsWithStemPrivilege(String callerIdentity, StemIdentifier stem, StemPrivilegeType privilege) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException;
+    public List<String> getSubjectsWithStemPrivilege(String callerIdentity, StemIdentifier stem, StemPrivilegeType privilege) throws GridGrouperRuntimeException,  StemNotFoundException;
 
-    public List<StemPrivilege> getStemPrivileges(String callerIdentity, StemIdentifier stem,String subject) throws GridGrouperRuntimeException, RemoteException, StemNotFoundException;
+    public List<StemPrivilege> getStemPrivileges(String callerIdentity, StemIdentifier stem,String subject) throws GridGrouperRuntimeException,  StemNotFoundException;
 
     public boolean hasStemPrivilege(String callerIdentity, StemIdentifier stem,String subject, StemPrivilegeType privilege) throws GridGrouperRuntimeException, StemNotFoundException;
 
@@ -64,7 +67,7 @@ public interface GridGrouperService {
 
     public List<GroupDescriptor> getChildGroups(String callerIdentity, StemIdentifier stem) throws GridGrouperRuntimeException, StemNotFoundException;
 
-    public GroupDescriptor addChildGroup(String callerIdentity, StemIdentifier stem,String extension,String displayExtension) throws RemoteException, GroupAddException, InsufficientPrivilegeException, StemNotFoundException, GridGrouperRuntimeException;
+    public GroupDescriptor addChildGroup(String callerIdentity, StemIdentifier stem,String extension,String displayExtension) throws  GroupAddException, InsufficientPrivilegeException, StemNotFoundException, GridGrouperRuntimeException;
 
     public void deleteGroup(String callerIdentity, GroupIdentifier group) throws InsufficientPrivilegeException, GroupDeleteException, GroupNotFoundException, GridGrouperRuntimeException;
     
@@ -74,13 +77,13 @@ public interface GridGrouperService {
     
     public void addMember(String callerIdentity, GroupIdentifier group,String subject) throws InsufficientPrivilegeException, MemberAddException, GroupNotFoundException, GridGrouperRuntimeException;
 
-    public List<MemberDescriptor> getMembers(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException;
+    public List<MemberDescriptor> getMembers(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException,  GroupNotFoundException;
     
     public boolean isMemberOf(String callerIdentity, GroupIdentifier group,String member, MemberFilter filter) throws GridGrouperRuntimeException, GroupNotFoundException;
 
-    public List<MembershipDescriptor> getMemberships(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException;
+    public List<MembershipDescriptor> getMemberships(String callerIdentity, GroupIdentifier group, MemberFilter filter) throws GridGrouperRuntimeException, GroupNotFoundException;
 
-    public void deleteMember(String callerIdentity, GroupIdentifier group,String member) throws RemoteException, GroupNotFoundException, InsufficientPrivilegeException, MemberDeleteException, GridGrouperRuntimeException;
+    public void deleteMember(String callerIdentity, GroupIdentifier group,String member) throws  GroupNotFoundException, InsufficientPrivilegeException, MemberDeleteException, GridGrouperRuntimeException;
     
     public GroupDescriptor addCompositeMember(String callerIdentity, GroupCompositeType type,GroupIdentifier composite,GroupIdentifier left,GroupIdentifier right) throws InsufficientPrivilegeException, MemberAddException, GroupNotFoundException, GridGrouperRuntimeException;
     
@@ -88,9 +91,9 @@ public interface GridGrouperService {
 
     public void grantGroupPrivilege(String callerIdentity, GroupIdentifier group,String subject, GroupPrivilegeType privilege) throws GrantPrivilegeException, InsufficientPrivilegeException, GroupNotFoundException, GridGrouperRuntimeException;
     
-    public void revokeGroupPrivilege(String callerIdentity, GroupIdentifier group,String subject, GroupPrivilegeType privilege) throws RemoteException, GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException;
+    public void revokeGroupPrivilege(String callerIdentity, GroupIdentifier group,String subject, GroupPrivilegeType privilege) throws  GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException;
 
-    public List<String> getSubjectsWithGroupPrivilege(String callerIdentity, GroupIdentifier group, GroupPrivilegeType privilege) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException;
+    public List<String> getSubjectsWithGroupPrivilege(String callerIdentity, GroupIdentifier group, GroupPrivilegeType privilege) throws GridGrouperRuntimeException,  GroupNotFoundException;
 
     public List<GroupPrivilege> getGroupPrivileges(String callerIdentity, GroupIdentifier group, String subject) throws GridGrouperRuntimeException, GroupNotFoundException;
 
@@ -106,12 +109,13 @@ public interface GridGrouperService {
 
     public MembershipRequestDescriptor updateMembershipRequest(String callerIdentity, GroupIdentifier group,String subject, MembershipRequestUpdate update) throws InsufficientPrivilegeException, MemberAddException, GroupNotFoundException, GridGrouperRuntimeException;
     
-    public List<MembershipRequestDescriptor> getMembershipRequests(String callerIdentity, GroupIdentifier group, MembershipRequestStatus status) throws GridGrouperRuntimeException, RemoteException, GroupNotFoundException;
+    public List<MembershipRequestDescriptor> getMembershipRequests(String callerIdentity, GroupIdentifier group, MembershipRequestStatus status) throws GridGrouperRuntimeException,  GroupNotFoundException;
 
     public void enableMembershipRequests(String callerIdentity, GroupIdentifier group) throws GrantPrivilegeException, InsufficientPrivilegeException, GroupNotFoundException, GridGrouperRuntimeException;
 
-    public void disableMembershipRequests(String callerIdentity, GroupIdentifier group) throws RemoteException, GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException;
+    public void disableMembershipRequests(String callerIdentity, GroupIdentifier group) throws  GroupNotFoundException, RevokePrivilegeException, SchemaException, InsufficientPrivilegeException, GridGrouperRuntimeException;
 
     public boolean isMembershipRequestEnabled(String callerIdentity, GroupIdentifier group) throws GrantPrivilegeException, InsufficientPrivilegeException, GroupNotFoundException, GridGrouperRuntimeException;
 
+    public ResourceHome getResourceHome();
 }
