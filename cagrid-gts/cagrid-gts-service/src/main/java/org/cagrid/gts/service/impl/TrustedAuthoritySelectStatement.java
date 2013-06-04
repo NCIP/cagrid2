@@ -1,6 +1,6 @@
 package org.cagrid.gts.service.impl;
 
-import org.cagrid.gts.service.db.TrustedAuthorityTable;
+import org.cagrid.gts.service.impl.db.TrustedAuthorityTable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

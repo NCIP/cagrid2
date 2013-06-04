@@ -11,13 +11,18 @@
 	<bean id="jaxbResourceProperties" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="serviceMetadata" value="${cagrid.dorian.service.metadata.url}"/>
-				<entry key="serviceSecurityMetadata" value="${cagrid.dorian.service.security.metadata.url}"/>
+				<entry key="serviceMetadata" value="${cagrid.gts.service.metadata.url}"/>
+				<entry key="serviceSecurityMetadata" value="${cagrid.gts.service.security.metadata.url}"/>
 			</map>
 		</constructor-arg>
 	</bean>
+	<bean id="srm" class="org.cagrid.gts.service.impl.SimpleResourceManager">
+		<constructor-arg value="${cagrid.gts.service.config.url}"/>
+	</bean>
 	<bean id="gts" class="org.cagrid.gts.service.impl.GTSImpl"
 		init-method="initialize">
-		<constructor-arg index="1" ref="jaxbResourceProperties"/>
+		<constructor-arg ref="jaxbResourceProperties"/>
+		<constructor-arg ref="srm"/>
+		<constructor-arg value="${cagrid.gts.service.url}"/>
 	</bean>
 </beans>

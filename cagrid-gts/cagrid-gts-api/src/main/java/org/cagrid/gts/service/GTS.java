@@ -1,6 +1,6 @@
 package org.cagrid.gts.service;
 
-import java.rmi.RemoteException;
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 
 import org.cagrid.gts.service.exception.CertificateValidationException;
 import org.cagrid.gts.service.exception.GTSInternalException;
@@ -13,10 +13,13 @@ import org.cagrid.gts.service.exception.InvalidPermissionException;
 import org.cagrid.gts.service.exception.InvalidTrustLevelException;
 import org.cagrid.gts.service.exception.InvalidTrustedAuthorityException;
 import org.cagrid.gts.service.exception.PermissionDeniedException;
+import org.cagrid.wsrf.properties.ResourceHome;
 
 public interface GTS {
 
     public gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata getServiceSecurityMetadata();
+
+    public ServiceMetadata getServiceMetadata();
 
     /**
      * Publish a Certificate Authority to the trust fabric.
@@ -29,15 +32,17 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public org.cagrid.gts.model.TrustedAuthority addTrustedAuthority(org.cagrid.gts.model.TrustedAuthority ta) throws RemoteException, GTSInternalException,
-            IllegalTrustedAuthorityException, PermissionDeniedException;
+    public org.cagrid.gts.model.TrustedAuthority addTrustedAuthority(String callerIdentity, org.cagrid.gts.model.TrustedAuthority ta)
+            throws GTSInternalException, IllegalTrustedAuthorityException, PermissionDeniedException;
 
     /**
      * Discover a list of trusted authorities that meets a specified trust criteria.
      * 
      * @param filter
+     * @throws GTSInternalException
      */
-    public org.cagrid.gts.model.TrustedAuthority[] findTrustedAuthorities(org.cagrid.gts.model.TrustedAuthorityFilter filter) throws RemoteException;
+    public org.cagrid.gts.model.TrustedAuthority[] findTrustedAuthorities(String callerIdentity, org.cagrid.gts.model.TrustedAuthorityFilter filter)
+            throws GTSInternalException;
 
     /**
      * Remove a certficate authority from the trust fabric.
@@ -50,8 +55,8 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void removeTrustedAuthority(java.lang.String trustedAuthorityName) throws RemoteException, GTSInternalException, InvalidTrustedAuthorityException,
-            PermissionDeniedException;
+    public void removeTrustedAuthority(String callerIdentity, java.lang.String trustedAuthorityName) throws GTSInternalException,
+            InvalidTrustedAuthorityException, PermissionDeniedException;
 
     /**
      * Grant a permission to a user or service.
@@ -64,7 +69,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void addPermission(org.cagrid.gts.model.Permission permission) throws RemoteException, GTSInternalException, IllegalPermissionException,
+    public void addPermission(String callerIdentity, org.cagrid.gts.model.Permission permission) throws GTSInternalException, IllegalPermissionException,
             PermissionDeniedException;
 
     /**
@@ -76,7 +81,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public org.cagrid.gts.model.Permission[] findPermissions(org.cagrid.gts.model.PermissionFilter filter) throws RemoteException, GTSInternalException,
+    public org.cagrid.gts.model.Permission[] findPermissions(String callerIdentity, org.cagrid.gts.model.PermissionFilter filter) throws GTSInternalException,
             PermissionDeniedException;
 
     /**
@@ -90,7 +95,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void revokePermission(org.cagrid.gts.model.Permission permission) throws RemoteException, GTSInternalException, InvalidPermissionException,
+    public void revokePermission(String callerIdentity, org.cagrid.gts.model.Permission permission) throws GTSInternalException, InvalidPermissionException,
             PermissionDeniedException;
 
     /**
@@ -106,7 +111,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void updateTrustedAuthority(org.cagrid.gts.model.TrustedAuthority ta) throws RemoteException, GTSInternalException,
+    public void updateTrustedAuthority(String callerIdentity, org.cagrid.gts.model.TrustedAuthority ta) throws GTSInternalException,
             IllegalTrustedAuthorityException, InvalidTrustedAuthorityException, PermissionDeniedException;
 
     /**
@@ -120,7 +125,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void addTrustLevel(org.cagrid.gts.model.TrustLevel trustLevel) throws RemoteException, GTSInternalException, IllegalTrustLevelException,
+    public void addTrustLevel(String callerIdentity, org.cagrid.gts.model.TrustLevel trustLevel) throws GTSInternalException, IllegalTrustLevelException,
             PermissionDeniedException;
 
     /**
@@ -136,7 +141,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void updateTrustLevel(org.cagrid.gts.model.TrustLevel trustLevel) throws RemoteException, GTSInternalException, InvalidTrustLevelException,
+    public void updateTrustLevel(String callerIdentity, org.cagrid.gts.model.TrustLevel trustLevel) throws GTSInternalException, InvalidTrustLevelException,
             IllegalTrustLevelException, PermissionDeniedException;
 
     /**
@@ -145,7 +150,7 @@ public interface GTS {
      * @throws GTSInternalFault
      *             An unexpected internal GTS error.
      */
-    public org.cagrid.gts.model.TrustLevel[] getTrustLevels() throws RemoteException, GTSInternalException;
+    public org.cagrid.gts.model.TrustLevel[] getTrustLevels(String callerIdentity) throws GTSInternalException;
 
     /**
      * Remove a trust level from a GTS.
@@ -160,7 +165,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void removeTrustLevel(java.lang.String trustLevelName) throws RemoteException, GTSInternalException, InvalidTrustLevelException,
+    public void removeTrustLevel(String callerIdentity, java.lang.String trustLevelName) throws GTSInternalException, InvalidTrustLevelException,
             IllegalTrustLevelException, PermissionDeniedException;
 
     /**
@@ -174,7 +179,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void addAuthority(org.cagrid.gts.model.AuthorityGTS authorityGTS) throws RemoteException, GTSInternalException, IllegalAuthorityException,
+    public void addAuthority(String callerIdentity, org.cagrid.gts.model.AuthorityGTS authorityGTS) throws GTSInternalException, IllegalAuthorityException,
             PermissionDeniedException;
 
     /**
@@ -190,7 +195,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void updateAuthority(org.cagrid.gts.model.AuthorityGTS authorityGTS) throws RemoteException, GTSInternalException, IllegalAuthorityException,
+    public void updateAuthority(String callerIdentity, org.cagrid.gts.model.AuthorityGTS authorityGTS) throws GTSInternalException, IllegalAuthorityException,
             InvalidAuthorityException, PermissionDeniedException;
 
     /**
@@ -204,8 +209,8 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void updateAuthorityPriorities(org.cagrid.gts.model.AuthorityPriorityUpdate authorityPriorityUpdate) throws RemoteException, GTSInternalException,
-            IllegalAuthorityException, PermissionDeniedException;
+    public void updateAuthorityPriorities(String callerIdentity, org.cagrid.gts.model.AuthorityPriorityUpdate authorityPriorityUpdate)
+            throws GTSInternalException, IllegalAuthorityException, PermissionDeniedException;
 
     /**
      * List the GTS's authorities.
@@ -213,7 +218,7 @@ public interface GTS {
      * @throws GTSInternalFault
      *             An unexpected internal GTS error.
      */
-    public org.cagrid.gts.model.AuthorityGTS[] getAuthorities() throws RemoteException, GTSInternalException;
+    public org.cagrid.gts.model.AuthorityGTS[] getAuthorities(String callerIdentity) throws GTSInternalException;
 
     /**
      * Remove one of a GTS's authorities.
@@ -226,7 +231,8 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void removeAuthority(java.lang.String serviceURI) throws RemoteException, GTSInternalException, InvalidAuthorityException, PermissionDeniedException;
+    public void removeAuthority(String callerIdentity, java.lang.String serviceURI) throws GTSInternalException, InvalidAuthorityException,
+            PermissionDeniedException;
 
     /**
      * Publish an updated CRL for a certificate authority.
@@ -242,7 +248,7 @@ public interface GTS {
      * @throws PermissionDeniedFault
      *             Client does not have permission to perform the operation.
      */
-    public void updateCRL(java.lang.String trustedAuthorityName, org.cagrid.gts.model.X509CRL crl) throws RemoteException, GTSInternalException,
+    public void updateCRL(String callerIdentity, java.lang.String trustedAuthorityName, org.cagrid.gts.model.X509CRL crl) throws GTSInternalException,
             IllegalTrustedAuthorityException, InvalidTrustedAuthorityException, PermissionDeniedException;
 
     /**
@@ -255,16 +261,19 @@ public interface GTS {
      * @throws CertificateValidationFault
      *             The certificate specified is invalid.
      */
-    public boolean validate(org.cagrid.gts.model.X509Certificate[] chain, org.cagrid.gts.model.TrustedAuthorityFilter filter) throws RemoteException,
-            GTSInternalException, CertificateValidationException;
+    public boolean validate(String callerIdentity, org.cagrid.gts.model.X509Certificate[] chain, org.cagrid.gts.model.TrustedAuthorityFilter filter)
+            throws GTSInternalException, CertificateValidationException;
 
-    // public org.cagrid.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(
+    // public org.cagrid.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(String callerIdentity,
     // org.cagrid.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException;
     //
-    // public org.cagrid.wsrf.properties.GetResourcePropertyResponse getResourceProperty(javax.xml.namespace.QName params) throws RemoteException;
+    // public org.cagrid.wsrf.properties.GetResourcePropertyResponse getResourceProperty(String callerIdentity,javax.xml.namespace.QName params) throws
+    // RemoteException;
     //
-    // public org.cagrid.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(org.cagrid.wsrf.properties.QueryResourceProperties_Element
+    // public org.cagrid.wsrf.properties.QueryResourcePropertiesResponse queryResourceProperties(String
+    // callerIdentity,org.cagrid.wsrf.properties.QueryResourceProperties_Element
     // params)
     // throws RemoteException;
 
+    public ResourceHome getResourceHome();
 }

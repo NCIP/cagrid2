@@ -62,13 +62,8 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Embed-Dependency> mobius_tools| mobius_common_client 
-						</Embed-Dependency>
+						<Embed-Dependency> mobius_tools| mobius_common_client</Embed-Dependency>
 						<Export-Package></Export-Package>
-						<Private-Package>org.cagrid.gts.service.impl</Private-Package>
-						<!-- <Private-Package> org.cagrid.dorian.ca.impl, org.cagrid.dorian.federation.impl, 
-							org.cagrid.dorian.idp.impl, org.cagrid.dorian.idp.impl.dictionary, org.cagrid.dorian.service.impl, 
-							org.cagrid.dorian.service.util </Private-Package> -->
 						<Import-Package>*</Import-Package>
 					</instructions>
 				</configuration>

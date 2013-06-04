@@ -7,6 +7,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -44,7 +55,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 @XmlRootElement(name = "AddPermissionRequest")
 public class AddPermissionRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -74,6 +85,69 @@ public class AddPermissionRequest
         this.permission = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            AddPermissionRequest.Permission thePermission;
+            thePermission = this.getPermission();
+            strategy.appendField(locator, this, "permission", buffer, thePermission);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            AddPermissionRequest.Permission thePermission;
+            thePermission = this.getPermission();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "permission", thePermission), currentHashCode, thePermission);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof AddPermissionRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final AddPermissionRequest that = ((AddPermissionRequest) object);
+        {
+            AddPermissionRequest.Permission lhsPermission;
+            lhsPermission = this.getPermission();
+            AddPermissionRequest.Permission rhsPermission;
+            rhsPermission = that.getPermission();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "permission", lhsPermission), LocatorUtils.property(thatLocator, "permission", rhsPermission), lhsPermission, rhsPermission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -99,7 +173,7 @@ public class AddPermissionRequest
         "permission"
     })
     public static class Permission
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "Permission", namespace = "http://cagrid.nci.nih.gov/8/gts", required = true)
@@ -127,6 +201,69 @@ public class AddPermissionRequest
          */
         public void setPermission(org.cagrid.gts.model.Permission value) {
             this.permission = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                org.cagrid.gts.model.Permission thePermission;
+                thePermission = this.getPermission();
+                strategy.appendField(locator, this, "permission", buffer, thePermission);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                org.cagrid.gts.model.Permission thePermission;
+                thePermission = this.getPermission();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "permission", thePermission), currentHashCode, thePermission);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof AddPermissionRequest.Permission)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final AddPermissionRequest.Permission that = ((AddPermissionRequest.Permission) object);
+            {
+                org.cagrid.gts.model.Permission lhsPermission;
+                lhsPermission = this.getPermission();
+                org.cagrid.gts.model.Permission rhsPermission;
+                rhsPermission = that.getPermission();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "permission", lhsPermission), LocatorUtils.property(thatLocator, "permission", rhsPermission), lhsPermission, rhsPermission)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

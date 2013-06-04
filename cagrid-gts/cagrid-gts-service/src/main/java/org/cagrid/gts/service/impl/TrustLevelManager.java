@@ -14,13 +14,12 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.gts.common.Database;
 import org.cagrid.gts.model.TrustLevel;
-import org.cagrid.gts.service.db.DBManager;
-import org.cagrid.gts.service.db.TrustLevelTable;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalTrustLevelException;
 import org.cagrid.gts.service.exception.InvalidTrustLevelException;
+import org.cagrid.gts.service.impl.db.DBManager;
+import org.cagrid.gts.service.impl.db.TrustLevelTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>

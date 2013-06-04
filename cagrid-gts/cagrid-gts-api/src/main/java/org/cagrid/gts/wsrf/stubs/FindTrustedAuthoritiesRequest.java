@@ -8,6 +8,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.gts.model.TrustedAuthorityFilter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -45,7 +56,7 @@ import org.cagrid.gts.model.TrustedAuthorityFilter;
 })
 @XmlRootElement(name = "FindTrustedAuthoritiesRequest")
 public class FindTrustedAuthoritiesRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -75,6 +86,69 @@ public class FindTrustedAuthoritiesRequest
         this.filter = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            FindTrustedAuthoritiesRequest.Filter theFilter;
+            theFilter = this.getFilter();
+            strategy.appendField(locator, this, "filter", buffer, theFilter);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            FindTrustedAuthoritiesRequest.Filter theFilter;
+            theFilter = this.getFilter();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "filter", theFilter), currentHashCode, theFilter);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof FindTrustedAuthoritiesRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final FindTrustedAuthoritiesRequest that = ((FindTrustedAuthoritiesRequest) object);
+        {
+            FindTrustedAuthoritiesRequest.Filter lhsFilter;
+            lhsFilter = this.getFilter();
+            FindTrustedAuthoritiesRequest.Filter rhsFilter;
+            rhsFilter = that.getFilter();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "filter", lhsFilter), LocatorUtils.property(thatLocator, "filter", rhsFilter), lhsFilter, rhsFilter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -100,7 +174,7 @@ public class FindTrustedAuthoritiesRequest
         "trustedAuthorityFilter"
     })
     public static class Filter
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "TrustedAuthorityFilter", namespace = "http://cagrid.nci.nih.gov/8/gts", required = true)
@@ -128,6 +202,69 @@ public class FindTrustedAuthoritiesRequest
          */
         public void setTrustedAuthorityFilter(TrustedAuthorityFilter value) {
             this.trustedAuthorityFilter = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                TrustedAuthorityFilter theTrustedAuthorityFilter;
+                theTrustedAuthorityFilter = this.getTrustedAuthorityFilter();
+                strategy.appendField(locator, this, "trustedAuthorityFilter", buffer, theTrustedAuthorityFilter);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                TrustedAuthorityFilter theTrustedAuthorityFilter;
+                theTrustedAuthorityFilter = this.getTrustedAuthorityFilter();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "trustedAuthorityFilter", theTrustedAuthorityFilter), currentHashCode, theTrustedAuthorityFilter);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof FindTrustedAuthoritiesRequest.Filter)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final FindTrustedAuthoritiesRequest.Filter that = ((FindTrustedAuthoritiesRequest.Filter) object);
+            {
+                TrustedAuthorityFilter lhsTrustedAuthorityFilter;
+                lhsTrustedAuthorityFilter = this.getTrustedAuthorityFilter();
+                TrustedAuthorityFilter rhsTrustedAuthorityFilter;
+                rhsTrustedAuthorityFilter = that.getTrustedAuthorityFilter();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "trustedAuthorityFilter", lhsTrustedAuthorityFilter), LocatorUtils.property(thatLocator, "trustedAuthorityFilter", rhsTrustedAuthorityFilter), lhsTrustedAuthorityFilter, rhsTrustedAuthorityFilter)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

@@ -10,8 +10,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.gts.common.Database;
-import org.cagrid.gts.common.MySQLDatabase;
 import org.cagrid.gts.model.AuthorityGTS;
 import org.cagrid.gts.model.AuthorityPriorityUpdate;
 import org.cagrid.gts.model.Lifetime;
@@ -24,8 +22,6 @@ import org.cagrid.gts.model.TrustedAuthority;
 import org.cagrid.gts.model.TrustedAuthorityFilter;
 import org.cagrid.gts.model.X509CRL;
 import org.cagrid.gts.model.X509Certificate;
-import org.cagrid.gts.service.db.DBManager;
-import org.cagrid.gts.service.db.mysql.MySQLManager;
 import org.cagrid.gts.service.exception.CertificateValidationException;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalAuthorityException;
@@ -37,6 +33,8 @@ import org.cagrid.gts.service.exception.InvalidPermissionException;
 import org.cagrid.gts.service.exception.InvalidTrustLevelException;
 import org.cagrid.gts.service.exception.InvalidTrustedAuthorityException;
 import org.cagrid.gts.service.exception.PermissionDeniedException;
+import org.cagrid.gts.service.impl.db.DBManager;
+import org.cagrid.gts.service.impl.db.mysql.MySQLManager;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
@@ -236,7 +234,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
     public void addPermission(Permission p, String callerGridIdentity) throws GTSInternalException, IllegalPermissionException, PermissionDeniedException {
         checkServiceAdministrator(callerGridIdentity);
-        if ((p.getTrustedAuthorityName() != null) && (!p.getTrustedAuthorityName().equals(org.cagrid.gts.common.Constants.ALL_TRUST_AUTHORITIES))) {
+        if ((p.getTrustedAuthorityName() != null) && (!p.getTrustedAuthorityName().equals(org.cagrid.gts.service.impl.Constants.ALL_TRUST_AUTHORITIES))) {
             if (!trust.doesTrustedAuthorityExist(p.getTrustedAuthorityName())) {
                 IllegalPermissionException fault = FaultHelper.createFaultException(IllegalPermissionException.class,
                         "Cannot add permission, the Trusted Authority (" + p.getTrustedAuthorityName() + ") specified does not exist.");
