@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.gts.service">
+		<prop key="cagrid.gts.service.config.url">gts-conf.xml</prop>
+		<prop key="cagrid.gts.service.metadata.url">serviceMetadata.xml</prop>
+		<prop key="cagrid.gts.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
+		<!-- TODO: MIGRATE: is there a better way to do this? GTS needs to know 
+			its own "endpoint" to compare against trusted authorities -->
+		<prop key="cagrid.gts.service.url">https://localhost:8443/wsrf/services/cagrid/GTS</prop>
+		<prop key="cagrid.gts.sync.authorities">true</prop>
+	</osgix:cm-properties>
+	<ctx:property-placeholder properties-ref="preProps"/>
+	<osgi:service ref="gts" interface="org.cagrid.gts.service.GTS"/>
+</beans>

@@ -62,12 +62,8 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Embed-Dependency> mobius_tools| mobius_common_client</Embed-Dependency>
 						<Export-Package></Export-Package>
-						<Private-Package>org.cagrid.gts.service.impl</Private-Package>
-						
-						<!-- <Private-Package> org.cagrid.dorian.ca.impl, org.cagrid.dorian.federation.impl, 
-							org.cagrid.dorian.idp.impl, org.cagrid.dorian.idp.impl.dictionary, org.cagrid.dorian.service.impl, 
-							org.cagrid.dorian.service.util </Private-Package> -->
 						<Import-Package>*</Import-Package>
 					</instructions>
 				</configuration>
@@ -78,6 +74,11 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-gts-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+				<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-gts-soap-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -135,6 +136,27 @@
 		<dependency>
 			<groupId>com.mysql.jdbc</groupId>
 			<artifactId>com.springsource.com.mysql.jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectmobius</groupId>
+			<artifactId>mobius_tools</artifactId>
+			<version>1.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/mobius_tools-1.1.jar</systemPath>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.projectmobius</groupId>
+			<artifactId>mobius_common_client</artifactId>
+			<version>1.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/mobius_common_client-1.1.jar</systemPath>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>
