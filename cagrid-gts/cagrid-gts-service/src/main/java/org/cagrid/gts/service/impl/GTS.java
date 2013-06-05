@@ -49,7 +49,7 @@ import org.projectmobius.common.MobiusRunnable;
  */
 public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
-    public static boolean SYNC_WITH_AUTHORITIES = true;
+    public boolean syncAuthorities = true;
 
     private Configuration conf;
 
@@ -67,9 +67,10 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
     private Database db;
 
-    public GTS(Configuration conf, String gtsURI) {
+    public GTS(Configuration conf, String gtsURI, boolean syncAuthorities) {
         this.conf = conf;
         this.gtsURI = gtsURI;
+        this.syncAuthorities = syncAuthorities;
         log = LogFactory.getLog(this.getClass().getName());
 
         DBManager dbManager = new MySQLManager(new MySQLDatabase(this.conf.getConnectionManager(), this.conf.getGTSInternalId()));
@@ -78,7 +79,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         trustLevelManager = new TrustLevelManager(this.gtsURI, this, dbManager);
         permissions = new PermissionManager(dbManager);
         authority = new GTSAuthorityManager(gtsURI, conf.getAuthoritySyncTime(), dbManager);
-        if (SYNC_WITH_AUTHORITIES) {
+        if (this.syncAuthorities) {
             MobiusRunnable runner = new MobiusRunnable() {
                 public void execute() {
                     synchronizeWithAuthorities();
@@ -220,15 +221,15 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         trustLevelManager.updateTrustLevel(level);
     }
 
-    public TrustLevel[] getTrustLevels() throws GTSInternalException {
+    public TrustLevel[] getTrustLevels(String callerGridIdentity) throws GTSInternalException {
         return trustLevelManager.getTrustLevels();
     }
 
-    public TrustLevel[] getTrustLevels(String gtsSourceURI) throws GTSInternalException {
+    public TrustLevel[] getTrustLevels(String gtsSourceURI, String callerGridIdentity) throws GTSInternalException {
         return trustLevelManager.getTrustLevels(gtsSourceURI);
     }
 
-    public TrustLevel getTrustLevel(String name) throws GTSInternalException, InvalidTrustLevelException {
+    public TrustLevel getTrustLevel(String name, String callerGridIdentity) throws GTSInternalException, InvalidTrustLevelException {
         return trustLevelManager.getTrustLevel(name);
     }
 
@@ -363,7 +364,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         this.trust.removeLevelFromTrustedAuthorities(trustLevel);
     }
 
-    protected void synchronizeTrustLevels(String authorityServiceURI, List<TrustLevel> levels) {
+    void synchronizeTrustLevels(String authorityServiceURI, List<TrustLevel> levels) {
         // Synchronize the Trust Level
 
         // We need to get a list of all the Trusted Authorities provided
@@ -383,7 +384,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
             return;
         }
         if (levels != null) {
-            for (TrustLevel level:levels) {
+            for (TrustLevel level : levels) {
                 toBeDeleted.remove(level.getName());
                 try {
 
@@ -403,9 +404,8 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
                                 this.log.debug("The trust level (" + level.getName() + ") will be updated!!!");
                             } else if (currAuthority.getPriority() > updateAuthority.getPriority()) {
                                 performUpdate = true;
-                                this.log.debug("The trust level (" + level.getName() + ") will be updated, the authority ("
-                                        + updateAuthority.getServiceURI() + ") has a greater priority then the current source authority ("
-                                        + currAuthority.getServiceURI() + ")!!!");
+                                this.log.debug("The trust level (" + level.getName() + ") will be updated, the authority (" + updateAuthority.getServiceURI()
+                                        + ") has a greater priority then the current source authority (" + currAuthority.getServiceURI() + ")!!!");
 
                             } else {
                                 this.log.debug("The trust level(" + level.getName() + ") will NOT be updated, the current source authority ("
@@ -424,10 +424,8 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
                             try {
                                 this.trustLevelManager.updateTrustLevel(level, false);
                             } catch (Exception e) {
-                                this.log.error(
-                                        "Error synchronizing with the authority " + authorityServiceURI
-                                                + ", the following error occcurred when trying to update the authority, " + level.getName() + ": "
-                                                + e.getMessage(), e);
+                                this.log.error("Error synchronizing with the authority " + authorityServiceURI
+                                        + ", the following error occcurred when trying to update the authority, " + level.getName() + ": " + e.getMessage(), e);
                                 continue;
                             }
                         }
@@ -606,11 +604,11 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
                             // IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
                             // client.setAuthorization(ia);
                             // }
-                            //levels = client.getTrustLevels();
-                            //trusted = client.findTrustedAuthorities(filter);
+                            // levels = client.getTrustLevels();
+                            // trusted = client.findTrustedAuthorities(filter);
                             levels = client.getTrustLevels(new GetTrustLevelsRequest()).getTrustLevel();
                             FindTrustedAuthoritiesRequest parameters = new FindTrustedAuthoritiesRequest();
-                            FindTrustedAuthoritiesRequest.Filter filterReq= new FindTrustedAuthoritiesRequest.Filter();
+                            FindTrustedAuthoritiesRequest.Filter filterReq = new FindTrustedAuthoritiesRequest.Filter();
                             filterReq.setTrustedAuthorityFilter(filter);
                             parameters.setFilter(filterReq);
                             client.findTrustedAuthorities(parameters);

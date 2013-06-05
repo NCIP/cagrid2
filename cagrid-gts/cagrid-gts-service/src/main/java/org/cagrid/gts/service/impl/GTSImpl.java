@@ -50,12 +50,13 @@ public class GTSImpl implements org.cagrid.gts.service.GTS {
     private final ResourceImpl resource = new ResourceImpl(null);
     private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
 
-    public GTSImpl(Map<String, String> jaxbResourcePropertiesMap, SimpleResourceManager srm, String gtsURI) throws GTSInternalException {
+    public GTSImpl(Map<String, String> jaxbResourcePropertiesMap, SimpleResourceManager srm, String gtsURI, boolean syncAuthorities)
+            throws GTSInternalException {
         // EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
         // String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(GTS_CONFIG);
         // String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
         Configuration conf = (Configuration) srm.getResource(Configuration.RESOURCE);
-        this.gts = new GTS(conf, gtsURI);
+        this.gts = new GTS(conf, gtsURI, syncAuthorities);
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
     }
 
@@ -175,7 +176,12 @@ public class GTSImpl implements org.cagrid.gts.service.GTS {
 
     @Override
     public TrustLevel[] getTrustLevels(String callerIdentity) throws GTSInternalException {
-        return gts.getTrustLevels();
+        return gts.getTrustLevels(callerIdentity);
+    }
+
+    @Override
+    public TrustLevel[] getTrustLevels(String callerIdentity, String gtsSourceURI) throws GTSInternalException {
+        return gts.getTrustLevels(gtsSourceURI, callerIdentity);
     }
 
     @Override
@@ -227,6 +233,20 @@ public class GTSImpl implements org.cagrid.gts.service.GTS {
     public boolean validate(String callerIdentity, X509Certificate[] chain, TrustedAuthorityFilter filter) throws GTSInternalException,
             CertificateValidationException {
         return gts.validate(chain, filter);
+    }
+
+    protected GTS getGTS() {
+        return this.gts;
+    }
+
+    @Override
+    public boolean doesTrustLevelExist(String caller, String name) throws GTSInternalException {
+        return gts.doesTrustLevelExist(name);
+    }
+
+    @Override
+    public TrustLevel getTrustLevel(String caller, String name) throws GTSInternalException, InvalidTrustLevelException {
+        return gts.getTrustLevel(name, caller);
     }
 
 }

@@ -2,6 +2,7 @@ package org.cagrid.gts.service;
 
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 
+import org.cagrid.gts.model.TrustLevel;
 import org.cagrid.gts.service.exception.CertificateValidationException;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalAuthorityException;
@@ -151,6 +152,17 @@ public interface GTS {
      *             An unexpected internal GTS error.
      */
     public org.cagrid.gts.model.TrustLevel[] getTrustLevels(String callerIdentity) throws GTSInternalException;
+    
+    
+    /**
+     * List the trust level define for the GTS, limited to those from the identified source GTS
+     * @param callerIdentity
+     * @param gtsSourceURI  the source URI of the GTS
+     * @return
+     * @throws GTSInternalException
+     */
+    public TrustLevel[] getTrustLevels(String callerIdentity, String gtsSourceURI) throws GTSInternalException ;
+
 
     /**
      * Remove a trust level from a GTS.
@@ -263,6 +275,27 @@ public interface GTS {
      */
     public boolean validate(String callerIdentity, org.cagrid.gts.model.X509Certificate[] chain, org.cagrid.gts.model.TrustedAuthorityFilter filter)
             throws GTSInternalException, CertificateValidationException;
+
+    /**
+     * Check whether the given trust level exists
+     * 
+     * @param name
+     *            the name to check
+     * @return true iff it exists
+     * @throws GTSInternalException
+     */
+    public boolean doesTrustLevelExist(String callerIdentity, String name) throws GTSInternalException;
+
+    /**
+     * Returns the requested trust level
+     * 
+     * @param name
+     * @return
+     * @throws GTSInternalException
+     * @throws InvalidTrustLevelException
+     *             if the requested trustlevel does not exist
+     */
+    public TrustLevel getTrustLevel(String callerIdentity, String name) throws GTSInternalException, InvalidTrustLevelException;
 
     // public org.cagrid.wsrf.properties.GetMultipleResourcePropertiesResponse getMultipleResourceProperties(String callerIdentity,
     // org.cagrid.wsrf.properties.GetMultipleResourceProperties_Element params) throws RemoteException;

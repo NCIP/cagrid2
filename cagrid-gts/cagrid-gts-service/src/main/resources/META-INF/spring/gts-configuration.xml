@@ -24,5 +24,6 @@
 		<constructor-arg ref="jaxbResourceProperties"/>
 		<constructor-arg ref="srm"/>
 		<constructor-arg value="${cagrid.gts.service.url}"/>
+		<constructor-arg value="${cagrid.gts.sync.authorities}"/>
 	</bean>
 </beans>

@@ -14,6 +14,7 @@
 		<!-- TODO: MIGRATE: is there a better way to do this? GTS needs to know 
 			its own "endpoint" to compare against trusted authorities -->
 		<prop key="cagrid.gts.service.url">https://localhost:8443/wsrf/services/cagrid/GTS</prop>
+		<prop key="cagrid.gts.sync.authorities">true</prop>
 	</osgix:cm-properties>
 	<ctx:property-placeholder properties-ref="preProps"/>
 	<osgi:service ref="gts" interface="org.cagrid.gts.service.GTS"/>
