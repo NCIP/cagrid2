@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:test.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="auditService" factory-method="createMock" class="org.easymock.EasyMock">
+        <constructor-arg value="com.inventrio.audit.service.AuditService" />
+    </bean>
+
+    <bean id="auditClient" class="com.inventrio.audit.client.AuditClient">
+        <constructor-arg type="com.inventrio.audit.service.AuditService" ref="auditService" />
+    </bean>
+
+    <bean id="activemqProducer" factory-method="createMock" class="org.easymock.EasyMock">
+        <constructor-arg value="com.inventrio.icms.service.impl.ActiveMQProducer"/>
+    </bean>
+
+    <bean id="groupService" factory-method="createMock" class="org.easymock.EasyMock">
+        <constructor-arg value="com.inventrio.group.service.GroupService"/>
+    </bean>
+
+    <bean id="groupClient" class="com.inventrio.group.client.GroupClient">
+        <constructor-arg ref="groupService"/>
+    </bean>
+
+    <bean id="mpiClient" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.mpi.service.MasterPersonIndex"/>
+    </bean>
+
+    <bean id="salesforceClient"  class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.sfi.service.SFIService"/>
+    </bean>
+
+    <bean id="zuoraClient"  class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.zuora.service.ZuoraService"/>
+    </bean>
+
+    <bean id="idmClient" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.idm.service.IdentityManagementService"/>
+    </bean>
+
+    <bean id="entitlementClient" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.entitlement.service.EntitlementService"/>
+    </bean>
+
+    <bean id="entitlementService" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.entitlement.service.EntitlementService"/>
+    </bean>
+
+    <bean id="emailClient" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.notification.service.EmailNotificationService"/>
+    </bean>
+
+    <bean id="contextClient" class="org.easymock.EasyMock" factory-method="createMock">
+        <constructor-arg value="com.inventrio.context.service.ContextService"/>
+    </bean>
+
+    <bean id="groupManager" class="com.inventrio.icms.service.impl.GroupManager" >
+        <constructor-arg ref="groupService"/>
+        <constructor-arg ref="icmsManager"/>
+        <constructor-arg value="${com.inventrio.icms.service.namespace.name}"/>
+    </bean>
+</beans>
