@@ -22,9 +22,10 @@
 						<Export-Package>
 							org.cagrid.gridgrouper.soapclient
 						</Export-Package>
+                        <Private-Package>
+                        </Private-Package>
 						<Import-Package>
-							org.cagrid.gridgrouper.soapclient,
-							*
+                            *
 						</Import-Package>
 					</instructions>
 				</configuration>

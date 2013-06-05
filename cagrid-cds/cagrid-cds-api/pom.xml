@@ -290,23 +290,13 @@
                             org.cagrid.cds.types,
                             org.cagrid.cds.wsrf.service,
                             org.cagrid.cds.wsrf.stubs,
+                            org.cagrid.delegatedcredential.service,
                             org.cagrid.delegatedcredential.types,
                             org.cagrid.delegatedcredential.wsrf.service,
                             org.cagrid.delegatedcredential.wsrf.stubs
 						</Export-Package>
 						<Import-Package>
-                            schema.org.cagrid.cds,
-                            org.cagrid.cds,
-                            org.cagrid.cds.service,
-                            org.cagrid.cds.service.exception,
-                            org.cagrid.cds.model,
-                            org.cagrid.cds.types,
-                            org.cagrid.cds.wsrf.service,
-                            org.cagrid.cds.wsrf.stubs,
-                            org.cagrid.delegatedcredential.types,
-                            org.cagrid.delegatedcredential.wsrf.service,
-                            org.cagrid.delegatedcredential.wsrf.stubs,
-							*
+                            *
 						</Import-Package>
 					</instructions>
 				</configuration>

@@ -21,11 +21,47 @@
 		<prop key="cagrid.cds.service.metadata.url">serviceMetadata.xml</prop>
         <prop key="cagrid.cds.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
         <prop key="cagrid.cds.service.security.delegated.metadata.url">delegated-serviceSecurityMetadata.xml</prop>
+
+        <prop key="cagrid.cds.service.client.gridgrouper.url">https://localhost:7737/gridgrouper</prop>
+        <prop key="cagrid.cds.service.client.keystorefile"></prop>
+        <prop key="cagrid.cds.service.client.keystorepassword"></prop>
+        <prop key="cagrid.cds.service.client.keyalias"></prop>
+        <prop key="cagrid.cds.service.client.keypassword"></prop>
+        <prop key="cagrid.cds.service.client.truststoreLocation"></prop>
+        <prop key="cagrid.cds.service.client.truststorePassword"></prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
 	<osgi:service ref="cds" interface="org.cagrid.cds.service.CredentialDelegationService" />
     <osgi:service ref="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.DelegatedCredentialService" />
+
+    <bean id="gridGrouperClient" class="org.cagrid.gridgrouper.client.GridGrouperClient">
+        <constructor-arg ref="gridGrouper"/>
+    </bean>
+
+    <bean id="gridGrouper" class="org.cagrid.gridgrouper.soapclient.GridGrouperSoapClientFactory" factory-method="createSoapClient">
+        <constructor-arg value="${cagrid.cds.service.client.gridgrouper.url}"/>
+        <constructor-arg ref="truststore"/>
+        <constructor-arg ref="keymanager"/>
+    </bean>
+
+    <bean id="truststore" class="org.apache.cxf.configuration.security.KeyStoreType" lazy-init="true">
+        <property name="file" value="${cagrid.cds.service.client.truststoreLocation}"/>
+        <property name="password" value="${cagrid.cds.service.client.truststorePassword}"/>
+        <property name="type" value="JKS"/>
+    </bean>
+
+    <bean id="credential" factory-method="getCredential" class="org.cagrid.core.common.security.CredentialFactory" lazy-init="true">
+        <constructor-arg index="0" value="${cagrid.cds.service.client.keystorefile}" />
+        <constructor-arg index="1" value="${cagrid.cds.service.client.keystorepassword}" />
+        <constructor-arg index="2" value="${cagrid.cds.service.client.keyalias}" />
+        <constructor-arg index="3" value="${cagrid.cds.service.client.keypassword}"/>
+    </bean>
+
+    <bean id="keymanager" class="org.cagrid.core.soapclient.SingleEntityKeyManager">
+        <constructor-arg value="${cagrid.cds.service.client.keyalias}"/>
+        <constructor-arg ref="credential"/>
+    </bean>
 
 </beans>
