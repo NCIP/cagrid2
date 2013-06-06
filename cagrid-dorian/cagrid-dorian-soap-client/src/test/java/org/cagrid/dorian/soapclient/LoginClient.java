@@ -1,6 +1,10 @@
 package org.cagrid.dorian.soapclient;
 
+import java.io.InputStream;
 import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.PrivateKey;
+import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.KeyManager;
@@ -30,9 +34,34 @@ public class LoginClient extends DorianClientBase {
 
 	private final static String USERNAME = "dorian";
 	private final static String PASSWORD = "DorianAdmin$1";
+	private final static String ALIAS = "Proxy";
 
 	public LoginClient() throws Exception {
 		super(LOCALS_URL);
+
+		KeyStoreType truststore = new KeyStoreType();
+		truststore.setUrl(LoginClient.class.getClassLoader()
+				.getResource("truststore.jks").toString());
+		truststore.setType("JKS");
+		truststore.setPassword("changeit");
+
+		KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+		InputStream keyStoreStream = LoginClient.class.getClassLoader()
+				.getResourceAsStream("keystore.jks");
+		keyStore.load(keyStoreStream, "changeit".toCharArray());
+		keyStoreStream.close();
+		PrivateKey privateKey = (PrivateKey) keyStore.getKey(ALIAS,
+				"changeit".toCharArray());
+		Certificate[] plainCertificates = keyStore.getCertificateChain(ALIAS);
+		X509Certificate[] certificates = new X509Certificate[plainCertificates.length];
+		for (int i = 0; i < certificates.length; i++) {
+			certificates[i] = (X509Certificate) plainCertificates[i];
+		}
+		KeyManager keyManager = new SingleEntityKeyManager(ALIAS, certificates,
+				privateKey);
+
+		dorian = DorianSoapClientFactory.createSoapClient(LOCALS_URL,
+				truststore, keyManager);
 	}
 
 	public AssertionType login1() throws Exception {
@@ -76,7 +105,7 @@ public class LoginClient extends DorianClientBase {
 	}
 
 	public static void main(String[] args) throws Exception {
-//		System.setProperty("javax.net.debug", "ssl,handshake");
+		// System.setProperty("javax.net.debug", "ssl,handshake");
 
 		LoginClient loginClient = new LoginClient();
 		AssertionType assertion = loginClient.login1();
@@ -98,7 +127,7 @@ public class LoginClient extends DorianClientBase {
 		KeyManager keyManager = new SingleEntityKeyManager("client",
 				new X509Certificate[] { certificate }, keyPair.getPrivate());
 		DorianPortType dorians = DorianSoapClientFactory.createSoapClient(
-				LOCALS_URL, truststore, keyManager);
+				TOMCATS_URL, truststore, keyManager);
 
 		DoesLocalUserExistRequest doesLocalUserExistRequest = new DoesLocalUserExistRequest();
 		doesLocalUserExistRequest.setUserId("dorian");

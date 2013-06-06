@@ -9,6 +9,7 @@ public abstract class DorianClientBase {
 	public final static String LOCAL_URL = "http://localhost:7734/dorian";
 	public final static String LOCALS_URL = "https://localhost:7734/dorian";
 	public final static String TOMCAT_URL = "http://localhost:8080/wsrf/services/cagrid/Dorian";
+	public final static String TOMCATS_URL = "https://localhost:8443/wsrf/services/cagrid/Dorian";
 	public final static String TRAINING_URL = "https://dorian.training.cagrid.org:8443/wsrf/services/cagrid/Dorian";
 
 	protected DorianPortType dorian;

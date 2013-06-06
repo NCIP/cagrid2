@@ -357,5 +357,6 @@
 		<module>cagrid-gts</module>
 		<module>cagrid-gridgrouper</module>
 		<!-- TODO: MOVE THIS <module>puretls</module>-->
+		<module>cagrid-proxy-trust</module>
 	</modules>
 </project>
