@@ -27,7 +27,7 @@ public abstract class GrouperClientBase {
                 "tomcat",
                 "inventrio");
 
-        KeyManager keyManager = new SingleEntityKeyManager("tomcat", credential.getCertificates(), credential.getKey());
+        KeyManager keyManager = new SingleEntityKeyManager("tomcat", credential);
 
         gridGrouper = GridGrouperSoapClientFactory.createSoapClient(url, truststore, keyManager);
 	}

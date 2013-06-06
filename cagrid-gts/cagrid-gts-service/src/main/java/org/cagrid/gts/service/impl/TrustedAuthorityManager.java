@@ -16,18 +16,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.gts.common.Database;
 import org.cagrid.gts.model.Lifetime;
 import org.cagrid.gts.model.Status;
 import org.cagrid.gts.model.TrustLevels;
 import org.cagrid.gts.model.TrustedAuthority;
 import org.cagrid.gts.model.TrustedAuthorityFilter;
-import org.cagrid.gts.service.db.DBManager;
-import org.cagrid.gts.service.db.TrustedAuthorityTable;
-import org.cagrid.gts.service.db.TrustedAuthorityTrustLevelsTable;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalTrustedAuthorityException;
 import org.cagrid.gts.service.exception.InvalidTrustedAuthorityException;
+import org.cagrid.gts.service.impl.db.DBManager;
+import org.cagrid.gts.service.impl.db.TrustedAuthorityTable;
+import org.cagrid.gts.service.impl.db.TrustedAuthorityTrustLevelsTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>

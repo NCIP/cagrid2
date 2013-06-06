@@ -1,5 +1,7 @@
 package org.cagrid.core.soapclient;
 
+import org.cagrid.core.common.security.X509Credential;
+
 import java.net.Socket;
 import java.security.Principal;
 import java.security.PrivateKey;
@@ -13,6 +15,10 @@ public class SingleEntityKeyManager extends X509ExtendedKeyManager {
 	private final String alias;
 	private final X509Certificate[] certificateChain;
 	private final PrivateKey privateKey;
+
+    public SingleEntityKeyManager(String alias, X509Credential credential) {
+        this(alias, credential.getCertificates(), credential.getKey());
+    }
 
 	public SingleEntityKeyManager(String alias,
 			X509Certificate[] certificateChain, PrivateKey privateKey) {

@@ -1,14 +1,14 @@
 package org.cagrid.gts.tools.service;
 
-import org.cagrid.gts.common.MySQLDatabase;
 import org.cagrid.gts.model.Permission;
 import org.cagrid.gts.model.Role;
-import org.cagrid.gts.service.db.mysql.MySQLManager;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalPermissionException;
 import org.cagrid.gts.service.impl.Configuration;
+import org.cagrid.gts.service.impl.MySQLDatabase;
 import org.cagrid.gts.service.impl.PermissionManager;
 import org.cagrid.gts.service.impl.SimpleResourceManager;
+import org.cagrid.gts.service.impl.db.mysql.MySQLManager;
 
 
 /**

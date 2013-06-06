@@ -37,6 +37,11 @@
                 <artifactId>cagrid-gridgrouper-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-gridgrouper-soap-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>${wsrf.group}</groupId>
 				<artifactId>wsrf-faults-api</artifactId>
@@ -53,6 +58,12 @@
 				<version>5.1.6</version>
 				<scope>test</scope>
 			</dependency>
+            <dependency>
+                <groupId>org.easymock</groupId>
+                <artifactId>easymock</artifactId>
+                <version>3.0</version>
+                <scope>test</scope>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 

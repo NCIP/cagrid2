@@ -24,13 +24,10 @@
         <constructor-arg ref="database" />
     </bean>
 
-    <!-- TODO: pending migration of grid grouper
     <bean id="groupPolicyHandler" class="org.cagrid.cds.service.impl.policy.GroupPolicyHandler">
         <constructor-arg ref="database" />
-
-        make sure you also uncomment in the delegatedCredentialManager in this file
+        <constructor-arg ref="gridGrouperClient"/>
     </bean>
-    -->
 
     <!-- SPECIFY KEY MANAGER HERE -->
 
@@ -111,9 +108,7 @@
         <constructor-arg>
             <list>
                 <ref bean="identityPolicyHandler" />
-                <!-- TODO pending migration of grid grouper
                 <ref bean="groupPolicyHandler" />
-                -->
             </list>
         </constructor-arg>
         <constructor-arg ref="proxyPolicy" />

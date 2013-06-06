@@ -9,16 +9,14 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.gts.common.Constants;
-import org.cagrid.gts.common.Database;
 import org.cagrid.gts.model.Permission;
 import org.cagrid.gts.model.PermissionFilter;
 import org.cagrid.gts.model.Role;
-import org.cagrid.gts.service.db.DBManager;
-import org.cagrid.gts.service.db.PermissionsTable;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalPermissionException;
 import org.cagrid.gts.service.exception.InvalidPermissionException;
+import org.cagrid.gts.service.impl.db.DBManager;
+import org.cagrid.gts.service.impl.db.PermissionsTable;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -197,7 +195,7 @@ public class PermissionManager {
         StringBuffer sql = new StringBuffer();
         sql.append("select count(*) from " + PermissionsTable.TABLE_NAME);
         sql.append(" WHERE " + PermissionsTable.GRID_IDENTITY + " = ? AND ");
-        sql.append(PermissionsTable.ROLE + "='" + Role.TRUST_SERVICE_ADMIN + "' AND ");
+        sql.append(PermissionsTable.ROLE + "='" + Role.TRUST_SERVICE_ADMIN.value() + "' AND ");
         sql.append(PermissionsTable.TRUSTED_AUTHORITY + " = '" + Constants.ALL_TRUST_AUTHORITIES + "'");
         try {
             c = db.getConnection();
@@ -232,7 +230,7 @@ public class PermissionManager {
         StringBuffer sql = new StringBuffer();
         sql.append("select count(*) from " + PermissionsTable.TABLE_NAME);
         sql.append(" WHERE " + PermissionsTable.GRID_IDENTITY + " = ?" + " AND ");
-        sql.append(PermissionsTable.ROLE + "='" + Role.TRUST_AUTHORITY_MANAGER + "' AND ");
+        sql.append(PermissionsTable.ROLE + "='" + Role.TRUST_AUTHORITY_MANAGER.value() + "' AND ");
         sql.append(PermissionsTable.TRUSTED_AUTHORITY + " = '" + authority + "'");
         try {
             c = db.getConnection();

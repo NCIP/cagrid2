@@ -38,7 +38,7 @@ public class GridGrouperClient {
         IsMemberOfRequest.Filter filterContainer = new IsMemberOfRequest.Filter();
         filterContainer.setMemberFilter(filter);
         params.setFilter(filterContainer);
-        IsMemberOfResponse boxedResult = null;
+        IsMemberOfResponse boxedResult;
         try {
             boxedResult = portType.isMemberOf(params);
         } catch (GroupNotFoundFaultFaultMessage e) {

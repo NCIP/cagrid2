@@ -34,7 +34,7 @@
                             org.apache.commons.beanutils*,
                             org.apache.commons.math*
 						</Private-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <DynamicImport-Package>*</DynamicImport-Package> <!-- we need this for the private hibernate stuff -->
 						<Import-Package>
                             <!-- preventing these from importing, not sure which are actually needed -->
                             !com.ibm.ejs.jts.jta,

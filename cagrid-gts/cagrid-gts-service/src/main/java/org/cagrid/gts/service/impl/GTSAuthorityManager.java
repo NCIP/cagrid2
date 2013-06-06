@@ -17,16 +17,15 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.gts.common.Database;
 import org.cagrid.gts.model.AuthorityGTS;
 import org.cagrid.gts.model.AuthorityPrioritySpecification;
 import org.cagrid.gts.model.AuthorityPriorityUpdate;
 import org.cagrid.gts.model.TimeToLive;
-import org.cagrid.gts.service.db.AuthorityTable;
-import org.cagrid.gts.service.db.DBManager;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalAuthorityException;
 import org.cagrid.gts.service.exception.InvalidAuthorityException;
+import org.cagrid.gts.service.impl.db.AuthorityTable;
+import org.cagrid.gts.service.impl.db.DBManager;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>

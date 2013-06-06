@@ -42,51 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AuthorityGTS }
+     * Create an instance of {@link TrustedAuthority }
      * 
      */
-    public AuthorityGTS createAuthorityGTS() {
-        return new AuthorityGTS();
-    }
-
-    /**
-     * Create an instance of {@link TrustLevel }
-     * 
-     */
-    public TrustLevel createTrustLevel() {
-        return new TrustLevel();
-    }
-
-    /**
-     * Create an instance of {@link AuthorityPriorityUpdate }
-     * 
-     */
-    public AuthorityPriorityUpdate createAuthorityPriorityUpdate() {
-        return new AuthorityPriorityUpdate();
-    }
-
-    /**
-     * Create an instance of {@link TrustedAuthorityFilter }
-     * 
-     */
-    public TrustedAuthorityFilter createTrustedAuthorityFilter() {
-        return new TrustedAuthorityFilter();
-    }
-
-    /**
-     * Create an instance of {@link X509Certificate }
-     * 
-     */
-    public X509Certificate createX509Certificate() {
-        return new X509Certificate();
-    }
-
-    /**
-     * Create an instance of {@link Permission }
-     * 
-     */
-    public Permission createPermission() {
-        return new Permission();
+    public TrustedAuthority createTrustedAuthority() {
+        return new TrustedAuthority();
     }
 
     /**
@@ -98,19 +58,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TrustedAuthority }
-     * 
-     */
-    public TrustedAuthority createTrustedAuthority() {
-        return new TrustedAuthority();
-    }
-
-    /**
      * Create an instance of {@link AuthorityPrioritySpecification }
      * 
      */
     public AuthorityPrioritySpecification createAuthorityPrioritySpecification() {
         return new AuthorityPrioritySpecification();
+    }
+
+    /**
+     * Create an instance of {@link TrustedAuthorityFilter }
+     * 
+     */
+    public TrustedAuthorityFilter createTrustedAuthorityFilter() {
+        return new TrustedAuthorityFilter();
     }
 
     /**
@@ -122,11 +82,51 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link TrustLevel }
+     * 
+     */
+    public TrustLevel createTrustLevel() {
+        return new TrustLevel();
+    }
+
+    /**
+     * Create an instance of {@link AuthorityGTS }
+     * 
+     */
+    public AuthorityGTS createAuthorityGTS() {
+        return new AuthorityGTS();
+    }
+
+    /**
+     * Create an instance of {@link Permission }
+     * 
+     */
+    public Permission createPermission() {
+        return new Permission();
+    }
+
+    /**
+     * Create an instance of {@link X509Certificate }
+     * 
+     */
+    public X509Certificate createX509Certificate() {
+        return new X509Certificate();
+    }
+
+    /**
      * Create an instance of {@link TrustLevels }
      * 
      */
     public TrustLevels createTrustLevels() {
         return new TrustLevels();
+    }
+
+    /**
+     * Create an instance of {@link AuthorityPriorityUpdate }
+     * 
+     */
+    public AuthorityPriorityUpdate createAuthorityPriorityUpdate() {
+        return new AuthorityPriorityUpdate();
     }
 
     /**
