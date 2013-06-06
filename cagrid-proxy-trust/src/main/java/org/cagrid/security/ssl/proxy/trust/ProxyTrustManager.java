@@ -280,8 +280,10 @@ public class ProxyTrustManager implements X509TrustManager {
 		if (octets[0] == ASN1_OCTET_STRING_TAG) {
 			int offset = 2;
 			int length1 = octets[1];
-			if (length1 < 0)
-				offset = 3;
+			if (length1 < 0) {
+				int nAdditional = length1 & 0x7F;
+				offset += nAdditional;
+			}
 			octets = Arrays.copyOfRange(octets, offset, octets.length);
 		}
 		return octets;
