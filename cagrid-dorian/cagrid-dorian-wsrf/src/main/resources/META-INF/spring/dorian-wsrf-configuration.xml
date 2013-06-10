@@ -23,83 +23,47 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
+	<bean id="proxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.dorian.wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.dorian.wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.dorian.wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.dorian.wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
+	</bean>
+
+	<bean id="legacyProxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.dorian.legacy-wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.dorian.legacy-wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.dorian.legacy-wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.dorian.legacy-wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.dorian.legacy-wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
+	</bean>
+
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.dorian.wsrf.port}">
-
-			<httpj:tlsServerParameters>
-				<sec:keyManagers keyPassword="${cagrid.dorian.wsrf.key.password}">
-					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.wsrf.keystore.password}" file="${cagrid.dorian.wsrf.keystore.path}" />
-				</sec:keyManagers>
-				<sec:trustManagers>
-					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.wsrf.truststore.password}" file="${cagrid.dorian.wsrf.truststore.path}" />
-				</sec:trustManagers>
-
-				<sec:cipherSuitesFilter>
-					<sec:include>.*_WITH_3DES_.*</sec:include>
-					<sec:include>.*_WITH_DES_.*</sec:include>
-					<sec:include>.*_EXPORT_.*</sec:include>
-					<sec:include>.*_EXPORT1024_.*</sec:include>
-					<sec:include>.*_WITH_NULL_.*</sec:include>
-					<sec:exclude>.*_DH_anon_.*</sec:exclude>
-				</sec:cipherSuitesFilter>
-
-				<sec:clientAuthentication want="true"
-					required="false" />
-			</httpj:tlsServerParameters>
-			
+			<httpj:tlsServerParameters />
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="proxySslContextFactory" />
 					<property name="port" value="${cagrid.dorian.wsrf.port}" />
-					<property name="keystore" value="${cagrid.dorian.wsrf.keystore.path}" />
-					<property name="password" value="${cagrid.dorian.wsrf.keystore.password}" />
-					<property name="keyPassword" value="${cagrid.dorian.wsrf.key.password}" />
-					<property name="truststore" value="${cagrid.dorian.wsrf.truststore.path}" />
-					<property name="trustPassword" value="${cagrid.dorian.wsrf.truststore.password}" />
-					<property name="wantClientAuth" value="true" />
-					<property name="needClientAuth" value="false" />
-					<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
 				</bean>
 			</httpj:connector>
 		</httpj:engine>
 
 		<httpj:engine port="${cagrid.dorian.legacy-wsrf.port}">
-
-			<httpj:tlsServerParameters>
-				<sec:keyManagers keyPassword="${cagrid.dorian.legacy-wsrf.key.password}">
-					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.legacy-wsrf.keystore.password}" file="${cagrid.dorian.legacy-wsrf.keystore.path}" />
-				</sec:keyManagers>
-				<sec:trustManagers>
-					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.legacy-wsrf.truststore.password}" file="${cagrid.dorian.legacy-wsrf.truststore.path}" />
-				</sec:trustManagers>
-
-				<sec:cipherSuitesFilter>
-					<sec:include>.*_WITH_3DES_.*</sec:include>
-					<sec:include>.*_WITH_DES_.*</sec:include>
-					<sec:include>.*_EXPORT_.*</sec:include>
-					<sec:include>.*_EXPORT1024_.*</sec:include>
-					<sec:include>.*_WITH_NULL_.*</sec:include>
-					<sec:exclude>.*_DH_anon_.*</sec:exclude>
-				</sec:cipherSuitesFilter>
-
-				<sec:clientAuthentication want="true"
-					required="false" />
-			</httpj:tlsServerParameters>
-
+			<httpj:tlsServerParameters />
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="legacyProxySslContextFactory" />
 					<property name="port" value="${cagrid.dorian.legacy-wsrf.port}" />
-					<property name="keystore" value="${cagrid.dorian.legacy-wsrf.keystore.path}" />
-					<property name="password" value="${cagrid.dorian.legacy-wsrf.keystore.password}" />
-					<property name="keyPassword" value="${cagrid.dorian.legacy-wsrf.key.password}" />
-					<property name="truststore" value="${cagrid.dorian.legacy-wsrf.truststore.path}" />
-					<property name="trustPassword" value="${cagrid.dorian.legacy-wsrf.truststore.password}" />
-					<property name="wantClientAuth" value="true" />
-					<property name="needClientAuth" value="false" />
-					<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
 				</bean>
 			</httpj:connector>
 		</httpj:engine>

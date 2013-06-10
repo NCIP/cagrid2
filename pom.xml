@@ -141,6 +141,11 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-proxy-trust</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-metadata-model</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -347,6 +352,7 @@
 	<modules>
 		<module>cagrid-csmapi</module>
 		<module>cagrid-third-party-features</module>
+		<module>cagrid-proxy-trust</module>
 		<module>cagrid-metadata-model</module>
 		<module>cagrid-opensaml-api</module>
 		<module>cagrid-core</module>
@@ -357,6 +363,5 @@
 		<module>cagrid-gts</module>
 		<module>cagrid-gridgrouper</module>
 		<!-- TODO: MOVE THIS <module>puretls</module>-->
-		<module>cagrid-proxy-trust</module>
 	</modules>
 </project>

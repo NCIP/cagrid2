@@ -63,6 +63,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-proxy-trust</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-metadata-model</artifactId>
 		</dependency>
 		<dependency>

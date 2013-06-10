@@ -1,5 +1,8 @@
 package org.cagrid.security.ssl.proxy.trust;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -17,6 +20,8 @@ import javax.net.ssl.X509TrustManager;
 import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.asn1.DERObjectIdentifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Trying to follow http://www.ietf.org/rfc/rfc3820.txt
@@ -36,16 +41,37 @@ public class ProxyTrustManager implements X509TrustManager {
 
 	private final static X509Certificate[] EMPTY_ACCEPTED_ISSUERS = new X509Certificate[0];
 
-	private final X509TrustManager[] delegateTrustManagers;
+	private final static Logger logger = LoggerFactory
+			.getLogger(ProxyTrustManager.class);
 
-	public ProxyTrustManager(KeyStore trustStore)
+	public static ProxyTrustManager createTrustManager(String trustStorePath,
+			String trustStorePassword) throws KeyStoreException,
+			NoSuchAlgorithmException, CertificateException, IOException {
+		InputStream trustStoreStream = new FileInputStream(trustStorePath);
+		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+		trustStore.load(trustStoreStream, trustStorePassword.toCharArray());
+		trustStoreStream.close();
+		return createTrustManager(trustStore);
+	}
+
+	public static ProxyTrustManager createTrustManager(KeyStore trustStore)
 			throws NoSuchAlgorithmException, KeyStoreException {
+		logger.info("Creating ProxyTrustManager");
 
 		TrustManagerFactory trustManagerFactory = TrustManagerFactory
 				.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 		trustManagerFactory.init(trustStore);
 		TrustManager[] plainTrustManagers = trustManagerFactory
 				.getTrustManagers();
+
+		ProxyTrustManager proxyTrustManager = new ProxyTrustManager(
+				plainTrustManagers);
+		return proxyTrustManager;
+	}
+
+	private final X509TrustManager[] delegateTrustManagers;
+
+	public ProxyTrustManager(TrustManager[] plainTrustManagers) {
 		int nTrustManagers = 0;
 		for (TrustManager tm : plainTrustManagers) {
 			if (tm instanceof X509TrustManager)
@@ -67,6 +93,7 @@ public class ProxyTrustManager implements X509TrustManager {
 	@Override
 	public void checkClientTrusted(X509Certificate[] chain, String authType)
 			throws CertificateException {
+		logger.info("checkClientTrusted authType=" + authType);
 
 		int currentProxyPathLength = -1;
 
@@ -79,6 +106,7 @@ public class ProxyTrustManager implements X509TrustManager {
 					.getExtensionValue(PROXY_CERT_INFO_OID);
 			if (proxyCertInfoBytes == null)
 				break;
+			logger.info("Proxy cert found");
 
 			/*
 			 * The extension value is probably wrapped as a primitive octet
@@ -235,6 +263,7 @@ public class ProxyTrustManager implements X509TrustManager {
 			}
 		}
 
+		logger.info("Delegating to default TrustManagers...");
 		X509Certificate[] endChain = new X509Certificate[chain.length
 				- endCertIX];
 		for (int i = 0, j = endCertIX; j < chain.length; j++, i++) {
