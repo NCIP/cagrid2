@@ -11,6 +11,17 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3c.dom.Element;
 
 
@@ -40,7 +51,7 @@ import org.w3c.dom.Element;
     "assertionIDReferenceOrAssertionOrAny"
 })
 public class AdviceType
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElementRefs({
@@ -68,10 +79,10 @@ public class AdviceType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
-     * {@link JAXBElement }{@code <}{@link AssertionType }{@code >}
-     * {@link Object }
      * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link Object }
+     * {@link JAXBElement }{@code <}{@link AssertionType }{@code >}
+     * {@link Element }
      * 
      * 
      */
@@ -80,6 +91,69 @@ public class AdviceType
             assertionIDReferenceOrAssertionOrAny = new ArrayList<Object>();
         }
         return this.assertionIDReferenceOrAssertionOrAny;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            List<Object> theAssertionIDReferenceOrAssertionOrAny;
+            theAssertionIDReferenceOrAssertionOrAny = (((this.assertionIDReferenceOrAssertionOrAny!= null)&&(!this.assertionIDReferenceOrAssertionOrAny.isEmpty()))?this.getAssertionIDReferenceOrAssertionOrAny():null);
+            strategy.appendField(locator, this, "assertionIDReferenceOrAssertionOrAny", buffer, theAssertionIDReferenceOrAssertionOrAny);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<Object> theAssertionIDReferenceOrAssertionOrAny;
+            theAssertionIDReferenceOrAssertionOrAny = (((this.assertionIDReferenceOrAssertionOrAny!= null)&&(!this.assertionIDReferenceOrAssertionOrAny.isEmpty()))?this.getAssertionIDReferenceOrAssertionOrAny():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "assertionIDReferenceOrAssertionOrAny", theAssertionIDReferenceOrAssertionOrAny), currentHashCode, theAssertionIDReferenceOrAssertionOrAny);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof AdviceType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final AdviceType that = ((AdviceType) object);
+        {
+            List<Object> lhsAssertionIDReferenceOrAssertionOrAny;
+            lhsAssertionIDReferenceOrAssertionOrAny = (((this.assertionIDReferenceOrAssertionOrAny!= null)&&(!this.assertionIDReferenceOrAssertionOrAny.isEmpty()))?this.getAssertionIDReferenceOrAssertionOrAny():null);
+            List<Object> rhsAssertionIDReferenceOrAssertionOrAny;
+            rhsAssertionIDReferenceOrAssertionOrAny = (((that.assertionIDReferenceOrAssertionOrAny!= null)&&(!that.assertionIDReferenceOrAssertionOrAny.isEmpty()))?that.getAssertionIDReferenceOrAssertionOrAny():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "assertionIDReferenceOrAssertionOrAny", lhsAssertionIDReferenceOrAssertionOrAny), LocatorUtils.property(thatLocator, "assertionIDReferenceOrAssertionOrAny", rhsAssertionIDReferenceOrAssertionOrAny), lhsAssertionIDReferenceOrAssertionOrAny, rhsAssertionIDReferenceOrAssertionOrAny)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

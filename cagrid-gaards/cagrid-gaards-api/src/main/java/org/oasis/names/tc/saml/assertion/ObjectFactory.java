@@ -48,8 +48,8 @@ public class ObjectFactory {
     private final static QName _SubjectLocality_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "SubjectLocality");
     private final static QName _AuthenticationStatement_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "AuthenticationStatement");
     private final static QName _Conditions_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "Conditions");
-    private final static QName _DoNotCacheCondition_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "DoNotCacheCondition");
     private final static QName _Statement_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "Statement");
+    private final static QName _DoNotCacheCondition_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "DoNotCacheCondition");
     private final static QName _AttributeValue_QNAME = new QName("urn:oasis:names:tc:SAML:1.0:assertion", "AttributeValue");
 
     /**
@@ -60,27 +60,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AudienceRestrictionConditionType }
+     * Create an instance of {@link EvidenceType }
      * 
      */
-    public AudienceRestrictionConditionType createAudienceRestrictionConditionType() {
-        return new AudienceRestrictionConditionType();
+    public EvidenceType createEvidenceType() {
+        return new EvidenceType();
     }
 
     /**
-     * Create an instance of {@link AdviceType }
+     * Create an instance of {@link ActionType }
      * 
      */
-    public AdviceType createAdviceType() {
-        return new AdviceType();
+    public ActionType createActionType() {
+        return new ActionType();
     }
 
     /**
-     * Create an instance of {@link DoNotCacheConditionType }
+     * Create an instance of {@link SubjectType }
      * 
      */
-    public DoNotCacheConditionType createDoNotCacheConditionType() {
-        return new DoNotCacheConditionType();
+    public SubjectType createSubjectType() {
+        return new SubjectType();
     }
 
     /**
@@ -89,6 +89,14 @@ public class ObjectFactory {
      */
     public SubjectConfirmationType createSubjectConfirmationType() {
         return new SubjectConfirmationType();
+    }
+
+    /**
+     * Create an instance of {@link SubjectLocalityType }
+     * 
+     */
+    public SubjectLocalityType createSubjectLocalityType() {
+        return new SubjectLocalityType();
     }
 
     /**
@@ -116,59 +124,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AttributeStatementType }
+     * Create an instance of {@link AudienceRestrictionConditionType }
      * 
      */
-    public AttributeStatementType createAttributeStatementType() {
-        return new AttributeStatementType();
+    public AudienceRestrictionConditionType createAudienceRestrictionConditionType() {
+        return new AudienceRestrictionConditionType();
     }
 
     /**
-     * Create an instance of {@link ActionType }
+     * Create an instance of {@link DoNotCacheConditionType }
      * 
      */
-    public ActionType createActionType() {
-        return new ActionType();
-    }
-
-    /**
-     * Create an instance of {@link AttributeDesignatorType }
-     * 
-     */
-    public AttributeDesignatorType createAttributeDesignatorType() {
-        return new AttributeDesignatorType();
-    }
-
-    /**
-     * Create an instance of {@link EvidenceType }
-     * 
-     */
-    public EvidenceType createEvidenceType() {
-        return new EvidenceType();
-    }
-
-    /**
-     * Create an instance of {@link AuthorityBindingType }
-     * 
-     */
-    public AuthorityBindingType createAuthorityBindingType() {
-        return new AuthorityBindingType();
-    }
-
-    /**
-     * Create an instance of {@link SubjectType }
-     * 
-     */
-    public SubjectType createSubjectType() {
-        return new SubjectType();
-    }
-
-    /**
-     * Create an instance of {@link SubjectLocalityType }
-     * 
-     */
-    public SubjectLocalityType createSubjectLocalityType() {
-        return new SubjectLocalityType();
+    public DoNotCacheConditionType createDoNotCacheConditionType() {
+        return new DoNotCacheConditionType();
     }
 
     /**
@@ -180,19 +148,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AttributeType }
-     * 
-     */
-    public AttributeType createAttributeType() {
-        return new AttributeType();
-    }
-
-    /**
      * Create an instance of {@link NameIdentifierType }
      * 
      */
     public NameIdentifierType createNameIdentifierType() {
         return new NameIdentifierType();
+    }
+
+    /**
+     * Create an instance of {@link AdviceType }
+     * 
+     */
+    public AdviceType createAdviceType() {
+        return new AdviceType();
+    }
+
+    /**
+     * Create an instance of {@link AttributeDesignatorType }
+     * 
+     */
+    public AttributeDesignatorType createAttributeDesignatorType() {
+        return new AttributeDesignatorType();
+    }
+
+    /**
+     * Create an instance of {@link AuthorityBindingType }
+     * 
+     */
+    public AuthorityBindingType createAuthorityBindingType() {
+        return new AuthorityBindingType();
+    }
+
+    /**
+     * Create an instance of {@link AttributeStatementType }
+     * 
+     */
+    public AttributeStatementType createAttributeStatementType() {
+        return new AttributeStatementType();
+    }
+
+    /**
+     * Create an instance of {@link AttributeType }
+     * 
+     */
+    public AttributeType createAttributeType() {
+        return new AttributeType();
     }
 
     /**
@@ -395,21 +395,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DoNotCacheConditionType }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:1.0:assertion", name = "DoNotCacheCondition")
-    public JAXBElement<DoNotCacheConditionType> createDoNotCacheCondition(DoNotCacheConditionType value) {
-        return new JAXBElement<DoNotCacheConditionType>(_DoNotCacheCondition_QNAME, DoNotCacheConditionType.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link StatementAbstractType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:1.0:assertion", name = "Statement")
     public JAXBElement<StatementAbstractType> createStatement(StatementAbstractType value) {
         return new JAXBElement<StatementAbstractType>(_Statement_QNAME, StatementAbstractType.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DoNotCacheConditionType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:1.0:assertion", name = "DoNotCacheCondition")
+    public JAXBElement<DoNotCacheConditionType> createDoNotCacheCondition(DoNotCacheConditionType value) {
+        return new JAXBElement<DoNotCacheConditionType>(_DoNotCacheCondition_QNAME, DoNotCacheConditionType.class, null, value);
     }
 
     /**

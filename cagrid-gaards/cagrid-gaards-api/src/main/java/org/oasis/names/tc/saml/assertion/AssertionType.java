@@ -16,6 +16,17 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3._2000._09.xmldsig.SignatureType;
 import org.w3._2001.xmlschema.Adapter1;
 
@@ -60,7 +71,7 @@ import org.w3._2001.xmlschema.Adapter1;
     "statementOrSubjectStatementOrAuthenticationStatement",
     "signature"
 })
-public class AssertionType implements Serializable
+public class AssertionType implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(name = "Conditions")
@@ -68,11 +79,11 @@ public class AssertionType implements Serializable
     @XmlElement(name = "Advice")
     protected AdviceType advice;
     @XmlElements({
-        @XmlElement(name = "SubjectStatement", type = SubjectStatementAbstractType.class),
-        @XmlElement(name = "AuthorizationDecisionStatement", type = AuthorizationDecisionStatementType.class),
+        @XmlElement(name = "AuthenticationStatement", type = AuthenticationStatementType.class),
         @XmlElement(name = "Statement"),
+        @XmlElement(name = "AuthorizationDecisionStatement", type = AuthorizationDecisionStatementType.class),
         @XmlElement(name = "AttributeStatement", type = AttributeStatementType.class),
-        @XmlElement(name = "AuthenticationStatement", type = AuthenticationStatementType.class)
+        @XmlElement(name = "SubjectStatement", type = SubjectStatementAbstractType.class)
     })
     protected List<StatementAbstractType> statementOrSubjectStatementOrAuthenticationStatement;
     @XmlElement(name = "Signature", namespace = "http://www.w3.org/2000/09/xmldsig#")
@@ -159,11 +170,11 @@ public class AssertionType implements Serializable
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SubjectStatementAbstractType }
-     * {@link AuthorizationDecisionStatementType }
-     * {@link StatementAbstractType }
-     * {@link AttributeStatementType }
      * {@link AuthenticationStatementType }
+     * {@link StatementAbstractType }
+     * {@link AuthorizationDecisionStatementType }
+     * {@link AttributeStatementType }
+     * {@link SubjectStatementAbstractType }
      * 
      * 
      */
@@ -316,6 +327,221 @@ public class AssertionType implements Serializable
      */
     public void setIssueInstant(Calendar value) {
         this.issueInstant = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            ConditionsType theConditions;
+            theConditions = this.getConditions();
+            strategy.appendField(locator, this, "conditions", buffer, theConditions);
+        }
+        {
+            AdviceType theAdvice;
+            theAdvice = this.getAdvice();
+            strategy.appendField(locator, this, "advice", buffer, theAdvice);
+        }
+        {
+            List<StatementAbstractType> theStatementOrSubjectStatementOrAuthenticationStatement;
+            theStatementOrSubjectStatementOrAuthenticationStatement = (((this.statementOrSubjectStatementOrAuthenticationStatement!= null)&&(!this.statementOrSubjectStatementOrAuthenticationStatement.isEmpty()))?this.getStatementOrSubjectStatementOrAuthenticationStatement():null);
+            strategy.appendField(locator, this, "statementOrSubjectStatementOrAuthenticationStatement", buffer, theStatementOrSubjectStatementOrAuthenticationStatement);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            strategy.appendField(locator, this, "signature", buffer, theSignature);
+        }
+        {
+            BigInteger theMajorVersion;
+            theMajorVersion = this.getMajorVersion();
+            strategy.appendField(locator, this, "majorVersion", buffer, theMajorVersion);
+        }
+        {
+            BigInteger theMinorVersion;
+            theMinorVersion = this.getMinorVersion();
+            strategy.appendField(locator, this, "minorVersion", buffer, theMinorVersion);
+        }
+        {
+            String theAssertionID;
+            theAssertionID = this.getAssertionID();
+            strategy.appendField(locator, this, "assertionID", buffer, theAssertionID);
+        }
+        {
+            String theIssuer;
+            theIssuer = this.getIssuer();
+            strategy.appendField(locator, this, "issuer", buffer, theIssuer);
+        }
+        {
+            Calendar theIssueInstant;
+            theIssueInstant = this.getIssueInstant();
+            strategy.appendField(locator, this, "issueInstant", buffer, theIssueInstant);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            ConditionsType theConditions;
+            theConditions = this.getConditions();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "conditions", theConditions), currentHashCode, theConditions);
+        }
+        {
+            AdviceType theAdvice;
+            theAdvice = this.getAdvice();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "advice", theAdvice), currentHashCode, theAdvice);
+        }
+        {
+            List<StatementAbstractType> theStatementOrSubjectStatementOrAuthenticationStatement;
+            theStatementOrSubjectStatementOrAuthenticationStatement = (((this.statementOrSubjectStatementOrAuthenticationStatement!= null)&&(!this.statementOrSubjectStatementOrAuthenticationStatement.isEmpty()))?this.getStatementOrSubjectStatementOrAuthenticationStatement():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "statementOrSubjectStatementOrAuthenticationStatement", theStatementOrSubjectStatementOrAuthenticationStatement), currentHashCode, theStatementOrSubjectStatementOrAuthenticationStatement);
+        }
+        {
+            SignatureType theSignature;
+            theSignature = this.getSignature();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "signature", theSignature), currentHashCode, theSignature);
+        }
+        {
+            BigInteger theMajorVersion;
+            theMajorVersion = this.getMajorVersion();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "majorVersion", theMajorVersion), currentHashCode, theMajorVersion);
+        }
+        {
+            BigInteger theMinorVersion;
+            theMinorVersion = this.getMinorVersion();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "minorVersion", theMinorVersion), currentHashCode, theMinorVersion);
+        }
+        {
+            String theAssertionID;
+            theAssertionID = this.getAssertionID();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "assertionID", theAssertionID), currentHashCode, theAssertionID);
+        }
+        {
+            String theIssuer;
+            theIssuer = this.getIssuer();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "issuer", theIssuer), currentHashCode, theIssuer);
+        }
+        {
+            Calendar theIssueInstant;
+            theIssueInstant = this.getIssueInstant();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "issueInstant", theIssueInstant), currentHashCode, theIssueInstant);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof AssertionType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final AssertionType that = ((AssertionType) object);
+        {
+            ConditionsType lhsConditions;
+            lhsConditions = this.getConditions();
+            ConditionsType rhsConditions;
+            rhsConditions = that.getConditions();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "conditions", lhsConditions), LocatorUtils.property(thatLocator, "conditions", rhsConditions), lhsConditions, rhsConditions)) {
+                return false;
+            }
+        }
+        {
+            AdviceType lhsAdvice;
+            lhsAdvice = this.getAdvice();
+            AdviceType rhsAdvice;
+            rhsAdvice = that.getAdvice();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "advice", lhsAdvice), LocatorUtils.property(thatLocator, "advice", rhsAdvice), lhsAdvice, rhsAdvice)) {
+                return false;
+            }
+        }
+        {
+            List<StatementAbstractType> lhsStatementOrSubjectStatementOrAuthenticationStatement;
+            lhsStatementOrSubjectStatementOrAuthenticationStatement = (((this.statementOrSubjectStatementOrAuthenticationStatement!= null)&&(!this.statementOrSubjectStatementOrAuthenticationStatement.isEmpty()))?this.getStatementOrSubjectStatementOrAuthenticationStatement():null);
+            List<StatementAbstractType> rhsStatementOrSubjectStatementOrAuthenticationStatement;
+            rhsStatementOrSubjectStatementOrAuthenticationStatement = (((that.statementOrSubjectStatementOrAuthenticationStatement!= null)&&(!that.statementOrSubjectStatementOrAuthenticationStatement.isEmpty()))?that.getStatementOrSubjectStatementOrAuthenticationStatement():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "statementOrSubjectStatementOrAuthenticationStatement", lhsStatementOrSubjectStatementOrAuthenticationStatement), LocatorUtils.property(thatLocator, "statementOrSubjectStatementOrAuthenticationStatement", rhsStatementOrSubjectStatementOrAuthenticationStatement), lhsStatementOrSubjectStatementOrAuthenticationStatement, rhsStatementOrSubjectStatementOrAuthenticationStatement)) {
+                return false;
+            }
+        }
+        {
+            SignatureType lhsSignature;
+            lhsSignature = this.getSignature();
+            SignatureType rhsSignature;
+            rhsSignature = that.getSignature();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "signature", lhsSignature), LocatorUtils.property(thatLocator, "signature", rhsSignature), lhsSignature, rhsSignature)) {
+                return false;
+            }
+        }
+        {
+            BigInteger lhsMajorVersion;
+            lhsMajorVersion = this.getMajorVersion();
+            BigInteger rhsMajorVersion;
+            rhsMajorVersion = that.getMajorVersion();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "majorVersion", lhsMajorVersion), LocatorUtils.property(thatLocator, "majorVersion", rhsMajorVersion), lhsMajorVersion, rhsMajorVersion)) {
+                return false;
+            }
+        }
+        {
+            BigInteger lhsMinorVersion;
+            lhsMinorVersion = this.getMinorVersion();
+            BigInteger rhsMinorVersion;
+            rhsMinorVersion = that.getMinorVersion();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "minorVersion", lhsMinorVersion), LocatorUtils.property(thatLocator, "minorVersion", rhsMinorVersion), lhsMinorVersion, rhsMinorVersion)) {
+                return false;
+            }
+        }
+        {
+            String lhsAssertionID;
+            lhsAssertionID = this.getAssertionID();
+            String rhsAssertionID;
+            rhsAssertionID = that.getAssertionID();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "assertionID", lhsAssertionID), LocatorUtils.property(thatLocator, "assertionID", rhsAssertionID), lhsAssertionID, rhsAssertionID)) {
+                return false;
+            }
+        }
+        {
+            String lhsIssuer;
+            lhsIssuer = this.getIssuer();
+            String rhsIssuer;
+            rhsIssuer = that.getIssuer();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "issuer", lhsIssuer), LocatorUtils.property(thatLocator, "issuer", rhsIssuer), lhsIssuer, rhsIssuer)) {
+                return false;
+            }
+        }
+        {
+            Calendar lhsIssueInstant;
+            lhsIssueInstant = this.getIssueInstant();
+            Calendar rhsIssueInstant;
+            rhsIssueInstant = that.getIssueInstant();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "issueInstant", lhsIssueInstant), LocatorUtils.property(thatLocator, "issueInstant", rhsIssueInstant), lhsIssueInstant, rhsIssueInstant)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

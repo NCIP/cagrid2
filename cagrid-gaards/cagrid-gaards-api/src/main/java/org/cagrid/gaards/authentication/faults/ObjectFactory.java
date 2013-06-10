@@ -30,11 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CredentialNotSupportedFault }
+     * Create an instance of {@link InvalidCredentialFault }
      * 
      */
-    public CredentialNotSupportedFault createCredentialNotSupportedFault() {
-        return new CredentialNotSupportedFault();
+    public InvalidCredentialFault createInvalidCredentialFault() {
+        return new InvalidCredentialFault();
     }
 
     /**
@@ -46,11 +46,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InvalidCredentialFault }
+     * Create an instance of {@link CredentialNotSupportedFault }
      * 
      */
-    public InvalidCredentialFault createInvalidCredentialFault() {
-        return new InvalidCredentialFault();
+    public CredentialNotSupportedFault createCredentialNotSupportedFault() {
+        return new CredentialNotSupportedFault();
     }
 
     /**

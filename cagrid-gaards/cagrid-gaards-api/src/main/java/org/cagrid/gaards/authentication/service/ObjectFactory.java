@@ -35,11 +35,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Credential }
+     * Create an instance of {@link BasicAuthenticationCredential }
      * 
      */
-    public Credential createCredential() {
-        return new Credential();
+    public BasicAuthenticationCredential createBasicAuthenticationCredential() {
+        return new BasicAuthenticationCredential();
     }
 
     /**
@@ -51,11 +51,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link BasicAuthenticationCredential }
+     * Create an instance of {@link Credential }
      * 
      */
-    public BasicAuthenticationCredential createBasicAuthenticationCredential() {
-        return new BasicAuthenticationCredential();
+    public Credential createCredential() {
+        return new Credential();
     }
 
     /**

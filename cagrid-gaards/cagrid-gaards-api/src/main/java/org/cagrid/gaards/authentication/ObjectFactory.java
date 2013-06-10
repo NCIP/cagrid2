@@ -37,51 +37,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AuthenticationServiceResourceProperties }
+     * Create an instance of {@link AuthenticationProfiles }
      * 
      */
-    public AuthenticationServiceResourceProperties createAuthenticationServiceResourceProperties() {
-        return new AuthenticationServiceResourceProperties();
-    }
-
-    /**
-     * Create an instance of {@link GetLockedOutUsersResponse }
-     * 
-     */
-    public GetLockedOutUsersResponse createGetLockedOutUsersResponse() {
-        return new GetLockedOutUsersResponse();
-    }
-
-    /**
-     * Create an instance of {@link BasicAuthentication }
-     * 
-     */
-    public BasicAuthentication createBasicAuthentication() {
-        return new BasicAuthentication();
-    }
-
-    /**
-     * Create an instance of {@link AuthenticateUserRequest.Credential }
-     * 
-     */
-    public AuthenticateUserRequest.Credential createAuthenticateUserRequestCredential() {
-        return new AuthenticateUserRequest.Credential();
-    }
-
-    /**
-     * Create an instance of {@link GetLockedOutUsersRequest }
-     * 
-     */
-    public GetLockedOutUsersRequest createGetLockedOutUsersRequest() {
-        return new GetLockedOutUsersRequest();
-    }
-
-    /**
-     * Create an instance of {@link AuthenticateUserResponse }
-     * 
-     */
-    public AuthenticateUserResponse createAuthenticateUserResponse() {
-        return new AuthenticateUserResponse();
+    public AuthenticationProfiles createAuthenticationProfiles() {
+        return new AuthenticationProfiles();
     }
 
     /**
@@ -101,11 +61,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AuthenticationProfiles }
+     * Create an instance of {@link GetLockedOutUsersResponse }
      * 
      */
-    public AuthenticationProfiles createAuthenticationProfiles() {
-        return new AuthenticationProfiles();
+    public GetLockedOutUsersResponse createGetLockedOutUsersResponse() {
+        return new GetLockedOutUsersResponse();
+    }
+
+    /**
+     * Create an instance of {@link AuthenticateUserRequest.Credential }
+     * 
+     */
+    public AuthenticateUserRequest.Credential createAuthenticateUserRequestCredential() {
+        return new AuthenticateUserRequest.Credential();
+    }
+
+    /**
+     * Create an instance of {@link GetLockedOutUsersRequest }
+     * 
+     */
+    public GetLockedOutUsersRequest createGetLockedOutUsersRequest() {
+        return new GetLockedOutUsersRequest();
+    }
+
+    /**
+     * Create an instance of {@link AuthenticationServiceResourceProperties }
+     * 
+     */
+    public AuthenticationServiceResourceProperties createAuthenticationServiceResourceProperties() {
+        return new AuthenticationServiceResourceProperties();
+    }
+
+    /**
+     * Create an instance of {@link BasicAuthentication }
+     * 
+     */
+    public BasicAuthentication createBasicAuthentication() {
+        return new BasicAuthentication();
+    }
+
+    /**
+     * Create an instance of {@link AuthenticateUserResponse }
+     * 
+     */
+    public AuthenticateUserResponse createAuthenticateUserResponse() {
+        return new AuthenticateUserResponse();
     }
 
     /**
