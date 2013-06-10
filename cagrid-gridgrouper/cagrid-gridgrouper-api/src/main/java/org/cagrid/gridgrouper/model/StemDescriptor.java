@@ -372,4 +372,47 @@ public class StemDescriptor
         sb.append('}');
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StemDescriptor that = (StemDescriptor) o;
+
+        if (createTime != that.createTime) return false;
+        if (modifyTime != that.modifyTime) return false;
+        if (createSource != null ? !createSource.equals(that.createSource) : that.createSource != null) return false;
+        if (createSubject != null ? !createSubject.equals(that.createSubject) : that.createSubject != null)
+            return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (displayExtension != null ? !displayExtension.equals(that.displayExtension) : that.displayExtension != null)
+            return false;
+        if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
+        if (extension != null ? !extension.equals(that.extension) : that.extension != null) return false;
+        if (modifySource != null ? !modifySource.equals(that.modifySource) : that.modifySource != null) return false;
+        if (modifySubject != null ? !modifySubject.equals(that.modifySubject) : that.modifySubject != null)
+            return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
+        result = 31 * result + (extension != null ? extension.hashCode() : 0);
+        result = 31 * result + (displayExtension != null ? displayExtension.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (createSource != null ? createSource.hashCode() : 0);
+        result = 31 * result + (createSubject != null ? createSubject.hashCode() : 0);
+        result = 31 * result + (int) (createTime ^ (createTime >>> 32));
+        result = 31 * result + (modifySource != null ? modifySource.hashCode() : 0);
+        result = 31 * result + (modifySubject != null ? modifySubject.hashCode() : 0);
+        result = 31 * result + (int) (modifyTime ^ (modifyTime >>> 32));
+        return result;
+    }
 }

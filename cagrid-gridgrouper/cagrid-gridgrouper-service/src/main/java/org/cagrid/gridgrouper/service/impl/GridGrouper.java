@@ -529,11 +529,15 @@ public class GridGrouper {
             Subject subj = SubjectFinder.findById(gridIdentity);
             session = GrouperSession.start(subj);
             Stem target = StemFinder.findByName(session, stem.getStemName());
-            Set set = target.getChildGroups();
+            Set<Group> set = target.getChildGroups();
             if (set == null) {
                 return Collections.emptyList();
             }
-            return new ArrayList<GroupDescriptor>(set);
+            List<GroupDescriptor> children = new ArrayList<GroupDescriptor>();
+            for(Group g : set) {
+                children.add(grouptoGroupDescriptor(g));
+            }
+            return children;
         } catch (edu.internet2.middleware.grouper.StemNotFoundException e) {
             log.error(e.getMessage(), e);
             throw Errors.makeException(StemNotFoundException.class, "The stem " + stem.getStemName() + " could not be found!!!", e);

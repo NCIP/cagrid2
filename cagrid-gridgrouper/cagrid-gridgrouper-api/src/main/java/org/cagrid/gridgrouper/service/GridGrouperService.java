@@ -41,6 +41,8 @@ import java.util.List;
 
 public interface GridGrouperService {
 
+    public static final String ROOT_STEM = "";
+
     public ServiceSecurityMetadata getServiceSecurityMetadata();
 
     public StemDescriptor getStem(String callerIdentity, StemIdentifier stem) throws GridGrouperRuntimeException, StemNotFoundException;
