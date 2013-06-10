@@ -6,6 +6,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -56,7 +67,7 @@ import javax.xml.bind.annotation.XmlType;
     "phoneNumber"
 })
 public class Application
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -393,6 +404,297 @@ public class Application
      */
     public void setPhoneNumber(String value) {
         this.phoneNumber = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            String theUserId;
+            theUserId = this.getUserId();
+            strategy.appendField(locator, this, "userId", buffer, theUserId);
+        }
+        {
+            String theEmail;
+            theEmail = this.getEmail();
+            strategy.appendField(locator, this, "email", buffer, theEmail);
+        }
+        {
+            String thePassword;
+            thePassword = this.getPassword();
+            strategy.appendField(locator, this, "password", buffer, thePassword);
+        }
+        {
+            String theFirstName;
+            theFirstName = this.getFirstName();
+            strategy.appendField(locator, this, "firstName", buffer, theFirstName);
+        }
+        {
+            String theLastName;
+            theLastName = this.getLastName();
+            strategy.appendField(locator, this, "lastName", buffer, theLastName);
+        }
+        {
+            String theOrganization;
+            theOrganization = this.getOrganization();
+            strategy.appendField(locator, this, "organization", buffer, theOrganization);
+        }
+        {
+            String theAddress;
+            theAddress = this.getAddress();
+            strategy.appendField(locator, this, "address", buffer, theAddress);
+        }
+        {
+            String theAddress2;
+            theAddress2 = this.getAddress2();
+            strategy.appendField(locator, this, "address2", buffer, theAddress2);
+        }
+        {
+            String theCity;
+            theCity = this.getCity();
+            strategy.appendField(locator, this, "city", buffer, theCity);
+        }
+        {
+            StateCode theState;
+            theState = this.getState();
+            strategy.appendField(locator, this, "state", buffer, theState);
+        }
+        {
+            String theZipcode;
+            theZipcode = this.getZipcode();
+            strategy.appendField(locator, this, "zipcode", buffer, theZipcode);
+        }
+        {
+            CountryCode theCountry;
+            theCountry = this.getCountry();
+            strategy.appendField(locator, this, "country", buffer, theCountry);
+        }
+        {
+            String thePhoneNumber;
+            thePhoneNumber = this.getPhoneNumber();
+            strategy.appendField(locator, this, "phoneNumber", buffer, thePhoneNumber);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theUserId;
+            theUserId = this.getUserId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "userId", theUserId), currentHashCode, theUserId);
+        }
+        {
+            String theEmail;
+            theEmail = this.getEmail();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "email", theEmail), currentHashCode, theEmail);
+        }
+        {
+            String thePassword;
+            thePassword = this.getPassword();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "password", thePassword), currentHashCode, thePassword);
+        }
+        {
+            String theFirstName;
+            theFirstName = this.getFirstName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "firstName", theFirstName), currentHashCode, theFirstName);
+        }
+        {
+            String theLastName;
+            theLastName = this.getLastName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "lastName", theLastName), currentHashCode, theLastName);
+        }
+        {
+            String theOrganization;
+            theOrganization = this.getOrganization();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "organization", theOrganization), currentHashCode, theOrganization);
+        }
+        {
+            String theAddress;
+            theAddress = this.getAddress();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "address", theAddress), currentHashCode, theAddress);
+        }
+        {
+            String theAddress2;
+            theAddress2 = this.getAddress2();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "address2", theAddress2), currentHashCode, theAddress2);
+        }
+        {
+            String theCity;
+            theCity = this.getCity();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "city", theCity), currentHashCode, theCity);
+        }
+        {
+            StateCode theState;
+            theState = this.getState();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "state", theState), currentHashCode, theState);
+        }
+        {
+            String theZipcode;
+            theZipcode = this.getZipcode();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "zipcode", theZipcode), currentHashCode, theZipcode);
+        }
+        {
+            CountryCode theCountry;
+            theCountry = this.getCountry();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "country", theCountry), currentHashCode, theCountry);
+        }
+        {
+            String thePhoneNumber;
+            thePhoneNumber = this.getPhoneNumber();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "phoneNumber", thePhoneNumber), currentHashCode, thePhoneNumber);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof Application)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final Application that = ((Application) object);
+        {
+            String lhsUserId;
+            lhsUserId = this.getUserId();
+            String rhsUserId;
+            rhsUserId = that.getUserId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "userId", lhsUserId), LocatorUtils.property(thatLocator, "userId", rhsUserId), lhsUserId, rhsUserId)) {
+                return false;
+            }
+        }
+        {
+            String lhsEmail;
+            lhsEmail = this.getEmail();
+            String rhsEmail;
+            rhsEmail = that.getEmail();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "email", lhsEmail), LocatorUtils.property(thatLocator, "email", rhsEmail), lhsEmail, rhsEmail)) {
+                return false;
+            }
+        }
+        {
+            String lhsPassword;
+            lhsPassword = this.getPassword();
+            String rhsPassword;
+            rhsPassword = that.getPassword();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "password", lhsPassword), LocatorUtils.property(thatLocator, "password", rhsPassword), lhsPassword, rhsPassword)) {
+                return false;
+            }
+        }
+        {
+            String lhsFirstName;
+            lhsFirstName = this.getFirstName();
+            String rhsFirstName;
+            rhsFirstName = that.getFirstName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "firstName", lhsFirstName), LocatorUtils.property(thatLocator, "firstName", rhsFirstName), lhsFirstName, rhsFirstName)) {
+                return false;
+            }
+        }
+        {
+            String lhsLastName;
+            lhsLastName = this.getLastName();
+            String rhsLastName;
+            rhsLastName = that.getLastName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "lastName", lhsLastName), LocatorUtils.property(thatLocator, "lastName", rhsLastName), lhsLastName, rhsLastName)) {
+                return false;
+            }
+        }
+        {
+            String lhsOrganization;
+            lhsOrganization = this.getOrganization();
+            String rhsOrganization;
+            rhsOrganization = that.getOrganization();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "organization", lhsOrganization), LocatorUtils.property(thatLocator, "organization", rhsOrganization), lhsOrganization, rhsOrganization)) {
+                return false;
+            }
+        }
+        {
+            String lhsAddress;
+            lhsAddress = this.getAddress();
+            String rhsAddress;
+            rhsAddress = that.getAddress();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "address", lhsAddress), LocatorUtils.property(thatLocator, "address", rhsAddress), lhsAddress, rhsAddress)) {
+                return false;
+            }
+        }
+        {
+            String lhsAddress2;
+            lhsAddress2 = this.getAddress2();
+            String rhsAddress2;
+            rhsAddress2 = that.getAddress2();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "address2", lhsAddress2), LocatorUtils.property(thatLocator, "address2", rhsAddress2), lhsAddress2, rhsAddress2)) {
+                return false;
+            }
+        }
+        {
+            String lhsCity;
+            lhsCity = this.getCity();
+            String rhsCity;
+            rhsCity = that.getCity();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "city", lhsCity), LocatorUtils.property(thatLocator, "city", rhsCity), lhsCity, rhsCity)) {
+                return false;
+            }
+        }
+        {
+            StateCode lhsState;
+            lhsState = this.getState();
+            StateCode rhsState;
+            rhsState = that.getState();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "state", lhsState), LocatorUtils.property(thatLocator, "state", rhsState), lhsState, rhsState)) {
+                return false;
+            }
+        }
+        {
+            String lhsZipcode;
+            lhsZipcode = this.getZipcode();
+            String rhsZipcode;
+            rhsZipcode = that.getZipcode();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "zipcode", lhsZipcode), LocatorUtils.property(thatLocator, "zipcode", rhsZipcode), lhsZipcode, rhsZipcode)) {
+                return false;
+            }
+        }
+        {
+            CountryCode lhsCountry;
+            lhsCountry = this.getCountry();
+            CountryCode rhsCountry;
+            rhsCountry = that.getCountry();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "country", lhsCountry), LocatorUtils.property(thatLocator, "country", rhsCountry), lhsCountry, rhsCountry)) {
+                return false;
+            }
+        }
+        {
+            String lhsPhoneNumber;
+            lhsPhoneNumber = this.getPhoneNumber();
+            String rhsPhoneNumber;
+            rhsPhoneNumber = that.getPhoneNumber();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "phoneNumber", lhsPhoneNumber), LocatorUtils.property(thatLocator, "phoneNumber", rhsPhoneNumber), lhsPhoneNumber, rhsPhoneNumber)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

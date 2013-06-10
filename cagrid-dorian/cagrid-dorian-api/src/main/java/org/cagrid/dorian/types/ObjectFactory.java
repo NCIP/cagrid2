@@ -37,19 +37,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UserPolicyFault }
+     * Create an instance of {@link InvalidUserCertificateFault }
      * 
      */
-    public UserPolicyFault createUserPolicyFault() {
-        return new UserPolicyFault();
-    }
-
-    /**
-     * Create an instance of {@link DorianReference }
-     * 
-     */
-    public DorianReference createDorianReference() {
-        return new DorianReference();
+    public InvalidUserCertificateFault createInvalidUserCertificateFault() {
+        return new InvalidUserCertificateFault();
     }
 
     /**
@@ -61,11 +53,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InvalidUserCertificateFault }
+     * Create an instance of {@link UserPolicyFault }
      * 
      */
-    public InvalidUserCertificateFault createInvalidUserCertificateFault() {
-        return new InvalidUserCertificateFault();
+    public UserPolicyFault createUserPolicyFault() {
+        return new UserPolicyFault();
+    }
+
+    /**
+     * Create an instance of {@link PermissionDeniedFault }
+     * 
+     */
+    public PermissionDeniedFault createPermissionDeniedFault() {
+        return new PermissionDeniedFault();
+    }
+
+    /**
+     * Create an instance of {@link InvalidUserPropertyFault }
+     * 
+     */
+    public InvalidUserPropertyFault createInvalidUserPropertyFault() {
+        return new InvalidUserPropertyFault();
     }
 
     /**
@@ -85,11 +93,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PermissionDeniedFault }
+     * Create an instance of {@link DorianReference }
      * 
      */
-    public PermissionDeniedFault createPermissionDeniedFault() {
-        return new PermissionDeniedFault();
+    public DorianReference createDorianReference() {
+        return new DorianReference();
+    }
+
+    /**
+     * Create an instance of {@link InvalidAssertionFault }
+     * 
+     */
+    public InvalidAssertionFault createInvalidAssertionFault() {
+        return new InvalidAssertionFault();
+    }
+
+    /**
+     * Create an instance of {@link InvalidTrustedIdPFault }
+     * 
+     */
+    public InvalidTrustedIdPFault createInvalidTrustedIdPFault() {
+        return new InvalidTrustedIdPFault();
     }
 
     /**
@@ -117,35 +141,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InvalidTrustedIdPFault }
-     * 
-     */
-    public InvalidTrustedIdPFault createInvalidTrustedIdPFault() {
-        return new InvalidTrustedIdPFault();
-    }
-
-    /**
      * Create an instance of {@link AdminAlreadyExists }
      * 
      */
     public AdminAlreadyExists createAdminAlreadyExists() {
         return new AdminAlreadyExists();
-    }
-
-    /**
-     * Create an instance of {@link InvalidAssertionFault }
-     * 
-     */
-    public InvalidAssertionFault createInvalidAssertionFault() {
-        return new InvalidAssertionFault();
-    }
-
-    /**
-     * Create an instance of {@link InvalidUserPropertyFault }
-     * 
-     */
-    public InvalidUserPropertyFault createInvalidUserPropertyFault() {
-        return new InvalidUserPropertyFault();
     }
 
     /**

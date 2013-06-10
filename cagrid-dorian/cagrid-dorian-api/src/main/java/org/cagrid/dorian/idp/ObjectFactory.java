@@ -42,11 +42,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ApplicationReview }
+     * Create an instance of {@link IdentityProviderAuditRecord }
      * 
      */
-    public ApplicationReview createApplicationReview() {
-        return new ApplicationReview();
+    public IdentityProviderAuditRecord createIdentityProviderAuditRecord() {
+        return new IdentityProviderAuditRecord();
     }
 
     /**
@@ -55,30 +55,6 @@ public class ObjectFactory {
      */
     public Application createApplication() {
         return new Application();
-    }
-
-    /**
-     * Create an instance of {@link LocalUserFilter }
-     * 
-     */
-    public LocalUserFilter createLocalUserFilter() {
-        return new LocalUserFilter();
-    }
-
-    /**
-     * Create an instance of {@link LocalUser }
-     * 
-     */
-    public LocalUser createLocalUser() {
-        return new LocalUser();
-    }
-
-    /**
-     * Create an instance of {@link IdentityProviderAuditRecord }
-     * 
-     */
-    public IdentityProviderAuditRecord createIdentityProviderAuditRecord() {
-        return new IdentityProviderAuditRecord();
     }
 
     /**
@@ -98,6 +74,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LocalUser }
+     * 
+     */
+    public LocalUser createLocalUser() {
+        return new LocalUser();
+    }
+
+    /**
      * Create an instance of {@link BasicAuthCredential }
      * 
      */
@@ -106,11 +90,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link LocalUserFilter }
+     * 
+     */
+    public LocalUserFilter createLocalUserFilter() {
+        return new LocalUserFilter();
+    }
+
+    /**
      * Create an instance of {@link PasswordSecurity }
      * 
      */
     public PasswordSecurity createPasswordSecurity() {
         return new PasswordSecurity();
+    }
+
+    /**
+     * Create an instance of {@link ApplicationReview }
+     * 
+     */
+    public ApplicationReview createApplicationReview() {
+        return new ApplicationReview();
     }
 
     /**

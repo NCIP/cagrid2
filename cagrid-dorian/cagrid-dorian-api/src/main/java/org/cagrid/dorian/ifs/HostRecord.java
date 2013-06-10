@@ -6,6 +6,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -44,7 +55,7 @@ import javax.xml.bind.annotation.XmlType;
     "ownerEmail"
 })
 public class HostRecord
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -228,6 +239,183 @@ public class HostRecord
      */
     public void setOwnerEmail(String value) {
         this.ownerEmail = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            String theIdentity;
+            theIdentity = this.getIdentity();
+            strategy.appendField(locator, this, "identity", buffer, theIdentity);
+        }
+        {
+            String theHostname;
+            theHostname = this.getHostname();
+            strategy.appendField(locator, this, "hostname", buffer, theHostname);
+        }
+        {
+            String theHostCertificateSubject;
+            theHostCertificateSubject = this.getHostCertificateSubject();
+            strategy.appendField(locator, this, "hostCertificateSubject", buffer, theHostCertificateSubject);
+        }
+        {
+            String theOwner;
+            theOwner = this.getOwner();
+            strategy.appendField(locator, this, "owner", buffer, theOwner);
+        }
+        {
+            String theOwnerFirstName;
+            theOwnerFirstName = this.getOwnerFirstName();
+            strategy.appendField(locator, this, "ownerFirstName", buffer, theOwnerFirstName);
+        }
+        {
+            String theOwnerLastName;
+            theOwnerLastName = this.getOwnerLastName();
+            strategy.appendField(locator, this, "ownerLastName", buffer, theOwnerLastName);
+        }
+        {
+            String theOwnerEmail;
+            theOwnerEmail = this.getOwnerEmail();
+            strategy.appendField(locator, this, "ownerEmail", buffer, theOwnerEmail);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theIdentity;
+            theIdentity = this.getIdentity();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "identity", theIdentity), currentHashCode, theIdentity);
+        }
+        {
+            String theHostname;
+            theHostname = this.getHostname();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostname", theHostname), currentHashCode, theHostname);
+        }
+        {
+            String theHostCertificateSubject;
+            theHostCertificateSubject = this.getHostCertificateSubject();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostCertificateSubject", theHostCertificateSubject), currentHashCode, theHostCertificateSubject);
+        }
+        {
+            String theOwner;
+            theOwner = this.getOwner();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "owner", theOwner), currentHashCode, theOwner);
+        }
+        {
+            String theOwnerFirstName;
+            theOwnerFirstName = this.getOwnerFirstName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "ownerFirstName", theOwnerFirstName), currentHashCode, theOwnerFirstName);
+        }
+        {
+            String theOwnerLastName;
+            theOwnerLastName = this.getOwnerLastName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "ownerLastName", theOwnerLastName), currentHashCode, theOwnerLastName);
+        }
+        {
+            String theOwnerEmail;
+            theOwnerEmail = this.getOwnerEmail();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "ownerEmail", theOwnerEmail), currentHashCode, theOwnerEmail);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof HostRecord)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final HostRecord that = ((HostRecord) object);
+        {
+            String lhsIdentity;
+            lhsIdentity = this.getIdentity();
+            String rhsIdentity;
+            rhsIdentity = that.getIdentity();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "identity", lhsIdentity), LocatorUtils.property(thatLocator, "identity", rhsIdentity), lhsIdentity, rhsIdentity)) {
+                return false;
+            }
+        }
+        {
+            String lhsHostname;
+            lhsHostname = this.getHostname();
+            String rhsHostname;
+            rhsHostname = that.getHostname();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostname", lhsHostname), LocatorUtils.property(thatLocator, "hostname", rhsHostname), lhsHostname, rhsHostname)) {
+                return false;
+            }
+        }
+        {
+            String lhsHostCertificateSubject;
+            lhsHostCertificateSubject = this.getHostCertificateSubject();
+            String rhsHostCertificateSubject;
+            rhsHostCertificateSubject = that.getHostCertificateSubject();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostCertificateSubject", lhsHostCertificateSubject), LocatorUtils.property(thatLocator, "hostCertificateSubject", rhsHostCertificateSubject), lhsHostCertificateSubject, rhsHostCertificateSubject)) {
+                return false;
+            }
+        }
+        {
+            String lhsOwner;
+            lhsOwner = this.getOwner();
+            String rhsOwner;
+            rhsOwner = that.getOwner();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "owner", lhsOwner), LocatorUtils.property(thatLocator, "owner", rhsOwner), lhsOwner, rhsOwner)) {
+                return false;
+            }
+        }
+        {
+            String lhsOwnerFirstName;
+            lhsOwnerFirstName = this.getOwnerFirstName();
+            String rhsOwnerFirstName;
+            rhsOwnerFirstName = that.getOwnerFirstName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "ownerFirstName", lhsOwnerFirstName), LocatorUtils.property(thatLocator, "ownerFirstName", rhsOwnerFirstName), lhsOwnerFirstName, rhsOwnerFirstName)) {
+                return false;
+            }
+        }
+        {
+            String lhsOwnerLastName;
+            lhsOwnerLastName = this.getOwnerLastName();
+            String rhsOwnerLastName;
+            rhsOwnerLastName = that.getOwnerLastName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "ownerLastName", lhsOwnerLastName), LocatorUtils.property(thatLocator, "ownerLastName", rhsOwnerLastName), lhsOwnerLastName, rhsOwnerLastName)) {
+                return false;
+            }
+        }
+        {
+            String lhsOwnerEmail;
+            lhsOwnerEmail = this.getOwnerEmail();
+            String rhsOwnerEmail;
+            rhsOwnerEmail = that.getOwnerEmail();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "ownerEmail", lhsOwnerEmail), LocatorUtils.property(thatLocator, "ownerEmail", rhsOwnerEmail), lhsOwnerEmail, rhsOwnerEmail)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

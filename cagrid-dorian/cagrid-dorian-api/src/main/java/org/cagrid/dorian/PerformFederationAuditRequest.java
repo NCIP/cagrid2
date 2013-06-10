@@ -8,6 +8,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.dorian.ifs.FederationAuditFilter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -45,7 +56,7 @@ import org.cagrid.dorian.ifs.FederationAuditFilter;
 })
 @XmlRootElement(name = "PerformFederationAuditRequest")
 public class PerformFederationAuditRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -75,6 +86,69 @@ public class PerformFederationAuditRequest
         this.f = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            PerformFederationAuditRequest.F theF;
+            theF = this.getF();
+            strategy.appendField(locator, this, "f", buffer, theF);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            PerformFederationAuditRequest.F theF;
+            theF = this.getF();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "f", theF), currentHashCode, theF);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof PerformFederationAuditRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final PerformFederationAuditRequest that = ((PerformFederationAuditRequest) object);
+        {
+            PerformFederationAuditRequest.F lhsF;
+            lhsF = this.getF();
+            PerformFederationAuditRequest.F rhsF;
+            rhsF = that.getF();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "f", lhsF), LocatorUtils.property(thatLocator, "f", rhsF), lhsF, rhsF)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -100,7 +174,7 @@ public class PerformFederationAuditRequest
         "federationAuditFilter"
     })
     public static class F
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "FederationAuditFilter", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -128,6 +202,69 @@ public class PerformFederationAuditRequest
          */
         public void setFederationAuditFilter(FederationAuditFilter value) {
             this.federationAuditFilter = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                FederationAuditFilter theFederationAuditFilter;
+                theFederationAuditFilter = this.getFederationAuditFilter();
+                strategy.appendField(locator, this, "federationAuditFilter", buffer, theFederationAuditFilter);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                FederationAuditFilter theFederationAuditFilter;
+                theFederationAuditFilter = this.getFederationAuditFilter();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "federationAuditFilter", theFederationAuditFilter), currentHashCode, theFederationAuditFilter);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof PerformFederationAuditRequest.F)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final PerformFederationAuditRequest.F that = ((PerformFederationAuditRequest.F) object);
+            {
+                FederationAuditFilter lhsFederationAuditFilter;
+                lhsFederationAuditFilter = this.getFederationAuditFilter();
+                FederationAuditFilter rhsFederationAuditFilter;
+                rhsFederationAuditFilter = that.getFederationAuditFilter();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "federationAuditFilter", lhsFederationAuditFilter), LocatorUtils.property(thatLocator, "federationAuditFilter", rhsFederationAuditFilter), lhsFederationAuditFilter, rhsFederationAuditFilter)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

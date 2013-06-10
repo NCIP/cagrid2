@@ -7,6 +7,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -44,7 +55,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 @XmlRootElement(name = "UserSearchRequest")
 public class UserSearchRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -74,6 +85,69 @@ public class UserSearchRequest
         this.gridUserSearchCriteria = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            UserSearchRequest.GridUserSearchCriteria theGridUserSearchCriteria;
+            theGridUserSearchCriteria = this.getGridUserSearchCriteria();
+            strategy.appendField(locator, this, "gridUserSearchCriteria", buffer, theGridUserSearchCriteria);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            UserSearchRequest.GridUserSearchCriteria theGridUserSearchCriteria;
+            theGridUserSearchCriteria = this.getGridUserSearchCriteria();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "gridUserSearchCriteria", theGridUserSearchCriteria), currentHashCode, theGridUserSearchCriteria);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof UserSearchRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final UserSearchRequest that = ((UserSearchRequest) object);
+        {
+            UserSearchRequest.GridUserSearchCriteria lhsGridUserSearchCriteria;
+            lhsGridUserSearchCriteria = this.getGridUserSearchCriteria();
+            UserSearchRequest.GridUserSearchCriteria rhsGridUserSearchCriteria;
+            rhsGridUserSearchCriteria = that.getGridUserSearchCriteria();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "gridUserSearchCriteria", lhsGridUserSearchCriteria), LocatorUtils.property(thatLocator, "gridUserSearchCriteria", rhsGridUserSearchCriteria), lhsGridUserSearchCriteria, rhsGridUserSearchCriteria)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -99,7 +173,7 @@ public class UserSearchRequest
         "gridUserSearchCriteria"
     })
     public static class GridUserSearchCriteria
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "GridUserSearchCriteria", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -127,6 +201,69 @@ public class UserSearchRequest
          */
         public void setGridUserSearchCriteria(org.cagrid.dorian.ifs.GridUserSearchCriteria value) {
             this.gridUserSearchCriteria = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                org.cagrid.dorian.ifs.GridUserSearchCriteria theGridUserSearchCriteria;
+                theGridUserSearchCriteria = this.getGridUserSearchCriteria();
+                strategy.appendField(locator, this, "gridUserSearchCriteria", buffer, theGridUserSearchCriteria);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                org.cagrid.dorian.ifs.GridUserSearchCriteria theGridUserSearchCriteria;
+                theGridUserSearchCriteria = this.getGridUserSearchCriteria();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "gridUserSearchCriteria", theGridUserSearchCriteria), currentHashCode, theGridUserSearchCriteria);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof UserSearchRequest.GridUserSearchCriteria)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final UserSearchRequest.GridUserSearchCriteria that = ((UserSearchRequest.GridUserSearchCriteria) object);
+            {
+                org.cagrid.dorian.ifs.GridUserSearchCriteria lhsGridUserSearchCriteria;
+                lhsGridUserSearchCriteria = this.getGridUserSearchCriteria();
+                org.cagrid.dorian.ifs.GridUserSearchCriteria rhsGridUserSearchCriteria;
+                rhsGridUserSearchCriteria = that.getGridUserSearchCriteria();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "gridUserSearchCriteria", lhsGridUserSearchCriteria), LocatorUtils.property(thatLocator, "gridUserSearchCriteria", rhsGridUserSearchCriteria), lhsGridUserSearchCriteria, rhsGridUserSearchCriteria)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

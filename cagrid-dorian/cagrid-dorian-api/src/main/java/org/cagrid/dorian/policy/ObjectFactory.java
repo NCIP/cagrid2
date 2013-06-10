@@ -47,11 +47,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link HostPolicy }
+     * 
+     */
+    public HostPolicy createHostPolicy() {
+        return new HostPolicy();
+    }
+
+    /**
+     * Create an instance of {@link UserIdPolicy }
+     * 
+     */
+    public UserIdPolicy createUserIdPolicy() {
+        return new UserIdPolicy();
+    }
+
+    /**
      * Create an instance of {@link PasswordLockoutPolicy }
      * 
      */
     public PasswordLockoutPolicy createPasswordLockoutPolicy() {
         return new PasswordLockoutPolicy();
+    }
+
+    /**
+     * Create an instance of {@link UserCertificateLifetime }
+     * 
+     */
+    public UserCertificateLifetime createUserCertificateLifetime() {
+        return new UserCertificateLifetime();
     }
 
     /**
@@ -71,11 +95,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PasswordPolicy }
+     * Create an instance of {@link SearchPolicy }
      * 
      */
-    public PasswordPolicy createPasswordPolicy() {
-        return new PasswordPolicy();
+    public SearchPolicy createSearchPolicy() {
+        return new SearchPolicy();
+    }
+
+    /**
+     * Create an instance of {@link UserPolicy }
+     * 
+     */
+    public UserPolicy createUserPolicy() {
+        return new UserPolicy();
     }
 
     /**
@@ -87,27 +119,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SearchPolicy }
+     * Create an instance of {@link PasswordPolicy }
      * 
      */
-    public SearchPolicy createSearchPolicy() {
-        return new SearchPolicy();
-    }
-
-    /**
-     * Create an instance of {@link UserCertificateLifetime }
-     * 
-     */
-    public UserCertificateLifetime createUserCertificateLifetime() {
-        return new UserCertificateLifetime();
-    }
-
-    /**
-     * Create an instance of {@link HostPolicy }
-     * 
-     */
-    public HostPolicy createHostPolicy() {
-        return new HostPolicy();
+    public PasswordPolicy createPasswordPolicy() {
+        return new PasswordPolicy();
     }
 
     /**
@@ -116,22 +132,6 @@ public class ObjectFactory {
      */
     public HostCertificateLifetime createHostCertificateLifetime() {
         return new HostCertificateLifetime();
-    }
-
-    /**
-     * Create an instance of {@link UserIdPolicy }
-     * 
-     */
-    public UserIdPolicy createUserIdPolicy() {
-        return new UserIdPolicy();
-    }
-
-    /**
-     * Create an instance of {@link UserPolicy }
-     * 
-     */
-    public UserPolicy createUserPolicy() {
-        return new UserPolicy();
     }
 
     /**
