@@ -30,14 +30,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetServiceSecurityMetadataResponse }
-     * 
-     */
-    public GetServiceSecurityMetadataResponse createGetServiceSecurityMetadataResponse() {
-        return new GetServiceSecurityMetadataResponse();
-    }
-
-    /**
      * Create an instance of {@link ServiceSecurityResourceProperties }
      * 
      */
@@ -51,6 +43,14 @@ public class ObjectFactory {
      */
     public GetServiceSecurityMetadataRequest createGetServiceSecurityMetadataRequest() {
         return new GetServiceSecurityMetadataRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetServiceSecurityMetadataResponse }
+     * 
+     */
+    public GetServiceSecurityMetadataResponse createGetServiceSecurityMetadataResponse() {
+        return new GetServiceSecurityMetadataResponse();
     }
 
 }

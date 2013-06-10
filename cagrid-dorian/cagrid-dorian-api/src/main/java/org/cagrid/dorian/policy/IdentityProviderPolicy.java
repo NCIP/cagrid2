@@ -7,6 +7,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -36,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
     "passwordPolicy"
 })
 public class IdentityProviderPolicy
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(name = "UserIdPolicy", required = true)
@@ -116,6 +127,107 @@ public class IdentityProviderPolicy
      */
     public void setAccountInformationModificationPolicy(AccountInformationModificationPolicy value) {
         this.accountInformationModificationPolicy = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            UserIdPolicy theUserIdPolicy;
+            theUserIdPolicy = this.getUserIdPolicy();
+            strategy.appendField(locator, this, "userIdPolicy", buffer, theUserIdPolicy);
+        }
+        {
+            PasswordPolicy thePasswordPolicy;
+            thePasswordPolicy = this.getPasswordPolicy();
+            strategy.appendField(locator, this, "passwordPolicy", buffer, thePasswordPolicy);
+        }
+        {
+            AccountInformationModificationPolicy theAccountInformationModificationPolicy;
+            theAccountInformationModificationPolicy = this.getAccountInformationModificationPolicy();
+            strategy.appendField(locator, this, "accountInformationModificationPolicy", buffer, theAccountInformationModificationPolicy);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            UserIdPolicy theUserIdPolicy;
+            theUserIdPolicy = this.getUserIdPolicy();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "userIdPolicy", theUserIdPolicy), currentHashCode, theUserIdPolicy);
+        }
+        {
+            PasswordPolicy thePasswordPolicy;
+            thePasswordPolicy = this.getPasswordPolicy();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "passwordPolicy", thePasswordPolicy), currentHashCode, thePasswordPolicy);
+        }
+        {
+            AccountInformationModificationPolicy theAccountInformationModificationPolicy;
+            theAccountInformationModificationPolicy = this.getAccountInformationModificationPolicy();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "accountInformationModificationPolicy", theAccountInformationModificationPolicy), currentHashCode, theAccountInformationModificationPolicy);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof IdentityProviderPolicy)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final IdentityProviderPolicy that = ((IdentityProviderPolicy) object);
+        {
+            UserIdPolicy lhsUserIdPolicy;
+            lhsUserIdPolicy = this.getUserIdPolicy();
+            UserIdPolicy rhsUserIdPolicy;
+            rhsUserIdPolicy = that.getUserIdPolicy();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "userIdPolicy", lhsUserIdPolicy), LocatorUtils.property(thatLocator, "userIdPolicy", rhsUserIdPolicy), lhsUserIdPolicy, rhsUserIdPolicy)) {
+                return false;
+            }
+        }
+        {
+            PasswordPolicy lhsPasswordPolicy;
+            lhsPasswordPolicy = this.getPasswordPolicy();
+            PasswordPolicy rhsPasswordPolicy;
+            rhsPasswordPolicy = that.getPasswordPolicy();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "passwordPolicy", lhsPasswordPolicy), LocatorUtils.property(thatLocator, "passwordPolicy", rhsPasswordPolicy), lhsPasswordPolicy, rhsPasswordPolicy)) {
+                return false;
+            }
+        }
+        {
+            AccountInformationModificationPolicy lhsAccountInformationModificationPolicy;
+            lhsAccountInformationModificationPolicy = this.getAccountInformationModificationPolicy();
+            AccountInformationModificationPolicy rhsAccountInformationModificationPolicy;
+            rhsAccountInformationModificationPolicy = that.getAccountInformationModificationPolicy();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "accountInformationModificationPolicy", lhsAccountInformationModificationPolicy), LocatorUtils.property(thatLocator, "accountInformationModificationPolicy", rhsAccountInformationModificationPolicy), lhsAccountInformationModificationPolicy, rhsAccountInformationModificationPolicy)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

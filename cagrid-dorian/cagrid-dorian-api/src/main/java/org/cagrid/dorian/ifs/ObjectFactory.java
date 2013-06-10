@@ -58,11 +58,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GridUser }
+     * Create an instance of {@link FederationAuditFilter }
      * 
      */
-    public GridUser createGridUser() {
-        return new GridUser();
+    public FederationAuditFilter createFederationAuditFilter() {
+        return new FederationAuditFilter();
+    }
+
+    /**
+     * Create an instance of {@link PublicKey }
+     * 
+     */
+    public PublicKey createPublicKey() {
+        return new PublicKey();
     }
 
     /**
@@ -74,11 +82,99 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link UserCertificateFilter }
+     * Create an instance of {@link CertificateLifetime }
      * 
      */
-    public UserCertificateFilter createUserCertificateFilter() {
-        return new UserCertificateFilter();
+    public CertificateLifetime createCertificateLifetime() {
+        return new CertificateLifetime();
+    }
+
+    /**
+     * Create an instance of {@link HostSearchCriteria }
+     * 
+     */
+    public HostSearchCriteria createHostSearchCriteria() {
+        return new HostSearchCriteria();
+    }
+
+    /**
+     * Create an instance of {@link HostCertificateFilter }
+     * 
+     */
+    public HostCertificateFilter createHostCertificateFilter() {
+        return new HostCertificateFilter();
+    }
+
+    /**
+     * Create an instance of {@link UserCertificateUpdate }
+     * 
+     */
+    public UserCertificateUpdate createUserCertificateUpdate() {
+        return new UserCertificateUpdate();
+    }
+
+    /**
+     * Create an instance of {@link GridUserSearchCriteria }
+     * 
+     */
+    public GridUserSearchCriteria createGridUserSearchCriteria() {
+        return new GridUserSearchCriteria();
+    }
+
+    /**
+     * Create an instance of {@link HostCertificateUpdate }
+     * 
+     */
+    public HostCertificateUpdate createHostCertificateUpdate() {
+        return new HostCertificateUpdate();
+    }
+
+    /**
+     * Create an instance of {@link ProxyLifetime }
+     * 
+     */
+    public ProxyLifetime createProxyLifetime() {
+        return new ProxyLifetime();
+    }
+
+    /**
+     * Create an instance of {@link DelegationPathLength }
+     * 
+     */
+    public DelegationPathLength createDelegationPathLength() {
+        return new DelegationPathLength();
+    }
+
+    /**
+     * Create an instance of {@link HostCertificateRecord }
+     * 
+     */
+    public HostCertificateRecord createHostCertificateRecord() {
+        return new HostCertificateRecord();
+    }
+
+    /**
+     * Create an instance of {@link GridUserRecord }
+     * 
+     */
+    public GridUserRecord createGridUserRecord() {
+        return new GridUserRecord();
+    }
+
+    /**
+     * Create an instance of {@link TrustedIdP }
+     * 
+     */
+    public TrustedIdP createTrustedIdP() {
+        return new TrustedIdP();
+    }
+
+    /**
+     * Create an instance of {@link HostRecord }
+     * 
+     */
+    public HostRecord createHostRecord() {
+        return new HostRecord();
     }
 
     /**
@@ -98,11 +194,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DelegationPathLength }
+     * Create an instance of {@link SAMLAttributeDescriptor }
      * 
      */
-    public DelegationPathLength createDelegationPathLength() {
-        return new DelegationPathLength();
+    public SAMLAttributeDescriptor createSAMLAttributeDescriptor() {
+        return new SAMLAttributeDescriptor();
+    }
+
+    /**
+     * Create an instance of {@link GridUser }
+     * 
+     */
+    public GridUser createGridUser() {
+        return new GridUser();
+    }
+
+    /**
+     * Create an instance of {@link FederationAuditRecord }
+     * 
+     */
+    public FederationAuditRecord createFederationAuditRecord() {
+        return new FederationAuditRecord();
+    }
+
+    /**
+     * Create an instance of {@link TrustedIdentityProviders }
+     * 
+     */
+    public TrustedIdentityProviders createTrustedIdentityProviders() {
+        return new TrustedIdentityProviders();
+    }
+
+    /**
+     * Create an instance of {@link UserCertificateRecord }
+     * 
+     */
+    public UserCertificateRecord createUserCertificateRecord() {
+        return new UserCertificateRecord();
+    }
+
+    /**
+     * Create an instance of {@link UserCertificateFilter }
+     * 
+     */
+    public UserCertificateFilter createUserCertificateFilter() {
+        return new UserCertificateFilter();
     }
 
     /**
@@ -119,142 +255,6 @@ public class ObjectFactory {
      */
     public DateRange createDateRange() {
         return new DateRange();
-    }
-
-    /**
-     * Create an instance of {@link GridUserSearchCriteria }
-     * 
-     */
-    public GridUserSearchCriteria createGridUserSearchCriteria() {
-        return new GridUserSearchCriteria();
-    }
-
-    /**
-     * Create an instance of {@link TrustedIdentityProviders }
-     * 
-     */
-    public TrustedIdentityProviders createTrustedIdentityProviders() {
-        return new TrustedIdentityProviders();
-    }
-
-    /**
-     * Create an instance of {@link ProxyLifetime }
-     * 
-     */
-    public ProxyLifetime createProxyLifetime() {
-        return new ProxyLifetime();
-    }
-
-    /**
-     * Create an instance of {@link SAMLAttributeDescriptor }
-     * 
-     */
-    public SAMLAttributeDescriptor createSAMLAttributeDescriptor() {
-        return new SAMLAttributeDescriptor();
-    }
-
-    /**
-     * Create an instance of {@link FederationAuditFilter }
-     * 
-     */
-    public FederationAuditFilter createFederationAuditFilter() {
-        return new FederationAuditFilter();
-    }
-
-    /**
-     * Create an instance of {@link HostCertificateRecord }
-     * 
-     */
-    public HostCertificateRecord createHostCertificateRecord() {
-        return new HostCertificateRecord();
-    }
-
-    /**
-     * Create an instance of {@link TrustedIdP }
-     * 
-     */
-    public TrustedIdP createTrustedIdP() {
-        return new TrustedIdP();
-    }
-
-    /**
-     * Create an instance of {@link PublicKey }
-     * 
-     */
-    public PublicKey createPublicKey() {
-        return new PublicKey();
-    }
-
-    /**
-     * Create an instance of {@link GridUserRecord }
-     * 
-     */
-    public GridUserRecord createGridUserRecord() {
-        return new GridUserRecord();
-    }
-
-    /**
-     * Create an instance of {@link HostSearchCriteria }
-     * 
-     */
-    public HostSearchCriteria createHostSearchCriteria() {
-        return new HostSearchCriteria();
-    }
-
-    /**
-     * Create an instance of {@link CertificateLifetime }
-     * 
-     */
-    public CertificateLifetime createCertificateLifetime() {
-        return new CertificateLifetime();
-    }
-
-    /**
-     * Create an instance of {@link UserCertificateRecord }
-     * 
-     */
-    public UserCertificateRecord createUserCertificateRecord() {
-        return new UserCertificateRecord();
-    }
-
-    /**
-     * Create an instance of {@link HostRecord }
-     * 
-     */
-    public HostRecord createHostRecord() {
-        return new HostRecord();
-    }
-
-    /**
-     * Create an instance of {@link UserCertificateUpdate }
-     * 
-     */
-    public UserCertificateUpdate createUserCertificateUpdate() {
-        return new UserCertificateUpdate();
-    }
-
-    /**
-     * Create an instance of {@link HostCertificateUpdate }
-     * 
-     */
-    public HostCertificateUpdate createHostCertificateUpdate() {
-        return new HostCertificateUpdate();
-    }
-
-    /**
-     * Create an instance of {@link FederationAuditRecord }
-     * 
-     */
-    public FederationAuditRecord createFederationAuditRecord() {
-        return new FederationAuditRecord();
-    }
-
-    /**
-     * Create an instance of {@link HostCertificateFilter }
-     * 
-     */
-    public HostCertificateFilter createHostCertificateFilter() {
-        return new HostCertificateFilter();
     }
 
     /**

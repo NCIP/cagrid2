@@ -8,6 +8,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.dorian.ifs.GridUser;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -45,7 +56,7 @@ import org.cagrid.dorian.ifs.GridUser;
 })
 @XmlRootElement(name = "UpdateGridUserRequest")
 public class UpdateGridUserRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -75,6 +86,69 @@ public class UpdateGridUserRequest
         this.user = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            UpdateGridUserRequest.User theUser;
+            theUser = this.getUser();
+            strategy.appendField(locator, this, "user", buffer, theUser);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            UpdateGridUserRequest.User theUser;
+            theUser = this.getUser();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "user", theUser), currentHashCode, theUser);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof UpdateGridUserRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final UpdateGridUserRequest that = ((UpdateGridUserRequest) object);
+        {
+            UpdateGridUserRequest.User lhsUser;
+            lhsUser = this.getUser();
+            UpdateGridUserRequest.User rhsUser;
+            rhsUser = that.getUser();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "user", lhsUser), LocatorUtils.property(thatLocator, "user", rhsUser), lhsUser, rhsUser)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -100,7 +174,7 @@ public class UpdateGridUserRequest
         "gridUser"
     })
     public static class User
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "GridUser", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -128,6 +202,69 @@ public class UpdateGridUserRequest
          */
         public void setGridUser(GridUser value) {
             this.gridUser = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                GridUser theGridUser;
+                theGridUser = this.getGridUser();
+                strategy.appendField(locator, this, "gridUser", buffer, theGridUser);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                GridUser theGridUser;
+                theGridUser = this.getGridUser();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "gridUser", theGridUser), currentHashCode, theGridUser);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof UpdateGridUserRequest.User)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final UpdateGridUserRequest.User that = ((UpdateGridUserRequest.User) object);
+            {
+                GridUser lhsGridUser;
+                lhsGridUser = this.getGridUser();
+                GridUser rhsGridUser;
+                rhsGridUser = that.getGridUser();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "gridUser", lhsGridUser), LocatorUtils.property(thatLocator, "gridUser", rhsGridUser), lhsGridUser, rhsGridUser)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

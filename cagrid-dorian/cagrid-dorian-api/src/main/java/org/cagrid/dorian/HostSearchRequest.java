@@ -7,6 +7,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -44,7 +55,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 @XmlRootElement(name = "HostSearchRequest")
 public class HostSearchRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -74,6 +85,69 @@ public class HostSearchRequest
         this.hostSearchCriteria = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            HostSearchRequest.HostSearchCriteria theHostSearchCriteria;
+            theHostSearchCriteria = this.getHostSearchCriteria();
+            strategy.appendField(locator, this, "hostSearchCriteria", buffer, theHostSearchCriteria);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            HostSearchRequest.HostSearchCriteria theHostSearchCriteria;
+            theHostSearchCriteria = this.getHostSearchCriteria();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostSearchCriteria", theHostSearchCriteria), currentHashCode, theHostSearchCriteria);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof HostSearchRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final HostSearchRequest that = ((HostSearchRequest) object);
+        {
+            HostSearchRequest.HostSearchCriteria lhsHostSearchCriteria;
+            lhsHostSearchCriteria = this.getHostSearchCriteria();
+            HostSearchRequest.HostSearchCriteria rhsHostSearchCriteria;
+            rhsHostSearchCriteria = that.getHostSearchCriteria();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostSearchCriteria", lhsHostSearchCriteria), LocatorUtils.property(thatLocator, "hostSearchCriteria", rhsHostSearchCriteria), lhsHostSearchCriteria, rhsHostSearchCriteria)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -99,7 +173,7 @@ public class HostSearchRequest
         "hostSearchCriteria"
     })
     public static class HostSearchCriteria
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "HostSearchCriteria", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -127,6 +201,69 @@ public class HostSearchRequest
          */
         public void setHostSearchCriteria(org.cagrid.dorian.ifs.HostSearchCriteria value) {
             this.hostSearchCriteria = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                org.cagrid.dorian.ifs.HostSearchCriteria theHostSearchCriteria;
+                theHostSearchCriteria = this.getHostSearchCriteria();
+                strategy.appendField(locator, this, "hostSearchCriteria", buffer, theHostSearchCriteria);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                org.cagrid.dorian.ifs.HostSearchCriteria theHostSearchCriteria;
+                theHostSearchCriteria = this.getHostSearchCriteria();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostSearchCriteria", theHostSearchCriteria), currentHashCode, theHostSearchCriteria);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof HostSearchRequest.HostSearchCriteria)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final HostSearchRequest.HostSearchCriteria that = ((HostSearchRequest.HostSearchCriteria) object);
+            {
+                org.cagrid.dorian.ifs.HostSearchCriteria lhsHostSearchCriteria;
+                lhsHostSearchCriteria = this.getHostSearchCriteria();
+                org.cagrid.dorian.ifs.HostSearchCriteria rhsHostSearchCriteria;
+                rhsHostSearchCriteria = that.getHostSearchCriteria();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "hostSearchCriteria", lhsHostSearchCriteria), LocatorUtils.property(thatLocator, "hostSearchCriteria", rhsHostSearchCriteria), lhsHostSearchCriteria, rhsHostSearchCriteria)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

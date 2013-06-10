@@ -9,6 +9,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.dorian.ifs.CertificateLifetime;
 import org.cagrid.dorian.ifs.PublicKey;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.oasis.names.tc.saml.assertion.AssertionType;
 
 
@@ -71,7 +82,7 @@ import org.oasis.names.tc.saml.assertion.AssertionType;
 })
 @XmlRootElement(name = "RequestUserCertificateRequest")
 public class RequestUserCertificateRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -153,6 +164,107 @@ public class RequestUserCertificateRequest
         this.lifetime = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            RequestUserCertificateRequest.Saml theSaml;
+            theSaml = this.getSaml();
+            strategy.appendField(locator, this, "saml", buffer, theSaml);
+        }
+        {
+            RequestUserCertificateRequest.Key theKey;
+            theKey = this.getKey();
+            strategy.appendField(locator, this, "key", buffer, theKey);
+        }
+        {
+            RequestUserCertificateRequest.Lifetime theLifetime;
+            theLifetime = this.getLifetime();
+            strategy.appendField(locator, this, "lifetime", buffer, theLifetime);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            RequestUserCertificateRequest.Saml theSaml;
+            theSaml = this.getSaml();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "saml", theSaml), currentHashCode, theSaml);
+        }
+        {
+            RequestUserCertificateRequest.Key theKey;
+            theKey = this.getKey();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "key", theKey), currentHashCode, theKey);
+        }
+        {
+            RequestUserCertificateRequest.Lifetime theLifetime;
+            theLifetime = this.getLifetime();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "lifetime", theLifetime), currentHashCode, theLifetime);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof RequestUserCertificateRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final RequestUserCertificateRequest that = ((RequestUserCertificateRequest) object);
+        {
+            RequestUserCertificateRequest.Saml lhsSaml;
+            lhsSaml = this.getSaml();
+            RequestUserCertificateRequest.Saml rhsSaml;
+            rhsSaml = that.getSaml();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "saml", lhsSaml), LocatorUtils.property(thatLocator, "saml", rhsSaml), lhsSaml, rhsSaml)) {
+                return false;
+            }
+        }
+        {
+            RequestUserCertificateRequest.Key lhsKey;
+            lhsKey = this.getKey();
+            RequestUserCertificateRequest.Key rhsKey;
+            rhsKey = that.getKey();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "key", lhsKey), LocatorUtils.property(thatLocator, "key", rhsKey), lhsKey, rhsKey)) {
+                return false;
+            }
+        }
+        {
+            RequestUserCertificateRequest.Lifetime lhsLifetime;
+            lhsLifetime = this.getLifetime();
+            RequestUserCertificateRequest.Lifetime rhsLifetime;
+            rhsLifetime = that.getLifetime();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "lifetime", lhsLifetime), LocatorUtils.property(thatLocator, "lifetime", rhsLifetime), lhsLifetime, rhsLifetime)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -178,7 +290,7 @@ public class RequestUserCertificateRequest
         "publicKey"
     })
     public static class Key
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "PublicKey", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -208,6 +320,69 @@ public class RequestUserCertificateRequest
             this.publicKey = value;
         }
 
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                PublicKey thePublicKey;
+                thePublicKey = this.getPublicKey();
+                strategy.appendField(locator, this, "publicKey", buffer, thePublicKey);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                PublicKey thePublicKey;
+                thePublicKey = this.getPublicKey();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "publicKey", thePublicKey), currentHashCode, thePublicKey);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof RequestUserCertificateRequest.Key)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final RequestUserCertificateRequest.Key that = ((RequestUserCertificateRequest.Key) object);
+            {
+                PublicKey lhsPublicKey;
+                lhsPublicKey = this.getPublicKey();
+                PublicKey rhsPublicKey;
+                rhsPublicKey = that.getPublicKey();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "publicKey", lhsPublicKey), LocatorUtils.property(thatLocator, "publicKey", rhsPublicKey), lhsPublicKey, rhsPublicKey)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
+        }
+
     }
 
 
@@ -235,7 +410,7 @@ public class RequestUserCertificateRequest
         "certificateLifetime"
     })
     public static class Lifetime
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "CertificateLifetime", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -265,6 +440,69 @@ public class RequestUserCertificateRequest
             this.certificateLifetime = value;
         }
 
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                CertificateLifetime theCertificateLifetime;
+                theCertificateLifetime = this.getCertificateLifetime();
+                strategy.appendField(locator, this, "certificateLifetime", buffer, theCertificateLifetime);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                CertificateLifetime theCertificateLifetime;
+                theCertificateLifetime = this.getCertificateLifetime();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "certificateLifetime", theCertificateLifetime), currentHashCode, theCertificateLifetime);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof RequestUserCertificateRequest.Lifetime)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final RequestUserCertificateRequest.Lifetime that = ((RequestUserCertificateRequest.Lifetime) object);
+            {
+                CertificateLifetime lhsCertificateLifetime;
+                lhsCertificateLifetime = this.getCertificateLifetime();
+                CertificateLifetime rhsCertificateLifetime;
+                rhsCertificateLifetime = that.getCertificateLifetime();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "certificateLifetime", lhsCertificateLifetime), LocatorUtils.property(thatLocator, "certificateLifetime", rhsCertificateLifetime), lhsCertificateLifetime, rhsCertificateLifetime)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
+        }
+
     }
 
 
@@ -292,7 +530,7 @@ public class RequestUserCertificateRequest
         "assertion"
     })
     public static class Saml
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "Assertion", namespace = "urn:oasis:names:tc:SAML:1.0:assertion", required = true)
@@ -320,6 +558,69 @@ public class RequestUserCertificateRequest
          */
         public void setAssertion(AssertionType value) {
             this.assertion = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                AssertionType theAssertion;
+                theAssertion = this.getAssertion();
+                strategy.appendField(locator, this, "assertion", buffer, theAssertion);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                AssertionType theAssertion;
+                theAssertion = this.getAssertion();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "assertion", theAssertion), currentHashCode, theAssertion);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof RequestUserCertificateRequest.Saml)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final RequestUserCertificateRequest.Saml that = ((RequestUserCertificateRequest.Saml) object);
+            {
+                AssertionType lhsAssertion;
+                lhsAssertion = this.getAssertion();
+                AssertionType rhsAssertion;
+                rhsAssertion = that.getAssertion();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "assertion", lhsAssertion), LocatorUtils.property(thatLocator, "assertion", rhsAssertion), lhsAssertion, rhsAssertion)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

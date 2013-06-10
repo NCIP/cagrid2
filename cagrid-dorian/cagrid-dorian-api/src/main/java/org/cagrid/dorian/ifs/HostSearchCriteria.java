@@ -6,6 +6,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -38,7 +49,7 @@ import javax.xml.bind.annotation.XmlType;
     "owner"
 })
 public class HostSearchCriteria
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -144,6 +155,126 @@ public class HostSearchCriteria
      */
     public void setOwner(String value) {
         this.owner = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            String theIdentity;
+            theIdentity = this.getIdentity();
+            strategy.appendField(locator, this, "identity", buffer, theIdentity);
+        }
+        {
+            String theHostname;
+            theHostname = this.getHostname();
+            strategy.appendField(locator, this, "hostname", buffer, theHostname);
+        }
+        {
+            String theHostCertificateSubject;
+            theHostCertificateSubject = this.getHostCertificateSubject();
+            strategy.appendField(locator, this, "hostCertificateSubject", buffer, theHostCertificateSubject);
+        }
+        {
+            String theOwner;
+            theOwner = this.getOwner();
+            strategy.appendField(locator, this, "owner", buffer, theOwner);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            String theIdentity;
+            theIdentity = this.getIdentity();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "identity", theIdentity), currentHashCode, theIdentity);
+        }
+        {
+            String theHostname;
+            theHostname = this.getHostname();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostname", theHostname), currentHashCode, theHostname);
+        }
+        {
+            String theHostCertificateSubject;
+            theHostCertificateSubject = this.getHostCertificateSubject();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostCertificateSubject", theHostCertificateSubject), currentHashCode, theHostCertificateSubject);
+        }
+        {
+            String theOwner;
+            theOwner = this.getOwner();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "owner", theOwner), currentHashCode, theOwner);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof HostSearchCriteria)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final HostSearchCriteria that = ((HostSearchCriteria) object);
+        {
+            String lhsIdentity;
+            lhsIdentity = this.getIdentity();
+            String rhsIdentity;
+            rhsIdentity = that.getIdentity();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "identity", lhsIdentity), LocatorUtils.property(thatLocator, "identity", rhsIdentity), lhsIdentity, rhsIdentity)) {
+                return false;
+            }
+        }
+        {
+            String lhsHostname;
+            lhsHostname = this.getHostname();
+            String rhsHostname;
+            rhsHostname = that.getHostname();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostname", lhsHostname), LocatorUtils.property(thatLocator, "hostname", rhsHostname), lhsHostname, rhsHostname)) {
+                return false;
+            }
+        }
+        {
+            String lhsHostCertificateSubject;
+            lhsHostCertificateSubject = this.getHostCertificateSubject();
+            String rhsHostCertificateSubject;
+            rhsHostCertificateSubject = that.getHostCertificateSubject();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostCertificateSubject", lhsHostCertificateSubject), LocatorUtils.property(thatLocator, "hostCertificateSubject", rhsHostCertificateSubject), lhsHostCertificateSubject, rhsHostCertificateSubject)) {
+                return false;
+            }
+        }
+        {
+            String lhsOwner;
+            lhsOwner = this.getOwner();
+            String rhsOwner;
+            rhsOwner = that.getOwner();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "owner", lhsOwner), LocatorUtils.property(thatLocator, "owner", rhsOwner), lhsOwner, rhsOwner)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

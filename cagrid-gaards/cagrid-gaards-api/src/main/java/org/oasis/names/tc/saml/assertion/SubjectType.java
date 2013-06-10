@@ -10,6 +10,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -40,12 +51,12 @@ import javax.xml.bind.annotation.XmlType;
     "content"
 })
 public class SubjectType
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "NameIdentifier", namespace = "urn:oasis:names:tc:SAML:1.0:assertion", type = JAXBElement.class),
-        @XmlElementRef(name = "SubjectConfirmation", namespace = "urn:oasis:names:tc:SAML:1.0:assertion", type = JAXBElement.class)
+        @XmlElementRef(name = "SubjectConfirmation", namespace = "urn:oasis:names:tc:SAML:1.0:assertion", type = JAXBElement.class),
+        @XmlElementRef(name = "NameIdentifier", namespace = "urn:oasis:names:tc:SAML:1.0:assertion", type = JAXBElement.class)
     })
     protected List<JAXBElement<? extends Serializable>> content;
 
@@ -55,8 +66,8 @@ public class SubjectType
      * <p>
      * You are getting this "catch-all" property because of the following reason: 
      * The field name "SubjectConfirmation" is used by two different parts of a schema. See: 
-     * line 105 of file:/Users/dave/projects/caGrid/caGrid-OSGi/cagrid-gaards/cagrid-gaards-api/work/schema/org/cagrid/gaards/cs-sstc-schema-assertion-1.1.xsd
-     * line 103 of file:/Users/dave/projects/caGrid/caGrid-OSGi/cagrid-gaards/cagrid-gaards-api/work/schema/org/cagrid/gaards/cs-sstc-schema-assertion-1.1.xsd
+     * line 105 of file:/Users/dave/projects/caGrid/caGrid2/cagrid-gaards/cagrid-gaards-api/work/schema/org/cagrid/gaards/cs-sstc-schema-assertion-1.1.xsd
+     * line 103 of file:/Users/dave/projects/caGrid/caGrid2/cagrid-gaards/cagrid-gaards-api/work/schema/org/cagrid/gaards/cs-sstc-schema-assertion-1.1.xsd
      * <p>
      * To get rid of this property, apply a property customization to one 
      * of both of the following declarations to change their names: 
@@ -87,6 +98,69 @@ public class SubjectType
             content = new ArrayList<JAXBElement<? extends Serializable>>();
         }
         return this.content;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            List<JAXBElement<? extends Serializable>> theContent;
+            theContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
+            strategy.appendField(locator, this, "content", buffer, theContent);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<JAXBElement<? extends Serializable>> theContent;
+            theContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "content", theContent), currentHashCode, theContent);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof SubjectType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final SubjectType that = ((SubjectType) object);
+        {
+            List<JAXBElement<? extends Serializable>> lhsContent;
+            lhsContent = (((this.content!= null)&&(!this.content.isEmpty()))?this.getContent():null);
+            List<JAXBElement<? extends Serializable>> rhsContent;
+            rhsContent = (((that.content!= null)&&(!that.content.isEmpty()))?that.getContent():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "content", lhsContent), LocatorUtils.property(thatLocator, "content", rhsContent), lhsContent, rhsContent)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

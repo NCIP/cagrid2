@@ -6,6 +6,17 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -44,7 +55,7 @@ import javax.xml.bind.annotation.XmlType;
     "userStatus"
 })
 public class GridUser
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(name = "IdPId")
@@ -220,6 +231,183 @@ public class GridUser
      */
     public void setUserStatus(GridUserStatus value) {
         this.userStatus = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            long theIdPId;
+            theIdPId = (true?this.getIdPId(): 0L);
+            strategy.appendField(locator, this, "idPId", buffer, theIdPId);
+        }
+        {
+            String theUID;
+            theUID = this.getUID();
+            strategy.appendField(locator, this, "uid", buffer, theUID);
+        }
+        {
+            String theGridId;
+            theGridId = this.getGridId();
+            strategy.appendField(locator, this, "gridId", buffer, theGridId);
+        }
+        {
+            String theFirstName;
+            theFirstName = this.getFirstName();
+            strategy.appendField(locator, this, "firstName", buffer, theFirstName);
+        }
+        {
+            String theLastName;
+            theLastName = this.getLastName();
+            strategy.appendField(locator, this, "lastName", buffer, theLastName);
+        }
+        {
+            String theEmail;
+            theEmail = this.getEmail();
+            strategy.appendField(locator, this, "email", buffer, theEmail);
+        }
+        {
+            GridUserStatus theUserStatus;
+            theUserStatus = this.getUserStatus();
+            strategy.appendField(locator, this, "userStatus", buffer, theUserStatus);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            long theIdPId;
+            theIdPId = (true?this.getIdPId(): 0L);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "idPId", theIdPId), currentHashCode, theIdPId);
+        }
+        {
+            String theUID;
+            theUID = this.getUID();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "uid", theUID), currentHashCode, theUID);
+        }
+        {
+            String theGridId;
+            theGridId = this.getGridId();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "gridId", theGridId), currentHashCode, theGridId);
+        }
+        {
+            String theFirstName;
+            theFirstName = this.getFirstName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "firstName", theFirstName), currentHashCode, theFirstName);
+        }
+        {
+            String theLastName;
+            theLastName = this.getLastName();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "lastName", theLastName), currentHashCode, theLastName);
+        }
+        {
+            String theEmail;
+            theEmail = this.getEmail();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "email", theEmail), currentHashCode, theEmail);
+        }
+        {
+            GridUserStatus theUserStatus;
+            theUserStatus = this.getUserStatus();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "userStatus", theUserStatus), currentHashCode, theUserStatus);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof GridUser)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final GridUser that = ((GridUser) object);
+        {
+            long lhsIdPId;
+            lhsIdPId = (true?this.getIdPId(): 0L);
+            long rhsIdPId;
+            rhsIdPId = (true?that.getIdPId(): 0L);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "idPId", lhsIdPId), LocatorUtils.property(thatLocator, "idPId", rhsIdPId), lhsIdPId, rhsIdPId)) {
+                return false;
+            }
+        }
+        {
+            String lhsUID;
+            lhsUID = this.getUID();
+            String rhsUID;
+            rhsUID = that.getUID();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "uid", lhsUID), LocatorUtils.property(thatLocator, "uid", rhsUID), lhsUID, rhsUID)) {
+                return false;
+            }
+        }
+        {
+            String lhsGridId;
+            lhsGridId = this.getGridId();
+            String rhsGridId;
+            rhsGridId = that.getGridId();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "gridId", lhsGridId), LocatorUtils.property(thatLocator, "gridId", rhsGridId), lhsGridId, rhsGridId)) {
+                return false;
+            }
+        }
+        {
+            String lhsFirstName;
+            lhsFirstName = this.getFirstName();
+            String rhsFirstName;
+            rhsFirstName = that.getFirstName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "firstName", lhsFirstName), LocatorUtils.property(thatLocator, "firstName", rhsFirstName), lhsFirstName, rhsFirstName)) {
+                return false;
+            }
+        }
+        {
+            String lhsLastName;
+            lhsLastName = this.getLastName();
+            String rhsLastName;
+            rhsLastName = that.getLastName();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "lastName", lhsLastName), LocatorUtils.property(thatLocator, "lastName", rhsLastName), lhsLastName, rhsLastName)) {
+                return false;
+            }
+        }
+        {
+            String lhsEmail;
+            lhsEmail = this.getEmail();
+            String rhsEmail;
+            rhsEmail = that.getEmail();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "email", lhsEmail), LocatorUtils.property(thatLocator, "email", rhsEmail), lhsEmail, rhsEmail)) {
+                return false;
+            }
+        }
+        {
+            GridUserStatus lhsUserStatus;
+            lhsUserStatus = this.getUserStatus();
+            GridUserStatus rhsUserStatus;
+            rhsUserStatus = that.getUserStatus();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "userStatus", lhsUserStatus), LocatorUtils.property(thatLocator, "userStatus", rhsUserStatus), lhsUserStatus, rhsUserStatus)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

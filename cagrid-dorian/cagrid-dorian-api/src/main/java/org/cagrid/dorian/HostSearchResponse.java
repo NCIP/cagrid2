@@ -10,6 +10,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.dorian.ifs.HostRecord;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -37,7 +48,7 @@ import org.cagrid.dorian.ifs.HostRecord;
 })
 @XmlRootElement(name = "HostSearchResponse")
 public class HostSearchResponse
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(name = "HostRecord", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
@@ -70,6 +81,69 @@ public class HostSearchResponse
             hostRecord = new ArrayList<HostRecord>();
         }
         return this.hostRecord;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            List<HostRecord> theHostRecord;
+            theHostRecord = (((this.hostRecord!= null)&&(!this.hostRecord.isEmpty()))?this.getHostRecord():null);
+            strategy.appendField(locator, this, "hostRecord", buffer, theHostRecord);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<HostRecord> theHostRecord;
+            theHostRecord = (((this.hostRecord!= null)&&(!this.hostRecord.isEmpty()))?this.getHostRecord():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostRecord", theHostRecord), currentHashCode, theHostRecord);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof HostSearchResponse)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final HostSearchResponse that = ((HostSearchResponse) object);
+        {
+            List<HostRecord> lhsHostRecord;
+            lhsHostRecord = (((this.hostRecord!= null)&&(!this.hostRecord.isEmpty()))?this.getHostRecord():null);
+            List<HostRecord> rhsHostRecord;
+            rhsHostRecord = (((that.hostRecord!= null)&&(!that.hostRecord.isEmpty()))?that.getHostRecord():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostRecord", lhsHostRecord), LocatorUtils.property(thatLocator, "hostRecord", rhsHostRecord), lhsHostRecord, rhsHostRecord)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

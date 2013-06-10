@@ -12,6 +12,7 @@
 
 	<properties>
 		<wsdl.path>schema/org/cagrid/dorian/Dorian_Service.wsdl</wsdl.path>
+		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 	</properties>
 
 	<profiles>
@@ -22,6 +23,15 @@
 					<plugin>
 						<groupId>org.apache.cxf</groupId>
 						<artifactId>cxf-codegen-plugin</artifactId>
+						<!-- Don't copy *Fault.java generated with -xjc-XtoString, etc. -->
+						<!-- types/AdminAlreadyExists.java -->
+						<dependencies>
+							<dependency>
+								<groupId>org.jvnet.jaxb2_commons</groupId>
+								<artifactId>jaxb2-basics</artifactId>
+								<version>${jaxb2.basics.version}</version>
+							</dependency>
+						</dependencies>
 						<executions>
 							<execution>
 								<id>generate-sources</id>
@@ -82,6 +92,9 @@
 												<extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd</extraarg>
 												<extraarg>-nexclude</extraarg>
 												<extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl</extraarg>
+												<extraarg>-xjc-XtoString</extraarg>
+												<extraarg>-xjc-XhashCode</extraarg>
+												<extraarg>-xjc-Xequals</extraarg>
 											</extraargs>
 											<bindingFiles>
 												<bindingFile>work/schema/jaxb-binding.xjb</bindingFile>
@@ -266,6 +279,11 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>${jaxb2.basics.version}</version>
 		</dependency>
 	</dependencies>
 </project>

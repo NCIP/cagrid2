@@ -13,6 +13,17 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3._2001.xmlschema.Adapter1;
 
 
@@ -44,13 +55,13 @@ import org.w3._2001.xmlschema.Adapter1;
     "audienceRestrictionConditionOrDoNotCacheConditionOrCondition"
 })
 public class ConditionsType
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElements({
-        @XmlElement(name = "Condition"),
+        @XmlElement(name = "DoNotCacheCondition", type = DoNotCacheConditionType.class),
         @XmlElement(name = "AudienceRestrictionCondition", type = AudienceRestrictionConditionType.class),
-        @XmlElement(name = "DoNotCacheCondition", type = DoNotCacheConditionType.class)
+        @XmlElement(name = "Condition")
     })
     protected List<ConditionAbstractType> audienceRestrictionConditionOrDoNotCacheConditionOrCondition;
     @XmlAttribute(name = "NotBefore")
@@ -80,9 +91,9 @@ public class ConditionsType
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ConditionAbstractType }
-     * {@link AudienceRestrictionConditionType }
      * {@link DoNotCacheConditionType }
+     * {@link AudienceRestrictionConditionType }
+     * {@link ConditionAbstractType }
      * 
      * 
      */
@@ -139,6 +150,107 @@ public class ConditionsType
      */
     public void setNotOnOrAfter(Calendar value) {
         this.notOnOrAfter = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            List<ConditionAbstractType> theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition;
+            theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition = (((this.audienceRestrictionConditionOrDoNotCacheConditionOrCondition!= null)&&(!this.audienceRestrictionConditionOrDoNotCacheConditionOrCondition.isEmpty()))?this.getAudienceRestrictionConditionOrDoNotCacheConditionOrCondition():null);
+            strategy.appendField(locator, this, "audienceRestrictionConditionOrDoNotCacheConditionOrCondition", buffer, theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition);
+        }
+        {
+            Calendar theNotBefore;
+            theNotBefore = this.getNotBefore();
+            strategy.appendField(locator, this, "notBefore", buffer, theNotBefore);
+        }
+        {
+            Calendar theNotOnOrAfter;
+            theNotOnOrAfter = this.getNotOnOrAfter();
+            strategy.appendField(locator, this, "notOnOrAfter", buffer, theNotOnOrAfter);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            List<ConditionAbstractType> theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition;
+            theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition = (((this.audienceRestrictionConditionOrDoNotCacheConditionOrCondition!= null)&&(!this.audienceRestrictionConditionOrDoNotCacheConditionOrCondition.isEmpty()))?this.getAudienceRestrictionConditionOrDoNotCacheConditionOrCondition():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "audienceRestrictionConditionOrDoNotCacheConditionOrCondition", theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition), currentHashCode, theAudienceRestrictionConditionOrDoNotCacheConditionOrCondition);
+        }
+        {
+            Calendar theNotBefore;
+            theNotBefore = this.getNotBefore();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "notBefore", theNotBefore), currentHashCode, theNotBefore);
+        }
+        {
+            Calendar theNotOnOrAfter;
+            theNotOnOrAfter = this.getNotOnOrAfter();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "notOnOrAfter", theNotOnOrAfter), currentHashCode, theNotOnOrAfter);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof ConditionsType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final ConditionsType that = ((ConditionsType) object);
+        {
+            List<ConditionAbstractType> lhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition;
+            lhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition = (((this.audienceRestrictionConditionOrDoNotCacheConditionOrCondition!= null)&&(!this.audienceRestrictionConditionOrDoNotCacheConditionOrCondition.isEmpty()))?this.getAudienceRestrictionConditionOrDoNotCacheConditionOrCondition():null);
+            List<ConditionAbstractType> rhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition;
+            rhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition = (((that.audienceRestrictionConditionOrDoNotCacheConditionOrCondition!= null)&&(!that.audienceRestrictionConditionOrDoNotCacheConditionOrCondition.isEmpty()))?that.getAudienceRestrictionConditionOrDoNotCacheConditionOrCondition():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "audienceRestrictionConditionOrDoNotCacheConditionOrCondition", lhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition), LocatorUtils.property(thatLocator, "audienceRestrictionConditionOrDoNotCacheConditionOrCondition", rhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition), lhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition, rhsAudienceRestrictionConditionOrDoNotCacheConditionOrCondition)) {
+                return false;
+            }
+        }
+        {
+            Calendar lhsNotBefore;
+            lhsNotBefore = this.getNotBefore();
+            Calendar rhsNotBefore;
+            rhsNotBefore = that.getNotBefore();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "notBefore", lhsNotBefore), LocatorUtils.property(thatLocator, "notBefore", rhsNotBefore), lhsNotBefore, rhsNotBefore)) {
+                return false;
+            }
+        }
+        {
+            Calendar lhsNotOnOrAfter;
+            lhsNotOnOrAfter = this.getNotOnOrAfter();
+            Calendar rhsNotOnOrAfter;
+            rhsNotOnOrAfter = that.getNotOnOrAfter();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "notOnOrAfter", lhsNotOnOrAfter), LocatorUtils.property(thatLocator, "notOnOrAfter", rhsNotOnOrAfter), lhsNotOnOrAfter, rhsNotOnOrAfter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

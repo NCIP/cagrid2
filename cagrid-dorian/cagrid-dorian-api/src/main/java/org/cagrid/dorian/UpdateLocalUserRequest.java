@@ -8,6 +8,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.dorian.idp.LocalUser;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -45,7 +56,7 @@ import org.cagrid.dorian.idp.LocalUser;
 })
 @XmlRootElement(name = "UpdateLocalUserRequest")
 public class UpdateLocalUserRequest
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(required = true)
@@ -75,6 +86,69 @@ public class UpdateLocalUserRequest
         this.user = value;
     }
 
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            UpdateLocalUserRequest.User theUser;
+            theUser = this.getUser();
+            strategy.appendField(locator, this, "user", buffer, theUser);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            UpdateLocalUserRequest.User theUser;
+            theUser = this.getUser();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "user", theUser), currentHashCode, theUser);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof UpdateLocalUserRequest)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final UpdateLocalUserRequest that = ((UpdateLocalUserRequest) object);
+        {
+            UpdateLocalUserRequest.User lhsUser;
+            lhsUser = this.getUser();
+            UpdateLocalUserRequest.User rhsUser;
+            rhsUser = that.getUser();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "user", lhsUser), LocatorUtils.property(thatLocator, "user", rhsUser), lhsUser, rhsUser)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
+    }
+
 
     /**
      * <p>Java class for anonymous complex type.
@@ -100,7 +174,7 @@ public class UpdateLocalUserRequest
         "localUser"
     })
     public static class User
-        implements Serializable
+        implements Serializable, Equals, HashCode, ToString
     {
 
         @XmlElement(name = "LocalUser", namespace = "http://cagrid.nci.nih.gov/1/dorian-idp", required = true)
@@ -128,6 +202,69 @@ public class UpdateLocalUserRequest
          */
         public void setLocalUser(LocalUser value) {
             this.localUser = value;
+        }
+
+        public String toString() {
+            final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+            final StringBuilder buffer = new StringBuilder();
+            append(null, buffer, strategy);
+            return buffer.toString();
+        }
+
+        public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            strategy.appendStart(locator, this, buffer);
+            appendFields(locator, buffer, strategy);
+            strategy.appendEnd(locator, this, buffer);
+            return buffer;
+        }
+
+        public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+            {
+                LocalUser theLocalUser;
+                theLocalUser = this.getLocalUser();
+                strategy.appendField(locator, this, "localUser", buffer, theLocalUser);
+            }
+            return buffer;
+        }
+
+        public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+            int currentHashCode = 1;
+            {
+                LocalUser theLocalUser;
+                theLocalUser = this.getLocalUser();
+                currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "localUser", theLocalUser), currentHashCode, theLocalUser);
+            }
+            return currentHashCode;
+        }
+
+        public int hashCode() {
+            final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+            return this.hashCode(null, strategy);
+        }
+
+        public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+            if (!(object instanceof UpdateLocalUserRequest.User)) {
+                return false;
+            }
+            if (this == object) {
+                return true;
+            }
+            final UpdateLocalUserRequest.User that = ((UpdateLocalUserRequest.User) object);
+            {
+                LocalUser lhsLocalUser;
+                lhsLocalUser = this.getLocalUser();
+                LocalUser rhsLocalUser;
+                rhsLocalUser = that.getLocalUser();
+                if (!strategy.equals(LocatorUtils.property(thisLocator, "localUser", lhsLocalUser), LocatorUtils.property(thatLocator, "localUser", rhsLocalUser), lhsLocalUser, rhsLocalUser)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean equals(Object object) {
+            final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+            return equals(null, null, object, strategy);
         }
 
     }

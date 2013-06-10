@@ -7,6 +7,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 
 
 /**
@@ -35,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "hostCertificateLifetime"
 })
 public class HostPolicy
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(name = "HostCertificateLifetime", required = true)
@@ -107,6 +118,107 @@ public class HostPolicy
      */
     public void setHostCertificateRenewalPolicy(HostCertificateRenewalPolicy value) {
         this.hostCertificateRenewalPolicy = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        {
+            HostCertificateLifetime theHostCertificateLifetime;
+            theHostCertificateLifetime = this.getHostCertificateLifetime();
+            strategy.appendField(locator, this, "hostCertificateLifetime", buffer, theHostCertificateLifetime);
+        }
+        {
+            boolean theAdministrativeApprovalRequired;
+            theAdministrativeApprovalRequired = (true?this.isAdministrativeApprovalRequired():false);
+            strategy.appendField(locator, this, "administrativeApprovalRequired", buffer, theAdministrativeApprovalRequired);
+        }
+        {
+            HostCertificateRenewalPolicy theHostCertificateRenewalPolicy;
+            theHostCertificateRenewalPolicy = this.getHostCertificateRenewalPolicy();
+            strategy.appendField(locator, this, "hostCertificateRenewalPolicy", buffer, theHostCertificateRenewalPolicy);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = 1;
+        {
+            HostCertificateLifetime theHostCertificateLifetime;
+            theHostCertificateLifetime = this.getHostCertificateLifetime();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostCertificateLifetime", theHostCertificateLifetime), currentHashCode, theHostCertificateLifetime);
+        }
+        {
+            boolean theAdministrativeApprovalRequired;
+            theAdministrativeApprovalRequired = (true?this.isAdministrativeApprovalRequired():false);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "administrativeApprovalRequired", theAdministrativeApprovalRequired), currentHashCode, theAdministrativeApprovalRequired);
+        }
+        {
+            HostCertificateRenewalPolicy theHostCertificateRenewalPolicy;
+            theHostCertificateRenewalPolicy = this.getHostCertificateRenewalPolicy();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostCertificateRenewalPolicy", theHostCertificateRenewalPolicy), currentHashCode, theHostCertificateRenewalPolicy);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof HostPolicy)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        final HostPolicy that = ((HostPolicy) object);
+        {
+            HostCertificateLifetime lhsHostCertificateLifetime;
+            lhsHostCertificateLifetime = this.getHostCertificateLifetime();
+            HostCertificateLifetime rhsHostCertificateLifetime;
+            rhsHostCertificateLifetime = that.getHostCertificateLifetime();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostCertificateLifetime", lhsHostCertificateLifetime), LocatorUtils.property(thatLocator, "hostCertificateLifetime", rhsHostCertificateLifetime), lhsHostCertificateLifetime, rhsHostCertificateLifetime)) {
+                return false;
+            }
+        }
+        {
+            boolean lhsAdministrativeApprovalRequired;
+            lhsAdministrativeApprovalRequired = (true?this.isAdministrativeApprovalRequired():false);
+            boolean rhsAdministrativeApprovalRequired;
+            rhsAdministrativeApprovalRequired = (true?that.isAdministrativeApprovalRequired():false);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "administrativeApprovalRequired", lhsAdministrativeApprovalRequired), LocatorUtils.property(thatLocator, "administrativeApprovalRequired", rhsAdministrativeApprovalRequired), lhsAdministrativeApprovalRequired, rhsAdministrativeApprovalRequired)) {
+                return false;
+            }
+        }
+        {
+            HostCertificateRenewalPolicy lhsHostCertificateRenewalPolicy;
+            lhsHostCertificateRenewalPolicy = this.getHostCertificateRenewalPolicy();
+            HostCertificateRenewalPolicy rhsHostCertificateRenewalPolicy;
+            rhsHostCertificateRenewalPolicy = that.getHostCertificateRenewalPolicy();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "hostCertificateRenewalPolicy", lhsHostCertificateRenewalPolicy), LocatorUtils.property(thatLocator, "hostCertificateRenewalPolicy", rhsHostCertificateRenewalPolicy), lhsHostCertificateRenewalPolicy, rhsHostCertificateRenewalPolicy)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }

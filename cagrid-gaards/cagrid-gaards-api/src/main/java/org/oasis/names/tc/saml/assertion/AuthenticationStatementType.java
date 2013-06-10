@@ -12,6 +12,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.jvnet.jaxb2_commons.lang.Equals;
+import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.HashCode;
+import org.jvnet.jaxb2_commons.lang.HashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBEqualsStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBHashCodeStrategy;
+import org.jvnet.jaxb2_commons.lang.JAXBToStringStrategy;
+import org.jvnet.jaxb2_commons.lang.ToString;
+import org.jvnet.jaxb2_commons.lang.ToStringStrategy;
+import org.jvnet.jaxb2_commons.locator.ObjectLocator;
+import org.jvnet.jaxb2_commons.locator.util.LocatorUtils;
 import org.w3._2001.xmlschema.Adapter1;
 
 
@@ -44,7 +55,7 @@ import org.w3._2001.xmlschema.Adapter1;
 })
 public class AuthenticationStatementType
     extends SubjectStatementAbstractType
-    implements Serializable
+    implements Serializable, Equals, HashCode, ToString
 {
 
     @XmlElement(name = "SubjectLocality")
@@ -158,6 +169,130 @@ public class AuthenticationStatementType
      */
     public void setAuthenticationInstant(Calendar value) {
         this.authenticationInstant = value;
+    }
+
+    public String toString() {
+        final ToStringStrategy strategy = JAXBToStringStrategy.INSTANCE;
+        final StringBuilder buffer = new StringBuilder();
+        append(null, buffer, strategy);
+        return buffer.toString();
+    }
+
+    public StringBuilder append(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        strategy.appendStart(locator, this, buffer);
+        appendFields(locator, buffer, strategy);
+        strategy.appendEnd(locator, this, buffer);
+        return buffer;
+    }
+
+    public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
+        super.appendFields(locator, buffer, strategy);
+        {
+            SubjectLocalityType theSubjectLocality;
+            theSubjectLocality = this.getSubjectLocality();
+            strategy.appendField(locator, this, "subjectLocality", buffer, theSubjectLocality);
+        }
+        {
+            List<AuthorityBindingType> theAuthorityBinding;
+            theAuthorityBinding = (((this.authorityBinding!= null)&&(!this.authorityBinding.isEmpty()))?this.getAuthorityBinding():null);
+            strategy.appendField(locator, this, "authorityBinding", buffer, theAuthorityBinding);
+        }
+        {
+            String theAuthenticationMethod;
+            theAuthenticationMethod = this.getAuthenticationMethod();
+            strategy.appendField(locator, this, "authenticationMethod", buffer, theAuthenticationMethod);
+        }
+        {
+            Calendar theAuthenticationInstant;
+            theAuthenticationInstant = this.getAuthenticationInstant();
+            strategy.appendField(locator, this, "authenticationInstant", buffer, theAuthenticationInstant);
+        }
+        return buffer;
+    }
+
+    public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
+        int currentHashCode = super.hashCode(locator, strategy);
+        {
+            SubjectLocalityType theSubjectLocality;
+            theSubjectLocality = this.getSubjectLocality();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "subjectLocality", theSubjectLocality), currentHashCode, theSubjectLocality);
+        }
+        {
+            List<AuthorityBindingType> theAuthorityBinding;
+            theAuthorityBinding = (((this.authorityBinding!= null)&&(!this.authorityBinding.isEmpty()))?this.getAuthorityBinding():null);
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "authorityBinding", theAuthorityBinding), currentHashCode, theAuthorityBinding);
+        }
+        {
+            String theAuthenticationMethod;
+            theAuthenticationMethod = this.getAuthenticationMethod();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "authenticationMethod", theAuthenticationMethod), currentHashCode, theAuthenticationMethod);
+        }
+        {
+            Calendar theAuthenticationInstant;
+            theAuthenticationInstant = this.getAuthenticationInstant();
+            currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "authenticationInstant", theAuthenticationInstant), currentHashCode, theAuthenticationInstant);
+        }
+        return currentHashCode;
+    }
+
+    public int hashCode() {
+        final HashCodeStrategy strategy = JAXBHashCodeStrategy.INSTANCE;
+        return this.hashCode(null, strategy);
+    }
+
+    public boolean equals(ObjectLocator thisLocator, ObjectLocator thatLocator, Object object, EqualsStrategy strategy) {
+        if (!(object instanceof AuthenticationStatementType)) {
+            return false;
+        }
+        if (this == object) {
+            return true;
+        }
+        if (!super.equals(thisLocator, thatLocator, object, strategy)) {
+            return false;
+        }
+        final AuthenticationStatementType that = ((AuthenticationStatementType) object);
+        {
+            SubjectLocalityType lhsSubjectLocality;
+            lhsSubjectLocality = this.getSubjectLocality();
+            SubjectLocalityType rhsSubjectLocality;
+            rhsSubjectLocality = that.getSubjectLocality();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "subjectLocality", lhsSubjectLocality), LocatorUtils.property(thatLocator, "subjectLocality", rhsSubjectLocality), lhsSubjectLocality, rhsSubjectLocality)) {
+                return false;
+            }
+        }
+        {
+            List<AuthorityBindingType> lhsAuthorityBinding;
+            lhsAuthorityBinding = (((this.authorityBinding!= null)&&(!this.authorityBinding.isEmpty()))?this.getAuthorityBinding():null);
+            List<AuthorityBindingType> rhsAuthorityBinding;
+            rhsAuthorityBinding = (((that.authorityBinding!= null)&&(!that.authorityBinding.isEmpty()))?that.getAuthorityBinding():null);
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "authorityBinding", lhsAuthorityBinding), LocatorUtils.property(thatLocator, "authorityBinding", rhsAuthorityBinding), lhsAuthorityBinding, rhsAuthorityBinding)) {
+                return false;
+            }
+        }
+        {
+            String lhsAuthenticationMethod;
+            lhsAuthenticationMethod = this.getAuthenticationMethod();
+            String rhsAuthenticationMethod;
+            rhsAuthenticationMethod = that.getAuthenticationMethod();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "authenticationMethod", lhsAuthenticationMethod), LocatorUtils.property(thatLocator, "authenticationMethod", rhsAuthenticationMethod), lhsAuthenticationMethod, rhsAuthenticationMethod)) {
+                return false;
+            }
+        }
+        {
+            Calendar lhsAuthenticationInstant;
+            lhsAuthenticationInstant = this.getAuthenticationInstant();
+            Calendar rhsAuthenticationInstant;
+            rhsAuthenticationInstant = that.getAuthenticationInstant();
+            if (!strategy.equals(LocatorUtils.property(thisLocator, "authenticationInstant", lhsAuthenticationInstant), LocatorUtils.property(thatLocator, "authenticationInstant", rhsAuthenticationInstant), lhsAuthenticationInstant, rhsAuthenticationInstant)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean equals(Object object) {
+        final EqualsStrategy strategy = JAXBEqualsStrategy.INSTANCE;
+        return equals(null, null, object, strategy);
     }
 
 }
