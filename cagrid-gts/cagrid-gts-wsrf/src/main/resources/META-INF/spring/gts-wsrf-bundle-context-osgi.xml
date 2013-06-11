@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.gts.wsrf">
+		<prop key="cagrid.gts.wsrf.host">localhost</prop>
+		<prop key="cagrid.gts.wsrf.port">7737</prop>
+		<prop key="cagrid.gts.wsrf.path">gts</prop>
+		<prop key="cagrid.gts.wsrf.url">https://${cagrid.gts.wsrf.host}:${cagrid.gts.wsrf.port}/${cagrid.gts.wsrf.path}</prop>
+		<prop key="cagrid.gts.wsrf.keystore.path">${karaf.base}/etc/gts/host.jks</prop>
+		<prop key="cagrid.gts.wsrf.keystore.password">changeit</prop>
+		<prop key="cagrid.gts.wsrf.keystore.alias">host</prop>
+		<prop key="cagrid.gts.wsrf.key.password">changeit</prop>
+		<prop key="cagrid.gts.wsrf.truststore.path">${karaf.base}/etc/gts/truststore.jks</prop>
+		<prop key="cagrid.gts.wsrf.truststore.password">changeit</prop>
+		<prop key="cagrid.gts.wsrf.cipher-suites">SSL_RSA_WITH_RC4_128_MD5,SSL_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+			TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA,
+			SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,
+			SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,
+			SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA,TLS_EMPTY_RENEGOTIATION_INFO_SCSV,SSL_RSA_WITH_NULL_MD5
+		</prop>
+	</osgix:cm-properties>
+
+	<ctx:property-placeholder properties-ref="preProps" />
+
+	<osgi:reference id="gtsService" interface="org.cagrid.gts.service.GTS" />
+</beans>
