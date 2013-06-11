@@ -47,6 +47,7 @@
 		<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
 	</bean>
 
+<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.dorian.wsrf.port}">
 			<httpj:tlsServerParameters />
