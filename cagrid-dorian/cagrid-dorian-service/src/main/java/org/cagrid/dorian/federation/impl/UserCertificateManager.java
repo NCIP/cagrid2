@@ -177,7 +177,7 @@ public class UserCertificateManager {
 				PreparedStatement s = c.prepareStatement(sb.toString());
 				int count = 1;
 				if (updateStatus) {
-					s.setString(count, update.getStatus().toString());
+					s.setString(count, update.getStatus().value());
 					count++;
 				}
 				if (updateNotes) {

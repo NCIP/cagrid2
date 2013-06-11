@@ -1047,7 +1047,7 @@ public class UserManager {
 		}
 	}
 
-	protected PasswordSecurityManager getPasswordSecurityManager() {
+	public PasswordSecurityManager getPasswordSecurityManager() {
 		return passwordSecurityManager;
 	}
 }
