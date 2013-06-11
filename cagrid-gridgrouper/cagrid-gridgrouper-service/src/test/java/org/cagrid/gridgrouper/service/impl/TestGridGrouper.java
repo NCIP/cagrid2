@@ -7,19 +7,23 @@ import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.StemNotFoundException;
 import edu.internet2.middleware.grouper.SubjectFinder;
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**
- * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
- *          Exp $
- */
+* @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+* @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+* @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+* @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+*          Exp $
+*/
 
-public class TestGridGrouper extends TestCase {
+public class TestGridGrouper extends GrouperBaseTest {
 
+    @Test
 	public void testCreateDestroy() {
 		try {
 			RegistryReset.reset();

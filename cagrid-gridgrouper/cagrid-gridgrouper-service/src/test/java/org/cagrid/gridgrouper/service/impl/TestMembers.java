@@ -11,10 +11,13 @@ import org.cagrid.gridgrouper.model.StemDescriptor;
 import org.cagrid.gridgrouper.service.exception.InsufficientPrivilegeException;
 import org.cagrid.gridgrouper.service.impl.testutils.Utils;
 import org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -34,7 +37,7 @@ public class TestMembers extends GrouperBaseTest {
 
 	private String USER_D = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user d";
 
-
+    @Test
 	public void testGetMember() {
 		try {
 
@@ -70,7 +73,7 @@ public class TestMembers extends GrouperBaseTest {
 
 	}
 
-
+    @Test
 	public void testGetMemberGroups() {
 		try {
 			List<GroupDescriptor> groups = grouper.getMembersGroups(SUPER_USER, USER_A, null);
@@ -168,7 +171,7 @@ public class TestMembers extends GrouperBaseTest {
 		}
 	}
 
-
+    @Test
 	public void testGetMembersGroupsByAssociation() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -274,7 +277,7 @@ public class TestMembers extends GrouperBaseTest {
 		}
 	}
 
-
+    @Test
 	public void testGetMembersGroupsByComposite() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -407,6 +410,7 @@ public class TestMembers extends GrouperBaseTest {
 		}
 	}
 
+    @Test
 	public void testGetMembers() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);

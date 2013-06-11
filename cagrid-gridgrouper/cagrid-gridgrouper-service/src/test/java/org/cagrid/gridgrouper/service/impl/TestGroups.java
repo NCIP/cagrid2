@@ -18,24 +18,24 @@ import org.cagrid.gridgrouper.service.exception.InsufficientPrivilegeException;
 import org.cagrid.gridgrouper.service.exception.MemberAddException;
 import org.cagrid.gridgrouper.service.impl.testutils.Utils;
 import org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.*;
+
 
 /**
- * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
- * @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
- * @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
- * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
- *          Exp $
- */
+* @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
+* @author <A href="mailto:oster@bmi.osu.edu">Scott Oster </A>
+* @author <A href="mailto:hastings@bmi.osu.edu">Shannon Hastings </A>
+* @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
+*          Exp $
+*/
 public class TestGroups extends GrouperBaseTest {
-
-	
-
-	
 
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
 
@@ -47,7 +47,7 @@ public class TestGroups extends GrouperBaseTest {
 
 
 	// private String GROUPER_ALL = "GrouperAll";
-
+    @Test
 	public void testViewReadPrivilege() {
 		try {
 			Map memberExpected = new HashMap();
@@ -173,7 +173,7 @@ public class TestGroups extends GrouperBaseTest {
 		}
 	}
 
-
+    @Test
 	public void testUpdatePrivilege() {
 		try {
 			Map memberExpected = new HashMap();
@@ -287,7 +287,7 @@ public class TestGroups extends GrouperBaseTest {
 		}
 	}
 
-
+    @Test
 	public void testOptinOptoutPrivilege() {
 		try {
 			Map memberExpected = new HashMap();
@@ -371,7 +371,7 @@ public class TestGroups extends GrouperBaseTest {
 		}
 	}
 
-
+    @Test
 	public void testAdminPrivilege() {
 		try {
 			Map memberExpected = new HashMap();
@@ -482,7 +482,7 @@ public class TestGroups extends GrouperBaseTest {
 		}
 	}
 
-
+    @Test
 	public void testIsMember() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -589,7 +589,7 @@ public class TestGroups extends GrouperBaseTest {
 	}
 
 
-	public MembershipExpression getExpression(boolean and, MembershipExpression exp1, MembershipExpression exp2) {
+	private MembershipExpression getExpression(boolean and, MembershipExpression exp1, MembershipExpression exp2) {
 		MembershipExpression[] expression = new MembershipExpression[2];
 		expression[0] = exp1;
 		expression[1] = exp2;
@@ -659,7 +659,7 @@ public class TestGroups extends GrouperBaseTest {
 		return exp;
 	}
 
-
+    @Test
 	public void testMembers() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -781,7 +781,7 @@ public class TestGroups extends GrouperBaseTest {
 
 	}
 
-
+    @Test
 	public void testUnionComposite() {
 		try {
 			Map expected = new HashMap();
@@ -916,7 +916,7 @@ public class TestGroups extends GrouperBaseTest {
 
 	}
 
-
+    @Test
 	public void testIntersectionComposite() {
 		try {
 			Map expected = new HashMap();
@@ -1021,7 +1021,7 @@ public class TestGroups extends GrouperBaseTest {
 
 	}
 
-
+    @Test
 	public void testComplementComposite() {
 		try {
 			Map expected = new HashMap();
@@ -1127,7 +1127,7 @@ public class TestGroups extends GrouperBaseTest {
 
 	}
 
-
+    @Test
 	public void testNegativeComposites() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -1193,10 +1193,7 @@ public class TestGroups extends GrouperBaseTest {
 
 	}
 
-
-
-
-
+    @Test
 	public void testMemberships() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -1324,6 +1321,6 @@ public class TestGroups extends GrouperBaseTest {
 
 	private MembershipCaddy getGroupMembership(String name, String group, String viaGroup, int depth) {
 		return new MembershipCaddy(name, group, viaGroup, depth, MemberType.GROUPER_GROUP);
-	}	
+	}
 
 }
