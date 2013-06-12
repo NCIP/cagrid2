@@ -52,4 +52,20 @@ public class DelegationIdentifier
         this.delegationId = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DelegationIdentifier that = (DelegationIdentifier) o;
+
+        if (delegationId != that.delegationId) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (delegationId ^ (delegationId >>> 32));
+    }
 }

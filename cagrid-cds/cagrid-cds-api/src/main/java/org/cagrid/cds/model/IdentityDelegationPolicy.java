@@ -63,4 +63,21 @@ public class IdentityDelegationPolicy
         this.allowedParties = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IdentityDelegationPolicy that = (IdentityDelegationPolicy) o;
+
+        if (allowedParties != null ? !allowedParties.equals(that.allowedParties) : that.allowedParties != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return allowedParties != null ? allowedParties.hashCode() : 0;
+    }
 }

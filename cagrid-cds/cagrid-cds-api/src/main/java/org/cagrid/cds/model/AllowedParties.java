@@ -69,4 +69,21 @@ public class AllowedParties
         return this.gridIdentity;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AllowedParties that = (AllowedParties) o;
+
+        if (gridIdentity != null ? !gridIdentity.equals(that.gridIdentity) : that.gridIdentity != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return gridIdentity != null ? gridIdentity.hashCode() : 0;
+    }
 }
