@@ -2,6 +2,7 @@ package org.cagrid.gridgrouper.service.impl;
 
 import edu.internet2.middleware.grouper.GroupFinder;
 import edu.internet2.middleware.grouper.GroupNotFoundException;
+import edu.internet2.middleware.grouper.GrouperBaseTest;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.grouper.StemFinder;

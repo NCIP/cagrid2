@@ -1,7 +1,6 @@
 package org.cagrid.gridgrouper.service.impl;
 
-import edu.internet2.middleware.GrouperInit;
-import edu.internet2.middleware.grouper.RegistryReset;
+import edu.internet2.middleware.grouper.GrouperBaseTest;
 import edu.internet2.middleware.subject.AnonymousGridUserSubject;
 import net.sf.hibernate.exception.ExceptionUtils;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
@@ -13,14 +12,15 @@ import org.cagrid.gridgrouper.service.exception.InsufficientPrivilegeException;
 import org.cagrid.gridgrouper.service.exception.StemDeleteException;
 import org.cagrid.gridgrouper.service.impl.testutils.Utils;
 import org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 

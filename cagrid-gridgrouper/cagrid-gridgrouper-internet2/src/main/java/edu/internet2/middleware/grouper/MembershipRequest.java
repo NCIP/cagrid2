@@ -29,7 +29,7 @@ public class MembershipRequest {
 	}
 
 	public MembershipRequest(Group group, String requestor) {
-		this(group, requestor, MembershipRequestStatus.PENDING);
+		this(group, requestor, MembershipRequestStatus.Pending);
 	}
 
 	private MembershipRequest(Group group, String requestorId, MembershipRequestStatus status) {
@@ -185,7 +185,7 @@ public class MembershipRequest {
 
 		ArrayList<MembershipRequest> requests;
 		try {
-			requests = MembershipRequestFinder.findRequestsByStatus(session, group, MembershipRequestStatus.PENDING);
+			requests = MembershipRequestFinder.findRequestsByStatus(session, group, MembershipRequestStatus.Pending);
 		} catch (QueryException e) {
 			throw new MembershipRequestUpdateException("Unable to approve membershiprequest: " + e.getMessage(), e);
 		}
@@ -198,7 +198,7 @@ public class MembershipRequest {
 		try {
 			MembershipRequestValidator.canUpdateRequest(this.group, approver.getSubject());
 
-			this.status = MembershipRequestStatus.APPROVED;
+			this.status = MembershipRequestStatus.Approved;
 			this.reviewer = approver;
 			this.publicNote = publicNote;
 			this.adminNote = adminNote;
@@ -217,7 +217,7 @@ public class MembershipRequest {
 
 	public void pending() throws MembershipRequestUpdateException, GrouperException {
 
-		this.status = MembershipRequestStatus.PENDING;
+		this.status = MembershipRequestStatus.Pending;
 		this.publicNote = "Request Resubmitted. " + this.publicNote;
 		this.reviewTime = 0;
 		try {
@@ -235,11 +235,11 @@ public class MembershipRequest {
 		try {
 			MembershipRequestValidator.canUpdateRequest(this.group, rejector.getSubject());
 			
-			if (!MembershipRequestStatus.PENDING.equals(this.status)) {
+			if (!MembershipRequestStatus.Pending.equals(this.status)) {
 				throw new MembershipRequestUpdateException("Only pending membership requests can be rejected");
 			}
 
-			this.status = MembershipRequestStatus.REJECTED;
+			this.status = MembershipRequestStatus.Rejected;
 			this.reviewer = rejector;
 			this.publicNote = publicNote;
 			this.adminNote = adminNote;
@@ -261,7 +261,7 @@ public class MembershipRequest {
 		try {
 			MembershipRequestValidator.canUpdateRequest(this.group, approver.getSubject());
 
-			this.status = MembershipRequestStatus.REMOVED;
+			this.status = MembershipRequestStatus.Removed;
 			this.reviewer = approver;
 			this.publicNote = publicNote;
 			this.adminNote = adminNote;

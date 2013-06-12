@@ -21,7 +21,7 @@ public class MembershipRequestFinder {
 		try {
 			hs = GridGrouperHibernateHelper.getSession();
 			Query qry = null;
-			if (MembershipRequestStatus.ALL.equals(status)) {
+			if (MembershipRequestStatus.All.equals(status)) {
 				qry = hs.createQuery("from MembershipRequest as mr where mr.group = :grp");
 			} else {
 				qry = hs.createQuery("from MembershipRequest as mr where mr.group = :grp and mr.statusValue = :status");

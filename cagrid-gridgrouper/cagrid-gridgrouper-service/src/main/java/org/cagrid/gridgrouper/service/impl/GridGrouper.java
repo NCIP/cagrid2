@@ -1547,7 +1547,7 @@ public class GridGrouper {
 
             if (request == null) {
                 MembershipRequest.create(grp, gridIdentity);
-            } else if (MembershipRequestStatus.REMOVED.equals(request.getStatus())) {
+            } else if (MembershipRequestStatus.Removed.equals(request.getStatus())) {
                 request.pending();
             } else {
                 throw Errors.makeException(MemberAddException.class, gridIdentity + " has an existing " + request.getStatus().value().toLowerCase() + " membership request to group: " + group.getGroupName());
@@ -1637,7 +1637,7 @@ public class GridGrouper {
 
             MembershipRequest membershipRequest = MembershipRequestFinder.findRequest(session, grp, subject);
 
-            if (MembershipRequestStatus.APPROVED.equals(update.getStatus())) {
+            if (MembershipRequestStatus.Approved.equals(update.getStatus())) {
                 membershipRequest.approve(caller, update.getPublicNote(), update.getAdminNote());
                 grp.addMember(subj);
             } else {

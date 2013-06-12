@@ -46,6 +46,18 @@ public class MembershipRequestUpdate
     @XmlElement(name = "AdminNote")
     protected String adminNote;
 
+    public MembershipRequestUpdate() {
+    }
+
+    public MembershipRequestUpdate(
+            String adminNote,
+            String publicNote,
+            MembershipRequestStatus status) {
+        this.status = status;
+        this.publicNote = publicNote;
+        this.adminNote = adminNote;
+    }
+
     /**
      * Gets the value of the status property.
      * 

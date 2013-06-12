@@ -1,8 +1,10 @@
-package org.cagrid.gridgrouper.service.impl;
+package edu.internet2.middleware.grouper;
 
 import edu.internet2.middleware.GrouperInit;
-import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.subject.AnonymousGridUserSubject;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 import net.sf.hibernate.exception.ExceptionUtils;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
 import org.cagrid.gridgrouper.model.GroupPrivilege;
@@ -13,6 +15,7 @@ import org.cagrid.gridgrouper.model.MemberType;
 import org.cagrid.gridgrouper.model.MembershipDescriptor;
 import org.cagrid.gridgrouper.model.MembershipType;
 import org.cagrid.gridgrouper.model.StemDescriptor;
+import org.cagrid.gridgrouper.service.impl.GridGrouper;
 import org.cagrid.gridgrouper.service.impl.testutils.Utils;
 import org.junit.After;
 import org.junit.Before;
@@ -41,12 +44,14 @@ public abstract class GrouperBaseTest {
 
     @Before
 	public void setUp() throws Exception {
+        clearMembershipRequestsTable();
 		RegistryReset.reset();
 		this.grouper = new GridGrouper();
 	}
 
     @After
 	public void tearDown() throws Exception {
+        clearMembershipRequestsTable();
 		RegistryReset.reset();
 	}
 
@@ -57,6 +62,17 @@ public abstract class GrouperBaseTest {
             GrouperInit.main(new String[]{"schema-export.sql", "src/test/resources/grouper.hibernate.properties", "src/test/resources/edu/internet2/middleware/grouper"});
             dbInitialized = true;
         }
+    }
+
+    private void clearMembershipRequestsTable() throws HibernateException {
+        Session hs = GridGrouperHibernateHelper.getSession();
+        Transaction tx = hs.beginTransaction();
+
+        hs.delete("from MembershipRequestHistory");
+        hs.delete("from MembershipRequest");
+
+        tx.commit();
+        hs.close();
     }
 
 	protected GroupDescriptor createAndCheckGroup(StemDescriptor stem, String extension, String displayExtension,

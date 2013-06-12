@@ -1,5 +1,6 @@
 package org.cagrid.gridgrouper.service.impl;
 
+import edu.internet2.middleware.grouper.GrouperBaseTest;
 import net.sf.hibernate.exception.ExceptionUtils;
 import org.cagrid.gridgrouper.model.GroupCompositeType;
 import org.cagrid.gridgrouper.model.GroupDescriptor;

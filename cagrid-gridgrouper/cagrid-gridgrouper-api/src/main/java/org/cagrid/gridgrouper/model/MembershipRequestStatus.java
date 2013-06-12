@@ -29,15 +29,15 @@ import javax.xml.bind.annotation.XmlType;
 public enum MembershipRequestStatus {
 
     @XmlEnumValue("All")
-    ALL("All"),
+    All("All"),
     @XmlEnumValue("Pending")
-    PENDING("Pending"),
+    Pending("Pending"),
     @XmlEnumValue("Approved")
-    APPROVED("Approved"),
+    Approved("Approved"),
     @XmlEnumValue("Rejected")
-    REJECTED("Rejected"),
+    Rejected("Rejected"),
     @XmlEnumValue("Removed")
-    REMOVED("Removed");
+    Removed("Removed");
     private final String value;
 
     MembershipRequestStatus(String v) {
