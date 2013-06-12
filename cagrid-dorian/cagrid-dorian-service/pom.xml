@@ -9,13 +9,18 @@
 	<artifactId>cagrid-dorian-service</artifactId>
 	<packaging>bundle</packaging>
 	<name>caGrid Dorian Service</name>
-
 	<properties>
 		<db.name>DORIAN_TEST</db.name>
 	</properties>
-
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>always</forkMode>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>sql-maven-plugin</artifactId>
@@ -24,7 +29,7 @@
 					<driver>com.mysql.jdbc.Driver</driver>
 					<url>jdbc:mysql://localhost:3306</url>
 					<username>root</username>
-					<password />
+					<password/>
 					<skip>${skipTests}</skip>
 				</configuration>
 				<dependencies>
@@ -65,13 +70,10 @@
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package></Export-Package>
-						<Private-Package>
-							org.cagrid.dorian.ca.impl,
-							org.cagrid.dorian.federation.impl,
-							org.cagrid.dorian.idp.impl,
+						<Private-Package> org.cagrid.dorian.ca.impl,
+							org.cagrid.dorian.federation.impl, org.cagrid.dorian.idp.impl,
 							org.cagrid.dorian.idp.impl.dictionary,
-							org.cagrid.dorian.service.impl,
-							org.cagrid.dorian.service.util
+							org.cagrid.dorian.service.impl, org.cagrid.dorian.service.util 
 						</Private-Package>
 						<Import-Package>*</Import-Package>
 					</instructions>
@@ -79,7 +81,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
