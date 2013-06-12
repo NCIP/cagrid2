@@ -1,8 +1,8 @@
 package org.cagrid.gridgrouper.service.impl;
 
+import edu.internet2.middleware.GrouperInit;
 import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.subject.AnonymousGridUserSubject;
-import junit.framework.TestCase;
 import net.sf.hibernate.exception.ExceptionUtils;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
 import org.cagrid.gridgrouper.model.GroupPrivilege;
@@ -14,14 +14,22 @@ import org.cagrid.gridgrouper.model.MembershipDescriptor;
 import org.cagrid.gridgrouper.model.MembershipType;
 import org.cagrid.gridgrouper.model.StemDescriptor;
 import org.cagrid.gridgrouper.service.impl.testutils.Utils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public abstract class GrouperBaseTest extends TestCase {
+
+public abstract class GrouperBaseTest {
 
 	public static final String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
@@ -29,19 +37,27 @@ public abstract class GrouperBaseTest extends TestCase {
 	
 	public static final String GROUPER_ALL = "GrouperAll";
 
+    private static boolean dbInitialized = false;
 
-	protected void setUp() throws Exception {
-		super.setUp();
+    @Before
+	public void setUp() throws Exception {
 		RegistryReset.reset();
 		this.grouper = new GridGrouper();
 	}
 
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
+    @After
+	public void tearDown() throws Exception {
 		RegistryReset.reset();
 	}
 
+    @BeforeClass
+    public static void initDb() {
+
+        if (!dbInitialized) {
+            GrouperInit.main(new String[]{"schema-export.sql", "src/test/resources/grouper.hibernate.properties", "src/test/resources/edu/internet2/middleware/grouper"});
+            dbInitialized = true;
+        }
+    }
 
 	protected GroupDescriptor createAndCheckGroup(StemDescriptor stem, String extension, String displayExtension,
 		int childGroupCount) throws Exception {

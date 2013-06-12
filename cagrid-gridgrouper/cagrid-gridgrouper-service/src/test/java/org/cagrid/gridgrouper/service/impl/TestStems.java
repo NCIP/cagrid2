@@ -1,8 +1,8 @@
 package org.cagrid.gridgrouper.service.impl;
 
+import edu.internet2.middleware.GrouperInit;
 import edu.internet2.middleware.grouper.RegistryReset;
 import edu.internet2.middleware.subject.AnonymousGridUserSubject;
-import junit.framework.TestCase;
 import net.sf.hibernate.exception.ExceptionUtils;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
 import org.cagrid.gridgrouper.model.StemDescriptor;
@@ -13,8 +13,15 @@ import org.cagrid.gridgrouper.service.exception.InsufficientPrivilegeException;
 import org.cagrid.gridgrouper.service.exception.StemDeleteException;
 import org.cagrid.gridgrouper.service.impl.testutils.Utils;
 import org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.*;
+
 
 
 /**
@@ -24,9 +31,7 @@ import java.util.List;
 * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
 *          Exp $
 */
-public class TestStems extends TestCase {
-
-	private GridGrouper grouper = null;
+public class TestStems extends GrouperBaseTest {
 
 	private String SUPER_USER = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=super admin";
 
@@ -34,7 +39,7 @@ public class TestStems extends TestCase {
 
 	private String USER_A = "/O=OSU/OU=BMI/OU=caGrid/OU=Dorian/OU=cagrid05/OU=IdP [1]/CN=user a";
 
-
+    @Test
 	public void testRootStem() {
 		try {
 			StemDescriptor root = grouper.getStem(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
@@ -199,7 +204,7 @@ public class TestStems extends TestCase {
 
 	}
 
-
+    @Test
 	public void testAddingGroups() {
 		try {
 			GridGrouperBootstrapper.addAdminMember(SUPER_USER);
@@ -291,7 +296,7 @@ public class TestStems extends TestCase {
 
 	}
 
-
+    @Test
 	public void testChildStems() {
 		try {
 			StemDescriptor root = grouper.getStem(AnonymousGridUserSubject.ANONYMOUS_GRID_USER_ID, Utils
@@ -404,23 +409,8 @@ public class TestStems extends TestCase {
 
 	}
 
-
 	private void checkStem(StemDescriptor des, String displayExtension, String description) {
 		assertEquals(displayExtension, des.getDisplayExtension());
 		assertEquals(description, des.getDescription());
 	}
-
-
-	protected void setUp() throws Exception {
-		super.setUp();
-		RegistryReset.reset();
-		this.grouper = new GridGrouper();
-	}
-
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		RegistryReset.reset();
-	}
-
 }
