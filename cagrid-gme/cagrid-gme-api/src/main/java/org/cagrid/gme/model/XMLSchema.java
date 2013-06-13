@@ -24,7 +24,7 @@ public class XMLSchema {
     private Set<XMLSchemaDocument> additionalSchemaDocuments = new HashSet<XMLSchemaDocument>();
 
     @Column(nullable = false, unique = true)
-    @Type(type = "org.cagrid.gme.persistence.hibernate.types.URIUserType")
+    @Type(type = "org.cagrid.gme.model.URIUserType")
     private URI targetNamespace;
 
 

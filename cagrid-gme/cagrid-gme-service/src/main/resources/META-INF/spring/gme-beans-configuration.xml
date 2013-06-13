@@ -46,10 +46,7 @@
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">${cagrid.gme.service.db.dialect}</prop>
-                <!--
-                  <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-                 -->
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">${cagrid.gme.service.db.hibernate.hbm2ddl.auto}</prop>
                 <prop key="hibernate.show_sql">false</prop>
             </props>
         </property>

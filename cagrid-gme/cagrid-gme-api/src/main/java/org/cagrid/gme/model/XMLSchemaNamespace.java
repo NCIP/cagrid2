@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 @Embeddable
 public class XMLSchemaNamespace {
     @Column(nullable = false, unique = true)
-    @Type(type = "org.cagrid.gme.persistence.hibernate.types.URIUserType")
+    @Type(type = "org.cagrid.gme.model.URIUserType")
     private URI uri;
 
 

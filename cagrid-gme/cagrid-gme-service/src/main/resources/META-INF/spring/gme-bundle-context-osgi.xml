@@ -9,18 +9,15 @@
                         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.gme.service">
-        <!--
-		<prop key="cagrid.gme.service.name">cds</prop>
-        -->
         <prop key="cagrid.gme.service.db.url">jdbc:mysql://localhost:3306/gme</prop>
 		<prop key="cagrid.gme.service.db.user">root</prop>
 		<prop key="cagrid.gme.service.db.password"></prop>
         <prop key="cagrid.gme.service.db.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
         <prop key="cagrid.gme.service.db.driver">com.mysql.jdbc.Driver</prop>
+        <prop key="cagrid.gme.service.db.hibernate.hbm2ddl.auto">update</prop>
 
 		<prop key="cagrid.gme.service.metadata.url">serviceMetadata.xml</prop>
         <prop key="cagrid.gme.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
-
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
