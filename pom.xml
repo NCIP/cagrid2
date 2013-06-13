@@ -287,6 +287,11 @@
 				<artifactId>jaxb2-basics-runtime</artifactId>
 				<version>${jaxb2.basics.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.orm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-jdk14</artifactId>
@@ -368,6 +373,7 @@
 		<module>cagrid-cds</module>
 		<module>cagrid-gts</module>
 		<module>cagrid-gridgrouper</module>
+        <module>cagrid-gme</module>
 		<!-- TODO: MOVE THIS <module>puretls</module> -->
 	</modules>
 </project>
