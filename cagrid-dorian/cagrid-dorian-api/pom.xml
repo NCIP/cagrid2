@@ -12,7 +12,6 @@
 
 	<properties>
 		<wsdl.path>schema/org/cagrid/dorian/Dorian_Service.wsdl</wsdl.path>
-		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 	</properties>
 
 	<profiles>
@@ -283,7 +282,6 @@
 		<dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
 			<artifactId>jaxb2-basics-runtime</artifactId>
-			<version>${jaxb2.basics.version}</version>
 		</dependency>
 	</dependencies>
 </project>
