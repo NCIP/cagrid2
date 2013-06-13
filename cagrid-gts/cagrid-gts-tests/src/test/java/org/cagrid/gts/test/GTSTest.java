@@ -17,7 +17,6 @@ import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
 public class GTSTest extends CaGridTestSupport {
     public static final String GTS_FEATURE_VERSION_PROPERTY = "cagrid.gts.version";
     public static final String WSRF_FEATURE_VERSION_PROPERTY = "cagrid.wsrf.version";
-    public static final String CAGRID_3PL_FEATURE_VERSION_PROPERTY = "cagrid.3pl.version";
     public static final String CAGRID_FEATURE_VERSION_PROPERTY = "cagrid.version";
     public static final String GAARDS_FEATURE_VERSION_PROPERTY = "cagrid.gaards.version";
 
@@ -35,11 +34,6 @@ public class GTSTest extends CaGridTestSupport {
         features:install cagrid-gaards
         */
 
-        //Add the 3PL libraries
-        System.err.println(executeCommand("features:addurl "
-                + maven().groupId("org.cagrid").artifactId("cagrid-third-party-features").version(
-                        System.getProperty(CAGRID_3PL_FEATURE_VERSION_PROPERTY)).classifier("features").type("xml").getURL()));
-        
         //Add the WSRF Features
         System.err.println(executeCommand("features:addurl "
                 + maven().groupId("org.cagrid.wsrf").artifactId("wsrf-draft-features").version(
@@ -65,7 +59,6 @@ public class GTSTest extends CaGridTestSupport {
     @Configuration
     public Option[] config() {
         Option[] options = new Option[] { 
-                systemProperty(CAGRID_3PL_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-third-party-features")),
                 systemProperty(WSRF_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid.wsrf", "wsrf-draft-features")),
                 systemProperty(CAGRID_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-features")),
                 systemProperty(GAARDS_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-gaards-features")),
@@ -90,8 +83,8 @@ public class GTSTest extends CaGridTestSupport {
         executeCommand("features:install wsrf-draft");
         assertFeatureInstalled("wsrf-draft");
         
-        executeCommand("features:install cagrid");
-        assertFeatureInstalled("cagrid");
+        executeCommand("features:install cagrid-base");
+        assertFeatureInstalled("cagrid-base");
         
         executeCommand("features:install cagrid-gaards");
         assertFeatureInstalled("cagrid-gaards");

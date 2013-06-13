@@ -41,12 +41,6 @@
 			<type>xml</type>
 		</dependency>
 		<dependency>
-			<groupId>org.cagrid</groupId>
-			<artifactId>cagrid-third-party-features</artifactId>
-			<classifier>features</classifier>
-			<type>xml</type>
-		</dependency>
-		<dependency>
 			<groupId>org.cagrid.wsrf</groupId>
 			<artifactId>wsrf-draft-features</artifactId>
 			<classifier>features</classifier>

@@ -366,7 +366,6 @@
 	</pluginRepositories>
 	<modules>
 		<module>cagrid-csmapi</module>
-		<module>cagrid-third-party-features</module>
 		<module>cagrid-proxy-trust</module>
 		<module>cagrid-metadata-model</module>
 		<module>cagrid-opensaml-api</module>
