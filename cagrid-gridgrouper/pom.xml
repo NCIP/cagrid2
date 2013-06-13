@@ -67,6 +67,6 @@
 		<module>cagrid-gridgrouper-service</module>
  		<module>cagrid-gridgrouper-wsrf</module>
 		<module>cagrid-gridgrouper-soap-client</module>
-		<module>cagrid-gridgrouper-features</module>
+		
 	</modules>
 </project>

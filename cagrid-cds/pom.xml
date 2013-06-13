@@ -129,6 +129,6 @@
         <module>cagrid-cds-service</module>
         <module>cagrid-cds-wsrf</module>
         <module>cagrid-cds-soap-client</module>
-        <module>cagrid-cds-features</module>
+        
     </modules>
 </project>

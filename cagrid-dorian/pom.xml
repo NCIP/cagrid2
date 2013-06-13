@@ -67,7 +67,6 @@
 		<module>cagrid-dorian-service</module>
 		<module>cagrid-dorian-wsrf</module>
 		<module>cagrid-dorian-soap-client</module>
-		<module>cagrid-dorian-features</module>
 		<module>cagrid-dorian-service-tools</module>
 	</modules>
 </project>
