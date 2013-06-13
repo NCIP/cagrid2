@@ -5,6 +5,8 @@ import static org.apache.karaf.tooling.exam.options.KarafDistributionOption.kara
 import static org.apache.karaf.tooling.exam.options.KarafDistributionOption.keepRuntimeFolder;
 import static org.apache.karaf.tooling.exam.options.KarafDistributionOption.logLevel;
 import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.CoreOptions.vmOption;
+import static org.ops4j.pax.exam.CoreOptions.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -72,7 +74,14 @@ public abstract class CaGridTestSupport {
 
     @Configuration
     public Option[] config() {
-        return new Option[] { caGridDistributionConfiguration(), keepRuntimeFolder(), logLevel(LogLevelOption.LogLevel.INFO) };
+        return new Option[] { 
+                caGridDistributionConfiguration(),
+                keepRuntimeFolder(),
+                logLevel(LogLevelOption.LogLevel.INFO),
+                //Pass local/private maven locations into the forked JVMs (this is needed if you use jenkins with a per-build maven repo)
+                when(System.getProperty("maven.repo.local") != null).useOptions(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + System.getProperty("maven.repo.local"))),
+                when(System.getProperty("org.ops4j.pax.url.mvn.localRepository") != null).useOptions(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + System.getProperty("org.ops4j.pax.url.mvn.localRepository")))        
+        };
     }
 
     protected Option caGridDistributionConfiguration() {

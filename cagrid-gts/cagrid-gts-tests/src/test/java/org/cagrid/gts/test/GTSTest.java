@@ -18,19 +18,16 @@ public class GTSTest extends CaGridTestSupport {
     public static final String GTS_FEATURE_VERSION_PROPERTY = "cagrid.gts.version";
     public static final String WSRF_FEATURE_VERSION_PROPERTY = "cagrid.wsrf.version";
     public static final String CAGRID_FEATURE_VERSION_PROPERTY = "cagrid.version";
-    public static final String GAARDS_FEATURE_VERSION_PROPERTY = "cagrid.gaards.version";
 
     @Before
     public void setUp() {
         
         /**
-        features:addurl mvn:org.cagrid/cagrid-third-party-features/2.0.0-SNAPSHOT/xml/features
-        features:install cagrid-third-party
+
         features:addurl mvn:org.cagrid.wsrf/wsrf-draft-features/2.0.3-SNAPSHOT/xml/features
         features:install wsrf-draft
         features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
-        features:install cagrid
-        features:addurl mvn:org.cagrid/cagrid-gaards-features/2.0.0-SNAPSHOT/xml/features
+        features:install cagrid-base
         features:install cagrid-gaards
         */
 
@@ -44,11 +41,6 @@ public class GTSTest extends CaGridTestSupport {
                 + maven().groupId("org.cagrid").artifactId("cagrid-features").version(
                         System.getProperty(CAGRID_FEATURE_VERSION_PROPERTY)).classifier("features").type("xml").getURL()));
         
-        //Add the GAARDS libraries
-        System.err.println(executeCommand("features:addurl "
-                + maven().groupId("org.cagrid").artifactId("cagrid-gaards-features").version(
-                        System.getProperty(GAARDS_FEATURE_VERSION_PROPERTY)).classifier("features").type("xml").getURL()));
-        
         //Add the GTS Features
         System.err.println(executeCommand("features:addurl "
                 + maven().groupId("org.cagrid").artifactId("cagrid-gts-features").version(
@@ -61,7 +53,6 @@ public class GTSTest extends CaGridTestSupport {
         Option[] options = new Option[] { 
                 systemProperty(WSRF_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid.wsrf", "wsrf-draft-features")),
                 systemProperty(CAGRID_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-features")),
-                systemProperty(GAARDS_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-gaards-features")),
                 
                 systemProperty(GTS_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-gts-features")),
                 

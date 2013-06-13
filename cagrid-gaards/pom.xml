@@ -22,6 +22,6 @@
 
 	<modules>
 		<module>cagrid-gaards-api</module>
-		<module>cagrid-gaards-features</module>
+		
 	</modules>
 </project>

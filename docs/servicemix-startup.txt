@@ -7,13 +7,10 @@ Make sure mysql is running, root / nopassword.
 
 Execute the following on the console:
 
-features:addurl mvn:org.cagrid/cagrid-third-party-features/2.0.0-SNAPSHOT/xml/features
-features:install cagrid-third-party
 features:addurl mvn:org.cagrid.wsrf/wsrf-draft-features/2.0.3-SNAPSHOT/xml/features
 features:install wsrf-draft
 features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
-features:install cagrid
-features:addurl mvn:org.cagrid/cagrid-gaards-features/2.0.0-SNAPSHOT/xml/features
+features:install cagrid-base
 features:install cagrid-gaards
 features:addurl mvn:org.cagrid/cagrid-dorian-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid-dorian
