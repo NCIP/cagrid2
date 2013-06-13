@@ -199,8 +199,8 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Export-Package>org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.swrf.stubs</Export-Package>
-						<Import-Package>org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.swrf.stubs,*</Import-Package>
+						<Export-Package>org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.wsrf.stubs</Export-Package>
+						<Import-Package>org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.wsrf.stubs,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

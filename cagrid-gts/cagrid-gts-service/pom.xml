@@ -64,7 +64,12 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Embed-Dependency> mobius_tools| mobius_common_client</Embed-Dependency>
 						<Export-Package></Export-Package>
-						<Import-Package>*</Import-Package>
+						<Import-Package>
+						EDU.oswego.cs.dl.util.concurrent;resolution:=optional,
+						org.projectmobius*;resolution:=optional,
+						!org.projectmobius.castor*,
+						!javax.swing*, 
+						*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

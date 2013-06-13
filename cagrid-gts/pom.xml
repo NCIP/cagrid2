@@ -42,6 +42,34 @@
 				<version>5.1.6</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.cagrid</groupId>
+				<artifactId>cagrid-third-party-features</artifactId>
+				<version>${project.version}</version>
+				<classifier>features</classifier>
+				<type>xml</type>
+			</dependency>
+			<dependency>
+				<groupId>org.cagrid.wsrf</groupId>
+				<artifactId>wsrf-draft-features</artifactId>
+				<version>${wsrf.version}</version>
+				<classifier>features</classifier>
+				<type>xml</type>
+			</dependency>
+			<dependency>
+				<groupId>org.cagrid</groupId>
+				<artifactId>cagrid-features</artifactId>
+				<version>${project.version}</version>
+				<classifier>features</classifier>
+				<type>xml</type>
+			</dependency>
+			<dependency>
+				<groupId>org.cagrid</groupId>
+				<artifactId>cagrid-gaards-features</artifactId>
+				<version>${project.version}</version>
+				<classifier>features</classifier>
+				<type>xml</type>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<modules>
