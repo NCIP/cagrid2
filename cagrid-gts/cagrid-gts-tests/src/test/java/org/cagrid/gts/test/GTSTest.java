@@ -15,7 +15,6 @@ import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
 @RunWith(JUnit4TestRunner.class)
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
 public class GTSTest extends CaGridTestSupport {
-    public static final String GTS_FEATURE_VERSION_PROPERTY = "cagrid.gts.version";
     public static final String WSRF_FEATURE_VERSION_PROPERTY = "cagrid.wsrf.version";
     public static final String CAGRID_FEATURE_VERSION_PROPERTY = "cagrid.version";
 
@@ -23,12 +22,11 @@ public class GTSTest extends CaGridTestSupport {
     public void setUp() {
         
         /**
-
+        features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
+        features:install cagrid-third-party
         features:addurl mvn:org.cagrid.wsrf/wsrf-draft-features/2.0.3-SNAPSHOT/xml/features
         features:install wsrf-draft
-        features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
-        features:install cagrid-base
-        features:install cagrid-gaards
+        features:install gts
         */
 
         //Add the WSRF Features
@@ -41,10 +39,6 @@ public class GTSTest extends CaGridTestSupport {
                 + maven().groupId("org.cagrid").artifactId("cagrid-features").version(
                         System.getProperty(CAGRID_FEATURE_VERSION_PROPERTY)).classifier("features").type("xml").getURL()));
         
-        //Add the GTS Features
-        System.err.println(executeCommand("features:addurl "
-                + maven().groupId("org.cagrid").artifactId("cagrid-gts-features").version(
-                        System.getProperty(GTS_FEATURE_VERSION_PROPERTY)).classifier("features").type("xml").getURL()));
     }
 
     @Override
@@ -53,11 +47,6 @@ public class GTSTest extends CaGridTestSupport {
         Option[] options = new Option[] { 
                 systemProperty(WSRF_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid.wsrf", "wsrf-draft-features")),
                 systemProperty(CAGRID_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-features")),
-                
-                systemProperty(GTS_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-gts-features")),
-                
-        
-        
         };
         return CaGridTestSupport.concatAll(super.config(), options);
     }
@@ -73,12 +62,6 @@ public class GTSTest extends CaGridTestSupport {
         
         executeCommand("features:install wsrf-draft");
         assertFeatureInstalled("wsrf-draft");
-        
-        executeCommand("features:install cagrid-base");
-        assertFeatureInstalled("cagrid-base");
-        
-        executeCommand("features:install cagrid-gaards");
-        assertFeatureInstalled("cagrid-gaards");
         
         executeCommand("features:install cagrid-gts");
         assertFeatureInstalled("cagrid-gts");

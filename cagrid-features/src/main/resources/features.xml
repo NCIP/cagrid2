@@ -1,33 +1,48 @@
 <?xml version="1.0"?>
 <features>
-	<feature name="cagrid-base" version="${project.version}">
-		<!-- <bundle>mvn:${project.groupId}/cagrid-csmapi/${project.version}</bundle> -->
-		<feature version="${project.version}">cagrid-third-party</feature>
-		<bundle>mvn:${project.groupId}/cagrid-proxy-trust/${project.version}
-		</bundle>
-		<bundle>mvn:${project.groupId}/cagrid-metadata-model/${project.version}
-		</bundle>
-		<bundle>mvn:${project.groupId}/cagrid-opensaml-api/${project.version}
-		</bundle>
-		<bundle>mvn:${project.groupId}/cagrid-core/${project.version}</bundle>
-	</feature>
-	<feature name="cagrid-third-party" version="${project.version}">
-		<bundle>wrap:mvn:org.bouncycastle/bcprov-jdk14/${org.bouncycastle/bcprov-jdk14/version}
-		</bundle>
-		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/version}
-		</bundle>
-		<bundle>mvn:commons-io/commons-io/${commons-io/commons-io/version}
-		</bundle>
-		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/version}
-		</bundle>
-		<bundle>wrap:mvn:org.apache.santuario/xmlsec/${org.apache.santuario/xmlsec/version}
-		</bundle>
-		<bundle>mvn:com.mysql.jdbc/com.springsource.com.mysql.jdbc/${com.mysql.jdbc/com.springsource.com.mysql.jdbc/version}
-		</bundle>
-		<bundle>mvn:org.jvnet.jaxb2_commons/jaxb2-basics-runtime/${org.jvnet.jaxb2_commons/jaxb2-basics-runtime/version}
-		</bundle>
-	</feature>
-	<feature name="cagrid-gaards" version="${project.version}">
-		<bundle>mvn:${project.groupId}/cagrid-gaards-api/${project.version}</bundle>
-	</feature>
+    <!-- Third Party Libraries -->
+    <feature name="cagrid-third-party" version="${project.version}">
+        <bundle>wrap:mvn:org.bouncycastle/bcprov-jdk14/${org.bouncycastle/bcprov-jdk14/version}
+        </bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/version}
+        </bundle>
+        <bundle>mvn:commons-io/commons-io/${commons-io/commons-io/version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/${org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-codec/version}
+        </bundle>
+        <bundle>wrap:mvn:org.apache.santuario/xmlsec/${org.apache.santuario/xmlsec/version}</bundle>
+        <bundle>mvn:com.mysql.jdbc/com.springsource.com.mysql.jdbc/${com.mysql.jdbc/com.springsource.com.mysql.jdbc/version}
+        </bundle>
+        <bundle>mvn:org.jvnet.jaxb2_commons/jaxb2-basics-runtime/${org.jvnet.jaxb2_commons/jaxb2-basics-runtime/version}
+        </bundle>
+    </feature>
+    
+    
+    <!-- Common caGrid Modules -->
+    <feature name="cagrid-base" version="${project.version}">
+        <!-- <bundle>mvn:${project.groupId}/cagrid-csmapi/${project.version}</bundle> -->
+        <feature version="${project.version}">cagrid-third-party</feature>
+        <bundle>mvn:${project.groupId}/cagrid-proxy-trust/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-metadata-model/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-opensaml-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-core/${project.version}</bundle>
+    </feature>
+
+    <feature name="cagrid-gaards" version="${project.version}">
+        <feature version="${project.version}">cagrid-base</feature>
+        <bundle>mvn:${project.groupId}/cagrid-gaards-api/${project.version}</bundle>
+    </feature>
+
+
+    <!-- GTS -->
+    <feature name="cagrid-gts" version="${project.version}">
+        <feature version="${project.version}">cagrid-gts-client</feature>
+        <bundle>mvn:${project.groupId}/cagrid-gts-service/${project.version}</bundle>
+    </feature>
+
+    <feature name="cagrid-gts-client" version="${project.version}">
+        <feature version="${project.version}">cagrid-gaards</feature>
+        <bundle>mvn:${project.groupId}/cagrid-gts-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gts-soap-client/${project.version}</bundle>
+    </feature>
+
 </features>

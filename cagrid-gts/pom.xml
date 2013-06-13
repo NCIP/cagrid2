@@ -70,7 +70,7 @@
 		<module>cagrid-gts-service</module>
 		<module>cagrid-gts-wsrf</module>
 		<module>cagrid-gts-soap-client</module>
-		<module>cagrid-gts-features</module>
+		
 		<module>cagrid-gts-tests</module>
 	</modules>
 </project>
