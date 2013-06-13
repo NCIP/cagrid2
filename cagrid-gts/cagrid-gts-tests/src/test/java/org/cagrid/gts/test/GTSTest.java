@@ -29,8 +29,8 @@ public class GTSTest extends CaGridTestSupport {
         System.err.println(executeCommand("features:listurl"));
         //System.err.println(executeCommand("features:list"));
         
-        installAndAssertFeature("cagrid-third-party");
-        installAndAssertFeature("wsrf-draft");
+        //installAndAssertFeature("cagrid-third-party");
+        //installAndAssertFeature("wsrf-draft");
         installAndAssertFeature("cagrid-gts");
         assertBundleInstalled("cagrid-gts-service");
     }

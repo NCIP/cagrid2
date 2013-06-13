@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<features name="caGrid-${project.version}">
+<features name="caGrid-${project.version}"  xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+    <repository>mvn:org.cagrid.wsrf/wsrf-draft-features/${org.cagrid.wsrf/wsrf-draft-features/version}/xml/features</repository>
+
     <!-- Third Party Libraries -->
     <feature name="cagrid-third-party" version="${project.version}">
         <bundle>wrap:mvn:org.bouncycastle/bcprov-jdk14/${org.bouncycastle/bcprov-jdk14/version}
@@ -21,6 +23,7 @@
     <feature name="cagrid-base" version="${project.version}">
         <!-- <bundle>mvn:${project.groupId}/cagrid-csmapi/${project.version}</bundle> -->
         <feature version="${project.version}">cagrid-third-party</feature>
+        <feature version="${org.cagrid.wsrf/wsrf-draft-features/version}">wsrf-draft</feature>
         <bundle>mvn:${project.groupId}/cagrid-proxy-trust/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-metadata-model/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-opensaml-api/${project.version}</bundle>

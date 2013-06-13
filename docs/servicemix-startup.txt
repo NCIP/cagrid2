@@ -6,11 +6,7 @@ Install servicemix 4.5
 Make sure mysql is running, root / <nopassword>.
 
 Execute the following on the console:
-
-features:addurl mvn:org.cagrid.wsrf/wsrf-draft-features/2.0.3-SNAPSHOT/xml/features
 features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
-features:install cagrid-third-party
-features:install wsrf-draft
 features:install cagrid-dorian
 
 The soap endpoint isn't installed by default yet, so

@@ -61,6 +61,15 @@
     </build>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.cagrid.wsrf</groupId>
+            <artifactId>wsrf-draft-features</artifactId>
+            <version>${wsrf.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-proxy-trust</artifactId>
