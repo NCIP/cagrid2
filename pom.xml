@@ -291,6 +291,50 @@
 				<artifactId>jaxb2-basics-runtime</artifactId>
 				<version>${jaxb2.basics.version}</version>
 			</dependency>
+
+            <!-- hibernate libraries start -->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>com.springsource.javax.persistence</artifactId>
+                <version>1.99.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>com.springsource.org.hibernate</artifactId>
+                <version>3.3.2.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>com.springsource.org.hibernate.annotations</artifactId>
+                <version>3.4.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>com.springsource.org.hibernate.annotations.common</artifactId>
+                <version>3.3.0.ga</version>
+            </dependency>
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>com.springsource.antlr</artifactId>
+                <version>2.7.6</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.javassist</groupId>
+                <artifactId>com.springsource.javassist</artifactId>
+                <version>3.9.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.cglib</groupId>
+                <artifactId>com.springsource.net.sf.cglib</artifactId>
+                <version>2.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.objectweb.asm</groupId>
+                <artifactId>com.springsource.org.objectweb.asm</artifactId>
+                <version>1.5.3</version>
+            </dependency>
+            <!-- end of hibernate libraries -->
+
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>org.springframework.orm</artifactId>
