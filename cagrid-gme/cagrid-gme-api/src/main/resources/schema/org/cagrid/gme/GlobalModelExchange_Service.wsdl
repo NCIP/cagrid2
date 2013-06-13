@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="GlobalModelExchange" targetNamespace="http://gme.cagrid.org/GlobalModelExchange/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:binding="http://gme.cagrid.org/GlobalModelExchange/bindings" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:import namespace="http://gme.cagrid.org/GlobalModelExchange/bindings" location="GlobalModelExchange_bindings.wsdl"/>
+  <wsdl:service name="GlobalModelExchangeService">
+    <wsdl:port name="GlobalModelExchangePortTypePort" binding="binding:GlobalModelExchangePortTypeSOAPBinding">
+      <soap:address location="http://localhost:8080/wsrf/services/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.cds.service">
+		<prop key="cagrid.cds.service.name">cds</prop>
+
+        <prop key="cagrid.cds.service.db.host">localhost</prop>
+		<prop key="cagrid.cds.service.db.port">3306</prop>
+		<prop key="cagrid.cds.service.db.user">root</prop>
+		<prop key="cagrid.cds.service.db.password"></prop>
+
+        <prop key="cagrid.cds.service.max.delegation.path.length">0</prop>
+        <prop key="cagrid.cds.service.dbkeymanager.key.encyption.password">password</prop>
+		<prop key="cagrid.cds.service.metadata.url">serviceMetadata.xml</prop>
+        <prop key="cagrid.cds.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
+        <prop key="cagrid.cds.service.security.delegated.metadata.url">delegated-serviceSecurityMetadata.xml</prop>
+
+        <prop key="cagrid.cds.service.client.gridgrouper.url">https://localhost:7737/gridgrouper</prop>
+        <prop key="cagrid.cds.service.client.keystorefile"></prop>
+        <prop key="cagrid.cds.service.client.keystorepassword"></prop>
+        <prop key="cagrid.cds.service.client.keyalias"></prop>
+        <prop key="cagrid.cds.service.client.keypassword"></prop>
+        <prop key="cagrid.cds.service.client.truststoreLocation"></prop>
+        <prop key="cagrid.cds.service.client.truststorePassword"></prop>
+	</osgix:cm-properties>
+
+	<ctx:property-placeholder properties-ref="preProps" />
+
+	<osgi:service ref="cds" interface="org.cagrid.cds.service.CredentialDelegationService" />
+    <osgi:service ref="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.DelegatedCredentialService" />
+
+    <bean id="gridGrouperClient" class="org.cagrid.gridgrouper.client.GridGrouperClient">
+        <constructor-arg ref="gridGrouper"/>
+    </bean>
+
+    <bean id="gridGrouper" class="org.cagrid.gridgrouper.soapclient.GridGrouperSoapClientFactory" factory-method="createSoapClient">
+        <constructor-arg value="${cagrid.cds.service.client.gridgrouper.url}"/>
+        <constructor-arg ref="truststore"/>
+        <constructor-arg ref="keymanager"/>
+    </bean>
+
+    <bean id="truststore" class="org.apache.cxf.configuration.security.KeyStoreType" lazy-init="true">
+        <property name="file" value="${cagrid.cds.service.client.truststoreLocation}"/>
+        <property name="password" value="${cagrid.cds.service.client.truststorePassword}"/>
+        <property name="type" value="JKS"/>
+    </bean>
+
+    <bean id="credential" factory-method="getCredential" class="org.cagrid.core.common.security.CredentialFactory" lazy-init="true">
+        <constructor-arg index="0" value="${cagrid.cds.service.client.keystorefile}" />
+        <constructor-arg index="1" value="${cagrid.cds.service.client.keystorepassword}" />
+        <constructor-arg index="2" value="${cagrid.cds.service.client.keyalias}" />
+        <constructor-arg index="3" value="${cagrid.cds.service.client.keypassword}"/>
+    </bean>
+
+    <bean id="keymanager" class="org.cagrid.core.soapclient.SingleEntityKeyManager">
+        <constructor-arg value="${cagrid.cds.service.client.keyalias}"/>
+        <constructor-arg ref="credential"/>
+    </bean>
+
+</beans>
