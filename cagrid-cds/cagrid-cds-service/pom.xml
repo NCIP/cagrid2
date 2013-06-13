@@ -9,13 +9,18 @@
 	<artifactId>cagrid-cds-service</artifactId>
 	<packaging>bundle</packaging>
 	<name>caGrid CDS Service</name>
-
 	<properties>
 		<db.name>CDS_TEST</db.name>
 	</properties>
-
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>always</forkMode>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>sql-maven-plugin</artifactId>
@@ -24,7 +29,7 @@
 					<driver>com.mysql.jdbc.Driver</driver>
 					<url>jdbc:mysql://localhost:3306</url>
 					<username>root</username>
-					<password />
+					<password/>
 					<skip>${skipTests}</skip>
 				</configuration>
 				<dependencies>
@@ -65,28 +70,24 @@
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package></Export-Package>
-						<Private-Package>
-							org.cagrid.cds.service.impl,
-                            org.cagrid.cds.service.impl.delegatedcredential,
-                            org.cagrid.cds.service.impl.manager,
-                            org.cagrid.cds.service.impl.policy,
-                            org.cagrid.cds.service.impl.util
+						<Private-Package> org.cagrid.cds.service.impl,
+							org.cagrid.cds.service.impl.delegatedcredential,
+							org.cagrid.cds.service.impl.manager,
+							org.cagrid.cds.service.impl.policy,
+							org.cagrid.cds.service.impl.util 
 						</Private-Package>
-						<Import-Package>
-                            org.apache.cxf.jaxws.spi,
-                            *
-                        </Import-Package>
+						<Import-Package> org.apache.cxf.jaxws.spi, * 
+						</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
 	<dependencies>
-        <dependency>
-            <groupId>${wsrf.group}</groupId>
-            <artifactId>wsrf-jglobus</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>${wsrf.group}</groupId>
+			<artifactId>wsrf-jglobus</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-cds-api</artifactId>
@@ -95,14 +96,14 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-gaards-api</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cagrid-gridgrouper-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cagrid-gridgrouper-soap-client</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-gridgrouper-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-gridgrouper-soap-client</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-metadata-model</artifactId>
@@ -172,10 +173,10 @@
 			<groupId>com.mysql.jdbc</groupId>
 			<artifactId>com.springsource.com.mysql.jdbc</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
