@@ -10,6 +10,7 @@
 		<wsrf.group>org.cagrid.wsrf</wsrf.group>
 		<wsrf.version>2.0.3-SNAPSHOT</wsrf.version>
 		<jaxb2.version>0.8.3</jaxb2.version>
+		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 		<cxf.version>2.6.3</cxf.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<slf4j.version>1.6.6</slf4j.version>
@@ -78,44 +79,44 @@
 							<pluginExecutions>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId> org.apache.maven.plugins 
+										<groupId> org.apache.maven.plugins
 										</groupId>
-										<artifactId> maven-dependency-plugin 
+										<artifactId> maven-dependency-plugin
 										</artifactId>
-										<versionRange> [2.6,) 
+										<versionRange> [2.6,)
 										</versionRange>
 										<goals>
 											<goal>unpack</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute/>
+										<execute />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId> org.ops4j.pax.exam 
+										<groupId> org.ops4j.pax.exam
 										</groupId>
-										<artifactId> maven-paxexam-plugin 
+										<artifactId> maven-paxexam-plugin
 										</artifactId>
-										<versionRange> [1.2.4,) 
+										<versionRange> [1.2.4,)
 										</versionRange>
 										<goals>
-											<goal> generate-depends-file 
+											<goal> generate-depends-file
 											</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute/>
+										<execute />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-										<groupId> org.codehaus.mojo 
+										<groupId> org.codehaus.mojo
 										</groupId>
-										<artifactId> sql-maven-plugin 
+										<artifactId> sql-maven-plugin
 										</artifactId>
-										<versionRange> [1.5,) 
+										<versionRange> [1.5,)
 										</versionRange>
 										<goals>
 											<goal>execute</goal>
@@ -276,15 +277,15 @@
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.orm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jvnet.jaxb2_commons</groupId>
+				<artifactId>jaxb2-basics-runtime</artifactId>
+				<version>${jaxb2.basics.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -329,7 +330,7 @@
 		<developerConnection>scm:git:ssh://git@github.com/NCIP/caGrid2.git</developerConnection>
 		<url>https://github.com/NCIP/caGrid2</url>
 		<tag>HEAD</tag>
- 	</scm>
+	</scm>
 	<repositories>
 		<repository>
 			<id>com.springsource.repository.bundles.release</id>
@@ -367,7 +368,6 @@
 		<module>cagrid-cds</module>
 		<module>cagrid-gts</module>
 		<module>cagrid-gridgrouper</module>
-		<module>cagrid-gme</module>
-		<!-- TODO: MOVE THIS <module>puretls</module>-->
+		<!-- TODO: MOVE THIS <module>puretls</module> -->
 	</modules>
 </project>
