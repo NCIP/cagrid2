@@ -9,15 +9,59 @@
 	<artifactId>cagrid-gts-tests</artifactId>
 	<name>caGrid GTS Tests</name>
 	<build>
+		<plugins>
+			<!-- generate dependencies versions -->
+			<plugin>
+				<groupId>org.ops4j.pax.exam</groupId>
+				<artifactId>maven-paxexam-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-depends-file</id>
+						<goals>
+							<goal>generate-depends-file</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<recursive>true</recursive>
+					<settings>
+						<platform>felix</platform>
+						<profiles>log,url</profiles>
+					</settings>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>cagrid-gaards-api</artifactId>
+			<artifactId>cagrid-gts-features</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<!-- Karaf Test Framework Version -->
+		<dependency>
+			<groupId>org.apache.karaf.tooling.exam</groupId>
+			<artifactId>org.apache.karaf.tooling.exam.container</artifactId>
+			<version>${karaf-exam.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Pax Exam version you would like to use. At least 2.2.x is required. -->
+		<dependency>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-junit4</artifactId>
+			<version>${pax-exam.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.servicemix</groupId>
+			<artifactId>apache-servicemix</artifactId>
+			<version>${smx.version}</version>
+			<type>zip</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
