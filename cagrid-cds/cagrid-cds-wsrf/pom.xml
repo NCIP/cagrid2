@@ -44,10 +44,5 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-core</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>axis</groupId>
-            <artifactId>axis</artifactId>
-            <version>1.2</version>
-        </dependency>
 	</dependencies>
 </project>

@@ -1,8 +1,6 @@
 package org.cagrid.cds.service.wsrf;
 
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
-import org.apache.axis.MessageContext;
-import org.apache.axis.message.MessageElement;
 import org.cagrid.cds.model.DelegatedCredentialAuditRecord;
 import org.cagrid.cds.model.DelegationDescriptor;
 import org.cagrid.cds.model.DelegationIdentifier;
@@ -69,8 +67,11 @@ import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 import org.xmlsoap.schemas.ws._2004._03.addressing.ReferencePropertiesType;
 
 import javax.xml.namespace.QName;
+import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
 import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+
 import java.util.List;
 
 public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
@@ -336,12 +337,10 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             DelegationIdentifier id) throws CDSInternalFaultFaultMessage {
 
         try {
-            MessageContext ctx = MessageContext.getCurrentContext();
-            String transportURL = (String) ctx
-                    .getProperty(org.apache.axis.MessageContext.TRANS_URL);
+        	MessageContext msgContext = wsContext.getMessageContext();
+        	String transportURL = "my-url/";
             transportURL = transportURL.substring(0, transportURL
                     .lastIndexOf('/') + 1);
-
             transportURL += "DelegatedCredential";
 
             EndpointReferenceType epr = createEndpointReference(transportURL, getResourceKey(id));
@@ -384,9 +383,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
         if (value == null || object == null) {
             return;
         }
-        if (!(value instanceof MessageElement)) {
+        if (!(value instanceof SOAPBodyElement)) {
             throw new IllegalArgumentException();
         }
-        object.getAny().add( new MessageElement[]{(MessageElement)value} );
+        object.getAny().add(value);
     }
 }
