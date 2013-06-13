@@ -22,7 +22,7 @@
         <prop key="cagrid.cds.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
         <prop key="cagrid.cds.service.security.delegated.metadata.url">delegated-serviceSecurityMetadata.xml</prop>
 
-        <prop key="cagrid.cds.service.client.gridgrouper.url">https://localhost:7737/gridgrouper</prop>
+        <prop key="cagrid.cds.service.client.gridgrouper.url">https://localhost:7738/gridgrouper</prop>
         <prop key="cagrid.cds.service.client.keystorefile"></prop>
         <prop key="cagrid.cds.service.client.keystorepassword"></prop>
         <prop key="cagrid.cds.service.client.keyalias"></prop>

@@ -10,7 +10,7 @@
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.gridgrouper.wsrf">
 		<prop key="cagrid.gridgrouper.wsrf.host">localhost</prop>
-		<prop key="cagrid.gridgrouper.wsrf.port">7737</prop>
+		<prop key="cagrid.gridgrouper.wsrf.port">7738</prop>
 		<prop key="cagrid.gridgrouper.wsrf.path">gridgrouper</prop>
 		<prop key="cagrid.gridgrouper.wsrf.url">https://${cagrid.gridgrouper.wsrf.host}:${cagrid.gridgrouper.wsrf.port}/${cagrid.gridgrouper.wsrf.path}</prop>
 		<prop key="cagrid.gridgrouper.wsrf.keystore.path">${karaf.base}/etc/gridgrouper/host.jks</prop>

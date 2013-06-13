@@ -10,7 +10,7 @@ import javax.net.ssl.KeyManager;
 
 public abstract class GrouperClientBase {
 
-	public final static String LOCAL_URL = "https://localhost:7737/gridgrouper";
+	public final static String LOCAL_URL = "https://localhost:7738/gridgrouper";
 
 	protected GridGrouperPortType gridGrouper;
 

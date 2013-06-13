@@ -10,7 +10,7 @@
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.gts.wsrf">
 		<prop key="cagrid.gts.wsrf.host">localhost</prop>
-		<prop key="cagrid.gts.wsrf.port">7737</prop>
+		<prop key="cagrid.gts.wsrf.port">7740</prop>
 		<prop key="cagrid.gts.wsrf.path">gts</prop>
 		<prop key="cagrid.gts.wsrf.url">https://${cagrid.gts.wsrf.host}:${cagrid.gts.wsrf.port}/${cagrid.gts.wsrf.path}</prop>
 		<prop key="cagrid.gts.wsrf.keystore.path">${karaf.base}/etc/gts/host.jks</prop>
