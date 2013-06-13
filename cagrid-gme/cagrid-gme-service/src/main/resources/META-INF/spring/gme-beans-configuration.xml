@@ -1,155 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+        >
 
 	<bean id="defaultPropertiesPlaceholder"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:META-INF/spring/cds.properties" />
+		<property name="location" value="classpath:META-INF/spring/gme.properties" />
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
-	</bean>
-
-	<bean id="database" class="org.cagrid.tools.database.Database">
-		<constructor-arg value="${cagrid.cds.service.db.host}" />
-		<constructor-arg value="${cagrid.cds.service.db.port}" />
-		<constructor-arg value="${cagrid.cds.service.db.user}" />
-		<constructor-arg value="${cagrid.cds.service.db.password}" />
-		<constructor-arg value="${cagrid.cds.service.name}" />
-	</bean>
-
-    <!-- ADD POLICY HANDLER BEANS HERE -->
-
-    <bean id="identityPolicyHandler" class="org.cagrid.cds.service.impl.policy.IdentityPolicyHandler">
-        <constructor-arg ref="database" />
-    </bean>
-
-    <bean id="groupPolicyHandler" class="org.cagrid.cds.service.impl.policy.GroupPolicyHandler">
-        <constructor-arg ref="database" />
-        <constructor-arg ref="gridGrouperClient"/>
-    </bean>
-
-    <!-- SPECIFY KEY MANAGER HERE -->
-
-    <bean id="keyManager" class="org.cagrid.cds.service.impl.manager.DBKeyManager">
-        <constructor-arg ref="database" />
-        <property name="keyEncryptionPassword" value="${cagrid.cds.service.dbkeymanager.key.encyption.password}" />
-    </bean>
-
-    <!-- SPECIFY EVENT MANAGER HERE -->
-
-    <bean id="delegatedCredentialAuditor" class="org.cagrid.tools.events.EventAuditor">
-        <constructor-arg index="0" value="delegatedCredentialAuditor" />
-        <constructor-arg index="1" ref="database" />
-        <constructor-arg index="2" value="DELEGATED_CREDENTIAL_AUDITOR" />
-    </bean>
-
-    <bean id="eventManager" class="org.cagrid.tools.events.EventManager">
-        <constructor-arg index="0">
-            <list>
-                <ref bean="delegatedCredentialAuditor" />
-            </list>
-        </constructor-arg>
-        <constructor-arg index="1">
-            <list>
-
-                <bean
-                        class="org.cagrid.tools.events.EventToHandlerMapping">
-                    <constructor-arg index="0" value="DelegationInitiated" />
-                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
-                </bean>
-                <bean
-                        class="org.cagrid.tools.events.EventToHandlerMapping">
-                    <constructor-arg index="0" value="DelegationApproved" />
-                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
-                </bean>
-                <bean
-                        class="org.cagrid.tools.events.EventToHandlerMapping">
-                    <constructor-arg index="0" value="DelegationStatusUpdated" />
-                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
-                </bean>
-                <bean
-                        class="org.cagrid.tools.events.EventToHandlerMapping">
-                    <constructor-arg index="0" value="DelegatedCredentialIssued" />
-                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
-                </bean>
-                <bean
-                        class="org.cagrid.tools.events.EventToHandlerMapping">
-                    <constructor-arg index="0" value="DelegatedCredentialAccessDenied" />
-                    <constructor-arg index="1" value="delegatedCredentialAuditor" />
-                </bean>
-            </list>
-
-        </constructor-arg>
-    </bean>
-
-    <bean id="propertyManager" class="org.cagrid.cds.service.impl.manager.PropertyManager">
-        <constructor-arg ref="database" />
-    </bean>
-
-    <bean id="groupManager" class="org.cagrid.tools.groups.GroupManager">
-        <constructor-arg ref="database" />
-    </bean>
-
-    <bean id="proxyPolicy" class="org.cagrid.cds.service.impl.util.ProxyPolicy">
-        <property name="maxDelegationPathLength" value="${cagrid.cds.service.max.delegation.path.length}" />
-        <property name="supportedKeySizes">
-            <set>
-                <value>1024</value>
-                <value>2048</value>
-            </set>
-        </property>
-    </bean>
-
-    <bean id="delegatedCredentialManager" class="org.cagrid.cds.service.impl.manager.DelegatedCredentialManager">
-        <constructor-arg ref="database" />
-        <constructor-arg ref="propertyManager" />
-        <constructor-arg ref="keyManager" />
-        <constructor-arg>
-            <list>
-                <ref bean="identityPolicyHandler" />
-                <ref bean="groupPolicyHandler" />
-            </list>
-        </constructor-arg>
-        <constructor-arg ref="proxyPolicy" />
-        <constructor-arg ref="eventManager" />
-    </bean>
-
-    <bean id="delegationManager" class="org.cagrid.cds.service.impl.manager.DelegationManager">
-        <constructor-arg ref="propertyManager" />
-        <constructor-arg ref="delegatedCredentialManager" />
-        <constructor-arg ref="groupManager" />
-    </bean>
-
-    <bean id="cdsProperties" class="org.cagrid.cds.service.impl.CDSProperties">
-		<constructor-arg ref="database" />
-		<constructor-arg ref="delegationManager" />
-        <constructor-arg ref="eventManager" />
 	</bean>
 
 	<bean id="jaxbResourceProperties" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="serviceMetadata" value="${cagrid.cds.service.metadata.url}" />
-                <entry key="serviceSecurityMetadata" value="${cagrid.cds.service.security.metadata.url}" />
+				<entry key="serviceMetadata" value="${cagrid.gme.service.metadata.url}" />
+                <entry key="serviceSecurityMetadata" value="${cagrid.gme.service.security.metadata.url}" />
 			</map>
 		</constructor-arg>
 	</bean>
 
-	<bean id="cds" class="org.cagrid.cds.service.impl.CDSImpl" init-method="initialize">
-		<constructor-arg ref="cdsProperties" />
-		<constructor-arg ref="jaxbResourceProperties" />
-	</bean>
+    <bean id="dataSourceTemplate" abstract="true" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close" p:driverClassName="${cagrid.gme.service.db.driver}" p:maxActive="10" p:maxIdle="2"
+          p:maxWait="180000" p:removeAbandoned="true" p:removeAbandonedTimeout="300" p:logAbandoned="true"
+          p:testWhileIdle="true" p:testOnReturn="true" p:validationQuery="select 1"
+          p:timeBetweenEvictionRunsMillis="300000" p:minEvictableIdleTimeMillis="600000" />
 
-    <bean id="dcJaxbResourceProperties" class="java.util.HashMap">
-        <constructor-arg>
-            <map>
-                <entry key="serviceSecurityMetadata" value="${cagrid.cds.service.security.delegated.metadata.url}" />
-            </map>
-        </constructor-arg>
+    <bean id="dataSource" parent="dataSourceTemplate" p:url="${cagrid.gme.service.db.url}" p:username="${cagrid.gme.service.db.username}"
+          p:password="${cagrid.gme.service.db.password}" />
+
+    <bean id="databaseValidator" class="org.springframework.jdbc.support.DatabaseStartupValidator">
+        <property name="dataSource" ref="dataSource" />
+        <!-- timeout in seconds -->
+        <property name="timeout" value="15" />
+        <property name="validationQuery" value="Select 1" />
     </bean>
 
-    <bean id="delegatedCredentialService" class="org.cagrid.cds.service.impl.delegatedcredential.DCImpl" init-method="initialize">
-        <constructor-arg ref="dcJaxbResourceProperties" />
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+          depends-on="databaseValidator">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${cagrid.gme.service.db.dialect}</prop>
+                <!--
+                  <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+                 -->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">false</prop>
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.cagrid.gme.model.XMLSchema</value>
+                <value>org.cagrid.gme.model.XMLSchemaBundle</value>
+                <value>org.cagrid.gme.model.XMLSchemaDocument</value>
+                <value>org.cagrid.gme.model.XMLSchemaImportInformation</value>
+                <value>org.cagrid.gme.model.XMLSchemaNamespace</value>
+                <value>org.cagrid.gme.service.impl.domain.XMLSchemaInformation</value>
+                <value>org.cagrid.gme.service.impl.GME</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+        <property name="checkWriteOperations">
+            <value>true</value>
+        </property>
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean>
+
+    <bean id="daoTemplate" abstract="true">
+        <property name="hibernateTemplate">
+            <ref bean="hibernateTemplate" />
+        </property>
+    </bean>
+
+    <bean id="xmlSchemaInformationDao" parent="daoTemplate"
+          class="org.cagrid.gme.service.impl.dao.XMLSchemaInformationDao" />
+
+    <bean id="gme" class="org.cagrid.gme.service.impl.GME">
+        <property name="XMLSchemaInformationDao" ref="xmlSchemaInformationDao" />
+    </bean>
+
+    <bean id="gmeService" class="org.cagrid.gme.service.impl.GMEImpl" init-method="initialize">
+        <constructor-arg ref="gme"/>
+        <constructor-arg ref="jaxbResourceProperties" />
     </bean>
 </beans>
