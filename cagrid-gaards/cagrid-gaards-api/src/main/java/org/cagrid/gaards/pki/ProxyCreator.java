@@ -24,6 +24,10 @@ import org.globus.gsi.proxy.ext.ProxyPolicy;
  */
 public class ProxyCreator {
 
+	/*
+	 * If the signature algorithm isn't specified, use the same algorithm as in the issuer's certificate.
+	 */
+	@Deprecated
 	public static final String SIGNATURE_ALGORITHM = "MD5WithRSAEncryption";
 
 
@@ -32,7 +36,7 @@ public class ProxyCreator {
 		throws GeneralSecurityException {
 		SecurityUtil.init();
 		return createImpersonationProxyCertificate("BC", new X509Certificate[]{cert}, privateKey, proxyPublicKey,
-			lifetimeHours, lifetimeMinutes, lifetimeSeconds, SIGNATURE_ALGORITHM);
+			lifetimeHours, lifetimeMinutes, lifetimeSeconds, cert.getSigAlgName());
 	}
 
 
@@ -49,7 +53,7 @@ public class ProxyCreator {
 		throws GeneralSecurityException {
 		SecurityUtil.init();
 		return createImpersonationProxyCertificate("BC", new X509Certificate[]{cert}, privateKey, proxyPublicKey,
-			lifetimeHours, lifetimeMinutes, lifetimeSeconds, delegationPathLength, SIGNATURE_ALGORITHM);
+			lifetimeHours, lifetimeMinutes, lifetimeSeconds, delegationPathLength, cert.getSigAlgName());
 	}
 
 
@@ -66,7 +70,7 @@ public class ProxyCreator {
 		throws GeneralSecurityException {
 		SecurityUtil.init();
 		return createImpersonationProxyCertificate("BC", certs, privateKey, proxyPublicKey, lifetimeHours,
-			lifetimeMinutes, lifetimeSeconds, Integer.MAX_VALUE, SIGNATURE_ALGORITHM);
+			lifetimeMinutes, lifetimeSeconds, Integer.MAX_VALUE, certs[0].getSigAlgName());
 	}
 
 
@@ -83,7 +87,7 @@ public class ProxyCreator {
 		throws GeneralSecurityException {
 		SecurityUtil.init();
 		return createImpersonationProxyCertificate("BC", certs, privateKey, proxyPublicKey, lifetimeHours,
-			lifetimeMinutes, lifetimeSeconds, delegationPathLength, SIGNATURE_ALGORITHM);
+			lifetimeMinutes, lifetimeSeconds, delegationPathLength, certs[0].getSigAlgName());
 	}
 
 
@@ -105,7 +109,7 @@ public class ProxyCreator {
 		X509ExtensionSet extSet) throws GeneralSecurityException {
 		SecurityUtil.init();
 		return createProxyCertificate("BC", certs, privateKey, proxyPublicKey, lifetimeHours, lifetimeMinutes,
-			lifetimeSeconds, proxyType, extSet, SIGNATURE_ALGORITHM);
+			lifetimeSeconds, proxyType, extSet, certs[0].getSigAlgName());
 	}
 
 
@@ -145,5 +149,4 @@ public class ProxyCreator {
 		c.add(Calendar.SECOND, lifetimeSeconds);
 		return c.getTime();
 	}
-
 }
