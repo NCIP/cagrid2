@@ -63,14 +63,23 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
+                        <DynamicImport-Package>*</DynamicImport-Package>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package></Export-Package>
 						<Private-Package>
-							org.cagrid.gme.service.impl
+							org.cagrid.gme.service.impl,
+                            org.cagrid.gme.service.impl.common,
+                            org.cagrid.gme.service.impl.common.exceptions,
+                            org.cagrid.gme.service.impl.dao,
+                            org.cagrid.gme.service.impl.domain,
+                            org.cagrid.gme.service.impl.persistence,
+                            org.cagrid.gme.service.impl.sax
 						</Private-Package>
 						<Import-Package>
+                            <!--
                             org.apache.cxf.jaxws.spi,
                             *
+                            -->
                         </Import-Package>
 					</instructions>
 				</configuration>

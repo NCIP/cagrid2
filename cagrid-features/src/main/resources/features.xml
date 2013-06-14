@@ -26,6 +26,14 @@
         <bundle>mvn:org.jboss.javassist/com.springsource.javassist/${org.jboss.javassist/com.springsource.javassist/version}</bundle>
         <bundle>mvn:net.sourceforge.cglib/com.springsource.net.sf.cglib/${net.sourceforge.cglib/com.springsource.net.sf.cglib/version}</bundle>
         <bundle>mvn:org.objectweb.asm/com.springsource.org.objectweb.asm/${org.objectweb.asm/com.springsource.org.objectweb.asm/version}</bundle>
+        <bundle>mvn:org.jgroups/com.springsource.org.jgroups/${org.jgroups/com.springsource.org.jgroups/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.jdbc/${org.springframework/org.springframework.jdbc/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.beans/${org.springframework/org.springframework.beans/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.core/${org.springframework/org.springframework.core/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.context/${org.springframework/org.springframework.context/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.transaction/${org.springframework/org.springframework.transaction/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.orm/${org.springframework/org.springframework.orm/version}</bundle>
+        <bundle>mvn:org.springframework/org.springframework.aop/${org.springframework/org.springframework.aop/version}</bundle>
     </feature>
 
 

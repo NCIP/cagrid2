@@ -292,7 +292,10 @@
 				<version>${jaxb2.basics.version}</version>
 			</dependency>
 
-            <!-- hibernate libraries start -->
+            <!-- Hibernate libraries start here
+                Be careful with changing versions here, you need to know what you are doing, Hibernate has tight
+                dependencies on specific third party versions
+            -->
             <dependency>
                 <groupId>javax.persistence</groupId>
                 <artifactId>com.springsource.javax.persistence</artifactId>
@@ -333,7 +336,7 @@
             <dependency>
                 <groupId>org.jboss.javassist</groupId>
                 <artifactId>com.springsource.javassist</artifactId>
-                <version>3.9.0.GA</version>
+                <version>3.3.0.ga</version>
             </dependency>
             <dependency>
                 <groupId>net.sourceforge.cglib</groupId>
@@ -345,13 +348,48 @@
                 <artifactId>com.springsource.org.objectweb.asm</artifactId>
                 <version>1.5.3</version>
             </dependency>
-            <!-- end of hibernate libraries -->
-
+            <dependency>
+                <groupId>org.jgroups</groupId>
+                <artifactId>com.springsource.org.jgroups</artifactId>
+                <version>2.5.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>org.springframework.orm</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.transaction</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!-- end of hibernate libraries -->
+
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-jdk14</artifactId>
