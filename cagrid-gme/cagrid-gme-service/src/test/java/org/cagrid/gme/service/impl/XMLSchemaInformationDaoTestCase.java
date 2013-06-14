@@ -4,20 +4,26 @@ import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.model.XMLSchemaDocument;
 import org.cagrid.gme.service.impl.dao.XMLSchemaInformationDao;
 import org.cagrid.gme.service.impl.domain.XMLSchemaInformation;
-import org.cagrid.gme.service.impl.testutils.GMEIntegrationTestCaseBase;
+import org.cagrid.gme.service.impl.testutils.GMETestCaseBase;
+import org.junit.Test;
 
+import javax.annotation.Resource;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class XMLSchemaInformationDaoTestCase extends GMEIntegrationTestCaseBase {
 
+public class XMLSchemaInformationDaoTestCase extends GMETestCaseBase {
+
+    @Resource
     protected XMLSchemaInformationDao xmlSchemaInformationDao;
 
-
+    @Test
     public void testWithoutDependencies() throws URISyntaxException {
 
         XMLSchemaInformation schemaInfo = new XMLSchemaInformation();

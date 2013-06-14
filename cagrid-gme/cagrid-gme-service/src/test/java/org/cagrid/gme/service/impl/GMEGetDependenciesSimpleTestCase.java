@@ -6,13 +6,18 @@ import org.cagrid.gme.model.XMLSchemaImportInformation;
 import org.cagrid.gme.model.XMLSchemaNamespace;
 import org.cagrid.gme.service.exception.NoSuchNamespaceExistsException;
 import org.cagrid.gme.service.impl.testutils.GMETestCaseWithSimpleModel;
+import org.junit.Test;
 import org.springframework.test.annotation.ExpectedException;
 
 import java.net.URI;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 
 public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel {
-
+    @Test
     public void testAddAll() throws Exception {
         publishAllSchemas();
 
@@ -29,7 +34,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
 
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testInvalidSchemaImports() throws Exception {
         publishAllSchemas();
@@ -37,7 +42,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         this.gme.getImportedNamespaces(new URI("http://invalid"));
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testInvalidSchemaImported() throws Exception {
         publishAllSchemas();
@@ -45,7 +50,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         this.gme.getImportingNamespaces(new URI("http://invalid"));
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testNullSchemaImports() throws Exception {
         publishAllSchemas();
@@ -53,7 +58,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         this.gme.getImportedNamespaces(null);
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testNullSchemaImported() throws Exception {
         publishAllSchemas();
@@ -61,7 +66,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         this.gme.getImportingNamespaces(null);
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testNullBundle() throws Exception {
         publishAllSchemas();
@@ -69,7 +74,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         this.gme.getSchemBundle(null);
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testInvalidBundle() throws Exception {
         publishAllSchemas();
@@ -77,7 +82,7 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         this.gme.getSchemBundle(new URI("http://invalid"));
     }
 
-
+    @Test
     public void testBundle() throws Exception {
         publishAllSchemas();
 

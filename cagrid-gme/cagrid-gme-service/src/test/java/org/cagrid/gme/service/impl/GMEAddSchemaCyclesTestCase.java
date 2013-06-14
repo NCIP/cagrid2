@@ -1,30 +1,32 @@
 package org.cagrid.gme.service.impl;
 
-import gov.nih.nci.cagrid.common.Utils;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.service.exception.InvalidSchemaSubmissionException;
 import org.cagrid.gme.service.impl.testutils.GMETestCaseBase;
-import org.cagrid.gme.service.impl.testutils.SpringTestApplicationContextConstants;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.test.annotation.ExpectedException;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertNotNull;
 
 public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
 
-    // these are loaded by Spring
+    @Resource
     protected XMLSchema testSchemaCycleA;
+    @Resource
     protected XMLSchema testSchemaCycleB;
 
-
-    @Override
-    protected String[] getConfigLocations() {
-        return (String[]) Utils.appendToArray(super.getConfigLocations(),
-                SpringTestApplicationContextConstants.CYCLES_LOCATION);
+    @Before
+    public void onSetUp() throws Exception {
+        assertNotNull(this.testSchemaCycleA);
+        assertNotNull(this.testSchemaCycleB);
     }
 
-
+    @Test
     @ExpectedException(InvalidSchemaSubmissionException.class)
     public void testCycleAMissingDocumentB() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
@@ -32,7 +34,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         this.gme.publishSchemas(schemas);
     }
 
-
+    @Test
     @ExpectedException(InvalidSchemaSubmissionException.class)
     public void testCycleBMissingDocumentA() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
@@ -40,7 +42,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         this.gme.publishSchemas(schemas);
     }
 
-
+    @Test
     public void testCyclesAFirst() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaCycleA);
@@ -51,7 +53,7 @@ public class GMEAddSchemaCyclesTestCase extends GMETestCaseBase {
         assertPublishedContents(schemas);
     }
 
-
+    @Test
     public void testCyclesBFirst() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaCycleB);

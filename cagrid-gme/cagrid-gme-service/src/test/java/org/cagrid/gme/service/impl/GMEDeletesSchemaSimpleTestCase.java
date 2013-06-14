@@ -4,6 +4,7 @@ import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.service.exception.NoSuchNamespaceExistsException;
 import org.cagrid.gme.service.exception.UnableToDeleteSchemaException;
 import org.cagrid.gme.service.impl.testutils.GMETestCaseWithSimpleModel;
+import org.junit.Test;
 import org.springframework.test.annotation.ExpectedException;
 
 import java.net.URI;
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
 
+    @Test
     public void testSingleDelete() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaSimpleF);
@@ -24,7 +26,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         assertNotPublished(schemas);
     }
 
-
+    @Test
     public void testDeleteWithImport() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaSimpleB);
@@ -53,7 +55,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         assertNotImported(this.testSchemaSimpleF);
     }
 
-
+    @Test
     public void testDeleteA() throws Exception {
         publishAllSchemas();
 
@@ -80,7 +82,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         assertNotImported(this.testSchemaSimpleF);
     }
 
-
+    @Test
     public void testDeleteAF() throws Exception {
         publishAllSchemas();
 
@@ -109,7 +111,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         assertNoImports(this.testSchemaSimpleE);
     }
 
-
+    @Test
     public void testDeleteABD() throws Exception {
         publishAllSchemas();
 
@@ -137,7 +139,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
 
     }
 
-
+    @Test
     public void testDeleteDE() throws Exception {
         publishAllSchemas();
 
@@ -166,20 +168,20 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         assertNotImported(this.testSchemaSimpleF);
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testDeleteEmpty() throws Exception {
         List<URI> schemasToDelete = new ArrayList<URI>();
         this.gme.deleteSchemas(schemasToDelete);
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testDeleteNullError() throws Exception {
         this.gme.deleteSchemas(null);
     }
 
-
+    @Test
     @ExpectedException(NoSuchNamespaceExistsException.class)
     public void testDeleteBeforePublishError() throws Exception {
         List<URI> schemasToDelete = new ArrayList<URI>();
@@ -187,7 +189,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         this.gme.deleteSchemas(schemasToDelete);
     }
 
-
+    @Test
     @ExpectedException(UnableToDeleteSchemaException.class)
     public void testDeleteErrorsWithImport() throws Exception {
         publishAllSchemas();
@@ -197,7 +199,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         this.gme.deleteSchemas(schemasToDelete);
     }
 
-
+    @Test
     @ExpectedException(UnableToDeleteSchemaException.class)
     public void testDeleteErrorsWithImportAndOthers() throws Exception {
         publishAllSchemas();
@@ -209,7 +211,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         this.gme.deleteSchemas(schemasToDelete);
     }
 
-
+    @Test
     @ExpectedException(UnableToDeleteSchemaException.class)
     public void testDeleteErrorsWithNestedImport() throws Exception {
         publishAllSchemas();
@@ -219,7 +221,7 @@ public class GMEDeletesSchemaSimpleTestCase extends GMETestCaseWithSimpleModel {
         this.gme.deleteSchemas(schemasToDelete);
     }
 
-
+    @Test
     @ExpectedException(UnableToDeleteSchemaException.class)
     public void testDeleteErrorsWithMultipleImports() throws Exception {
         publishAllSchemas();

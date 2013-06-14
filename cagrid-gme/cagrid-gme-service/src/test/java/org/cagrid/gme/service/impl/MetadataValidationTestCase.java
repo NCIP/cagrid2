@@ -1,9 +1,6 @@
 package org.cagrid.gme.service.impl;
 
 
-import org.cagrid.gme.service.impl.testutils.SchemaValidationTestCase;
-
-
 /**
 * @author oster
 */

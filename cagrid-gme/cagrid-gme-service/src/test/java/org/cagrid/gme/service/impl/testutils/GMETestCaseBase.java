@@ -4,25 +4,52 @@ import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.model.XMLSchemaBundle;
 import org.cagrid.gme.model.XMLSchemaImportInformation;
 import org.cagrid.gme.model.XMLSchemaNamespace;
+import org.cagrid.gme.service.GlobalModelExchangeService;
 import org.cagrid.gme.service.exception.NoSuchNamespaceExistsException;
 import org.cagrid.gme.service.impl.GME;
+import org.cagrid.gme.service.impl.GMEImpl;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.annotation.Resource;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public abstract class GMETestCaseBase extends GMEIntegrationTestCaseBase {
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+        locations={
+                SpringTestApplicationContextConstants.GME_BASE_LOCATION,
+                SpringTestApplicationContextConstants.TEST_BASE_LOCATION,
+                SpringTestApplicationContextConstants.CYCLES_LOCATION,
+                SpringTestApplicationContextConstants.ERRORS_LOCATION,
+                SpringTestApplicationContextConstants.INCLUDES_LOCATION,
+                SpringTestApplicationContextConstants.REDEFINES_LOCATION,
+                SpringTestApplicationContextConstants.SIMPLE_LOCATION
+        })
+public abstract class GMETestCaseBase extends AbstractTransactionalJUnit4SpringContextTests {
+
+    @Resource
     protected GME gme;
 
+    protected GlobalModelExchangeService serviceImpl;
 
-    @Override
-    protected void onSetUp() throws Exception {
-        super.onSetUp();
+    @Before
+    public void onSetUp() throws Exception {
         assertNotNull(this.gme);
+        serviceImpl = new GMEImpl(gme, null);
     }
-
 
     protected void assertPublishedContents(XMLSchema schema) throws NoSuchNamespaceExistsException {
         List<XMLSchema> list = new ArrayList<XMLSchema>(1);

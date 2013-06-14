@@ -1,4 +1,4 @@
-package org.cagrid.gme.service.impl.testutils;
+package org.cagrid.gme.service.impl;
 
 import gov.nih.nci.cagrid.common.SchemaValidationException;
 import gov.nih.nci.cagrid.common.SchemaValidator;
@@ -8,16 +8,16 @@ import java.io.File;
 
 
 /**
- * Validates a given XML file against a given XML Schema.
- * 
- * @author oster
- */
+* Validates a given XML file against a given XML Schema.
+*
+* @author oster
+*/
 public abstract class SchemaValidationTestCase extends TestCase {
 
 	protected SchemaValidator validator = null;
 
-
-	protected void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
 		super.setUp();
 
 		assertNotNull(getSchemaFilename());
@@ -47,7 +47,7 @@ public abstract class SchemaValidationTestCase extends TestCase {
 
 	/**
 	 * The schema to validate with.
-	 * 
+	 *
 	 * @return The schema to validate with.
 	 */
 	public abstract String getSchemaFilename();
@@ -55,7 +55,7 @@ public abstract class SchemaValidationTestCase extends TestCase {
 
 	/**
 	 * The XML file to validate.
-	 * 
+	 *
 	 * @return The XML file to validate.
 	 */
 	public abstract String getXMLFilename();

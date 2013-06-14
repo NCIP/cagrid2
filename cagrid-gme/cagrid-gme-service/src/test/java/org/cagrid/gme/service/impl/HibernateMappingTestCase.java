@@ -1,21 +1,27 @@
 package org.cagrid.gme.service.impl;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.cagrid.gme.service.impl.testutils.GMEIntegrationTestCaseBase;
+import org.cagrid.gme.service.impl.testutils.GMETestCaseBase;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.persister.entity.EntityPersister;
+import org.junit.Test;
 
+import javax.annotation.Resource;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public class HibernateMappingTestCase extends GMEIntegrationTestCaseBase {
 
+public class HibernateMappingTestCase extends GMETestCaseBase {
+
+    @Resource
     protected SessionFactory sessionFactory;
 
-
+    @Test
     public void testEverything() throws Exception {
         Map metadata = sessionFactory.getAllClassMetadata();
         String className = "";

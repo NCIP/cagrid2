@@ -1,35 +1,34 @@
 package org.cagrid.gme.service.impl.testutils;
 
-import gov.nih.nci.cagrid.common.Utils;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.service.exception.InvalidSchemaSubmissionException;
 import org.cagrid.gme.service.exception.NoSuchNamespaceExistsException;
+import org.junit.Before;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+
+import static junit.framework.Assert.assertNotNull;
 
 
 public abstract class GMETestCaseWithSimpleModel extends GMETestCaseBase {
 
-    // these are loaded by Spring
+    @Resource
     protected XMLSchema testSchemaSimpleA;
+    @Resource
     protected XMLSchema testSchemaSimpleB;
+    @Resource
     protected XMLSchema testSchemaSimpleC;
+    @Resource
     protected XMLSchema testSchemaSimpleD;
+    @Resource
     protected XMLSchema testSchemaSimpleE;
+    @Resource
     protected XMLSchema testSchemaSimpleF;
 
-
-    @Override
-    protected String[] getConfigLocations() {
-        return (String[]) Utils.appendToArray(super.getConfigLocations(),
-                SpringTestApplicationContextConstants.SIMPLE_LOCATION);
-    }
-
-
-    @Override
-    protected void onSetUp() throws Exception {
-        super.onSetUp();
+    @Before
+    public void onSetUp() throws Exception {
         assertNotNull(this.testSchemaSimpleA);
         assertNotNull(this.testSchemaSimpleB);
         assertNotNull(this.testSchemaSimpleC);
@@ -37,7 +36,6 @@ public abstract class GMETestCaseWithSimpleModel extends GMETestCaseBase {
         assertNotNull(this.testSchemaSimpleE);
         assertNotNull(this.testSchemaSimpleF);
     }
-
 
     protected void publishAllSchemas() throws InvalidSchemaSubmissionException, NoSuchNamespaceExistsException {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();

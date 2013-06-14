@@ -1,39 +1,37 @@
 package org.cagrid.gme.service.impl;
 
-import gov.nih.nci.cagrid.common.Utils;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.service.impl.testutils.GMETestCaseBase;
 import org.cagrid.gme.service.impl.testutils.SpringTestApplicationContextConstants;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertNotNull;
 
 public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
 
-    // these are loaded by Spring
+    @Resource
     protected XMLSchema testSchemaInclude;
+    @Resource
     protected XMLSchema testSchemaIncludeCycle;
+    @Resource
     protected XMLSchema testSchemaIncludeNoNamespace;
 
-
-    @Override
-    protected String[] getConfigLocations() {
-        return (String[]) Utils.appendToArray(super.getConfigLocations(),
-                SpringTestApplicationContextConstants.INCLUDES_LOCATION);
-    }
-
-
-    @Override
-    protected void onSetUp() throws Exception {
-        super.onSetUp();
+    @Before
+    public void onSetUp() throws Exception {
         assertNotNull(this.testSchemaInclude);
         assertNotNull(this.testSchemaIncludeCycle);
         assertNotNull(this.testSchemaIncludeNoNamespace);
     }
 
-
+    @Test
     public void testSchemaInclude() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaInclude);
@@ -42,7 +40,7 @@ public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
         assertPublishedContents(schemas);
     }
 
-
+    @Test
     public void testSchemaIncludeCycle() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaIncludeCycle);
@@ -51,7 +49,7 @@ public class GMEAddSchemaIncludesTestCase extends GMETestCaseBase {
         assertPublishedContents(schemas);
     }
 
-
+    @Test
     public void testSchemaIncludeNoNamespace() throws Exception {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(this.testSchemaIncludeNoNamespace);
