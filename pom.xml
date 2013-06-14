@@ -339,6 +339,17 @@
                 <version>3.3.0.ga</version>
             </dependency>
             <dependency>
+                <groupId>org.jgroups</groupId>
+                <artifactId>com.springsource.org.jgroups</artifactId>
+                <version>2.5.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.orm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <!--
+            <dependency>
                 <groupId>net.sourceforge.cglib</groupId>
                 <artifactId>com.springsource.net.sf.cglib</artifactId>
                 <version>2.2.0</version>
@@ -349,11 +360,6 @@
                 <version>1.5.3</version>
             </dependency>
             <dependency>
-                <groupId>org.jgroups</groupId>
-                <artifactId>com.springsource.org.jgroups</artifactId>
-                <version>2.5.1</version>
-            </dependency>
-            <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>org.springframework.jdbc</artifactId>
                 <version>${spring.version}</version>
@@ -361,11 +367,6 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>org.springframework.beans</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.orm</artifactId>
                 <version>${spring.version}</version>
             </dependency>
             <dependency>
@@ -388,6 +389,7 @@
                 <artifactId>org.springframework.aop</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            -->
             <!-- end of hibernate libraries -->
 
 			<dependency>
