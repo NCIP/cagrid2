@@ -17,6 +17,7 @@ import org.cagrid.dorian.idp.impl.IdentityProvider;
 import org.cagrid.dorian.idp.impl.IdentityProviderProperties;
 import org.cagrid.dorian.ifs.GridUserPolicy;
 import org.cagrid.dorian.ifs.TrustedIdP;
+import org.cagrid.dorian.service.impl.BeanUtils;
 import org.cagrid.dorian.service.impl.DorianProperties;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.EventManager;
