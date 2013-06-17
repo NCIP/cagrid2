@@ -23,7 +23,7 @@ grid grouper (see https://wiki.inventrio.com/display/cagrid/Grid+Grouper):
 --------------------------------------------------------------------------------------
 Initialize Grid Grouper Database;
 $> cd $PROJECT_HOME/cagrid-gridgrouper-internet2
-$> mvn clean install -P GrouperInit
+$> mvn -P GrouperInit
 
 Add GridGrouper Admin:
 $> cd $PROJECT_HOME/cagrid-gridgrouper-service

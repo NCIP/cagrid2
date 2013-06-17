@@ -215,6 +215,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
+                <defaultGoal>validate</defaultGoal>
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -222,7 +223,7 @@
                         <version>1.1.1</version>
                         <executions>
                             <execution>
-                                <phase>install</phase>
+                                <phase>validate</phase>
                                 <goals>
                                     <goal>java</goal>
                                 </goals>
