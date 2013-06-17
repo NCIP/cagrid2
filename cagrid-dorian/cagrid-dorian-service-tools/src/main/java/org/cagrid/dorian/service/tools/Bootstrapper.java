@@ -1,4 +1,4 @@
-package org.cagrid.dorian.service.tools;
+BootstrapperSpringUtils.javapackage org.cagrid.dorian.service.tools;
 
 import java.io.File;
 import java.io.FileOutputStream;
