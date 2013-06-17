@@ -1,6 +1,5 @@
 package org.cagrid.dorian.ca.impl;
 
-<<<<<<< HEAD
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,8 +76,5 @@ public class DefaultCertificateAuthorityManager implements CertificateAuthorityM
 		}
 		return list;
 	}
-=======
-public class DefaultCertificateAuthorityManager {
->>>>>>> 998f1cc0c5eff2975cb156f9e8f70b24fb3365f3
 
 }

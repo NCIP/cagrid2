@@ -75,10 +75,6 @@ import org.cagrid.dorian.types.PermissionDeniedException;
 import org.cagrid.dorian.types.UserPolicyException;
 import org.cagrid.gaards.dorian.test.CA;
 import org.cagrid.gaards.dorian.test.Credential;
-<<<<<<< HEAD
-=======
-import org.cagrid.gaards.dorian.test.Constants;
->>>>>>> 998f1cc0c5eff2975cb156f9e8f70b24fb3365f3
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
