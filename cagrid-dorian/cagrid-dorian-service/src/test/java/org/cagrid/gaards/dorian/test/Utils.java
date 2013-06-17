@@ -52,11 +52,7 @@ public class Utils {
 	public static EventManager getEventManager() throws Exception {
 		return getBeanUtils().getEventManager();
 	}
-/*
-	public static DorianProperties getExpiringDorianProperties() throws Exception {
-		return getBeanUtils(new ClassPathResource(Constants.DORIAN_PROPERTIES_EXPIRING_CREDENTIALS)).getDorianProperties();
-	}
-	*/
+
 
 	public static IdentityFederationProperties getIdentityFederationProperties() throws Exception {
 		return getBeanUtils().getIdentityFederationProperties();

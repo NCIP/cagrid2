@@ -38,7 +38,7 @@ public class BeanUtils {
 	}
 
 	public IdentityProvider getIdentityProvider() throws Exception {
-		return (IdentityProvider) factory.getBean(DorianConstants.IDP_BEAN);
+		return new IdentityProvider(this.getIdentityProviderProperties(), this.getDatabase(), this.getCertificateAuthorityManager().getDefaultCertificateAuthority(), this.getEventManager());
 	}
 
 	public EventManager getEventManager() throws Exception {
@@ -54,7 +54,7 @@ public class BeanUtils {
 	}
 
 	public AssertionCredentialsManager getAssertionCredentialsManager() throws Exception {
-		return (AssertionCredentialsManager) factory.getBean(DorianConstants.IDP_ASSERTION_MANAGER_BEAN);
+		return new AssertionCredentialsManager(getIdentityProviderProperties(), getCertificateAuthorityManager().getDefaultCertificateAuthority(), getDatabase());
 	}
 
 	public org.cagrid.dorian.idp.impl.UserManager getIdPUserManager() throws Exception {
