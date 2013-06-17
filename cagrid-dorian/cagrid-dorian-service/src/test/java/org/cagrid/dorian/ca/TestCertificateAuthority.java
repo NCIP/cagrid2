@@ -94,7 +94,7 @@ public class TestCertificateAuthority extends TestCase {
 
 		CertificateAuthority ca = null;
 		if (type.equals(DBCertificateAuthority.class)) {
-			ca = new DBCertificateAuthority(db, props);
+			ca = new DBCertificateAuthority("dorianca",db, props);
 		} else if (type.equals(DBCertificateAuthority.class)) {
 			ca = new EracomCertificateAuthority((EracomCertificateAuthorityProperties) props);
 		} else {

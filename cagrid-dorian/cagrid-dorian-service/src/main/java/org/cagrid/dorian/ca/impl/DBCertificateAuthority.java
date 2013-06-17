@@ -23,15 +23,16 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	public static final String SIGNATURE_ALGORITHM = CertUtil.SHA2_SIGNATURE_ALGORITHM;
 
-	public static final String CA_ALIAS = "dorianca";
-
 	private final static Logger logger = LoggerFactory.getLogger(DBCertificateAuthority.class);
 
 	private CredentialsManager manager;
 
-	public DBCertificateAuthority(Database db, CertificateAuthorityProperties properties) {
+	private String alias;
+
+	public DBCertificateAuthority(String alias, Database db, CertificateAuthorityProperties properties) {
 		super(properties);
 		SecurityUtil.init();
+		this.alias = alias;
 		this.manager = new CredentialsManager(db);
 	}
 
@@ -61,7 +62,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	public void deleteCACredentials() throws CertificateAuthorityException {
 		try {
-			manager.deleteCredentials(CA_ALIAS);
+			manager.deleteCredentials(this.alias);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "An unexpected error occurred, could not delete the CA credentials.");
@@ -77,7 +78,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 				CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "The CA certificate does not exist.");
 				throw fault;
 			} else {
-				return manager.getCertificate(CA_ALIAS);
+				return manager.getCertificate(this.alias);
 			}
 		} catch (CertificateAuthorityException f) {
 			throw f;
@@ -96,7 +97,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 				CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "The CA private key does not exist.");
 				throw fault;
 			} else {
-				return manager.getPrivateKey(CA_ALIAS, password);
+				return manager.getPrivateKey(this.alias, password);
 			}
 		} catch (CertificateAuthorityException f) {
 			throw f;
@@ -110,7 +111,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 
 	public boolean hasCACredentials() throws CertificateAuthorityException {
 		try {
-			return this.manager.hasCredentials(CA_ALIAS);
+			return this.manager.hasCredentials(this.alias);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "An unexpected error occurred, could not determine if credentials exist.");
@@ -126,7 +127,7 @@ public class DBCertificateAuthority extends CertificateAuthority {
 				CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "Credentials already exist for the CA.");
 				throw fault;
 			}
-			manager.addCredentials(CA_ALIAS, password, cert, key);
+			manager.addCredentials(this.alias, password, cert, key);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			CertificateAuthorityException fault = FaultHelper.createFaultException(CertificateAuthorityException.class, "An unexpected error occurred, could not add CA credentials.");

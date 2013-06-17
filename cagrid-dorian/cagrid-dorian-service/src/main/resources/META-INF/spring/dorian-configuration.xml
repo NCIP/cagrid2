@@ -116,7 +116,45 @@
 			value="${cagrid.dorian.service.federation.host.certificate.renewal.policy}" />
 	</bean>
 
-	<bean id="caCreationPolicy" class="org.cagrid.dorian.ca.impl.CertificateAuthorityCreationPolicy">
+	
+
+
+
+	<bean id="certificateAuthorityManager" class="org.cagrid.dorian.ca.impl.DefaultCertificateAuthorityManager">
+		<constructor-arg index="0" value="${cagrid.dorian.service.ca.auto.create.subject}" />
+		<constructor-arg index="1">
+			<list>
+				<ref bean="certificateAuthority" />
+				<ref bean="legacyCertificateAuthority" />
+			</list>
+		</constructor-arg>
+		
+	</bean>
+
+	<bean id="certificateAuthority" class="org.cagrid.dorian.ca.impl.DBCertificateAuthority">
+	    <constructor-arg index="0" value="${cagrid.dorian.service.ca.db.alias}" />
+		<constructor-arg index="1" ref="database" />
+		<constructor-arg index="2" ref="caProperties" />
+	</bean>
+
+	<bean id="caProperties"
+		class="org.cagrid.dorian.ca.impl.CertificateAuthorityProperties">
+		<constructor-arg index="0"
+			value="${cagrid.dorian.service.ca.password}" />
+		<constructor-arg index="1"
+			value="${cagrid.dorian.service.ca.policy.oid}" />
+		<constructor-arg index="2"
+			value="${cagrid.dorian.service.ca.issued.cert.key.size}" />
+		<constructor-arg index="3"
+			value="${cagrid.dorian.service.ca.auto.create}" />
+		<constructor-arg index="4" ref="caCreationPolicy" />
+		<constructor-arg index="5"
+			value="${cagrid.dorian.service.ca.auto.renew}" />
+		<constructor-arg index="6" ref="caRenewalLifetime" />
+	</bean>
+	
+	<bean id="caCreationPolicy"
+		class="org.cagrid.dorian.ca.impl.CertificateAuthorityCreationPolicy">
 		<constructor-arg index="0"
 			value="${cagrid.dorian.service.ca.auto.create.subject}" />
 		<constructor-arg index="1"
@@ -153,25 +191,66 @@
 		<property name="seconds"
 			value="${cagrid.dorian.service.ca.auto.create.lifetime.seconds}" />
 	</bean>
-
-	<bean id="caProperties" class="org.cagrid.dorian.ca.impl.CertificateAuthorityProperties">
-		<constructor-arg index="0"
-			value="${cagrid.dorian.service.ca.password}" />
-		<constructor-arg index="1"
-			value="${cagrid.dorian.service.ca.policy.oid}" />
-		<constructor-arg index="2"
-			value="${cagrid.dorian.service.ca.issued.cert.key.size}" />
-		<constructor-arg index="3"
-			value="${cagrid.dorian.service.ca.auto.create}" />
-		<constructor-arg index="4" ref="caCreationPolicy" />
-		<constructor-arg index="5"
-			value="${cagrid.dorian.service.ca.auto.renew}" />
-		<constructor-arg index="6" ref="caRenewalLifetime" />
+	
+	<bean id="legacyCertificateAuthority" class="org.cagrid.dorian.ca.impl.DBCertificateAuthority">
+	  <constructor-arg index="0" value="${cagrid.dorian.service.legacy-ca.db.alias}" />
+		<constructor-arg index="1" ref="database" />
+		<constructor-arg index="2" ref="legacyCAProperties" />
 	</bean>
 
-	<bean id="certificateAuthority" class="org.cagrid.dorian.ca.impl.DBCertificateAuthority">
-		<constructor-arg index="0" ref="database" />
-		<constructor-arg index="1" ref="caProperties" />
+	<bean id="legacyCAProperties"
+		class="org.cagrid.dorian.ca.impl.CertificateAuthorityProperties">
+		<constructor-arg index="0"
+			value="${cagrid.dorian.service.legacy-ca.password}" />
+		<constructor-arg index="1"
+			value="${cagrid.dorian.service.legacy-ca.policy.oid}" />
+		<constructor-arg index="2"
+			value="${cagrid.dorian.service.legacy-ca.issued.cert.key.size}" />
+		<constructor-arg index="3"
+			value="${cagrid.dorian.service.legacy-ca.auto.create}" />
+		<constructor-arg index="4" ref="legacyCACreationPolicy" />
+		<constructor-arg index="5"
+			value="${cagrid.dorian.service.legacy-ca.auto.renew}" />
+		<constructor-arg index="6" ref="legacyCARenewalLifetime" />
+	</bean>
+	
+	<bean id="legacyCACreationPolicy"
+		class="org.cagrid.dorian.ca.impl.CertificateAuthorityCreationPolicy">
+		<constructor-arg index="0"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.subject}" />
+		<constructor-arg index="1"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.key.size}" />
+		<constructor-arg index="2">
+			<bean class="org.cagrid.dorian.common.Lifetime">
+				<property name="years"
+					value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.years}" />
+				<property name="months"
+					value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.months}" />
+				<property name="days"
+					value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.days}" />
+				<property name="hours"
+					value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.hours}" />
+				<property name="minutes"
+					value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.minutes}" />
+				<property name="seconds"
+					value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.seconds}" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="legacyCARenewalLifetime" class="org.cagrid.dorian.common.Lifetime">
+		<property name="years"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.years}" />
+		<property name="months"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.months}" />
+		<property name="days"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.days}" />
+		<property name="hours"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.hours}" />
+		<property name="minutes"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.minutes}" />
+		<property name="seconds"
+			value="${cagrid.dorian.service.legacy-ca.auto.create.lifetime.seconds}" />
 	</bean>
 
 	<bean id="eventManager" class="org.cagrid.tools.events.EventManager">
@@ -189,7 +268,7 @@
 		<constructor-arg index="0" ref="database" />
 		<constructor-arg index="1" ref="identityProviderProperties" />
 		<constructor-arg index="2" ref="identityFederationProperties" />
-		<constructor-arg index="3" ref="certificateAuthority" />
+		<constructor-arg index="3" ref="certificateAuthorityManager" />
 		<constructor-arg index="4" ref="eventManager" />
 	</bean>
 

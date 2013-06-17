@@ -7,6 +7,7 @@ import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 import java.util.Iterator;
 
 import org.cagrid.dorian.ca.impl.CertificateAuthority;
+import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
 import org.cagrid.dorian.federation.impl.AutoApprovalPolicy;
 import org.cagrid.dorian.federation.impl.IdentityFederationProperties;
@@ -17,6 +18,7 @@ import org.cagrid.dorian.idp.impl.IdentityProvider;
 import org.cagrid.dorian.idp.impl.IdentityProviderProperties;
 import org.cagrid.dorian.ifs.GridUserPolicy;
 import org.cagrid.dorian.ifs.TrustedIdP;
+import org.cagrid.dorian.service.impl.BeanUtils;
 import org.cagrid.dorian.service.impl.DorianProperties;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.EventManager;
@@ -126,6 +128,12 @@ public class Utils {
 
 	public static CertificateAuthorityProperties getCAProperties() throws Exception {
 		return getBeanUtils().getCertificateAuthorityProperties();
+	}
+	
+	public static CertificateAuthorityManager getCertificateAuthorityManager() throws Exception{
+		getCA();
+		CertificateAuthorityManager cm = getBeanUtils().getCertificateAuthorityManager();
+		return cm;
 	}
 
 	public static CertificateAuthority getCA() throws Exception {

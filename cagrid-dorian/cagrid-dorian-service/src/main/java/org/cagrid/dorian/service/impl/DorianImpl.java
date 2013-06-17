@@ -29,7 +29,7 @@ import org.cagrid.core.resource.ResourceImpl;
 import org.cagrid.core.resource.ResourcePropertyDescriptor;
 import org.cagrid.core.resource.SingletonResourceHomeImpl;
 import org.cagrid.dorian.DorianResourceProperties;
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
+import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
 import org.cagrid.dorian.common.AuditConstants;
 import org.cagrid.dorian.common.SAMLConstants;
 import org.cagrid.dorian.federation.impl.AutoApprovalPolicy;
@@ -117,7 +117,7 @@ public class DorianImpl implements Dorian {
 	private EventManager eventManager;
 	private Database db;
 	private PropertyManager propertyManager;
-	private CertificateAuthority ca;
+	private CertificateAuthorityManager caManager;
 	private IdentityProvider identityProvider;
 	private IdentityFederationProperties ifsConfiguration;
 	private IdentityFederationManager ifm;
@@ -137,7 +137,7 @@ public class DorianImpl implements Dorian {
 	@Override
 	public X509Certificate getCACertificate() throws DorianInternalException {
 		try {
-			return ca.getCACertificate();
+			return caManager.getDefaultCertificateAuthority().getCACertificate();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred, in obtaining the CA certificate.");
@@ -491,16 +491,9 @@ public class DorianImpl implements Dorian {
 		db = dorianProperties.getDatabase();
 		db.createDatabaseIfNeeded();
 		propertyManager = new PropertyManager(db);
-		if (propertyManager.getCertificateAuthorityType() == null) {
-			propertyManager.setCertificateAuthorityType(dorianProperties.getCertificateAuthority().getClass().getName());
-		} else if (!propertyManager.getCertificateAuthorityType().equals(dorianProperties.getCertificateAuthority().getClass().getName())) {
-			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Certificate Authority type conflict detected, this Dorian was created using a "
-					+ propertyManager.getCertificateAuthorityType() + " CA but the configuration file specifies the usage of a " + dorianProperties.getCertificateAuthority().getClass().getName()
-					+ " CA.");
-			throw fault;
-		}
-		ca = dorianProperties.getCertificateAuthority();
-		identityProvider = new IdentityProvider(dorianProperties.getIdentityProviderProperties(), db, ca, eventManager);
+
+		this.caManager = dorianProperties.getCertificateAuthorityManager();
+		identityProvider = new IdentityProvider(dorianProperties.getIdentityProviderProperties(), db, this.caManager.getDefaultCertificateAuthority(), eventManager);
 
 		TrustedIdP idp = new TrustedIdP();
 		idp.setName(dorianProperties.getIdentityProviderProperties().getName());
@@ -550,7 +543,7 @@ public class DorianImpl implements Dorian {
 		FederationDefaults defaults = new FederationDefaults(idp, usr);
 		// TODO
 		final boolean ignoreCRL = true;
-		ifm = new IdentityFederationManager(ifsConfiguration, db, propertyManager, ca, this.eventManager, defaults, ignoreCRL);
+		ifm = new IdentityFederationManager(ifsConfiguration, db, propertyManager, caManager, this.eventManager, defaults, ignoreCRL);
 
 		if (!propertyManager.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
 			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Version conflict detected, your are running Dorian " + PropertyManager.CURRENT_VERSION

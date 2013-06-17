@@ -27,6 +27,7 @@ import org.bouncycastle.asn1.x509.CRLReason;
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.dorian.ca.impl.CertificateAuthority;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityException;
+import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
 import org.cagrid.dorian.common.AuditConstants;
 import org.cagrid.dorian.common.CommonUtils;
 import org.cagrid.dorian.ifs.CertificateLifetime;
@@ -99,7 +100,7 @@ public class IdentityFederationManager implements Publisher {
 
 	private IdentityFederationProperties conf;
 
-	private CertificateAuthority ca;
+	private CertificateAuthorityManager caManager;
 
 	private Object mutex = new Object();
 
@@ -128,16 +129,16 @@ public class IdentityFederationManager implements Publisher {
 	private EventAuditor hostAuditor;
 	private EventAuditor userCertificateAuditor;
 
-	public IdentityFederationManager(IdentityFederationProperties conf, Database db, PropertyManager properties, CertificateAuthority ca, EventManager eventManager, FederationDefaults defaults)
-			throws DorianInternalException {
-		this(conf, db, properties, ca, eventManager, defaults, false);
+	public IdentityFederationManager(IdentityFederationProperties conf, Database db, PropertyManager properties, CertificateAuthorityManager caManager, EventManager eventManager,
+			FederationDefaults defaults) throws DorianInternalException {
+		this(conf, db, properties, caManager, eventManager, defaults, false);
 	}
 
-	public IdentityFederationManager(IdentityFederationProperties conf, Database db, PropertyManager properties, CertificateAuthority ca, EventManager eventManager, FederationDefaults defaults,
-			boolean ignoreCRL) throws DorianInternalException {
+	public IdentityFederationManager(IdentityFederationProperties conf, Database db, PropertyManager properties, CertificateAuthorityManager caManager, EventManager eventManager,
+			FederationDefaults defaults, boolean ignoreCRL) throws DorianInternalException {
 		super();
 		this.conf = conf;
-		this.ca = ca;
+		this.caManager = caManager;
 		this.db = db;
 		this.eventManager = eventManager;
 		this.initializeEventManager();
@@ -145,7 +146,7 @@ public class IdentityFederationManager implements Publisher {
 		this.blackList = new CertificateBlacklistManager(db);
 		this.userCertificateManager = new UserCertificateManager(db, this, this.blackList);
 		tm = new TrustedIdPManager(conf, db);
-		um = new UserManager(db, conf, properties, ca, tm, this, defaults);
+		um = new UserManager(db, conf, properties, this.caManager.getDefaultCertificateAuthority(), tm, this, defaults);
 		um.buildDatabase();
 		this.groupManager = new GroupManager(db);
 		try {
@@ -170,7 +171,7 @@ public class IdentityFederationManager implements Publisher {
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
-		this.hostManager = new HostCertificateManager(db, this.conf, ca, this, blackList);
+		this.hostManager = new HostCertificateManager(db, this.conf, caManager.getDefaultCertificateAuthority(), this, blackList);
 
 		try {
 			TrustedIdP idp = tm.getTrustedIdP(CertUtil.loadCertificate(defaults.getDefaultIdP().getIdPCertificate()));
@@ -655,7 +656,8 @@ public class IdentityFederationManager implements Publisher {
 		String gid = null;
 
 		try {
-			gid = CommonUtils.subjectToIdentity(UserManager.getUserSubject(this.conf.getIdentityAssignmentPolicy(), ca.getCACertificate().getSubjectDN().getName(), idp, uid));
+			gid = CommonUtils.subjectToIdentity(UserManager.getUserSubject(this.conf.getIdentityAssignmentPolicy(), caManager.getDefaultCertificateAuthority().getCACertificate().getSubjectDN()
+					.getName(), idp, uid));
 		} catch (Exception e) {
 			String msg = "An unexpected error occurred in determining the grid identity for the user.";
 			this.eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + Utils.getExceptionMessage(e) + "\n\n" + e.getMessage());
@@ -801,7 +803,7 @@ public class IdentityFederationManager implements Publisher {
 
 		// create user certificate
 		try {
-			String caSubject = ca.getCACertificate().getSubjectDN().getName();
+			String caSubject = caManager.getDefaultCertificateAuthority().getCACertificate().getSubjectDN().getName();
 			String sub = um.getUserSubject(caSubject, idp, usr.getUID());
 			Calendar c1 = new GregorianCalendar();
 			c1.add(Calendar.SECOND, CERTIFICATE_START_OFFSET_SECONDS);
@@ -811,7 +813,7 @@ public class IdentityFederationManager implements Publisher {
 			c2.add(Calendar.MINUTE, lifetime.getMinutes());
 			c2.add(Calendar.SECOND, lifetime.getSeconds());
 			Date end = c2.getTime();
-			X509Certificate userCert = ca.signCertificate(sub, publicKey, start, end, sa);
+			X509Certificate userCert = caManager.getDefaultCertificateAuthority().signCertificate(sub, publicKey, start, end, sa);
 			userCertificateManager.addUserCertifcate(usr.getGridId(), userCert);
 			this.eventManager.logEvent(usr.getGridId(), AuditConstants.SYSTEM_ID, FederationAudit.SUCCESSFUL_USER_CERTIFICATE_REQUEST.value(), "User certificate (" + userCert.getSerialNumber()
 					+ ") successfully issued for " + usr.getGridId() + ".");
@@ -1118,8 +1120,9 @@ public class IdentityFederationManager implements Publisher {
 			entries[count] = itr2.next();
 			count++;
 		}
+		// TODO: Finish this
 		try {
-			X509CRL crl = ca.getCRL(entries, sa);
+			X509CRL crl = this.caManager.getDefaultCertificateAuthority().getCRL(entries, sa);
 			return crl;
 		} catch (Exception e) {
 			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error obtaining the CRL.");
@@ -1254,12 +1257,15 @@ public class IdentityFederationManager implements Publisher {
 		this.userCertificateManager.clearDatabase();
 		this.hostManager.clearDatabase();
 		this.blackList.clearDatabase();
-		try {
-			ca.clearCertificateAuthority();
-		} catch (CertificateAuthorityException e) {
-			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, e.getMessage());
-			FaultHelper.addCause(fault, e.getFault());
-			throw fault;
+		List<CertificateAuthority> list = this.caManager.getCertificateAuthorities();
+		for (CertificateAuthority ca : list) {
+			try {
+				ca.clearCertificateAuthority();
+			} catch (CertificateAuthorityException e) {
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, e.getMessage());
+				FaultHelper.addCause(fault, e.getFault());
+				throw fault;
+			}
 		}
 		try {
 			this.gridAccountAuditor.clear();

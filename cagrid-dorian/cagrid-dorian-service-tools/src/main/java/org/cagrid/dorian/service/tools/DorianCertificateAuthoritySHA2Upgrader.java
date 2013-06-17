@@ -18,7 +18,7 @@ public class DorianCertificateAuthoritySHA2Upgrader {
 	public static void main(String[] args) {
 
 		try {
-			SpringUtils utils = new SpringUtils();
+			BootstrapperSpringUtils utils = new BootstrapperSpringUtils();
 			CertificateAuthorityProperties props = utils.getCertificateAuthorityProperties();
 			CertificateAuthority ca = utils.getCertificateAuthority();
 			X509Certificate cert = ca.getCACertificate();

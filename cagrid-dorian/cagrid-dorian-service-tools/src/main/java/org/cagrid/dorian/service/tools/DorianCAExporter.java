@@ -15,7 +15,7 @@ public class DorianCAExporter {
 	 */
 	public static void main(String[] args) {
 		try {
-			SpringUtils utils = new SpringUtils();
+			BootstrapperSpringUtils utils = new BootstrapperSpringUtils();
 			CertificateAuthority ca = utils.getCertificateAuthority();
 			X509Certificate cert = ca.getCACertificate();
 			PrivateKey key = ca.getPrivateKey();

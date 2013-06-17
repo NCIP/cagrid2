@@ -6,14 +6,18 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import org.cagrid.core.commandline.BaseCommandLine;
+import org.cagrid.dorian.ca.impl.CertificateAuthority;
+import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
 import org.cagrid.dorian.federation.impl.IdentityAssignmentPolicy;
 import org.cagrid.dorian.ifs.HostCertificateRecord;
 import org.cagrid.dorian.ifs.HostCertificateRequest;
 import org.cagrid.dorian.ifs.PublicKey;
+import org.cagrid.dorian.service.impl.DorianImpl;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 
@@ -53,14 +57,16 @@ public class Bootstrapper extends BaseCommandLine {
 	private String keyPassword;
 	private String truststorePassword;
 	private File dorianEtcDir;
-	private SpringUtils utils = new SpringUtils();
+	private BootstrapperSpringUtils utils;
 
-	public Bootstrapper(File propertiesFile) {
+	public Bootstrapper(File propertiesFile) throws Exception {
 		super(propertiesFile);
+		utils = new BootstrapperSpringUtils();
 	}
 
-	public Bootstrapper(Properties properties) {
+	public Bootstrapper(Properties properties) throws Exception {
 		super(properties);
+		utils = new BootstrapperSpringUtils();
 	}
 
 	public String getAdminIdentity() throws Exception {
@@ -121,7 +127,7 @@ public class Bootstrapper extends BaseCommandLine {
 		System.out.println("*                   Dorian Bootstrapper                     *");
 		System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 		System.out.println("");
-
+		((DorianImpl) utils.getDorian()).initialize();
 		dorianEtcDir = new File(getServiceMixEtc().getAbsolutePath() + File.separator + DORIAN_SERVICE_DIR);
 		dorianEtcDir.mkdirs();
 		createTruststore();
@@ -151,17 +157,25 @@ public class Bootstrapper extends BaseCommandLine {
 
 		try {
 			File f = new File(this.dorianEtcDir.getAbsolutePath() + File.separator + TRUSTSTORE_FILE_NAME);
-			X509Certificate cert = utils.getDorian().getCACertificate();
+			CertificateAuthorityManager caManager = utils.getCertificateAuthorityManager();
+
+			List<CertificateAuthority> list = caManager.getCertificateAuthorities();
 
 			KeyStore keyStore = KeyStore.getInstance("jks");
 			keyStore.load(null);
-			keyStore.setEntry("dorianca", new KeyStore.TrustedCertificateEntry(cert), null);
+			int count = 1;
+			for (CertificateAuthority ca : list) {
+				X509Certificate cert = ca.getCACertificate();
+				keyStore.setEntry("dorianca" + count, new KeyStore.TrustedCertificateEntry(cert), null);
+				count = count + 1;
+				System.out.println("Adding " + cert.getSubjectDN().getName() + " to the dorian truststore.");
+			}
 
 			FileOutputStream fos = new FileOutputStream(f);
 			keyStore.store(fos, getTruststorePassword().toCharArray());
 			fos.close();
 
-			System.out.println("Truststore created for " + cert.getSubjectDN().getName() + " at " + f.getAbsolutePath());
+			System.out.println("Truststore created for Dorian at " + f.getAbsolutePath());
 
 		} catch (Exception e) {
 			e.printStackTrace();

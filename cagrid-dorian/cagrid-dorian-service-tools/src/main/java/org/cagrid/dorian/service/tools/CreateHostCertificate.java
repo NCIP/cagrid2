@@ -42,7 +42,7 @@ public class CreateHostCertificate extends BaseCommandLine {
 	@Override
 	public void execute() throws Exception {
 
-		SpringUtils utils = new SpringUtils();
+		BootstrapperSpringUtils utils = new BootstrapperSpringUtils();
 		Dorian dorian = utils.getDorian();
 		String hostname = getValue(HOSTNAME_PROMPT, HOSTNAME_PROPERTY);
 		String userId = getValue(ADMIN_USER_ID_PROMPT, ADMIN_USER_ID_PROPERTY);

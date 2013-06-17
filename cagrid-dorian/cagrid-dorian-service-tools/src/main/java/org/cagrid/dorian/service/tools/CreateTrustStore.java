@@ -28,7 +28,7 @@ public class CreateTrustStore extends BaseCommandLine {
 	@Override
 	public void execute() throws Exception {
 
-		SpringUtils utils = new SpringUtils();
+		BootstrapperSpringUtils utils = new BootstrapperSpringUtils();
 		Dorian dorian = utils.getDorian();
 
 		X509Certificate certificate = dorian.getCACertificate();
