@@ -12,7 +12,7 @@
         <prop key="cagrid.gme.service.db.url">jdbc:mysql://localhost:3306/gme</prop>
 		<prop key="cagrid.gme.service.db.username">root</prop>
 		<prop key="cagrid.gme.service.db.password"></prop>
-        <prop key="cagrid.gme.service.db.dialect">org.hibernate.dialect.MySQLInnoDBDialect</prop>
+        <prop key="cagrid.gme.service.db.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
         <prop key="cagrid.gme.service.db.driver">com.mysql.jdbc.Driver</prop>
         <prop key="cagrid.gme.service.db.hibernate.hbm2ddl.auto">update</prop>
 

@@ -31,7 +31,6 @@ Add GridGrouper Admin:
 $> cd $PROJECT_HOME/cagrid-gridgrouper-service
 $> mvn -P AddAdmin
 
-features:addurl mvn:org.cagrid/cagrid-gridgrouper-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid-gridgrouper
 --------------------------------------------------------------------------------------
 
