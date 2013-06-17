@@ -22,6 +22,6 @@
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
-	<osgi:service ref="gmeService" interface="org.cagrid.gme.service.GlobalModelExchangeService" />
+	<osgi:service ref="gmeService" interface="org.cagrid.gme.service.GlobalModelExchangeService" context-class-loader="service-provider"/>
 
 </beans>

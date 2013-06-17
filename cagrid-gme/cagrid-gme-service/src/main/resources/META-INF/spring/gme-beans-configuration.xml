@@ -70,7 +70,7 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <tx:annotation-driven />
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
     <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
         <property name="checkWriteOperations">

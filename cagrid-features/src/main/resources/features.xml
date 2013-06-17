@@ -102,8 +102,15 @@
 
     <!-- GME -->
     <feature name="cagrid-gme" version="${project.version}">
+        <feature version="${project.version}">cagrid-gaards</feature>
         <bundle>mvn:${project.groupId}/cagrid-gme-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gme-soap-client/${project.version}</bundle>
+    </feature>
+    <feature name="cagrid-gme-client" version="${project.version}">
+        <feature version="${project.version}">cagrid-gaards</feature>
+        <bundle>mvn:${project.groupId}/cagrid-gme-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gme-soap-client/${project.version}</bundle>
     </feature>
 </features>

@@ -118,5 +118,6 @@
         <module>cagrid-gme-api</module>
         <module>cagrid-gme-service</module>
         <module>cagrid-gme-wsrf</module>
+        <module>cagrid-gme-soap-client</module>
     </modules>
 </project>
