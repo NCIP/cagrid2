@@ -104,5 +104,6 @@
     <feature name="cagrid-gme" version="${project.version}">
         <bundle>mvn:${project.groupId}/cagrid-gme-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-service/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}</bundle>
     </feature>
 </features>

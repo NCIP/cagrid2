@@ -117,5 +117,6 @@
     <modules>
         <module>cagrid-gme-api</module>
         <module>cagrid-gme-service</module>
+        <module>cagrid-gme-wsrf</module>
     </modules>
 </project>

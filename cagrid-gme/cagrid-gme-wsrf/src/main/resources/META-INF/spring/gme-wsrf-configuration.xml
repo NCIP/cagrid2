@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:wsa="http://cxf.apache.org/ws/addressing" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+	                    http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+	                    http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+	                    http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<bean id="defaultPropertiesPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:META-INF/spring/gme-wsrf.properties" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+
+	<bean id="proxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.gme.wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.gme.wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.gme.wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.gme.wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.gme.wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}" />
+	</bean>
+
+<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
+	<httpj:engine-factory bus="cxf">
+		<httpj:engine port="${cagrid.gme.wsrf.port}">
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<property name="port" value="${cagrid.gme.wsrf.port}" />
+				</bean>
+			</httpj:connector>
+		</httpj:engine>
+	</httpj:engine-factory>
+
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+		<property name="marshallerProperties" ref="propertiesMap" />
+	</bean>
+	<util:map id="propertiesMap">
+		<entry key="jaxb.formatted.output">
+			<value type="java.lang.Boolean">true</value>
+		</entry>
+	</util:map>
+
+	<bean id="gmeWSRF" class="org.cagrid.gme.service.wsrf.GMEWSRFImpl">
+		<constructor-arg index="0" ref="gmeService" />
+	</bean>
+
+	<jaxws:endpoint xmlns:e="http://gme.cagrid.org/GlobalModelExchange/service"
+		xmlns:s="http://gme.cagrid.org/GlobalModelExchange/service" id="gmeWSRFEP"
+		implementor="#gmeWSRF" bus="cxf" endpointName="e:GlobalModelExchangePortTypePort"
+		serviceName="s:GlobalModelExchangeService" address="${cagrid.gme.wsrf.url}"
+		wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl">
+	</jaxws:endpoint>
+</beans>

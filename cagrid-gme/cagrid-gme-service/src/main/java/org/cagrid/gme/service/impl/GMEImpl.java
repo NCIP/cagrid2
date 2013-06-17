@@ -36,7 +36,6 @@ public class GMEImpl implements GlobalModelExchangeService {
 
     protected static Log LOG = LogFactory.getLog(GMEImpl.class.getName());
 
-    protected static final String GME_BEAN_NAME = "gme";
     protected GME gme = null;
 
     private final ResourceImpl resource = new ResourceImpl(null);
@@ -45,41 +44,19 @@ public class GMEImpl implements GlobalModelExchangeService {
     private ResourceProperty<ServiceMetadata> serviceMetadataResourceProperty;
     private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
 
-    // TODO: do we need this constructor?
-//    public GMEImpl() throws RemoteException {
-//        super();
-//        try {
-//            String gmeConfigurationFile = getConfiguration().getGmeConfigurationFile();
-//            String gmeProperties = getConfiguration().getGmePropertiesFile();
-//            FileSystemResource gmeConfResource = new FileSystemResource(gmeConfigurationFile);
-//            FileSystemResource gmePropertiesResource = new FileSystemResource(gmeProperties);
-//
-//            XmlBeanFactory factory = new XmlBeanFactory(gmeConfResource);
-//            PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
-//            cfg.setLocation(gmePropertiesResource);
-//            cfg.postProcessBeanFactory(factory);
-//
-//            this.gme = (GME) factory.getBean(GME_BEAN_NAME, GME.class);
-//
-//        } catch (Exception e) {
-//            String message = "Problem inititializing GME while loading configuration:" + e.getMessage();
-//            LOG.error(message, e);
-//            throw new RemoteException(message, e);
-//        }
-//    }
-
     public GMEImpl(GME gme, Map<String, String> jaxbResourcePropertiesMap) {
         this.gme = gme;
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
     }
 
-//    public GlobalModelExchangeConfiguration getConfiguration() throws Exception {
-//        return GlobalModelExchangeConfiguration.getConfiguration();
-//    }
-
     @Override
     public ResourceHome getResourceHome() {
         return resourceHome;
+    }
+
+    @Override
+    public ServiceSecurityMetadata getServiceSecurityMetadata() {
+        return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty.get(0) : null;
     }
 
     @Override

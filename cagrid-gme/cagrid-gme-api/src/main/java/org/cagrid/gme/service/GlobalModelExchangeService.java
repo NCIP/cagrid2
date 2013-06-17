@@ -1,5 +1,6 @@
 package org.cagrid.gme.service;
 
+import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.model.XMLSchemaBundle;
 import org.cagrid.gme.model.XMLSchemaNamespace;
@@ -27,4 +28,6 @@ public interface GlobalModelExchangeService {
     List<XMLSchemaNamespace> getImportedXMLSchemaNamespaces(XMLSchemaNamespace targetNamespace) throws NoSuchNamespaceExistsException;
 
     List<XMLSchemaNamespace> getImportingXMLSchemaNamespaces(XMLSchemaNamespace targetNamespace) throws NoSuchNamespaceExistsException;
+
+    ServiceSecurityMetadata getServiceSecurityMetadata();
 }
