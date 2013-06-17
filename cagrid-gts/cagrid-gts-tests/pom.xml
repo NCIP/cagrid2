@@ -34,13 +34,6 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>cagrid-gts-features</artifactId>
-			<version>${project.version}</version>
-			<classifier>features</classifier>
-			<type>xml</type>
-		</dependency>
-		<dependency>
 			<groupId>org.cagrid.wsrf</groupId>
 			<artifactId>wsrf-draft-features</artifactId>
 			<classifier>features</classifier>
@@ -49,12 +42,6 @@
 		<dependency>
 			<groupId>org.cagrid</groupId>
 			<artifactId>cagrid-features</artifactId>
-			<classifier>features</classifier>
-			<type>xml</type>
-		</dependency>
-		<dependency>
-			<groupId>org.cagrid</groupId>
-			<artifactId>cagrid-gaards-features</artifactId>
 			<classifier>features</classifier>
 			<type>xml</type>
 		</dependency>
