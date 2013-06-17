@@ -3,6 +3,8 @@ and       https://svn.cagrid.org/branches/djh-inventrio/caGrid-OSGi
 Build and install both of these.  All the dependencies should resolve through the inventrio repo.
 
 Install servicemix 4.5
+*NOTE: servicemix defaults to using the felix osgi kernal which has some bugs when dealing with complex feature/bundle dependencies, so let's use equinox by default
+edit etc/config.properties, setting karaf.framework=equinox 
 Make sure mysql is running, root / <nopassword>.
 
 Execute the following on the console:

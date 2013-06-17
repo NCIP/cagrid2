@@ -32,6 +32,7 @@ import org.apache.felix.service.command.CommandProcessor;
 import org.apache.felix.service.command.CommandSession;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFilePutOption;
 import org.apache.karaf.tooling.exam.options.LogLevelOption;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +60,7 @@ public abstract class CaGridTestSupport {
     public static final String KARAF_GROUP_ID = "org.apache.karaf";
     public static final String KARAF_ARTIFACT_ID = "apache-karaf";
 
-    //public static final String WSRF_FEATURE_VERSION_PROPERTY = "cagrid.wsrf.version";
+    // public static final String WSRF_FEATURE_VERSION_PROPERTY = "cagrid.wsrf.version";
     public static final String CAGRID_FEATURE_VERSION_PROPERTY = "cagrid.version";
 
     ExecutorService executor = Executors.newCachedThreadPool();
@@ -79,10 +80,10 @@ public abstract class CaGridTestSupport {
     @Before
     public void setUp() {
 
-//        // Add the WSRF Features Repo
-//        System.err.println(executeCommand("features:addurl "
-//                + maven().groupId("org.cagrid.wsrf").artifactId("wsrf-draft-features").version(System.getProperty(WSRF_FEATURE_VERSION_PROPERTY))
-//                        .classifier("features").type("xml").getURL()));
+        // // Add the WSRF Features Repo
+        // System.err.println(executeCommand("features:addurl "
+        // + maven().groupId("org.cagrid.wsrf").artifactId("wsrf-draft-features").version(System.getProperty(WSRF_FEATURE_VERSION_PROPERTY))
+        // .classifier("features").type("xml").getURL()));
 
         // Add the caGrid Features Repo
         System.err.println(executeCommand("features:addurl "
@@ -94,18 +95,24 @@ public abstract class CaGridTestSupport {
     @Configuration
     public Option[] config() {
         return new Option[] {
-                //pick the distribution to use; and configure it to be kept
+                // pick the distribution to use; and configure it to be kept
                 caGridDistributionConfiguration(),
                 keepRuntimeFolder(),
                 logLevel(LogLevelOption.LogLevel.INFO),
-                //pass in the versions to use for features
-                //systemProperty(WSRF_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid.wsrf", "wsrf-draft-features")),
+                // pass in the versions to use for features
+                // systemProperty(WSRF_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid.wsrf", "wsrf-draft-features")),
                 systemProperty(CAGRID_FEATURE_VERSION_PROPERTY, MavenUtils.getArtifactVersion("org.cagrid", "cagrid-features")),
                 // Pass local/private maven locations into the forked JVMs (this is needed if you use jenkins with a per-build maven repo)
                 when(System.getProperty("maven.repo.local") != null).useOptions(
                         vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + System.getProperty("maven.repo.local"))),
                 when(System.getProperty("org.ops4j.pax.url.mvn.localRepository") != null).useOptions(
-                        vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + System.getProperty("org.ops4j.pax.url.mvn.localRepository"))) };
+                        vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + System.getProperty("org.ops4j.pax.url.mvn.localRepository"))),
+                // servicemix defaults to using the felix osgi kernal which has some bugs when dealing with complex feature/bundle dependencies, so let's use
+                // equinox by default
+                new KarafDistributionConfigurationFilePutOption("etc/config.properties", // config file to modify based on karaf.base
+                        "karaf.framework", // key to add or change
+                        "equinox") // value to add or change
+        };
     }
 
     protected Option caGridDistributionConfiguration() {
