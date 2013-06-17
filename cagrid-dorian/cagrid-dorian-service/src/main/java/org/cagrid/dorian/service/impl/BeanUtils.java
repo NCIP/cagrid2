@@ -58,7 +58,7 @@ public class BeanUtils {
 	}
 
 	public org.cagrid.dorian.idp.impl.UserManager getIdPUserManager() throws Exception {
-		return (org.cagrid.dorian.idp.impl.UserManager) factory.getBean(DorianConstants.IDP_USER_MANAGER_BEAN);
+		return new org.cagrid.dorian.idp.impl.UserManager(getDatabase(), getIdentityProviderProperties());
 	}
 
 	public Database getDatabase() throws Exception {
