@@ -227,6 +227,7 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
+                <defaultGoal>validate</defaultGoal>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -234,7 +235,7 @@
                         <version>1.7</version>
                         <executions>
                             <execution>
-                                <id>catch-new-version</id>
+                                <id>enter-grid-identity</id>
                                 <goals>
                                     <goal>run</goal>
                                 </goals>
@@ -261,10 +262,10 @@
                         <version>1.1.1</version>
                         <executions>
                             <execution>
-                                <phase>install</phase>
                                 <goals>
                                     <goal>java</goal>
                                 </goals>
+                                <phase>validate</phase>
                                 <configuration>
                                     <mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
                                     <arguments>
