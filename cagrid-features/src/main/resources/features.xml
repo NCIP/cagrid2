@@ -16,6 +16,14 @@
         </bundle>
         <bundle>mvn:org.jvnet.jaxb2_commons/jaxb2-basics-runtime/${org.jvnet.jaxb2_commons/jaxb2-basics-runtime/version}
         </bundle>
+        <!-- hibernate -->
+        <bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
+        <bundle>mvn:org.hibernate/com.springsource.org.hibernate/${org.hibernate/com.springsource.org.hibernate/version}</bundle>
+        <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations/${org.hibernate/com.springsource.org.hibernate.annotations/version}</bundle>
+        <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/${org.hibernate/com.springsource.org.hibernate.annotations.common/version}</bundle>
+        <bundle>mvn:org.antlr/com.springsource.antlr/${org.antlr/com.springsource.antlr/version}</bundle>
+        <bundle>mvn:org.jboss.javassist/com.springsource.javassist/${org.jboss.javassist/com.springsource.javassist/version}</bundle>
+        <bundle>mvn:org.jgroups/com.springsource.org.jgroups/${org.jgroups/com.springsource.org.jgroups/version}</bundle>
     </feature>
 
 
@@ -94,16 +102,6 @@
     <!-- GME -->
     <feature name="cagrid-gme" version="${project.version}">
     	<feature version="${project.version}">cagrid-gaards</feature>
-        <!-- hibernate -->
-        <feature>spring-orm</feature>
-        <feature>spring-jdbc</feature>
-        <bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
-        <bundle>mvn:org.hibernate/com.springsource.org.hibernate/${org.hibernate/com.springsource.org.hibernate/version}</bundle>
-        <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations/${org.hibernate/com.springsource.org.hibernate.annotations/version}</bundle>
-        <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/${org.hibernate/com.springsource.org.hibernate.annotations.common/version}</bundle>
-        <bundle>mvn:org.antlr/com.springsource.antlr/${org.antlr/com.springsource.antlr/version}</bundle>
-        <bundle>mvn:org.jboss.javassist/com.springsource.javassist/${org.jboss.javassist/com.springsource.javassist/version}</bundle>
-        <bundle>mvn:org.jgroups/com.springsource.org.jgroups/${org.jgroups/com.springsource.org.jgroups/version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}</bundle>
