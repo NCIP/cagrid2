@@ -539,6 +539,56 @@ public class HostCertificateManager {
 		return record;
 	}
 
+	public HostCertificateRecord getHostCertificateRecordBySerialNumber(long sn) throws DorianInternalException, InvalidHostCertificateException {
+		buildDatabase();
+		Connection c = null;
+		HostCertificateRecord record = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select " + ID + "," + HOST + "," + SUBJECT + "," + OWNER + "," + SERIAL + "," + STATUS + "," + PUBLIC_KEY + "," + CERTIFICATE + " from " + TABLE
+					+ " WHERE " + SERIAL + "= ?");
+			s.setLong(1, sn);
+
+			ResultSet rs = s.executeQuery();
+			if (rs.next()) {
+				record = new HostCertificateRecord();
+				record.setId(rs.getInt(ID));
+				record.setHost(rs.getString(HOST));
+				record.setOwner(rs.getString(OWNER));
+				record.setSerialNumber(rs.getLong(SERIAL));
+				record.setStatus(HostCertificateStatus.fromValue(rs.getString(STATUS)));
+				record.setSubject(rs.getString(SUBJECT));
+				String keyStr = Utils.clean(rs.getString(PUBLIC_KEY));
+				if (keyStr != null) {
+					PublicKey pk = new PublicKey();
+					pk.setKeyAsString(keyStr);
+					record.setPublicKey(pk);
+				}
+				String certStr = Utils.clean(rs.getString(CERTIFICATE));
+				if (certStr != null) {
+					X509Certificate cert = new X509Certificate();
+					cert.setCertificateAsString(certStr);
+					record.setCertificate(cert);
+				}
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
+			FaultHelper.addMessage(fault, e.getMessage());
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+
+		if (record == null) {
+			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class, "No such host certificate exists.");
+			throw fault;
+		}
+
+		return record;
+	}
+
 	public synchronized void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianInternalException, InvalidHostCertificateException {
 
 		if (!determineIfRecordExistById(update.getId())) {

@@ -1064,72 +1064,139 @@ public class IdentityFederationManager implements Publisher {
 		// }
 	}
 
-	public X509CRL getCRL(CertificateSignatureAlgorithm sa) throws DorianInternalException {
-		Map<Long, CRLEntry> list = new HashMap<Long, CRLEntry>();
+	private void addToCRLList(Map<String, Map<Long, CRLEntry>> crls, String issuer, BigInteger serialNumber) {
 
+		if (crls.containsKey(issuer)) {
+			Map<Long, CRLEntry> list = crls.get(issuer);
+			if (!list.containsKey(serialNumber)) {
+				CRLEntry entry = new CRLEntry(serialNumber, CRLReason.PRIVILEGE_WITHDRAWN);
+				list.put(serialNumber.longValue(), entry);
+			}
+		} else {
+			Map<Long, CRLEntry> list = new HashMap<Long, CRLEntry>();
+			CRLEntry entry = new CRLEntry(serialNumber, CRLReason.PRIVILEGE_WITHDRAWN);
+			list.put(serialNumber.longValue(), entry);
+			crls.put(issuer, list);
+		}
+
+	}
+
+	public Map<String, X509CRL> getCRL(CertificateSignatureAlgorithm sa) throws DorianInternalException {
+
+		Map<String, Map<Long, CRLEntry>> crls = new HashMap<String, Map<Long, CRLEntry>>();
 		Set<String> users = this.um.getDisabledUsers();
 		Iterator<String> itr = users.iterator();
 		while (itr.hasNext()) {
 			String gid = itr.next();
 			List<BigInteger> userCerts = this.userCertificateManager.getActiveCertificates(gid);
-			for (int i = 0; i < userCerts.size(); i++) {
-				Long sn = userCerts.get(i).longValue();
-				if (!list.containsKey(sn)) {
-					list.put(sn, new CRLEntry(userCerts.get(i), CRLReason.PRIVILEGE_WITHDRAWN));
+			for (BigInteger sn : userCerts) {
+				try {
+					UserCertificateRecord record = this.userCertificateManager.getUserCertificateRecord(sn.longValue());
+					X509Certificate cert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+					this.addToCRLList(crls, cert.getIssuerDN().getName(), sn);
+				} catch (Exception e) {
+					logger.error("An unexpected error occured loading the user certificate, " + sn.longValue() + ": " + e.getMessage(), e);
 				}
 			}
 
 			List<Long> hostCerts = this.hostManager.getHostCertificateRecordsSerialNumbers(gid);
-			for (int i = 0; i < hostCerts.size(); i++) {
-				if (!list.containsKey(hostCerts.get(i))) {
-					CRLEntry entry = new CRLEntry(BigInteger.valueOf(hostCerts.get(i).longValue()), CRLReason.PRIVILEGE_WITHDRAWN);
-					list.put(hostCerts.get(i), entry);
+			for (Long sn : hostCerts) {
+				try {
+					HostCertificateRecord record = this.hostManager.getHostCertificateRecordBySerialNumber(sn);
+					X509Certificate cert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+					this.addToCRLList(crls, cert.getIssuerDN().getName(), BigInteger.valueOf(sn));
+				} catch (Exception e) {
+					logger.error("An unexpected error occured loading the host certificate, " + sn + ": " + e.getMessage(), e);
 				}
 			}
 		}
 
 		List<BigInteger> compromisedUserCerts = this.userCertificateManager.getCompromisedCertificates();
-		for (int i = 0; i < compromisedUserCerts.size(); i++) {
-			Long sn = compromisedUserCerts.get(i).longValue();
-			if (!list.containsKey(sn)) {
-				list.put(sn, new CRLEntry(compromisedUserCerts.get(i), CRLReason.PRIVILEGE_WITHDRAWN));
+		for (BigInteger sn : compromisedUserCerts) {
+			try {
+				UserCertificateRecord record = this.userCertificateManager.getUserCertificateRecord(sn.longValue());
+				X509Certificate cert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+				this.addToCRLList(crls, cert.getIssuerDN().getName(), sn);
+			} catch (Exception e) {
+				logger.error("An unexpected error occured loading the user certificate, " + sn.longValue() + ": " + e.getMessage(), e);
 			}
 		}
 
 		List<Long> hosts = this.hostManager.getDisabledHostCertificatesSerialNumbers();
-		for (int i = 0; i < hosts.size(); i++) {
-			if (!list.containsKey(hosts.get(i))) {
-				CRLEntry entry = new CRLEntry(BigInteger.valueOf(hosts.get(i).longValue()), CRLReason.PRIVILEGE_WITHDRAWN);
-				list.put(hosts.get(i), entry);
+		for (Long sn : hosts) {
+			try {
+				HostCertificateRecord record = this.hostManager.getHostCertificateRecordBySerialNumber(sn);
+				X509Certificate cert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
+				this.addToCRLList(crls, cert.getIssuerDN().getName(), BigInteger.valueOf(sn));
+			} catch (Exception e) {
+				logger.error("An unexpected error occured loading the host certificate, " + sn.longValue() + ": " + e.getMessage(), e);
 			}
 		}
 
 		List<Long> blist = this.blackList.getBlackList();
 
-		for (int i = 0; i < blist.size(); i++) {
-			if (!list.containsKey(blist.get(i))) {
-				CRLEntry entry = new CRLEntry(BigInteger.valueOf(blist.get(i).longValue()), CRLReason.PRIVILEGE_WITHDRAWN);
-				list.put(blist.get(i), entry);
+		for (Long sn : blist) {
+			try {
+				X509Certificate cert = this.blackList.getCertificate(sn);
+				this.addToCRLList(crls, cert.getIssuerDN().getName(), BigInteger.valueOf(sn));
+			} catch (Exception e) {
+				logger.error("An unexpected error occured loading the black listed certificate, " + sn.longValue() + ": " + e.getMessage(), e);
 			}
 		}
 
-		CRLEntry[] entries = new CRLEntry[list.size()];
-		Iterator<CRLEntry> itr2 = list.values().iterator();
-		int count = 0;
-		while (itr2.hasNext()) {
-			entries[count] = itr2.next();
-			count++;
-		}
-		// TODO: Finish this
-		try {
-			X509CRL crl = this.caManager.getDefaultCertificateAuthority().getCRL(entries, sa);
-			return crl;
-		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error obtaining the CRL.");
-			FaultHelper.addMessage(fault, e.getMessage());
-			throw fault;
+		Map<String, X509CRL> crlMap = new HashMap<String, X509CRL>();
+		// We need to create a CRL for each certificate authority
+		List<CertificateAuthority> caList = this.caManager.getCertificateAuthorities();
+		for (CertificateAuthority ca : caList) {
+			CRLEntry[] entries = null;
+			String issuer = null;
+			try {
+				issuer = ca.getCACertificate().getSubjectDN().getName();
+
+				if (crls.containsKey(issuer)) {
+					Map<Long, CRLEntry> entryMap = crls.get(issuer);
+					entries = new CRLEntry[entryMap.size()];
+					Iterator<CRLEntry> itr2 = entryMap.values().iterator();
+					int count = 0;
+					while (itr2.hasNext()) {
+						entries[count] = itr2.next();
+						count++;
+					}
+				} else {
+					entries = new CRLEntry[0];
+				}
+				X509CRL crl = this.caManager.getCertificateAuthority(issuer).getCRL(entries, sa);
+				crlMap.put(issuer, crl);
+
+			} catch (Exception e) {
+				logger.error("Unexpected error obtaining the CRL for the issuer, " + issuer + ": " + e.getMessage() + ".", e);
+			}
 		}
 
+//		
+//		Iterator<String> crlItr = crls.keySet().iterator();
+//
+//		while (crlItr.hasNext()) {
+//			String issuer = crlItr.next();
+//			try {
+//
+//				Map<Long, CRLEntry> entryMap = crls.get(issuer);
+//
+//				CRLEntry[] entries = new CRLEntry[entryMap.size()];
+//				Iterator<CRLEntry> itr2 = entryMap.values().iterator();
+//				int count = 0;
+//				while (itr2.hasNext()) {
+//					entries[count] = itr2.next();
+//					count++;
+//				}
+//				X509CRL crl = this.caManager.getCertificateAuthority(issuer).getCRL(entries, sa);
+//				crlMap.put(issuer, crl);
+//
+//			} catch (Exception e) {
+//				logger.error("Unexpected error obtaining the CRL for the issuer, " + issuer + ": " + e.getMessage() + ".", e);
+//			}
+//		}
+		return crlMap;
 	}
 
 	private GridUser getUser(String gridId) throws DorianInternalException, PermissionDeniedException {

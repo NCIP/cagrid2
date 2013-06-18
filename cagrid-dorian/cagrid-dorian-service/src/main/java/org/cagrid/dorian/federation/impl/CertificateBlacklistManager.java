@@ -35,37 +35,54 @@ public class CertificateBlacklistManager {
 		this.db = db;
 	}
 
-	public synchronized void addCertificateToBlackList(
-			org.cagrid.dorian.common.X509Certificate cert, String reason)
-			throws DorianInternalException {
+	public synchronized void addCertificateToBlackList(org.cagrid.dorian.common.X509Certificate cert, String reason) throws DorianInternalException {
 		try {
-			addCertificateToBlackList(
-					CertUtil.loadCertificate(cert.getCertificateAsString()),
-					reason);
+			addCertificateToBlackList(CertUtil.loadCertificate(cert.getCertificateAsString()), reason);
 		} catch (GeneralSecurityException e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class, "Unexpected Error");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected Error");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} catch (IOException e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class, "Unexpected Error");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected Error");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}
 
 	}
 
-	public synchronized void addCertificateToBlackList(X509Certificate cert,
-			String reason) throws DorianInternalException {
+	public X509Certificate getCertificate(long sn) throws DorianInternalException {
+		buildDatabase();
+		Connection c = null;
+		X509Certificate cert = null;
+		try {
+			c = db.getConnection();
+			PreparedStatement s = c.prepareStatement("select " + CERTIFICATE + " from " + TABLE + " WHERE " + SERIAL + "= ?");
+			s.setLong(1, sn);
+
+			ResultSet rs = s.executeQuery();
+			if (rs.next()) {
+				cert = CertUtil.loadCertificate(rs.getString(CERTIFICATE));
+			}
+			rs.close();
+			s.close();
+		} catch (Exception e) {
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected error occurred.");
+			FaultHelper.addMessage(fault, e.getMessage());
+			throw fault;
+		} finally {
+			db.releaseConnection(c);
+		}
+
+		return cert;
+	}
+
+	public synchronized void addCertificateToBlackList(X509Certificate cert, String reason) throws DorianInternalException {
 		buildDatabase();
 		if (!memberOfBlackList(cert.getSerialNumber().longValue())) {
 			Connection c = null;
 			try {
 				c = db.getConnection();
-				PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE
-						+ " SET " + SERIAL + "= ?," + SUBJECT + "= ?," + REASON
-						+ "= ?," + CERTIFICATE + "= ?");
+				PreparedStatement s = c.prepareStatement("INSERT INTO " + TABLE + " SET " + SERIAL + "= ?," + SUBJECT + "= ?," + REASON + "= ?," + CERTIFICATE + "= ?");
 				s.setLong(1, cert.getSerialNumber().longValue());
 				s.setString(2, cert.getSubjectDN().getName());
 				s.setString(3, reason);
@@ -73,9 +90,7 @@ public class CertificateBlacklistManager {
 				s.executeUpdate();
 				s.close();
 			} catch (Exception e) {
-				DorianInternalException fault = FaultHelper
-						.createFaultException(DorianInternalException.class,
-								"Unexpected Error");
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected Error");
 				FaultHelper.addMessage(fault, e.getMessage());
 				throw fault;
 			} finally {
@@ -84,20 +99,17 @@ public class CertificateBlacklistManager {
 		}
 	}
 
-	public void removeCertificateFromBlackList(long serialNumber)
-			throws DorianInternalException {
+	public void removeCertificateFromBlackList(long serialNumber) throws DorianInternalException {
 		buildDatabase();
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("delete from " + TABLE
-					+ " where " + SERIAL + "= ?");
+			PreparedStatement s = c.prepareStatement("delete from " + TABLE + " where " + SERIAL + "= ?");
 			s.setLong(1, serialNumber);
 			s.executeUpdate();
 			s.close();
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class, "Unexpected Error");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected Error");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -112,8 +124,7 @@ public class CertificateBlacklistManager {
 		Connection c = null;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select " + SERIAL
-					+ " from " + TABLE);
+			PreparedStatement s = c.prepareStatement("select " + SERIAL + " from " + TABLE);
 			ResultSet rs = s.executeQuery();
 			while (rs.next()) {
 				list.add(Long.valueOf(rs.getLong(SERIAL)));
@@ -122,9 +133,7 @@ public class CertificateBlacklistManager {
 			s.close();
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Unexpected error encountered.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected error encountered.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -139,8 +148,7 @@ public class CertificateBlacklistManager {
 		boolean exists = false;
 		try {
 			c = db.getConnection();
-			PreparedStatement s = c.prepareStatement("select count(*) from "
-					+ TABLE + " WHERE " + SERIAL + "= ?");
+			PreparedStatement s = c.prepareStatement("select count(*) from " + TABLE + " WHERE " + SERIAL + "= ?");
 			s.setLong(1, id);
 			ResultSet rs = s.executeQuery();
 			if (rs.next()) {
@@ -151,8 +159,7 @@ public class CertificateBlacklistManager {
 			rs.close();
 			s.close();
 		} catch (Exception e) {
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class, "Unexpected Database Error");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "Unexpected Database Error");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		} finally {
@@ -166,20 +173,14 @@ public class CertificateBlacklistManager {
 			try {
 				if (!this.db.tableExists(TABLE)) {
 
-					String certificates = "CREATE TABLE " + TABLE + " ("
-							+ SERIAL + " BIGINT PRIMARY KEY," + SUBJECT
-							+ " TEXT NOT NULL," + REASON
-							+ " VARCHAR(255) NOT NULL," + CERTIFICATE
-							+ " TEXT," + "INDEX document_index (" + SERIAL
-							+ "));";
+					String certificates = "CREATE TABLE " + TABLE + " (" + SERIAL + " BIGINT PRIMARY KEY," + SUBJECT + " TEXT NOT NULL," + REASON + " VARCHAR(255) NOT NULL," + CERTIFICATE + " TEXT,"
+							+ "INDEX document_index (" + SERIAL + "));";
 					db.update(certificates);
 
 				}
 			} catch (Exception e) {
 				log.error(e.getMessage(), e);
-				DorianInternalException fault = FaultHelper
-						.createFaultException(DorianInternalException.class,
-								"An unexpected database error occurred.");
+				DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected database error occurred.");
 				FaultHelper.addMessage(fault, e.getMessage());
 				throw fault;
 			}
@@ -193,9 +194,7 @@ public class CertificateBlacklistManager {
 			db.update("delete from " + TABLE);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
-			DorianInternalException fault = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"An unexpected database error occurred.");
+			DorianInternalException fault = FaultHelper.createFaultException(DorianInternalException.class, "An unexpected database error occurred.");
 			FaultHelper.addMessage(fault, e.getMessage());
 			throw fault;
 		}

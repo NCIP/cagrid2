@@ -9,6 +9,8 @@ public interface CertificateAuthorityManager {
 	public CertificateAuthority getCertificateAuthority(String dn) throws DorianInternalException;
 
 	public CertificateAuthority getDefaultCertificateAuthority() throws DorianInternalException;
+	
+	public String getDefaultCertificateAuthoritySubjectDN();
 
 	public List<CertificateAuthority> getCertificateAuthorities();
 }

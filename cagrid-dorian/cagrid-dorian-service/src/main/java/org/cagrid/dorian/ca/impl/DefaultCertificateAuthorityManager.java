@@ -53,6 +53,11 @@ public class DefaultCertificateAuthorityManager implements CertificateAuthorityM
 	}
 
 	@Override
+	public String getDefaultCertificateAuthoritySubjectDN() {
+		return this.defaultCA;
+	}
+
+	@Override
 	public CertificateAuthority getCertificateAuthority(String dn) throws DorianInternalException {
 		if (this.certificateAuthorities.containsKey(dn)) {
 			return this.certificateAuthorities.get(dn);
