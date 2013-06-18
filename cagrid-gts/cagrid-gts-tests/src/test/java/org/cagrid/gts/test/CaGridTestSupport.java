@@ -117,7 +117,7 @@ public abstract class CaGridTestSupport {
 
     protected Option caGridDistributionConfiguration() {
         return karafDistributionConfiguration()
-                .frameworkUrl(maven().groupId("org.apache.servicemix").artifactId("apache-servicemix").type("zip").versionAsInProject())
+                .frameworkUrl(maven().groupId("org.apache.servicemix").artifactId("apache-servicemix").type("tar.gz").versionAsInProject())
                 .karafVersion(getKarafVersion()).name("Apache Servicemix").unpackDirectory(new File("target/paxexam/"));
     }
 
@@ -261,13 +261,14 @@ public abstract class CaGridTestSupport {
      * @param feature
      * @throws Exception
      */
-    public void installAndAssertFeature(String feature) throws Exception {
-        System.err.println(executeCommand("features:install " + feature));
+    public void installAndAssertFeature(String feature, Long timeout) throws Exception {
+        executeCommand("features:install " + feature, timeout, false);
         assertFeatureInstalled(feature);
     }
 
     public void assertFeatureInstalled(String featureName) {
         Feature[] features = featuresService.listInstalledFeatures();
+
         for (Feature feature : features) {
             if (featureName.equals(feature.getName())) {
                 return;

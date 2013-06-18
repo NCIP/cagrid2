@@ -12,13 +12,11 @@ import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
 public class GTSTest extends CaGridTestSupport {
 
-
-
     @Override
     @Configuration
     public Option[] config() {
-        Option[] options = new Option[] { 
-                //put Custom stuff here
+        Option[] options = new Option[] {
+        // put Custom stuff here
         };
         return CaGridTestSupport.concatAll(super.config(), options);
     }
@@ -27,11 +25,12 @@ public class GTSTest extends CaGridTestSupport {
     public void testGTS() throws Exception {
         // System.err.println(executeCommand("features:addurl " + gtsFeaturesURL));
         System.err.println(executeCommand("features:listurl"));
-        //System.err.println(executeCommand("features:list"));
-        
-        //installAndAssertFeature("cagrid-third-party");
-        //installAndAssertFeature("wsrf-draft");
-        installAndAssertFeature("cagrid-gts");
+        // System.err.println(executeCommand("features:list"));
+
+        // installAndAssertFeature("cagrid-third-party");
+        // installAndAssertFeature("wsrf-draft");
+        installAndAssertFeature("cagrid-gts", 30000L);
+        System.err.println(executeCommand("features:list"));
         assertBundleInstalled("cagrid-gts-service");
     }
 

@@ -155,14 +155,10 @@
             <artifactId>cagrid-dorian-wsrf</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-gme-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cagrid-gme-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
