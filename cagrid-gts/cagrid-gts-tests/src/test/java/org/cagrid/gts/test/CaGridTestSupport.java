@@ -32,6 +32,7 @@ import org.apache.felix.service.command.CommandProcessor;
 import org.apache.felix.service.command.CommandSession;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
+import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFilePutOption;
 import org.apache.karaf.tooling.exam.options.LogLevelOption;
 import org.junit.Assert;
@@ -112,9 +113,9 @@ public abstract class CaGridTestSupport {
                 new KarafDistributionConfigurationFilePutOption("etc/config.properties", // config file to modify based on karaf.base
                         "karaf.framework", // key to add or change
                         "equinox") // value to add or change
-                , new KarafDistributionConfigurationFilePutOption("etc/org.apache.karaf.features.cfg", // config file to modify based on karaf.base
+                , new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", // config file to modify based on karaf.base
                 "featuresBoot", // key to add or change
-                "karaf-framework,config,activemq-broker,activemq-spring,saaj,cxf-specs,camel,activemq-camel,camel-cxf,camel-blueprint,war,spring-jdbc,spring-orm")
+                ",spring-jdbc,spring-orm")
         };
     }
 
