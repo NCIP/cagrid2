@@ -7,7 +7,7 @@ import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesResponse;
 
 import java.util.List;
 
-public class GetXMLSchemaNamespaces extends GrouperClientBase {
+public class GetXMLSchemaNamespaces extends GMEClientBase {
 
 	private GetXMLSchemaNamespaces(String url) throws Exception {
 		super(url);

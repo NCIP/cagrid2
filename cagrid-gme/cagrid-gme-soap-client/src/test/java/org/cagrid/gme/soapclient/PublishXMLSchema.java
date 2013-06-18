@@ -4,12 +4,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.model.XMLSchemaDocument;
-import org.cagrid.gme.model.XMLSchemaNamespace;
-import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesRequest;
-import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesResponse;
 import org.cagrid.gme.wsrf.stubs.InvalidSchemaSubmissionFaultFaultMessage;
 import org.cagrid.gme.wsrf.stubs.PublishXMLSchemasRequest;
-import org.cagrid.gme.wsrf.stubs.PublishXMLSchemasResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PublishXMLSchema extends GrouperClientBase {
+public class PublishXMLSchema extends GMEClientBase {
 
 	private PublishXMLSchema(String url) throws Exception {
 		super(url);

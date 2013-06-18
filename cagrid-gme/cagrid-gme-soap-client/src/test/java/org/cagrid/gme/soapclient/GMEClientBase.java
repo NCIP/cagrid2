@@ -8,13 +8,13 @@ import org.cagrid.gme.wsrf.stubs.GlobalModelExchangePortType;
 
 import javax.net.ssl.KeyManager;
 
-public abstract class GrouperClientBase {
+public abstract class GMEClientBase {
 
 	public final static String LOCAL_URL = "https://localhost:7741/gme";
 
 	protected GlobalModelExchangePortType gme;
 
-	GrouperClientBase(String url) throws Exception {
+	GMEClientBase(String url) throws Exception {
 		KeyStoreType truststore = new KeyStoreType();
         truststore.setFile("/Users/cmelean/Documents/Developer/source/cagrid/apache-servicemix-4.5.1/etc/gme/truststore.jks");
         truststore.setType("JKS");
