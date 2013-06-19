@@ -110,13 +110,8 @@ public abstract class CaGridTestSupport {
                         vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + System.getProperty("org.ops4j.pax.url.mvn.localRepository"))),
                 // servicemix defaults to using the felix osgi kernal which has some bugs when dealing with complex feature/bundle dependencies, so let's use
                 // equinox by default
-                new KarafDistributionConfigurationFilePutOption("etc/config.properties", // config file to modify based on karaf.base
-                        "karaf.framework", // key to add or change
-                        "equinox") // value to add or change
-                , new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", // config file to modify based on karaf.base
-                "featuresBoot", // key to add or change
-                ",spring-jdbc,spring-orm")
-        };
+                new KarafDistributionConfigurationFilePutOption("etc/config.properties", "karaf.framework", "equinox"),
+                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",spring-jdbc,spring-orm") };
     }
 
     protected Option caGridDistributionConfiguration() {
