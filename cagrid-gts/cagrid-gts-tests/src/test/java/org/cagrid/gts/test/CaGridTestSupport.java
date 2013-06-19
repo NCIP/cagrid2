@@ -279,6 +279,10 @@ public abstract class CaGridTestSupport {
     protected void assertBundleInstalled(String name) {
         Assert.assertTrue("Bundle " + name + " should be installed", isBundleInstalled(name));
     }
+    
+    protected void assertBundleActive(String name) {
+        Assert.assertTrue("Bundle " + name + " should be active", isBundleActive(name));
+    }
 
     protected void assertBundleNotInstalled(String name) {
         Assert.assertFalse("Bundle " + name + " should not be installed", isBundleInstalled(name));
@@ -287,6 +291,15 @@ public abstract class CaGridTestSupport {
     private boolean isBundleInstalled(String symbolicName) {
         for (Bundle bundle : bundleContext.getBundles()) {
             if (bundle.getSymbolicName().equals(symbolicName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean isBundleActive(String symbolicName) {
+        for (Bundle bundle : bundleContext.getBundles()) {
+            if (bundle.getSymbolicName().equals(symbolicName) && bundle.getState()==Bundle.ACTIVE) {
                 return true;
             }
         }

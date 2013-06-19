@@ -23,33 +23,51 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
+	<bean id="proxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.gts.wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.gts.wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.gts.wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.gts.wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.gts.wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
+	</bean>
+
+	<bean id="legacyProxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.gts.legacy-wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.gts.legacy-wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.gts.legacy-wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.gts.legacy-wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.gts.legacy-wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
+	</bean>
+
+<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.gts.wsrf.port}">
-
-			<httpj:tlsServerParameters>
-				<sec:keyManagers keyPassword="${cagrid.gts.wsrf.key.password}">
-					<sec:keyStore type="JKS"
-						password="${cagrid.gts.wsrf.keystore.password}" file="${cagrid.gts.wsrf.keystore.path}" />
-				</sec:keyManagers>
-				<sec:trustManagers>
-					<sec:keyStore type="JKS"
-						password="${cagrid.gts.wsrf.truststore.password}" file="${cagrid.gts.wsrf.truststore.path}" />
-				</sec:trustManagers>
-
-				<sec:cipherSuitesFilter>
-					<sec:include>.*_WITH_3DES_.*</sec:include>
-					<sec:include>.*_WITH_DES_.*</sec:include>
-					<sec:include>.*_EXPORT_.*</sec:include>
-					<sec:include>.*_EXPORT1024_.*</sec:include>
-					<sec:include>.*_WITH_NULL_.*</sec:include>
-					<sec:exclude>.*_DH_anon_.*</sec:exclude>
-				</sec:cipherSuitesFilter>
-
-				<sec:clientAuthentication want="true"
-					required="false" />
-			</httpj:tlsServerParameters>
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<property name="port" value="${cagrid.gts.wsrf.port}" />
+				</bean>
+			</httpj:connector>
 		</httpj:engine>
 
+		<httpj:engine port="${cagrid.gts.legacy-wsrf.port}">
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="legacyProxySslContextFactory" />
+					<property name="port" value="${cagrid.gts.legacy-wsrf.port}" />
+				</bean>
+			</httpj:connector>
+		</httpj:engine>
 	</httpj:engine-factory>
 
 	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
@@ -62,13 +80,27 @@
 	</util:map>
 
 	<bean id="gtsWSRF" class="org.cagrid.gts.service.wsrf.GTSWSRFImpl">
-		<constructor-arg ref="gtsService" />
+		<constructor-arg index="0" ref="gtsService" />
+	</bean>
+
+	<bean id="legacyGTSWSRF" class="org.cagrid.gts.service.wsrf.GTSWSRFImpl">
+		<constructor-arg index="0" ref="gtsService" />
+	</bean>
+
+	<bean id="dummyGTSWSRF" class="org.cagrid.gts.wsrf.stubs.GTSPortTypeImpl">
 	</bean>
 
 	<jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GTS/service"
 		xmlns:s="http://cagrid.nci.nih.gov/GTS/service" id="gtsWSRFEP"
 		implementor="#gtsWSRF" bus="cxf" endpointName="e:GTSPortTypePort"
 		serviceName="s:GTSService" address="${cagrid.gts.wsrf.url}"
+		wsdlLocation="schema/org/cagrid/gts/GTS_service.wsdl">
+	</jaxws:endpoint>
+
+	<jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GTS/service"
+		xmlns:s="http://cagrid.nci.nih.gov/GTS/service" id="legacyGTSWSRFEP"
+		implementor="#legacyGTSWSRF" bus="cxf" endpointName="e:GTSPortTypePort"
+		serviceName="s:GTSService" address="${cagrid.gts.legacy-wsrf.url}"
 		wsdlLocation="schema/org/cagrid/gts/GTS_service.wsdl">
 	</jaxws:endpoint>
 </beans>

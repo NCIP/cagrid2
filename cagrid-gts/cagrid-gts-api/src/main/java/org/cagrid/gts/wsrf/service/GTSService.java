@@ -15,7 +15,7 @@ import org.cagrid.gts.wsrf.stubs.GTSPortType;
  * 
  */
 @WebServiceClient(name = "GTSService", 
-                  wsdlLocation = "/schema/org/cagrid/gts/GTS_Service.wsdl",
+                  wsdlLocation = "/schema/org/cagrid/gts/GTS_service.wsdl",
                   targetNamespace = "http://cagrid.nci.nih.gov/GTS/service") 
 public class GTSService extends Service {
 
@@ -24,11 +24,11 @@ public class GTSService extends Service {
     public final static QName SERVICE = new QName("http://cagrid.nci.nih.gov/GTS/service", "GTSService");
     public final static QName GTSPortTypePort = new QName("http://cagrid.nci.nih.gov/GTS/service", "GTSPortTypePort");
     static {
-        URL url = GTSService.class.getResource("/schema/org/cagrid/gts/GTS_Service.wsdl");
+        URL url = GTSService.class.getResource("/schema/org/cagrid/gts/GTS_service.wsdl");
         if (url == null) {
             java.util.logging.Logger.getLogger(GTSService.class.getName())
                 .log(java.util.logging.Level.INFO, 
-                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/gts/GTS_Service.wsdl");
+                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/gts/GTS_service.wsdl");
         }       
         WSDL_LOCATION = url;
     }

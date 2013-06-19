@@ -10,7 +10,7 @@
 	<packaging>bundle</packaging>
 	<name>caGrid GTS API</name>
 	<properties>
-		<wsdl.path>schema/org/cagrid/gts/GTS_Service.wsdl</wsdl.path>
+		<wsdl.path>schema/org/cagrid/gts/GTS_service.wsdl</wsdl.path>
 		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 	</properties>
 	<profiles>
@@ -199,8 +199,8 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Export-Package>org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.wsrf.stubs</Export-Package>
-						<Import-Package>org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.wsrf.stubs,*</Import-Package>
+						<Export-Package>schema.org.cagrid.gts,org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.wsrf.stubs</Export-Package>
+						<Import-Package>schema.org.cagrid.gts,org.cagrid.gts.model,org.cagrid.gts.service,org.cagrid.gts.service.exception,org.cagrid.gts.types,org.cagrid.gts.wsrf.service,org.cagrid.gts.wsrf.stubs,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

@@ -50,6 +50,7 @@
         <!-- Install the default config file; it won't overwrite if it already exists -->
          <configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config</configfile>
         <bundle>mvn:${project.groupId}/cagrid-gts-service/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}</bundle>
     </feature>
 
     <feature name="cagrid-gts-client" version="${project.version}">

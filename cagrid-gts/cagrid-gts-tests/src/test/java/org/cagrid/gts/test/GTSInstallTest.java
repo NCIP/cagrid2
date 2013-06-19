@@ -1,9 +1,5 @@
 package org.cagrid.gts.test;
 
-import static org.junit.Assert.*;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
-
 import org.cagrid.gts.service.GTS;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,16 +33,9 @@ public class GTSInstallTest extends CaGridTestSupport {
         // install the GTS and make sure the service starts
         installAndAssertFeature("cagrid-gts", TIMEOUT);
         System.err.println(executeCommand("features:list"));
-        assertBundleInstalled("cagrid-gts-service");
+        assertBundleActive("cagrid-gts-service");
         GTS gts = getOsgiService(GTS.class, TIMEOUT);
         Assert.assertNotNull(gts);
-
-        // grab its metadata
-        ServiceMetadata metadata = gts.getServiceMetadata();
-        assertNotNull(metadata);
-        assertEquals("Service metadata name was not as expected.", "GTS", metadata.getServiceDescription().getService().getName());
-        ServiceSecurityMetadata securityMetadata = gts.getServiceSecurityMetadata();
-        assertNotNull(securityMetadata);
     }
     
 }

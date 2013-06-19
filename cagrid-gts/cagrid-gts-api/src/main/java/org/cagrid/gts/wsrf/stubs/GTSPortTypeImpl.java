@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
                       serviceName = "GTSService",
                       portName = "GTSPortTypePort",
                       targetNamespace = "http://cagrid.nci.nih.gov/GTS/service",
-                      wsdlLocation = "/schema/org/cagrid/gts/GTS_Service.wsdl",
+                      wsdlLocation = "/schema/org/cagrid/gts/GTS_service.wsdl",
                       endpointInterface = "org.cagrid.gts.wsrf.stubs.GTSPortType")
                       
 public class GTSPortTypeImpl implements GTSPortType {
