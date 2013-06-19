@@ -1,5 +1,6 @@
 package org.cagrid.gridgrouper.service;
 
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import org.cagrid.gridgrouper.model.GroupCompositeType;
 import org.cagrid.gridgrouper.model.GroupDescriptor;
@@ -120,4 +121,6 @@ public interface GridGrouperService {
     public boolean isMembershipRequestEnabled(String callerIdentity, GroupIdentifier group) throws GrantPrivilegeException, InsufficientPrivilegeException, GroupNotFoundException, GridGrouperRuntimeException;
 
     public ResourceHome getResourceHome();
+
+    ServiceMetadata getServiceMetadata();
 }

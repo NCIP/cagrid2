@@ -12,6 +12,20 @@
 
 	<dependencyManagement>
 		<dependencies>
+	                        <dependency>
+                                <groupId>org.cagrid.wsrf</groupId>
+                                <artifactId>wsrf-draft-features</artifactId>
+                                <version>${wsrf.version}</version>
+                                <classifier>features</classifier>
+                                <type>xml</type>
+                        </dependency>
+                        <dependency>
+                                <groupId>org.cagrid</groupId>
+                                <artifactId>cagrid-features</artifactId>
+                                <version>${project.version}</version>
+                                <classifier>features</classifier>
+                                <type>xml</type>
+                        </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>cagrid-gridgrouper-api</artifactId>
@@ -67,6 +81,6 @@
 		<module>cagrid-gridgrouper-service</module>
  		<module>cagrid-gridgrouper-wsrf</module>
 		<module>cagrid-gridgrouper-soap-client</module>
-		
+		<module>cagrid-gridgrouper-systest</module>		
 	</modules>
 </project>

@@ -76,6 +76,12 @@ public class GridGrouperServiceImpl implements GridGrouperService {
     }
 
     @Override
+    public ServiceMetadata getServiceMetadata() {
+        return (serviceMetadataResourceProperty != null) ? serviceMetadataResourceProperty
+                .get(0) : null;
+    }
+
+    @Override
     public StemDescriptor getStem(String callerIdentity, StemIdentifier stem) throws GridGrouperRuntimeException, StemNotFoundException {
         return gridGrouper.getStem(callerIdentity, stem);
     }
