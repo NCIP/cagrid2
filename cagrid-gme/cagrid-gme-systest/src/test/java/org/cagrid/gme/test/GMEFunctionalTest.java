@@ -59,13 +59,16 @@ public class GMEFunctionalTest extends CaGridTestSupport {
     @Configuration
     public Option[] config() {
         Option[] options = new Option[] {
+                // Install GME feature
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresRepositories", "," + maven().groupId("org.cagrid").artifactId("cagrid-features").versionAsInProject().classifier("features").type("xml").getURL()),
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",cagrid-gme"),
-                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gme.wsrf.cfg", new File("src/test/resources/paxexam/etc/cagrid.gme.wsrf.cfg")),
-                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/paxexam/etc/gme/host.jks")),
-                new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/paxexam/etc/gme/truststore.jks")),
-                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_A, new File("src/test/resources/paxexam/etc/gme/A.xsd")),
-                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/paxexam/etc/gme/B.xsd"))
+
+                // Get our resource files to the "etc" area
+                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gme.wsrf.cfg", new File("src/test/resources/cagrid.gme.wsrf.cfg")),
+                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
+                new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
+                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_A, new File("src/test/resources/A.xsd")),
+                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/B.xsd"))
         };
         return CaGridTestSupport.concatAll(super.config(), options);
     }
