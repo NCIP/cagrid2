@@ -9,6 +9,7 @@ import org.cagrid.core.common.security.X509Credential;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.model.XMLSchemaNamespace;
+import org.cagrid.gme.service.GlobalModelExchangeService;
 import org.cagrid.gme.soapclient.GMESoapClientFactory;
 import org.cagrid.gme.test.utils.GMETestUtils;
 import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesRequest;
@@ -80,6 +81,9 @@ public class GMEFunctionalTest extends CaGridTestSupport {
             assertBundleInstalled("cagrid-gme-api");
             assertBundleInstalled("cagrid-gme-service");
             assertBundleInstalled("cagrid-gme-wsrf");
+
+            GlobalModelExchangeService gmeService = getOsgiService(GlobalModelExchangeService.class, 30000L);
+            assertNotNull(gmeService);
 
             // seeing once in a while an spurious linkage error:
             // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"

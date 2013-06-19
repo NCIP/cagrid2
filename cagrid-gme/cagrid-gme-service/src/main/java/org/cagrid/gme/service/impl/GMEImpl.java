@@ -60,6 +60,11 @@ public class GMEImpl implements GlobalModelExchangeService {
     }
 
     @Override
+    public ServiceMetadata getServiceMetadata() {
+        return (serviceMetadataResourceProperty != null) ? serviceMetadataResourceProperty.get(0) : null;
+    }
+
+    @Override
     public void publishXMLSchemas(List<XMLSchema> schemas) throws InvalidSchemaSubmissionException {
         this.gme.publishSchemas(schemas);
     }
