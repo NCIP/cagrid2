@@ -10,8 +10,11 @@ import org.cagrid.core.common.security.X509Credential;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.gme.model.XMLSchema;
 import org.cagrid.gme.model.XMLSchemaDocument;
+import org.cagrid.gme.model.XMLSchemaNamespace;
 import org.cagrid.gme.soapclient.GMESoapClientFactory;
 import org.cagrid.gme.test.utils.GMETestUtils;
+import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesRequest;
+import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesResponse;
 import org.cagrid.gme.wsrf.stubs.GlobalModelExchangePortType;
 import org.cagrid.gme.wsrf.stubs.InvalidSchemaSubmissionFaultFaultMessage;
 import org.cagrid.gme.wsrf.stubs.PublishXMLSchemasRequest;
@@ -36,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 
@@ -76,6 +80,10 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
             // publish schemas
             publishXMLSchemas(gme);
+
+            // get schemas
+            List<XMLSchemaNamespace> schemas = getXMLSchemaNamespaces(gme);
+            assertEquals(2, schemas.size());
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));
         }
@@ -96,6 +104,11 @@ public class GMEFunctionalTest extends CaGridTestSupport {
         KeyManager keyManager = new SingleEntityKeyManager("tomcat", credential);
 
         return GMESoapClientFactory.createSoapClient(GME_URL, truststore, keyManager);
+    }
+
+    private List<XMLSchemaNamespace> getXMLSchemaNamespaces(GlobalModelExchangePortType gme) {
+        GetXMLSchemaNamespacesResponse response = gme.getXMLSchemaNamespaces(new GetXMLSchemaNamespacesRequest());
+        return response.getXMLSchemaNamespace();
     }
 
     private void publishXMLSchemas(GlobalModelExchangePortType gme) throws URISyntaxException, IOException, InvalidSchemaSubmissionFaultFaultMessage {
