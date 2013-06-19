@@ -1,11 +1,5 @@
 package org.cagrid.gme.test;
 
-import org.apache.cxf.configuration.security.KeyStoreType;
-import org.cagrid.core.common.security.CredentialFactory;
-import org.cagrid.core.common.security.X509Credential;
-import org.cagrid.core.soapclient.SingleEntityKeyManager;
-import org.cagrid.gme.soapclient.GMESoapClientFactory;
-import org.cagrid.gme.wsrf.stubs.GlobalModelExchangePortType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Option;
@@ -13,12 +7,6 @@ import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.ExamReactorStrategy;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
-
-import javax.net.ssl.KeyManager;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
-import static junit.framework.Assert.assertNotNull;
 
 @RunWith(JUnit4TestRunner.class)
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
