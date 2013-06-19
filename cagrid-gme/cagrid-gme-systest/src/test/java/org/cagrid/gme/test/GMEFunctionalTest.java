@@ -80,6 +80,8 @@ public class GMEFunctionalTest extends CaGridTestSupport {
             assertBundleInstalled("cagrid-gme-api");
             assertBundleInstalled("cagrid-gme-service");
             assertBundleInstalled("cagrid-gme-wsrf");
+            System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
+            System.err.println(executeCommand("osgi:list"));
 
             // get gme soap client
             GlobalModelExchangePortType gme = getGMESoapClient();
