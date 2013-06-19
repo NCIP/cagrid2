@@ -43,18 +43,18 @@ import static org.ops4j.pax.exam.CoreOptions.maven;
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
 public class GMEFunctionalTest extends CaGridTestSupport {
 
-    private static final String GME_URL = "https://localhost:7741/gme";
+    private static final String GME_URL = "https://localhost:7742/gme";
 
-    private static final String HOST = "etc/gme/host.jks";
-    private static final String TRUSTSTORE = "etc/gme/truststore.jks";
+    private static final String HOST = "etc/cagrid-gme/host.jks";
+    private static final String TRUSTSTORE = "etc/cagrid-gme/truststore.jks";
     private static final String TRUSTSTORETYPE = "JKS";
     private static final String KEYALIAS = "tomcat";
     private static final String TRUSTSTOREPASSWORD = "inventrio";
     private static final String KEYSTOREPASSWORD = "inventrio";
     private static final String KEYPASSWORD = "inventrio";
 
-    private static final String SCHEMA_A = "etc/gme/A.xsd";
-    private static final String SCHEMA_B = "etc/gme/B.xsd";
+    private static final String SCHEMA_A = "etc/cagrid-gme/A.xsd";
+    private static final String SCHEMA_B = "etc/cagrid-gme/B.xsd";
 
     @Override
     @Configuration
@@ -70,6 +70,16 @@ public class GMEFunctionalTest extends CaGridTestSupport {
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_A, new File("src/test/resources/A.xsd")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/B.xsd"))
+
+                // seeing once in a while an spurious linkage error:
+                // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"
+                // adding this to get some info:
+                // System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
+                // System.err.println(executeCommand("osgi:list"));
+                // it seems there could be a conflict between the one included with the jre and the saaj feature in
+                // servicemix, both jars have this class (javax.xml.soap.SOAPFault)
+                , new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.6", ",javax.xml.soap;version=\"1.3\"")
+                , new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.7", ",javax.xml.soap;version=\"1.3\"")
         };
         return CaGridTestSupport.concatAll(super.config(), options);
     }
@@ -84,14 +94,6 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
             GlobalModelExchangeService gmeService = getOsgiService(GlobalModelExchangeService.class, 30000L);
             assertNotNull(gmeService);
-
-            // seeing once in a while an spurious linkage error:
-            // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"
-            // adding this to get some info:
-            // System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
-            // System.err.println(executeCommand("osgi:list"));
-            // it seems there could be a conflict between the one included with the jre and the saaj feature in
-            // servicemix, both jars have this class (javax.xml.soap.SOAPFault)
 
             // get gme soap client
             GlobalModelExchangePortType gme = getGMESoapClient();

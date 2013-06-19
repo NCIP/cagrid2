@@ -35,6 +35,18 @@
 		<property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}" />
 	</bean>
 
+    <bean id="legacyProxySslContextFactory"
+          class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+        <property name="keyStorePath" value="${cagrid.gme.legacy-wsrf.keystore.path}" />
+        <property name="keyStorePassword" value="${cagrid.gme.legacy-wsrf.keystore.password}" />
+        <property name="keyManagerPassword" value="${cagrid.gme.legacy-wsrf.key.password}" />
+        <property name="trustStore" value="${cagrid.gme.legacy-wsrf.truststore.path}" />
+        <property name="trustStorePassword" value="${cagrid.gme.legacy-wsrf.truststore.password}" />
+        <property name="wantClientAuth" value="true" />
+        <property name="needClientAuth" value="false" />
+        <property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}" />
+    </bean>
+
 <!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.gme.wsrf.port}">
@@ -46,6 +58,16 @@
 				</bean>
 			</httpj:connector>
 		</httpj:engine>
+
+        <httpj:engine port="${cagrid.gme.legacy-wsrf.port}">
+            <httpj:tlsServerParameters />
+            <httpj:connector>
+                <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                    <constructor-arg index="0" ref="legacyProxySslContextFactory" />
+                    <property name="port" value="${cagrid.gme.legacy-wsrf.port}" />
+                </bean>
+            </httpj:connector>
+        </httpj:engine>
 	</httpj:engine-factory>
 
 	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
@@ -67,4 +89,11 @@
 		serviceName="s:GlobalModelExchangeService" address="${cagrid.gme.wsrf.url}"
 		wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl">
 	</jaxws:endpoint>
+
+    <jaxws:endpoint xmlns:e="http://gme.cagrid.org/GlobalModelExchange/service"
+                    xmlns:s="http://gme.cagrid.org/GlobalModelExchange/service" id="legacyGMEWSRFEP"
+                    implementor="#gmeWSRF" bus="cxf" endpointName="e:GlobalModelExchangePortTypePort"
+                    serviceName="s:GlobalModelExchangeService" address="${cagrid.gme.legacy-wsrf.url}"
+                    wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl">
+    </jaxws:endpoint>
 </beans>

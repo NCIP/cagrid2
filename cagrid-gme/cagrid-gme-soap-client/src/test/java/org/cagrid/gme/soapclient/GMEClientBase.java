@@ -10,7 +10,7 @@ import javax.net.ssl.KeyManager;
 
 public abstract class GMEClientBase {
 
-	public final static String LOCAL_URL = "https://localhost:7741/gme";
+	public final static String LOCAL_URL = "https://localhost:7742/gme";
 
 	protected GlobalModelExchangePortType gme;
 
