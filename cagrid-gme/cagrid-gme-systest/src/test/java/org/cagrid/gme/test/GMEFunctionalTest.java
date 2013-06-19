@@ -80,8 +80,14 @@ public class GMEFunctionalTest extends CaGridTestSupport {
             assertBundleInstalled("cagrid-gme-api");
             assertBundleInstalled("cagrid-gme-service");
             assertBundleInstalled("cagrid-gme-wsrf");
-            System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
-            System.err.println(executeCommand("osgi:list"));
+
+            // seeing once in a while an spurious linkage error:
+            // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"
+            // adding this to get some info:
+            // System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
+            // System.err.println(executeCommand("osgi:list"));
+            // it seems there could be a conflict between the one included with the jre and the saaj feature in
+            // servicemix, both jars have this class (javax.xml.soap.SOAPFault)
 
             // get gme soap client
             GlobalModelExchangePortType gme = getGMESoapClient();
