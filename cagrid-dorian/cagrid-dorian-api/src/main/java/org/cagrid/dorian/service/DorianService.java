@@ -15,7 +15,7 @@ import org.cagrid.dorian.DorianPortType;
  * 
  */
 @WebServiceClient(name = "DorianService", 
-                  wsdlLocation = "/schema/org/cagrid/dorian/Dorian_Service.wsdl",
+                  wsdlLocation = "/schema/org/cagrid/dorian/Dorian_service.wsdl",
                   targetNamespace = "http://cagrid.nci.nih.gov/Dorian/service") 
 public class DorianService extends Service {
 
@@ -24,11 +24,11 @@ public class DorianService extends Service {
     public final static QName SERVICE = new QName("http://cagrid.nci.nih.gov/Dorian/service", "DorianService");
     public final static QName DorianPortTypePort = new QName("http://cagrid.nci.nih.gov/Dorian/service", "DorianPortTypePort");
     static {
-        URL url = DorianService.class.getResource("/schema/org/cagrid/dorian/Dorian_Service.wsdl");
+        URL url = DorianService.class.getResource("/schema/org/cagrid/dorian/Dorian_service.wsdl");
         if (url == null) {
             java.util.logging.Logger.getLogger(DorianService.class.getName())
                 .log(java.util.logging.Level.INFO, 
-                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/dorian/Dorian_Service.wsdl");
+                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/dorian/Dorian_service.wsdl");
         }       
         WSDL_LOCATION = url;
     }

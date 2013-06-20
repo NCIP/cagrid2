@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
                       serviceName = "DorianService",
                       portName = "DorianPortTypePort",
                       targetNamespace = "http://cagrid.nci.nih.gov/Dorian/service",
-                      wsdlLocation = "/schema/org/cagrid/dorian/Dorian_Service.wsdl",
+                      wsdlLocation = "/schema/org/cagrid/dorian/Dorian_service.wsdl",
                       endpointInterface = "org.cagrid.dorian.DorianPortType")
                       
 public class DorianPortTypeImpl implements DorianPortType {

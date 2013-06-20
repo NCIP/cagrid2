@@ -11,7 +11,7 @@
 	<name>caGrid Dorian API</name>
 
 	<properties>
-		<wsdl.path>schema/org/cagrid/dorian/Dorian_Service.wsdl</wsdl.path>
+		<wsdl.path>schema/org/cagrid/dorian/Dorian_service.wsdl</wsdl.path>
 	</properties>
 
 	<profiles>
