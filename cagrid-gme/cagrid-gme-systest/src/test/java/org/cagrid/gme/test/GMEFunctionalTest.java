@@ -105,6 +105,9 @@ public class GMEFunctionalTest extends CaGridTestSupport {
             // get schemas
             List<XMLSchemaNamespace> schemas = getXMLSchemaNamespaces(gme);
             assertEquals(2, schemas.size());
+
+            // publish bad schemas test
+            publishBadXMLSchemas(gme);
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));
         }
@@ -142,5 +145,26 @@ public class GMEFunctionalTest extends CaGridTestSupport {
         reqschemas.getXMLSchema().addAll(schemas);
         req.setSchemas(reqschemas);
         gme.publishXMLSchemas(req);
+    }
+
+    private void publishBadXMLSchemas(GlobalModelExchangePortType gme) throws URISyntaxException, IOException {
+        List<XMLSchema> schemas = new ArrayList<XMLSchema>();
+        schemas.add(GMETestUtils.createSchema(new URI("gme://ac"), new File(SCHEMA_A)));
+        schemas.add(GMETestUtils.createSchema(new URI("gme://bc"), new File(SCHEMA_B)));
+
+        PublishXMLSchemasRequest req = new PublishXMLSchemasRequest();
+        PublishXMLSchemasRequest.Schemas reqschemas = new PublishXMLSchemasRequest.Schemas();
+        reqschemas.getXMLSchema().addAll(schemas);
+        req.setSchemas(reqschemas);
+        try {
+            gme.publishXMLSchemas(req);
+        } catch(InvalidSchemaSubmissionFaultFaultMessage e) {
+            // expected
+            System.out.println("####################### Expected fault caught ##########################");
+            System.out.println("Got expected exception " + e.getMessage());
+            return;
+        }
+
+        fail("Should have thrown fault");
     }
 }
