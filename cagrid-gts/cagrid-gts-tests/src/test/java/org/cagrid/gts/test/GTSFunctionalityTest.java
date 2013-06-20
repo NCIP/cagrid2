@@ -8,6 +8,7 @@ import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import javax.net.ssl.KeyManager;
 
@@ -18,12 +19,18 @@ import org.cagrid.core.common.security.CredentialFactory;
 import org.cagrid.core.common.security.X509Credential;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataRequest;
+import org.cagrid.gts.model.Permission;
 import org.cagrid.gts.model.PermissionFilter;
+import org.cagrid.gts.model.Role;
+import org.cagrid.gts.model.TrustLevel;
 import org.cagrid.gts.service.GTS;
 import org.cagrid.gts.service.exception.PermissionDeniedException;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
+import org.cagrid.gts.tools.service.PermissionBootstapper;
 import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
+import org.cagrid.gts.wsrf.stubs.GetTrustLevelsRequest;
+import org.cagrid.gts.wsrf.stubs.GetTrustLevelsResponse;
 import org.cagrid.gts.wsrf.stubs.PermissionDeniedFaultFaultMessage;
 import org.junit.Assert;
 import org.junit.Test;
@@ -74,56 +81,80 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
 
     @Test
     public void testGTS() throws Exception {
-        // see if we have our expected service URLs
-        System.err.println(executeCommand("features:listurl"));
-        System.err.println(executeCommand("features:list"));
-
-        assertBundleActive("cagrid-gts-service");
-        GTS gts = getOsgiService(GTS.class, TIMEOUT);
-        Assert.assertNotNull(gts);
-
-        // grab its metadata
-        ServiceMetadata metadata = gts.getServiceMetadata();
-        assertNotNull(metadata);
-        assertEquals("Service metadata name was not as expected.", "GTS", metadata.getServiceDescription().getService().getName());
-        ServiceSecurityMetadata securityMetadata = gts.getServiceSecurityMetadata();
-        assertNotNull(securityMetadata);
-
         try {
-            gts.findPermissions(ADMIN_USER, new PermissionFilter());
-            Assert.fail("Should not be able to find permissions, no admin permission are configured.");
-        } catch (PermissionDeniedException f) { // expected
-        }
+            // see if we have our expected service URLs
+            System.err.println(executeCommand("features:listurl"));
+            System.err.println(executeCommand("features:list"));
 
-        // test the soap end point
-        assertBundleActive("cagrid-gts-wsrf");
-        GTSPortType legacyClient = getGTSSoapClient(LEGACY_GTS_URL);
+            assertBundleActive("cagrid-gts-service");
+            GTS gts = getOsgiService(GTS.class, TIMEOUT);
+            Assert.assertNotNull(gts);
 
-        ServiceSecurityMetadata securityMetadata2 = legacyClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest())
-                .getServiceSecurityMetadata();
+            try {
+                gts.findPermissions(ADMIN_USER, new PermissionFilter());
+                Assert.fail("Should not be able to find permissions, no admin permission are configured.");
+            } catch (PermissionDeniedException f) { // expected
+            }
 
-        // TODO: add the equals methods to this
-        // assertEquals(securityMetadata.getOperations(), securityMetadata2);
-        assertEquals(securityMetadata.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata2.getDefaultCommunicationMechanism()
-                .isAnonymousPermitted());
+            PermissionBootstapper pb = new PermissionBootstapper(new File("etc/cagrid-gts/gts-conf.xml"));
+            pb.addAdminUser(ADMIN_USER);
 
-        GTSPortType newClient = getGTSSoapClient(NEW_GTS_URL);
-        ServiceSecurityMetadata securityMetadata3 = newClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest()).getServiceSecurityMetadata();
-        // TODO: add the equals methods to this
-        assertEquals(securityMetadata2.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata3.getDefaultCommunicationMechanism()
-                .isAnonymousPermitted());
+            // grab its metadata
+            ServiceMetadata metadata = gts.getServiceMetadata();
+            assertNotNull(metadata);
+            assertEquals("Service metadata name was not as expected.", "GTS", metadata.getServiceDescription().getService().getName());
+            ServiceSecurityMetadata securityMetadata = gts.getServiceSecurityMetadata();
+            assertNotNull(securityMetadata);
 
-        FindPermissionsRequest fpReq = new FindPermissionsRequest();
-        FindPermissionsRequest.Filter filter = new FindPermissionsRequest.Filter();
-        filter.setPermissionFilter(new PermissionFilter());
-        fpReq.setFilter(filter);
-        try {
-            legacyClient.findPermissions(fpReq);
-            Assert.fail("Should not be able to find permissions, no admin permission are configured.");
-        } catch (PermissionDeniedFaultFaultMessage pd) {
-            // expected
+            try {
+                Permission[] perms = gts.findPermissions(ADMIN_USER, new PermissionFilter());
+                assertEquals(1, perms.length);
+                assertEquals(ADMIN_USER, perms[0].getGridIdentity());
+                assertEquals(Role.TRUST_SERVICE_ADMIN, perms[0].getRole());
+                assertEquals("*", perms[0].getTrustedAuthorityName());
+
+            } catch (PermissionDeniedException f) {
+                Assert.fail("Should be able to find permissions.");
+            }
+
+            // test the soap end point
+            assertBundleActive("cagrid-gts-wsrf");
+            GTSPortType legacyClient = getGTSSoapClient(LEGACY_GTS_URL);
+
+            ServiceSecurityMetadata securityMetadata2 = legacyClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest())
+                    .getServiceSecurityMetadata();
+
+            // TODO: add the equals methods to this
+            // assertEquals(securityMetadata.getOperations(), securityMetadata2);
+            assertEquals(securityMetadata.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata2.getDefaultCommunicationMechanism()
+                    .isAnonymousPermitted());
+
+            GTSPortType newClient = getGTSSoapClient(NEW_GTS_URL);
+            ServiceSecurityMetadata securityMetadata3 = newClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest())
+                    .getServiceSecurityMetadata();
+            // TODO: add the equals methods to this
+            assertEquals(securityMetadata2.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata3.getDefaultCommunicationMechanism()
+                    .isAnonymousPermitted());
+
+            FindPermissionsRequest fpReq = new FindPermissionsRequest();
+            FindPermissionsRequest.Filter filter = new FindPermissionsRequest.Filter();
+            filter.setPermissionFilter(new PermissionFilter());
+            fpReq.setFilter(filter);
+            try {
+                legacyClient.findPermissions(fpReq);
+                Assert.fail("Should not be able to find permissions, no admin permission are configured.");
+            } catch (PermissionDeniedFaultFaultMessage pd) {
+                // expected
+            }
+
+            GetTrustLevelsResponse trustLevelResp = newClient.getTrustLevels(new GetTrustLevelsRequest());
+            List<TrustLevel> levels = trustLevelResp.getTrustLevel();
+            assertEquals(0, levels.size());
+
+            // newClient.addPermission(parameters)
+
         } catch (Exception e) {
-            Assert.fail("Unexpected fault("+e.getClass().getCanonicalName()+") was raised:"+e.getMessage());
+            Assert.fail("Unexpected fault(" + e.getClass().getCanonicalName() + ") was raised:" + e.getMessage());
         }
 
     }

@@ -63,7 +63,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Embed-Dependency>mobius_tools|mobius_common_client</Embed-Dependency>
-                        <Export-Package></Export-Package>
+                        <Export-Package>org.cagrid.gts.tools.service</Export-Package>
                         <DynamicImport-Package>com.mysql.jdbc</DynamicImport-Package>
                         <Import-Package>
                             EDU.oswego.cs.dl.util.concurrent;resolution:=optional,

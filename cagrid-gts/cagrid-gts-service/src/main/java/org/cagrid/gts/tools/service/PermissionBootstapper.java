@@ -2,6 +2,10 @@ package org.cagrid.gts.tools.service;
 
 import gov.nih.nci.cagrid.common.IOUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import org.cagrid.gts.model.Permission;
 import org.cagrid.gts.model.Role;
 import org.cagrid.gts.service.exception.GTSInternalException;
@@ -30,6 +34,14 @@ public class PermissionBootstapper {
 		pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
 			.getGTSInternalId())));
 	}
+	
+	public PermissionBootstapper(File f) throws FileNotFoundException, Exception {
+	    SimpleResourceManager srm = new SimpleResourceManager(new FileInputStream(f));
+	    Configuration conf = (Configuration) srm.getResource(Configuration.RESOURCE);
+	    pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
+	            .getGTSInternalId())));
+	}
+	
 
 
 	public void addAdminUser(String gridIdentity) throws GTSInternalException, IllegalPermissionException {
