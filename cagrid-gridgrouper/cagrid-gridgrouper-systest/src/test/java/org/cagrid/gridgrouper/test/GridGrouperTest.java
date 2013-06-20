@@ -66,7 +66,11 @@ public class GridGrouperTest extends CaGridTestSupport {
                 // Get our resource files to the "etc" area
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gridgrouper.wsrf.cfg", new File("src/test/resources/cagrid.gridgrouper.wsrf.cfg")),
                 new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
-                new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks"))
+                new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
+
+                // work around smx vs jre soap conflict
+                new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.6", ",javax.xml.soap;version=\"1.3\""),
+                new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.7", ",javax.xml.soap;version=\"1.3\"")
         };
         return CaGridTestSupport.concatAll(super.config(), options);
     }
