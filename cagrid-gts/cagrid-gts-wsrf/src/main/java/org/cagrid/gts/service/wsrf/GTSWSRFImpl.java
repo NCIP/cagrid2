@@ -38,6 +38,7 @@ import org.cagrid.gts.wsrf.stubs.AddTrustedAuthorityRequest;
 import org.cagrid.gts.wsrf.stubs.AddTrustedAuthorityResponse;
 import org.cagrid.gts.wsrf.stubs.CertificateValidationFaultFaultMessage;
 import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest;
+import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest.Filter;
 import org.cagrid.gts.wsrf.stubs.FindPermissionsResponse;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesResponse;
@@ -125,7 +126,7 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return resp;
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -146,15 +147,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new AddPermissionResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalPermissionException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalPermissionFaultFaultMessage fault = new IllegalPermissionFaultFaultMessage(e.getMessage(), e);
+            IllegalPermissionFaultFaultMessage fault = new IllegalPermissionFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -175,19 +176,19 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new UpdateCRLResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalTrustedAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalTrustedAuthorityFaultFaultMessage fault = new IllegalTrustedAuthorityFaultFaultMessage(e.getMessage(), e);
+            IllegalTrustedAuthorityFaultFaultMessage fault = new IllegalTrustedAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidTrustedAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidTrustedAuthorityFaultFaultMessage fault = new InvalidTrustedAuthorityFaultFaultMessage(e.getMessage(), e);
+            InvalidTrustedAuthorityFaultFaultMessage fault = new InvalidTrustedAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -207,19 +208,19 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new UpdateTrustLevelResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidTrustLevelException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidTrustLevelFaultFaultMessage fault = new InvalidTrustLevelFaultFaultMessage(e.getMessage(), e);
+            InvalidTrustLevelFaultFaultMessage fault = new InvalidTrustLevelFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalTrustLevelException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalTrustLevelFaultFaultMessage fault = new IllegalTrustLevelFaultFaultMessage(e.getMessage(), e);
+            IllegalTrustLevelFaultFaultMessage fault = new IllegalTrustLevelFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -232,19 +233,19 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new UpdateAuthorityResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalAuthorityFaultFaultMessage fault = new IllegalAuthorityFaultFaultMessage(e.getMessage(), e);
+            IllegalAuthorityFaultFaultMessage fault = new IllegalAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidAuthorityFaultFaultMessage fault = new InvalidAuthorityFaultFaultMessage(e.getMessage(), e);
+            InvalidAuthorityFaultFaultMessage fault = new InvalidAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -257,15 +258,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new AddAuthorityResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalAuthorityFaultFaultMessage fault = new IllegalAuthorityFaultFaultMessage(e.getMessage(), e);
+            IllegalAuthorityFaultFaultMessage fault = new IllegalAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -278,19 +279,19 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new UpdateTrustedAuthorityResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalTrustedAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalTrustedAuthorityFaultFaultMessage fault = new IllegalTrustedAuthorityFaultFaultMessage(e.getMessage(), e);
+            IllegalTrustedAuthorityFaultFaultMessage fault = new IllegalTrustedAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidTrustedAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidTrustedAuthorityFaultFaultMessage fault = new InvalidTrustedAuthorityFaultFaultMessage(e.getMessage(), e);
+            InvalidTrustedAuthorityFaultFaultMessage fault = new InvalidTrustedAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -303,15 +304,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new RemoveTrustedAuthorityResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidTrustedAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidTrustedAuthorityFaultFaultMessage fault = new InvalidTrustedAuthorityFaultFaultMessage(e.getMessage(), e);
+            InvalidTrustedAuthorityFaultFaultMessage fault = new InvalidTrustedAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -324,15 +325,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new RemoveAuthorityResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidAuthorityFaultFaultMessage fault = new InvalidAuthorityFaultFaultMessage(e.getMessage(), e);
+            InvalidAuthorityFaultFaultMessage fault = new InvalidAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
 
@@ -341,7 +342,14 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
     @Override
     public FindPermissionsResponse findPermissions(FindPermissionsRequest parameters) throws GTSInternalFaultFaultMessage, PermissionDeniedFaultFaultMessage {
         try {
-            Permission[] permissions = this.gts.findPermissions(getCallerId(), parameters.getFilter().getPermissionFilter());
+            Permission[] permissions;
+            if (parameters.getFilter() != null && parameters.getFilter().getPermissionFilter() != null) {
+                permissions = this.gts.findPermissions(getCallerId(), parameters.getFilter().getPermissionFilter());
+            } else {
+                GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage("Cannot pass a null filter.");
+                throw fault;
+            }
+
             FindPermissionsResponse resp = new FindPermissionsResponse();
             if (permissions != null && permissions.length > 0) {
                 resp.getPermission().addAll(Arrays.asList(permissions));
@@ -349,11 +357,11 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return resp;
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -366,15 +374,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new AddTrustLevelResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalTrustLevelException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalTrustLevelFaultFaultMessage fault = new IllegalTrustLevelFaultFaultMessage(e.getMessage(), e);
+            IllegalTrustLevelFaultFaultMessage fault = new IllegalTrustLevelFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -387,15 +395,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new AddTrustedAuthorityResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalTrustedAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalTrustedAuthorityFaultFaultMessage fault = new IllegalTrustedAuthorityFaultFaultMessage(e.getMessage(), e);
+            IllegalTrustedAuthorityFaultFaultMessage fault = new IllegalTrustedAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -414,15 +422,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new UpdateAuthorityPrioritiesResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalAuthorityException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalAuthorityFaultFaultMessage fault = new IllegalAuthorityFaultFaultMessage(e.getMessage(), e);
+            IllegalAuthorityFaultFaultMessage fault = new IllegalAuthorityFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -435,19 +443,19 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new RemoveTrustLevelResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidTrustLevelException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidTrustLevelFaultFaultMessage fault = new InvalidTrustLevelFaultFaultMessage(e.getMessage(), e);
+            InvalidTrustLevelFaultFaultMessage fault = new InvalidTrustLevelFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (IllegalTrustLevelException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            IllegalTrustLevelFaultFaultMessage fault = new IllegalTrustLevelFaultFaultMessage(e.getMessage(), e);
+            IllegalTrustLevelFaultFaultMessage fault = new IllegalTrustLevelFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -464,7 +472,7 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
         } catch (GTSInternalException e) {
             logger.error(ExceptionUtils.getFullStackTrace(e));
             // NOTE: this looks like an omission in the origina WSDL... it should throw this fault; I have to just trap the error for now.
-            // GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            // GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             // throw fault;
             return new FindTrustedAuthoritiesResponse();
         }
@@ -482,7 +490,7 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return resp;
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -498,11 +506,11 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return resp;
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (CertificateValidationException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            CertificateValidationFaultFaultMessage fault = new CertificateValidationFaultFaultMessage(e.getMessage(), e);
+            CertificateValidationFaultFaultMessage fault = new CertificateValidationFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }
@@ -515,15 +523,15 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
             return new RevokePermissionResponse();
         } catch (GTSInternalException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e);
+            GTSInternalFaultFaultMessage fault = new GTSInternalFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (InvalidPermissionException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            InvalidPermissionFaultFaultMessage fault = new InvalidPermissionFaultFaultMessage(e.getMessage(), e);
+            InvalidPermissionFaultFaultMessage fault = new InvalidPermissionFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         } catch (PermissionDeniedException e) {
             logger.debug(ExceptionUtils.getFullStackTrace(e));
-            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e);
+            PermissionDeniedFaultFaultMessage fault = new PermissionDeniedFaultFaultMessage(e.getMessage(), e.getFault());
             throw fault;
         }
     }

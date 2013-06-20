@@ -22,7 +22,9 @@ import org.cagrid.gts.model.PermissionFilter;
 import org.cagrid.gts.service.GTS;
 import org.cagrid.gts.service.exception.PermissionDeniedException;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
+import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
+import org.cagrid.gts.wsrf.stubs.PermissionDeniedFaultFaultMessage;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -111,6 +113,18 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
         assertEquals(securityMetadata2.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata3.getDefaultCommunicationMechanism()
                 .isAnonymousPermitted());
 
+        FindPermissionsRequest fpReq = new FindPermissionsRequest();
+        FindPermissionsRequest.Filter filter = new FindPermissionsRequest.Filter();
+        filter.setPermissionFilter(new PermissionFilter());
+        fpReq.setFilter(filter);
+        try {
+            legacyClient.findPermissions(fpReq);
+            Assert.fail("Should not be able to find permissions, no admin permission are configured.");
+        } catch (PermissionDeniedFaultFaultMessage pd) {
+            // expected
+        } catch (Exception e) {
+            Assert.fail("Unexpected fault("+e.getClass().getCanonicalName()+") was raised:"+e.getMessage());
+        }
 
     }
 
