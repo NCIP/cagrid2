@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
                       serviceName = "GridGrouperService",
                       portName = "GridGrouperPortTypePort",
                       targetNamespace = "http://cagrid.nci.nih.gov/GridGrouper/service",
-                      wsdlLocation = "/schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl",
+                      wsdlLocation = "/schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl",
                       endpointInterface = "org.cagrid.gridgrouper.wsrf.stubs.GridGrouperPortType")
                       
 public class GridGrouperPortTypeImpl implements GridGrouperPortType {

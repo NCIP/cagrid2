@@ -15,7 +15,7 @@ import org.cagrid.gridgrouper.wsrf.stubs.GridGrouperPortType;
  * 
  */
 @WebServiceClient(name = "GridGrouperService", 
-                  wsdlLocation = "/schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl",
+                  wsdlLocation = "/schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl",
                   targetNamespace = "http://cagrid.nci.nih.gov/GridGrouper/service") 
 public class GridGrouperService extends Service {
 
@@ -24,11 +24,11 @@ public class GridGrouperService extends Service {
     public final static QName SERVICE = new QName("http://cagrid.nci.nih.gov/GridGrouper/service", "GridGrouperService");
     public final static QName GridGrouperPortTypePort = new QName("http://cagrid.nci.nih.gov/GridGrouper/service", "GridGrouperPortTypePort");
     static {
-        URL url = GridGrouperService.class.getResource("/schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl");
+        URL url = GridGrouperService.class.getResource("/schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl");
         if (url == null) {
             java.util.logging.Logger.getLogger(GridGrouperService.class.getName())
                 .log(java.util.logging.Level.INFO, 
-                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl");
+                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl");
         }       
         WSDL_LOCATION = url;
     }

@@ -87,13 +87,13 @@
 		xmlns:s="http://cagrid.nci.nih.gov/GridGrouper/service" id="gridgrouperWSRFEP"
 		implementor="#gridgrouperWSRF" bus="cxf" endpointName="e:GridGrouperPortTypePort"
 		serviceName="s:GridGrouperService" address="${cagrid.gridgrouper.wsrf.url}"
-		wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl">
+		wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl">
 	</jaxws:endpoint>
 
     <jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GridGrouper/service"
                     xmlns:s="http://cagrid.nci.nih.gov/GridGrouper/service" id="legacyGridgrouperWSRFEP"
                     implementor="#gridgrouperWSRF" bus="cxf" endpointName="e:GridGrouperPortTypePort"
                     serviceName="s:GridGrouperService" address="${cagrid.gridgrouper.legacy-wsrf.url}"
-                    wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl">
+                    wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl">
     </jaxws:endpoint>
 </beans>

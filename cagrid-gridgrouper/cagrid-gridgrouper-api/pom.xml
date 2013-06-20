@@ -10,7 +10,7 @@
 	<packaging>bundle</packaging>
 	<name>caGrid GridGrouper API</name>
 	<properties>
-		<wsdl.path>schema/org/cagrid/gridgrouper/GridGrouper_Service.wsdl</wsdl.path>
+		<wsdl.path>schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl</wsdl.path>
 	</properties>
 	<profiles>
 		<profile>
