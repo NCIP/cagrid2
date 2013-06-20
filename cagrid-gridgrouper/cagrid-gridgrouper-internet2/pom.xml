@@ -57,6 +57,7 @@
 	</build>
 
 	<dependencies>
+        <!-- you may want to add this nexus, it's in our resource folder for now -->
         <dependency>
             <groupId>internet2</groupId>
             <artifactId>grouper</artifactId>
@@ -64,7 +65,8 @@
             <scope>system</scope>
             <systemPath>${basedir}/src/main/resources/grouper.jar</systemPath>
         </dependency>
-                <dependency>
+        <!-- you may want to add this nexus, it's in our resource folder for now -->
+        <dependency>
             <groupId>internet2</groupId>
             <artifactId>subject</artifactId>
             <version>0.2.1</version>
