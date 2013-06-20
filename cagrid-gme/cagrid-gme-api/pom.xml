@@ -11,7 +11,7 @@
 	<name>caGrid GME API</name>
 
 	<properties>
-		<gme.wsdl.path>schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl</gme.wsdl.path>
+		<gme.wsdl.path>schema/org/cagrid/gme/GlobalModelExchange_service.wsdl</gme.wsdl.path>
 	</properties>
 
 	<profiles>

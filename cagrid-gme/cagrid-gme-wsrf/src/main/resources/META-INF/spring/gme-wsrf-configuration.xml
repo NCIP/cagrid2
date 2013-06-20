@@ -87,13 +87,13 @@
 		xmlns:s="http://gme.cagrid.org/GlobalModelExchange/service" id="gmeWSRFEP"
 		implementor="#gmeWSRF" bus="cxf" endpointName="e:GlobalModelExchangePortTypePort"
 		serviceName="s:GlobalModelExchangeService" address="${cagrid.gme.wsrf.url}"
-		wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl">
+		wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_service.wsdl">
 	</jaxws:endpoint>
 
     <jaxws:endpoint xmlns:e="http://gme.cagrid.org/GlobalModelExchange/service"
                     xmlns:s="http://gme.cagrid.org/GlobalModelExchange/service" id="legacyGMEWSRFEP"
                     implementor="#gmeWSRF" bus="cxf" endpointName="e:GlobalModelExchangePortTypePort"
                     serviceName="s:GlobalModelExchangeService" address="${cagrid.gme.legacy-wsrf.url}"
-                    wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl">
+                    wsdlLocation="schema/org/cagrid/gme/GlobalModelExchange_service.wsdl">
     </jaxws:endpoint>
 </beans>

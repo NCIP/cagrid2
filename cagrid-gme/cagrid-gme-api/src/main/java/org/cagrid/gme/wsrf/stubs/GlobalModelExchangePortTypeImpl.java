@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
                       serviceName = "GlobalModelExchangeService",
                       portName = "GlobalModelExchangePortTypePort",
                       targetNamespace = "http://gme.cagrid.org/GlobalModelExchange/service",
-                      wsdlLocation = "/schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl",
+                      wsdlLocation = "/schema/org/cagrid/gme/GlobalModelExchange_service.wsdl",
                       endpointInterface = "org.cagrid.gme.wsrf.stubs.GlobalModelExchangePortType")
                       
 public class GlobalModelExchangePortTypeImpl implements GlobalModelExchangePortType {

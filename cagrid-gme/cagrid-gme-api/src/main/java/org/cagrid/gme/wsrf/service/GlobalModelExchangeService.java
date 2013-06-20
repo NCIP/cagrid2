@@ -15,7 +15,7 @@ import org.cagrid.gme.wsrf.stubs.GlobalModelExchangePortType;
  * 
  */
 @WebServiceClient(name = "GlobalModelExchangeService", 
-                  wsdlLocation = "/schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl",
+                  wsdlLocation = "/schema/org/cagrid/gme/GlobalModelExchange_service.wsdl",
                   targetNamespace = "http://gme.cagrid.org/GlobalModelExchange/service") 
 public class GlobalModelExchangeService extends Service {
 
@@ -24,11 +24,11 @@ public class GlobalModelExchangeService extends Service {
     public final static QName SERVICE = new QName("http://gme.cagrid.org/GlobalModelExchange/service", "GlobalModelExchangeService");
     public final static QName GlobalModelExchangePortTypePort = new QName("http://gme.cagrid.org/GlobalModelExchange/service", "GlobalModelExchangePortTypePort");
     static {
-        URL url = GlobalModelExchangeService.class.getResource("/schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl");
+        URL url = GlobalModelExchangeService.class.getResource("/schema/org/cagrid/gme/GlobalModelExchange_service.wsdl");
         if (url == null) {
             java.util.logging.Logger.getLogger(GlobalModelExchangeService.class.getName())
                 .log(java.util.logging.Level.INFO, 
-                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/gme/GlobalModelExchange_Service.wsdl");
+                     "Can not initialize the default wsdl from {0}", "/schema/org/cagrid/gme/GlobalModelExchange_service.wsdl");
         }       
         WSDL_LOCATION = url;
     }
