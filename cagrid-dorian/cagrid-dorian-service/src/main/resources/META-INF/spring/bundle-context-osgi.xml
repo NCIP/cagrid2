@@ -64,8 +64,8 @@
 		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.hours">0</prop>
 		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.minutes">0</prop>
 		<prop key="cagrid.dorian.service.ca.auto.renew.lifetime.seconds">0</prop>
-		 <prop key="cagrid.dorian.service.legacy-ca.db.alias">legacyca</prop>
-	    <prop key="cagrid.dorian.service.legacy-ca.password">admin</prop>
+		<prop key="cagrid.dorian.service.legacy-ca.db.alias">legacyca</prop>
+		<prop key="cagrid.dorian.service.legacy-ca.password">admin</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.policy.oid"></prop>
 		<prop key="cagrid.dorian.service.legacy-ca.issued.cert.key.size">1024</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.auto.create">true</prop>
