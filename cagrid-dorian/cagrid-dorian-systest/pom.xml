@@ -7,6 +7,7 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>cagrid-dorian-systest</artifactId>
+	<name>caGrid Dorian System Test</name>
 
 	<properties>
 		<db.name>sys_dorian</db.name>
