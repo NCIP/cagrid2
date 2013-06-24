@@ -102,10 +102,12 @@
     <feature name="cagrid-dorian" version="${project.version}">
         <feature version="${project.version}">cagrid-dorian-client</feature>
         <bundle>mvn:${project.groupId}/cagrid-dorian-service/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}</bundle>
     </feature>
     <feature name="cagrid-dorian-client" version="${project.version}">
         <feature version="${project.version}">cagrid-gaards</feature>
         <bundle>mvn:${project.groupId}/cagrid-dorian-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-dorian-soap-client/${project.version}</bundle>
     </feature>
 
     <!-- GME -->

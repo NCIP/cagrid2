@@ -17,12 +17,21 @@
 				<artifactId>cagrid-dorian-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-dorian-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-dorian-wsrf</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-dorian-soap-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>			
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-gaards-api</artifactId>

@@ -154,8 +154,14 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-dorian-soap-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-dorian-service</artifactId>
 		</dependency>
+		<!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>cagrid-features</artifactId> 
+			<version>${project.version}</version> </dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
@@ -175,12 +181,6 @@
 		<dependency>
 			<groupId>org.ops4j.pax.exam</groupId>
 			<artifactId>pax-exam-junit4</artifactId>
-			<version>${pax.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ops4j.pax.exam</groupId>
-			<artifactId>pax-exam-link-mvn</artifactId>
 			<version>${pax.version}</version>
 			<scope>test</scope>
 		</dependency>

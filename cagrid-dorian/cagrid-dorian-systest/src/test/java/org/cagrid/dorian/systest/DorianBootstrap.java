@@ -9,6 +9,7 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
+import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
 import org.cagrid.dorian.ifs.HostCertificateRecord;
 import org.cagrid.dorian.ifs.HostCertificateRequest;
@@ -23,6 +25,7 @@ import org.cagrid.dorian.ifs.PublicKey;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.ops4j.pax.exam.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -82,18 +85,20 @@ public class DorianBootstrap {
 			if (!dir.isDirectory())
 				continue;
 			String cn = dir.getName() + '@' + hostName;
-			String dn = baseDN + ",CN=" + hostName;
+			String dn = baseDN + ",CN=" + cn;
 
 			KeyPair pair = KeyUtil.generateRSAKeyPair(keySize);
 			HostCertificateRequest req = new HostCertificateRequest();
-			req.setHostname(hostName);
+			req.setHostname(dn);
 			PublicKey publicKey = new PublicKey();
 			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
 			req.setPublicKey(publicKey);
 			HostCertificateRecord record = dorian.requestHostCertificate(
 					gridId, req);
-			org.cagrid.dorian.common.X509Certificate cert = record.getCertificate();
-			X509Certificate hostCertificate = CertUtil.loadCertificate(cert.getCertificateAsString());
+			org.cagrid.dorian.common.X509Certificate cert = record
+					.getCertificate();
+			X509Certificate hostCertificate = CertUtil.loadCertificate(cert
+					.getCertificateAsString());
 
 			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
 			keyStore.load(null, null);
@@ -109,6 +114,33 @@ public class DorianBootstrap {
 			OutputStream keyStoreStream = new FileOutputStream(keyStoreFile);
 			keyStore.store(keyStoreStream, STORE_PASSWORD);
 			keyStoreStream.close();
+		}
+	}
+
+	/**
+	 * Create file replacement options for everything in ${karaf.base}/etc.
+	 */
+	public List<Option> getFileOptions() {
+		List<Option> options = new ArrayList<Option>();
+
+		File karafBase = new File(
+				System.getProperty(ContextLoader.KARAF_BASE_KEY));
+		File karafEtc = new File(karafBase, "etc");
+		addFileOptions("etc", karafEtc, options);
+
+		return options;
+	}
+
+	private void addFileOptions(String path, File dir, List<Option> options) {
+		for (File file : dir.listFiles()) {
+			String filePath = path + "/" + file.getName();
+			if (file.isDirectory()) {
+				addFileOptions(filePath, file, options);
+			} else {
+				Option option = new KarafDistributionConfigurationFileReplacementOption(
+						filePath, file);
+				options.add(option);
+			}
 		}
 	}
 
