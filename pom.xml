@@ -68,6 +68,11 @@
 					<version>1.8</version>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>2.15</version>
+				</plugin>
+				<plugin>
 					<groupId>org.ops4j.pax.exam</groupId>
 					<artifactId>maven-paxexam-plugin</artifactId>
 					<version>1.2.4</version>
@@ -432,5 +437,6 @@
 		<module>cagrid-gridgrouper</module>
         <module>cagrid-gme</module>
 		<!-- TODO: MOVE THIS <module>puretls</module> -->
+		<module>cagrid-systest</module>
 	</modules>
 </project>
