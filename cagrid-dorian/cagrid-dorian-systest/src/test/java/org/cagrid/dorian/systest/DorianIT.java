@@ -104,7 +104,7 @@ public class DorianIT {
 				"cagrid-features");
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
-		options.add(scanFeatures(featureURL, "cagrid-dorian"));
+		options.add(scanFeatures(featureURL, "cagrid-gaards", "cagrid-dorian"));
 
 		return options(options.toArray(new Option[options.size()]));
 	}
