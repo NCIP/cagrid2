@@ -12,7 +12,7 @@
 		<jaxb2.version>0.8.3</jaxb2.version>
 		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 		<cxf.version>2.6.3</cxf.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring.version>3.0.7.RELEASE</spring.version>
 		<slf4j.version>1.6.6</slf4j.version>
 		<junit.version>4.10</junit.version>
 		<karaf.version>2.2.10</karaf.version>
