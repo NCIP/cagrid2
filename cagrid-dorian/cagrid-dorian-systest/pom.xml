@@ -141,6 +141,7 @@
 							</execution>
 						</executions>
 						<configuration>
+                            <argLine>-Dorg.ops4j.pax.url.mvn.localRepository=${maven.repo.local}</argLine>
 							<forkCount>1</forkCount>
 							<parallel>none</parallel>
 						</configuration>
@@ -148,27 +149,6 @@
 				</plugins>
 			</build>
 		</profile>
-        <profile>
-            <id>ci-build-profile</id>
-            <activation>
-                <property>
-                    <name>maven.repo.local</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <configuration>
-                            <!-- when the local repo location has been specified, we need to pass on 
-                                this information to PAX mvn url -->
-                            <argLine>-Dorg.ops4j.pax.url.mvn.localRepository=${maven.repo.local}</argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
 	</profiles>
 
 	<dependencies>
