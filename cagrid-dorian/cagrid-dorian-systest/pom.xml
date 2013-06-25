@@ -137,6 +137,7 @@
 		</plugins>
 	</build>
 
+<!--
 	<profiles>
 		<profile>
 			<id>ci-integration</id>
@@ -167,6 +168,7 @@
 			</build>
 		</profile>
 	</profiles>
+-->
 
 	<dependencies>
 		<dependency>
