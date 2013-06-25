@@ -100,10 +100,10 @@ public class DorianIT {
 
 		options.addAll(dorianBootstrap.getFileOptions());
 
-		// String featureVersion = MavenUtils.getArtifactVersion("org.cagrid",
-		// "cagrid-features");
-		String featureURL = "mvn:" + "org.cagrid" + "/" + "cagrid-features"
-				+ "/" + "2.0.0-SNAPSHOT" + "/xml/features";
+		String featureVersion = MavenUtils.getArtifactVersion("org.cagrid",
+				"cagrid-features");
+		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
+				+ "/xml/features";
 		options.add(scanFeatures(featureURL, "cagrid-dorian"));
 
 		return options(options.toArray(new Option[options.size()]));

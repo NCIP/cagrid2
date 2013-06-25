@@ -45,91 +45,108 @@
 					</filesets>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-pax</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>paxruntime</outputDirectory>
+							<resources>
+								<resource>
+									<filtering>true</filtering>
+									<directory>src/pax</directory>
+									<excludes>
+										<exclude>META-INF/**</exclude>
+									</excludes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.ops4j.pax.exam</groupId>
+				<artifactId>maven-paxexam-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>generate-depends-file</id>
+						<goals>
+							<goal>generate-depends-file</goal>
+						</goals>
+						<configuration>
+							<recursive>true</recursive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<driver>com.mysql.jdbc.Driver</driver>
+					<url>jdbc:mysql://localhost:3306</url>
+					<username>root</username>
+					<password />
+					<skip>${skipTests}</skip>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.mysql.jdbc</groupId>
+						<artifactId>com.springsource.com.mysql.jdbc</artifactId>
+						<version>5.1.6</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>create-db</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<sqlCommand>
+								drop database if exists ${db.name};
+								create database ${db.name};
+							</sqlCommand>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<forkCount>1</forkCount>
+					<parallel>none</parallel>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
 	<profiles>
 		<profile>
-			<id>integration</id>
+			<id>ci-integration</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>maven.repo.local</name>
+				</property>
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-resources-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>copy-pax</id>
-								<phase>initialize</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>paxruntime</outputDirectory>
-									<resources>
-										<resource>
-											<filtering>true</filtering>
-											<directory>src/pax</directory>
-											<excludes>
-												<exclude>META-INF/**</exclude>
-											</excludes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.ops4j.pax.exam</groupId>
-						<artifactId>maven-paxexam-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>generate-depends-file</id>
-								<goals>
-									<goal>generate-depends-file</goal>
-								</goals>
-								<configuration>
-									<recursive>true</recursive>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>sql-maven-plugin</artifactId>
-						<version>1.5</version>
-						<configuration>
-							<driver>com.mysql.jdbc.Driver</driver>
-							<url>jdbc:mysql://localhost:3306</url>
-							<username>root</username>
-							<password />
-							<skip>${skipTests}</skip>
-						</configuration>
-						<dependencies>
-							<dependency>
-								<groupId>com.mysql.jdbc</groupId>
-								<artifactId>com.springsource.com.mysql.jdbc</artifactId>
-								<version>5.1.6</version>
-							</dependency>
-						</dependencies>
-						<executions>
-							<execution>
-								<id>create-db</id>
-								<phase>process-test-resources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<sqlCommand>
-										drop database if exists ${db.name};
-										create database ${db.name};
-									</sqlCommand>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
@@ -141,7 +158,7 @@
 							</execution>
 						</executions>
 						<configuration>
-                            <argLine>-Dorg.ops4j.pax.url.mvn.localRepository=${maven.repo.local}</argLine>
+							<argLine>-Dorg.ops4j.pax.url.mvn.localRepository=${maven.repo.local}</argLine>
 							<forkCount>1</forkCount>
 							<parallel>none</parallel>
 						</configuration>
