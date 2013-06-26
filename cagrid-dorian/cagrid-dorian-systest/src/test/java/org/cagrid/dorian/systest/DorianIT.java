@@ -102,7 +102,8 @@ public class DorianIT {
 		String localRepository = System.getProperty("maven.repo.local");
 		System.out.println("!!! localRepository = " + localRepository);
 		if (localRepository != null) {
-			options.add(localRepository(localRepository));
+			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + localRepository));
+//			options.add(localRepository(localRepository));
 		}
 		options.add(autoWrap());
 
