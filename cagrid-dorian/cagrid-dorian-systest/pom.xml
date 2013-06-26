@@ -12,8 +12,7 @@
 	<properties>
 		<db.name>sys_dorian</db.name>
 		<subject.id>O=caBIG,OU=caGrid,OU=Training,CN=caGrid Training CA 2</subject.id>
-		<karaf.version>2.3.1</karaf.version>
-		<pax.version>2.6.0</pax.version>
+		<pax.version>3.1.0</pax.version>
 		<pax.url.version>1.6.0</pax.url.version>
 	</properties>
 
@@ -137,39 +136,6 @@
 		</plugins>
 	</build>
 
-<!--
-	<profiles>
-		<profile>
-			<id>ci-integration</id>
-			<activation>
-				<property>
-					<name>maven.repo.local</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<executions>
-							<execution>
-								<goals>
-									<goal>integration-test</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<argLine>-Dorg.ops4j.pax.url.mvn.localRepository=${maven.repo.local}</argLine>
-							<forkCount>1</forkCount>
-							<parallel>none</parallel>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
--->
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -213,15 +179,15 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.ops4j.pax.url</groupId>
-			<artifactId>pax-url-aether</artifactId>
-			<version>${pax.url.version}</version>
+			<groupId>org.ops4j.pax.exam</groupId>
+			<artifactId>pax-exam-container-karaf</artifactId>
+			<version>${pax.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.karaf.tooling.exam</groupId>
-			<artifactId>org.apache.karaf.tooling.exam.container</artifactId>
-			<version>${karaf.version}</version>
+			<groupId>org.ops4j.pax.url</groupId>
+			<artifactId>pax-url-aether</artifactId>
+			<version>${pax.url.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

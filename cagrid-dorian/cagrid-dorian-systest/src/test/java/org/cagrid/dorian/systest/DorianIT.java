@@ -1,15 +1,12 @@
 package org.cagrid.dorian.systest;
 
-import static org.apache.karaf.tooling.exam.options.KarafDistributionOption.karafDistributionConfiguration;
-import static org.apache.karaf.tooling.exam.options.KarafDistributionOption.keepRuntimeFolder;
-import static org.ops4j.pax.exam.CoreOptions.autoWrap;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.localRepository;
 import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.scanFeatures;
 import static org.ops4j.pax.exam.CoreOptions.vmOption;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 
 import java.io.File;
 import java.security.KeyPair;
@@ -23,8 +20,6 @@ import javax.inject.Inject;
 import javax.net.ssl.KeyManager;
 
 import org.apache.cxf.configuration.security.KeyStoreType;
-import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
-import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFilePutOption;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.dorian.DoesLocalUserExistRequest;
 import org.cagrid.dorian.DoesLocalUserExistResponse;
@@ -48,14 +43,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.oasis.names.tc.saml.assertion.AssertionType;
+import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
+import org.ops4j.pax.exam.junit.PaxExam;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-@RunWith(JUnit4TestRunner.class)
+@RunWith(PaxExam.class)
 public class DorianIT {
 
 	private final static String USERNAME = "dorian";
@@ -102,10 +97,9 @@ public class DorianIT {
 		String localRepository = System.getProperty("maven.repo.local");
 		System.out.println("!!! localRepository = " + localRepository);
 		if (localRepository != null) {
-			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + localRepository));
-//			options.add(localRepository(localRepository));
+			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository="
+					+ localRepository));
 		}
-		options.add(autoWrap());
 
 		if (System.getProperty(DEBUG_PROPERTY) != null) {
 			options.add(vmOption("-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend="
@@ -123,14 +117,6 @@ public class DorianIT {
 								.versionAsInProject().type("tar.gz"))
 				.name("Apache ServiceMix").karafVersion(karafVersion)
 				.unpackDirectory(karafBase));
-//		options.add(new KarafDistributionConfigurationFileExtendOption(
-//				"etc/org.apache.karaf.features.cfg", "featuresBoot",
-//				",spring-jdbc,spring-orm"));
-//		options.add(new KarafDistributionConfigurationFilePutOption(
-//				"etc/config.properties", "karaf.framework", "equinox"));
-//		options.add(new KarafDistributionConfigurationFileExtendOption(
-//				"etc/jre.properties", "jre-1.7",
-//				",javax.xml.soap;version=\"1.3\""));
 		options.add(keepRuntimeFolder());
 		options.add(junitBundles());
 
@@ -140,7 +126,7 @@ public class DorianIT {
 				"cagrid-features");
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
-		options.add(scanFeatures(featureURL, "cagrid-dorian"));
+		options.add(features(featureURL, "cagrid-dorian"));
 
 		return options(options.toArray(new Option[options.size()]));
 	}

@@ -1,5 +1,7 @@
 package org.cagrid.dorian.systest;
 
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +19,6 @@ import java.util.List;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
-import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
 import org.cagrid.dorian.ifs.HostCertificateRecord;
 import org.cagrid.dorian.ifs.HostCertificateRequest;
@@ -137,7 +138,7 @@ public class DorianBootstrap {
 			if (file.isDirectory()) {
 				addFileOptions(filePath, file, options);
 			} else {
-				Option option = new KarafDistributionConfigurationFileReplacementOption(
+				Option option = replaceConfigurationFile(
 						filePath, file);
 				options.add(option);
 			}
