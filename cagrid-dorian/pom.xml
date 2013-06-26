@@ -17,6 +17,7 @@
 				<artifactId>cagrid-dorian-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-dorian-service</artifactId>
@@ -31,7 +32,19 @@
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-dorian-soap-client</artifactId>
 				<version>${project.version}</version>
-			</dependency>			
+			</dependency>	
+			
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gts-soap-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gts-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>		
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-gaards-api</artifactId>

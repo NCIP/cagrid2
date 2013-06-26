@@ -24,18 +24,16 @@ import java.security.GeneralSecurityException;
 public class GMESoapClientFactory {
 
 	public static GlobalModelExchangePortType createSoapClient(String url) {
-        GlobalModelExchangeService gme = new GlobalModelExchangeService();
-        GlobalModelExchangePortType gridGrouperPort = gme.getGlobalModelExchangePortTypePort();
+		GlobalModelExchangeService gme = new GlobalModelExchangeService();
+		GlobalModelExchangePortType gridGrouperPort = gme.getGlobalModelExchangePortTypePort();
 
 		BindingProvider bp = (BindingProvider) gridGrouperPort;
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
 		return gridGrouperPort;
 	}
 
-	public static GlobalModelExchangePortType createSoapClient(String url,
-			KeyStoreType truststore, KeyManagersType keyManager)
-			throws GeneralSecurityException, IOException {
-        GlobalModelExchangePortType gmePort = createSoapClient(url);
+	public static GlobalModelExchangePortType createSoapClient(String url, KeyStoreType truststore, KeyManagersType keyManager) throws GeneralSecurityException, IOException {
+		GlobalModelExchangePortType gmePort = createSoapClient(url);
 
 		Client dorianClient = ClientProxy.getClient(gmePort);
 		Bus bus = dorianClient.getBus();
@@ -49,10 +47,8 @@ public class GMESoapClientFactory {
 		return gmePort;
 	}
 
-	public static GlobalModelExchangePortType createSoapClient(String url,
-			KeyStoreType truststore, KeyManager keyManager)
-			throws GeneralSecurityException, IOException {
-        GlobalModelExchangePortType gmePort = createSoapClient(url);
+	public static GlobalModelExchangePortType createSoapClient(String url, KeyStoreType truststore, KeyManager keyManager) throws GeneralSecurityException, IOException {
+		GlobalModelExchangePortType gmePort = createSoapClient(url);
 
 		Client dorianClient = ClientProxy.getClient(gmePort);
 		Bus bus = dorianClient.getBus();
@@ -70,16 +66,14 @@ public class GMESoapClientFactory {
 		private final TrustManager[] trustManagers;
 		private final KeyManager[] keyManagers;
 
-		public static TrustManager[] createTrustManagers(KeyStoreType truststore)
-				throws GeneralSecurityException, IOException {
+		public static TrustManager[] createTrustManagers(KeyStoreType truststore) throws GeneralSecurityException, IOException {
 			TrustManagersType trustManagersType = new TrustManagersType();
 			trustManagersType.setKeyStore(truststore);
 			TrustManager[] trustManagers = TLSParameterJaxBUtils.getTrustManagers(trustManagersType);
 			return trustManagers;
 		}
 
-		public static KeyManager[] createKeyManagers(KeyManagersType keyManager)
-				throws GeneralSecurityException, IOException {
+		public static KeyManager[] createKeyManagers(KeyManagersType keyManager) throws GeneralSecurityException, IOException {
 			KeyManager[] keyManagers = null;
 			if (keyManager != null) {
 				keyManagers = TLSParameterJaxBUtils.getKeyManagers(keyManager);
@@ -89,8 +83,7 @@ public class GMESoapClientFactory {
 			return keyManagers;
 		}
 
-		public SSLConfigurer(Configurer parentConfigurer,
-				TrustManager[] trustManagers, KeyManager[] keyManagers) {
+		public SSLConfigurer(Configurer parentConfigurer, TrustManager[] trustManagers, KeyManager[] keyManagers) {
 			this.parentConfigurer = parentConfigurer;
 			this.trustManagers = trustManagers;
 			this.keyManagers = keyManagers;

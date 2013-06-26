@@ -14,6 +14,12 @@
 		<prop key="cagrid.dorian.service.db.port">3306</prop>
 		<prop key="cagrid.dorian.service.db.user">root</prop>
 		<prop key="cagrid.dorian.service.db.password"></prop>
+		<prop key="cagrid.dorian.service.client.keystore.file">${karaf.base}/etc/dorian/dorian-host.jks</prop>
+		<prop key="cagrid.dorian.service.client.keystore.password">changeit</prop>
+		<prop key="cagrid.dorian.service.client.key.alias">host</prop>
+		<prop key="cagrid.dorian.service.client.key.password">changeit</prop>
+		<prop key="cagrid.dorian.service.client.truststore.file">${karaf.base}/etc/dorian/truststore.jks</prop>
+		<prop key="cagrid.dorian.service.client.truststore.password">changeit</prop>
 		<prop key="cagrid.dorian.service.idp.name">Dorian</prop>
 		<prop key="cagrid.dorian.service.idp.renew.asserting.credentials">true</prop>
 		<prop key="cagrid.dorian.service.idp.asserting.credentials.password">idpkey</prop>

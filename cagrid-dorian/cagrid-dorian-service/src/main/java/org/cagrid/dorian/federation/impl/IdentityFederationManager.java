@@ -1,5 +1,6 @@
 package org.cagrid.dorian.federation.impl;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -23,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.cxf.configuration.security.KeyStoreType;
 import org.bouncycastle.asn1.x509.CRLReason;
 import org.cagrid.core.common.FaultHelper;
+import org.cagrid.core.common.security.X509Credential;
 import org.cagrid.dorian.ca.impl.CertificateAuthority;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityException;
 import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
@@ -77,6 +80,9 @@ import org.cagrid.dorian.types.PermissionDeniedException;
 import org.cagrid.dorian.types.UserPolicyException;
 import org.cagrid.gaards.pki.CRLEntry;
 import org.cagrid.gaards.pki.CertUtil;
+import org.cagrid.gts.soapclient.GTSSoapClientFactory;
+import org.cagrid.gts.wsrf.stubs.GTSPortType;
+import org.cagrid.gts.wsrf.stubs.UpdateCRLRequest;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.Event;
 import org.cagrid.tools.events.EventAuditor;
@@ -999,69 +1005,60 @@ public class IdentityFederationManager implements Publisher {
 	}
 
 	public void publishCRL() {
-		// TODO depends on GTS
-		// if (publishCRL) {
-		// if ((conf.getCRLPublishingList() != null)
-		// && (conf.getCRLPublishingList().size() > 0)) {
-		// Runner runner = new Runner() {
-		// public void execute() {
-		// synchronized (mutex) {
-		// List<String> services = conf.getCRLPublishingList();
-		// try {
-		// X509CRL crl = getCRL();
-		// gov.nih.nci.cagrid.gts.bean.X509CRL x509 = new
-		// gov.nih.nci.cagrid.gts.bean.X509CRL();
-		// x509.setCrlEncodedString(CertUtil.writeCRL(crl));
-		// String authName = ca.getCACertificate()
-		// .getSubjectDN().getName();
-		// for (int i = 0; i < services.size(); i++) {
-		// String uri = services.get(i);
-		// try {
-		// debug("Publishing CRL to the GTS "
-		// + uri);
-		// GTSAdminClient client = new GTSAdminClient(
-		// uri, null);
-		// client.updateCRL(authName, x509);
-		// debug("Published CRL to the GTS " + uri);
-		// eventManager.logEvent(
-		// AuditConstants.SYSTEM_ID,
-		// AuditConstants.SYSTEM_ID,
-		// FederationAudit.CRLPublished
-		// .value(),
-		// "Published CRL to the GTS "
-		// + uri + ".");
-		// } catch (Exception ex) {
-		// String msg = "Error publishing the CRL to the GTS "
-		// + uri + "!!!";
-		// getLog().error(msg, ex);
-		// eventManager.logEvent(
-		// AuditConstants.SYSTEM_ID,
-		// AuditConstants.SYSTEM_ID,
-		// FederationAudit.INTERNAL_ERROR
-		// .value(), msg + "\n"
-		// + ed.getMessage());
-		// }
-		//
-		// }
-		//
-		// } catch (Exception e) {
-		// String msg = "Unexpected Error publishing the CRL!!!";
-		// getLog().error(msg, e);
-		// eventManager.logEvent(AuditConstants.SYSTEM_ID,
-		// AuditConstants.SYSTEM_ID,
-		// FederationAudit.INTERNAL_ERROR.value(),
-		// msg + "\n" + e.getMessage());
-		// }
-		// }
-		// }
-		// };
-		// try {
-		// threadManager.executeInBackground(runner);
-		// } catch (Exception t) {
-		// t.getMessage();
-		// }
-		// }
-		// }
+
+		if (publishCRL) {
+			if ((conf.getCRLPublishingList() != null) && (conf.getCRLPublishingList().size() > 0)) {
+				Runner runner = new Runner() {
+					public void execute() {
+						synchronized (mutex) {
+							List<String> services = conf.getCRLPublishingList();
+							X509Credential credential = conf.getCredentialManager().getCredential();
+							KeyStoreType truststore = conf.getCredentialManager().getTruststore();
+							try {
+								Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
+								Iterator<String> itr = crls.keySet().iterator();
+								while (itr.hasNext()) {
+									String issuer = itr.next();
+									X509CRL crl = crls.get(issuer);
+									org.cagrid.gts.model.X509CRL x509 = new org.cagrid.gts.model.X509CRL();
+
+									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+									for (int i = 0; i < services.size(); i++) {
+										String uri = services.get(i);
+										try {
+											logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
+											GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
+											UpdateCRLRequest req = new UpdateCRLRequest();
+											req.setTrustedAuthorityName(issuer);
+											UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();
+											val.setX509CRL(x509);
+											client.updateCRL(req);
+											logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
+											eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");
+										} catch (Exception ex) {
+											String msg = "Error publishing the CRL for the CA " + issuer + " to the GTS " + uri + "!!!";
+											logger.error(msg, ex);
+											eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + ex.getMessage());
+										}
+
+									}
+								}
+
+							} catch (Exception e) {
+								String msg = "Unexpected Error publishing the CRL!!!";
+								logger.error(msg, e);
+								eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + e.getMessage());
+							}
+						}
+					}
+				};
+				try {
+					threadManager.executeInBackground(runner);
+				} catch (Exception t) {
+					t.getMessage();
+				}
+			}
+		}
 	}
 
 	private void addToCRLList(Map<String, Map<Long, CRLEntry>> crls, String issuer, BigInteger serialNumber) {
@@ -1172,30 +1169,6 @@ public class IdentityFederationManager implements Publisher {
 				logger.error("Unexpected error obtaining the CRL for the issuer, " + issuer + ": " + e.getMessage() + ".", e);
 			}
 		}
-
-//		
-//		Iterator<String> crlItr = crls.keySet().iterator();
-//
-//		while (crlItr.hasNext()) {
-//			String issuer = crlItr.next();
-//			try {
-//
-//				Map<Long, CRLEntry> entryMap = crls.get(issuer);
-//
-//				CRLEntry[] entries = new CRLEntry[entryMap.size()];
-//				Iterator<CRLEntry> itr2 = entryMap.values().iterator();
-//				int count = 0;
-//				while (itr2.hasNext()) {
-//					entries[count] = itr2.next();
-//					count++;
-//				}
-//				X509CRL crl = this.caManager.getCertificateAuthority(issuer).getCRL(entries, sa);
-//				crlMap.put(issuer, crl);
-//
-//			} catch (Exception e) {
-//				logger.error("Unexpected error obtaining the CRL for the issuer, " + issuer + ": " + e.getMessage() + ".", e);
-//			}
-//		}
 		return crlMap;
 	}
 

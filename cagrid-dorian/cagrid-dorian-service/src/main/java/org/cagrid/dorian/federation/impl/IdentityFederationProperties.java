@@ -8,6 +8,7 @@ import org.cagrid.core.common.FaultHelper;
 import org.cagrid.dorian.common.Lifetime;
 import org.cagrid.dorian.policy.HostCertificateRenewalPolicy;
 import org.cagrid.dorian.policy.SearchPolicyType;
+import org.cagrid.dorian.service.impl.CredentialManager;
 import org.cagrid.dorian.types.DorianInternalException;
 
 public class IdentityFederationProperties {
@@ -32,6 +33,7 @@ public class IdentityFederationProperties {
 	private SearchPolicyType hostSearchPolicy;
 	private SearchPolicyType userSearchPolicy;
 	private HostCertificateRenewalPolicy hostCertificateRenewalPolicy;
+	private CredentialManager credentialManager;
 
 	public IdentityFederationProperties() {
 		this.identityAssignmentPolicy = IdentityAssignmentPolicy.NAME;
@@ -71,14 +73,11 @@ public class IdentityFederationProperties {
 		return identityAssignmentPolicy;
 	}
 
-	public void setIdentityAssignmentPolicy(String identityAssignmentPolicy)
-			throws DorianInternalException {
+	public void setIdentityAssignmentPolicy(String identityAssignmentPolicy) throws DorianInternalException {
 		if (IdentityAssignmentPolicy.isValidPolicy(identityAssignmentPolicy)) {
 			this.identityAssignmentPolicy = identityAssignmentPolicy;
 		} else {
-			DorianInternalException f = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"Invalid identity assigment policy specified.");
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "Invalid identity assigment policy specified.");
 			throw f;
 		}
 	}
@@ -87,13 +86,9 @@ public class IdentityFederationProperties {
 		return minIdPNameLength;
 	}
 
-	public void setMinIdPNameLength(int minIdPNameLength)
-			throws DorianInternalException {
+	public void setMinIdPNameLength(int minIdPNameLength) throws DorianInternalException {
 		if (this.minIdPNameLength < MIN_IDP_NAME_LENGTH) {
-			DorianInternalException f = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"The minumum IdP name length must be at least "
-							+ MIN_IDP_NAME_LENGTH + " characters.");
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "The minumum IdP name length must be at least " + MIN_IDP_NAME_LENGTH + " characters.");
 			throw f;
 		}
 		this.minIdPNameLength = minIdPNameLength;
@@ -103,13 +98,9 @@ public class IdentityFederationProperties {
 		return maxIdPNameLength;
 	}
 
-	public void setMaxIdPNameLength(int maxIdPNameLength)
-			throws DorianInternalException {
+	public void setMaxIdPNameLength(int maxIdPNameLength) throws DorianInternalException {
 		if (this.maxIdPNameLength > MAX_IDP_NAME_LENGTH) {
-			DorianInternalException f = FaultHelper.createFaultException(
-					DorianInternalException.class,
-					"The maximum IdP name length must be nore more than "
-							+ MAX_IDP_NAME_LENGTH + " characters.");
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "The maximum IdP name length must be nore more than " + MAX_IDP_NAME_LENGTH + " characters.");
 			throw f;
 		}
 		this.maxIdPNameLength = maxIdPNameLength;
@@ -135,14 +126,9 @@ public class IdentityFederationProperties {
 		return userCertificateLifetime;
 	}
 
-	public void setUserCertificateLifetime(Lifetime maxProxyLifetime)
-			throws DorianInternalException {
-		if ((this.userCertificateLifetime.getYears() != 0)
-				|| (this.userCertificateLifetime.getMonths() != 0)
-				|| (this.userCertificateLifetime.getDays() != 0)) {
-			DorianInternalException f = FaultHelper
-					.createFaultException(DorianInternalException.class,
-							"The max proxy lifetime configuration cannot specify years, months, or days.");
+	public void setUserCertificateLifetime(Lifetime maxProxyLifetime) throws DorianInternalException {
+		if ((this.userCertificateLifetime.getYears() != 0) || (this.userCertificateLifetime.getMonths() != 0) || (this.userCertificateLifetime.getDays() != 0)) {
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "The max proxy lifetime configuration cannot specify years, months, or days.");
 			throw f;
 		}
 		this.userCertificateLifetime = maxProxyLifetime;
@@ -174,23 +160,13 @@ public class IdentityFederationProperties {
 		return hostSearchPolicy.value();
 	}
 
-	public void setHostSearchPolicy(String searchPolicy)
-			throws DorianInternalException {
-		if (searchPolicy.equals(SearchPolicyType.PUBLIC.value())
-				|| searchPolicy.equals(SearchPolicyType.AUTHENTICATED.value())
-				|| searchPolicy.equals(SearchPolicyType.ADMIN.value())) {
+	public void setHostSearchPolicy(String searchPolicy) throws DorianInternalException {
+		if (searchPolicy.equals(SearchPolicyType.PUBLIC.value()) || searchPolicy.equals(SearchPolicyType.AUTHENTICATED.value()) || searchPolicy.equals(SearchPolicyType.ADMIN.value())) {
 			this.hostSearchPolicy = SearchPolicyType.fromValue(searchPolicy);
 		} else {
-			DorianInternalException f = FaultHelper
-					.createFaultException(
-							DorianInternalException.class,
-							"The user search policy "
-									+ searchPolicy
-									+ ", is invalid.  Please specify a valid search policy ("
-									+ SearchPolicyType.PUBLIC.value() + ", "
-									+ SearchPolicyType.AUTHENTICATED.value()
-									+ ", " + SearchPolicyType.ADMIN.value()
-									+ ").");
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "The user search policy " + searchPolicy
+					+ ", is invalid.  Please specify a valid search policy (" + SearchPolicyType.PUBLIC.value() + ", " + SearchPolicyType.AUTHENTICATED.value() + ", " + SearchPolicyType.ADMIN.value()
+					+ ").");
 			throw f;
 		}
 	}
@@ -202,23 +178,13 @@ public class IdentityFederationProperties {
 		return userSearchPolicy.value();
 	}
 
-	public void setUserSearchPolicy(String searchPolicy)
-			throws DorianInternalException {
-		if (searchPolicy.equals(SearchPolicyType.PUBLIC.value())
-				|| searchPolicy.equals(SearchPolicyType.AUTHENTICATED.value())
-				|| searchPolicy.equals(SearchPolicyType.ADMIN.value())) {
+	public void setUserSearchPolicy(String searchPolicy) throws DorianInternalException {
+		if (searchPolicy.equals(SearchPolicyType.PUBLIC.value()) || searchPolicy.equals(SearchPolicyType.AUTHENTICATED.value()) || searchPolicy.equals(SearchPolicyType.ADMIN.value())) {
 			this.userSearchPolicy = SearchPolicyType.fromValue(searchPolicy);
 		} else {
-			DorianInternalException f = FaultHelper
-					.createFaultException(
-							DorianInternalException.class,
-							"The user search policy "
-									+ searchPolicy
-									+ ", is invalid.  Please specify a valid search policy ("
-									+ SearchPolicyType.PUBLIC.value() + ", "
-									+ SearchPolicyType.AUTHENTICATED.value()
-									+ ", " + SearchPolicyType.ADMIN.value()
-									+ ").");
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "The user search policy " + searchPolicy
+					+ ", is invalid.  Please specify a valid search policy (" + SearchPolicyType.PUBLIC.value() + ", " + SearchPolicyType.AUTHENTICATED.value() + ", " + SearchPolicyType.ADMIN.value()
+					+ ").");
 			throw f;
 		}
 	}
@@ -230,26 +196,22 @@ public class IdentityFederationProperties {
 		return hostCertificateRenewalPolicy.value();
 	}
 
-	public void setHostCertificateRenewalPolicy(String renewalPolicy)
-			throws DorianInternalException {
-		if (renewalPolicy.equals(HostCertificateRenewalPolicy.OWNER.value())
-				|| renewalPolicy.equals(HostCertificateRenewalPolicy.ADMIN
-						.value())) {
-			this.hostCertificateRenewalPolicy = HostCertificateRenewalPolicy
-					.fromValue(renewalPolicy);
+	public void setHostCertificateRenewalPolicy(String renewalPolicy) throws DorianInternalException {
+		if (renewalPolicy.equals(HostCertificateRenewalPolicy.OWNER.value()) || renewalPolicy.equals(HostCertificateRenewalPolicy.ADMIN.value())) {
+			this.hostCertificateRenewalPolicy = HostCertificateRenewalPolicy.fromValue(renewalPolicy);
 		} else {
-			DorianInternalException f = FaultHelper
-					.createFaultException(
-							DorianInternalException.class,
-							"The host certificate renewal policy "
-									+ renewalPolicy
-									+ ", is invalid.  Please specify a valid renewal policy ("
-									+ HostCertificateRenewalPolicy.OWNER
-											.value()
-									+ ", "
-									+ HostCertificateRenewalPolicy.ADMIN
-											.value() + ").");
+			DorianInternalException f = FaultHelper.createFaultException(DorianInternalException.class, "The host certificate renewal policy " + renewalPolicy
+					+ ", is invalid.  Please specify a valid renewal policy (" + HostCertificateRenewalPolicy.OWNER.value() + ", " + HostCertificateRenewalPolicy.ADMIN.value() + ").");
 			throw f;
 		}
 	}
+
+	public CredentialManager getCredentialManager() {
+		return credentialManager;
+	}
+
+	public void setCredentialManager(CredentialManager credentialManager) {
+		this.credentialManager = credentialManager;
+	}
+
 }
