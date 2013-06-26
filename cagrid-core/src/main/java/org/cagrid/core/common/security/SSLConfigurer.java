@@ -103,6 +103,12 @@ public class SSLConfigurer implements Configurer {
 		}
 		return km;
 	}
+	
+	
+
+	public void setKm(KeyManager[] km) {
+		this.km = km;
+	}
 
 	private TrustManager[] getTrustManager() throws Exception {
 		if (tm == null) {
