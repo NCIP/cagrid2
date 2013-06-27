@@ -44,7 +44,7 @@ public class DorianBootstrap {
 
 	private final AbstractApplicationContext dorianContext;
 	private final Dorian dorian;
-	private final String gridId = "/O=caBIG/OU=caGrid/OU=Training/OU=Dorian/CN=dorian";
+	private final String gridId = "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian/CN=dorian";
 
 	public DorianBootstrap() throws IOException {
 		dorianContext = ContextLoader.loadContext("Dorian",
