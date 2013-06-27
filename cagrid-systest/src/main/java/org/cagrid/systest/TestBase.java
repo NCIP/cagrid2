@@ -88,6 +88,12 @@ public abstract class TestBase {
 			options.add(vmOption("-Dcom.sun.management.jmxremote.port=5006"));
 		}
 
+		String localRepository = System.getProperty("maven.repo.local");
+		System.out.println("!!! localRepository = " + localRepository);
+		if (localRepository != null) {
+			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + localRepository));
+		}
+
 		List<Option> containerOptions = getContainerOptions();
 		if ((containerOptions == null) || containerOptions.isEmpty()) {
 			throw new RuntimeException("No container specified!");
