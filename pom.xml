@@ -192,6 +192,12 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-systest</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>${wsrf.group}</groupId>
 				<artifactId>wsrf-jglobus</artifactId>
 				<version>${wsrf.version}</version>
@@ -438,6 +444,6 @@
 		<module>cagrid-gridgrouper</module>
         <module>cagrid-gme</module>
 		<!-- TODO: MOVE THIS <module>puretls</module> -->
-		<!-- <module>cagrid-systest</module> -->
+		<module>cagrid-systest</module>
 	</modules>
 </project>
