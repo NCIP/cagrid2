@@ -1,20 +1,12 @@
 package org.cagrid.dorian.systest;
 
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.vmOption;
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.karafDistributionConfiguration;
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.keepRuntimeFolder;
 
-import java.io.File;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.net.ssl.KeyManager;
@@ -39,96 +31,51 @@ import org.cagrid.gaards.authentication.AuthenticateUserResponse;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.systest.ContextLoader;
+import org.cagrid.systest.TestBase;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.oasis.names.tc.saml.assertion.AssertionType;
-import org.ops4j.pax.exam.Configuration;
 import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.PaxExam;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 
-@RunWith(PaxExam.class)
-public class DorianIT {
+public class DorianIT extends TestBase {
 
 	private final static String USERNAME = "dorian";
 	private final static String PASSWORD = "DorianAdmin$1";
 
-	/**
-	 * Debug system property, set to any value to enable.
-	 */
-	public final static String DEBUG_PROPERTY = "systest.debug";
-
-	/**
-	 * Debug suspend system property, set to 'y' or 'n' (or leave unset).
-	 */
-	public final static String DEBUG_SUSPEND_PROPERTY = "systest.suspend";
-
-	private final Map<Integer, String> bundleStates = new HashMap<Integer, String>();
-
-	@Inject
-	private BundleContext bundleContext;
-
 	@Inject
 	private Dorian dorian;
 
-	private DorianBootstrap dorianBootstrap = null;
-
-	public DorianIT() {
-		bundleStates.put(Bundle.UNINSTALLED, "UNINSTALLED");
-		bundleStates.put(Bundle.INSTALLED, "INSTALLED");
-		bundleStates.put(Bundle.RESOLVED, "RESOLVED");
-		bundleStates.put(Bundle.STARTING, "STARTING");
-		bundleStates.put(Bundle.STOPPING, "STOPPING");
-		bundleStates.put(Bundle.ACTIVE, "ACTIVE");
+	@Override
+	protected void prePAX() {
+		DorianBootstrap dorianBootstrap = null;
+		try {
+			dorianBootstrap = new DorianBootstrap();
+			dorianBootstrap.createKeyAndTrustStores();
+		} catch (Exception e) {
+			throw new RuntimeException("Exception bootstrapping Dorian", e);
+		} finally {
+			dorianBootstrap.close();
+		}
 	}
 
-	@Configuration
-	public Option[] config() {
+	@Override
+	@SuppressWarnings("rawtypes")
+	public List<Class> getAdditionalClasses() {
+		return Collections.singletonList((Class) DorianBootstrap.class);
+	}
 
-		beforePAX();
-		File karafBase = new File(
-				System.getProperty(ContextLoader.KARAF_BASE_KEY));
-
+	@Override
+	public List<Option> getTestBundles() {
 		List<Option> options = new ArrayList<Option>();
-
-		String localRepository = System.getProperty("maven.repo.local");
-		System.out.println("!!! localRepository = " + localRepository);
-		if (localRepository != null) {
-			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository="
-					+ localRepository));
-		}
-
-		if (System.getProperty(DEBUG_PROPERTY) != null) {
-			options.add(vmOption("-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend="
-					+ System.getProperty(DEBUG_SUSPEND_PROPERTY, "n")));
-			options.add(vmOption("-Dcom.sun.management.jmxremote.ssl=false"));
-			options.add(vmOption("-Dcom.sun.management.jmxremote.authenticate=false"));
-			options.add(vmOption("-Dcom.sun.management.jmxremote.port=5006"));
-		}
-
-		String karafVersion = MavenUtils.getArtifactVersion("org.apache.karaf",
-				"apache-karaf");
-		options.add(karafDistributionConfiguration()
-				.frameworkUrl(
-						maven("org.apache.servicemix", "apache-servicemix")
-								.versionAsInProject().type("tar.gz"))
-				.name("Apache ServiceMix").karafVersion(karafVersion)
-				.unpackDirectory(karafBase));
-		options.add(keepRuntimeFolder());
-		options.add(junitBundles());
-
-		options.addAll(dorianBootstrap.getFileOptions());
-
 		String featureVersion = MavenUtils.getArtifactVersion("org.cagrid",
 				"cagrid-features");
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
 		options.add(features(featureURL, "cagrid-dorian"));
-
-		return options(options.toArray(new Option[options.size()]));
+		return options;
 	}
 
 	@Test
@@ -207,14 +154,5 @@ public class DorianIT {
 				.doesLocalUserExist(doesLocalUserExistRequest);
 		localUserExists = doesLocalUserExistResponse.isResponse();
 		Assert.assertFalse(localUserExists);
-	}
-
-	protected void beforePAX() {
-		try {
-			dorianBootstrap = new DorianBootstrap();
-			dorianBootstrap.createKeyAndTrustStores();
-		} catch (Exception e) {
-			throw new RuntimeException("Exception bootstrapping Dorian", e);
-		}
 	}
 }

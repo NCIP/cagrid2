@@ -26,6 +26,7 @@ import org.cagrid.dorian.ifs.PublicKey;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.systest.ContextLoader;
 import org.ops4j.pax.exam.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,8 +53,7 @@ public class DorianBootstrap {
 	}
 
 	public void createKeyAndTrustStores() throws Exception {
-		File karafBase = new File(
-				System.getProperty(ContextLoader.KARAF_BASE_KEY));
+		File karafBase = ContextLoader.getKarafBase();
 		File karafEtc = new File(karafBase, "etc");
 		if (!karafEtc.exists() || !karafEtc.isDirectory()) {
 			logger.warn("No " + ContextLoader.KARAF_BASE_KEY
