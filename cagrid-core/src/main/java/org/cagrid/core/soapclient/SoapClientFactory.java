@@ -22,27 +22,41 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 
 public class SoapClientFactory {
 
-	public static <T> T configureSoapClient(T port,
-			String url) {
-		BindingProvider bp = (BindingProvider) port;
+	public static void configureSoapClient(BindingProvider bp, String url) {
 		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				url);
-		return port;
 	}
 
-	public static <T> T configureSoapClient(T port,
-			String url, KeyStoreType truststore, KeyManagersType keyManager)
+	public static void configureSoapClient(BindingProvider bp, String url,
+			KeyStoreType truststore, KeyManagersType keyManager)
 			throws GeneralSecurityException, IOException {
-		port = configureSoapClient(port, url);
+		configureSoapClient(bp, url);
 
-		Client client = ClientProxy.getClient(port);
+		Client client = ClientProxy.getClient(bp);
 		Bus bus = client.getBus();
 		Configurer baseConf = bus.getExtension(Configurer.class);
-		SSLConfigurer sslConf = new SSLConfigurer(baseConf, truststore,
-				keyManager);
+		TrustManager[] trustManagers = SSLConfigurer
+				.createTrustManagers(truststore);
+		KeyManager[] keyManagers = SSLConfigurer.createKeyManagers(keyManager);
+		SSLConfigurer sslConf = new SSLConfigurer(baseConf, trustManagers,
+				keyManagers);
 		bus.setExtension(sslConf, Configurer.class);
+	}
 
-		return port;
+	public static void configureSoapClient(BindingProvider bp, String url,
+			KeyStoreType truststore, KeyManager keyManager)
+			throws GeneralSecurityException, IOException {
+		configureSoapClient(bp, url);
+
+		Client dorianClient = ClientProxy.getClient(bp);
+		Bus bus = dorianClient.getBus();
+		Configurer baseConf = bus.getExtension(Configurer.class);
+
+		TrustManager[] trustManagers = SSLConfigurer
+				.createTrustManagers(truststore);
+		SSLConfigurer sslConf = new SSLConfigurer(baseConf, trustManagers,
+				new KeyManager[] { keyManager });
+		bus.setExtension(sslConf, Configurer.class);
 	}
 
 	static class SSLConfigurer implements Configurer {
@@ -50,21 +64,31 @@ public class SoapClientFactory {
 		private final TrustManager[] trustManagers;
 		private final KeyManager[] keyManagers;
 
-		public SSLConfigurer(Configurer parentConfigurer,
-				KeyStoreType truststore, KeyManagersType keyManager)
+		public static TrustManager[] createTrustManagers(KeyStoreType truststore)
 				throws GeneralSecurityException, IOException {
-			this.parentConfigurer = parentConfigurer;
-
 			TrustManagersType trustManagersType = new TrustManagersType();
 			trustManagersType.setKeyStore(truststore);
-			trustManagers = TLSParameterJaxBUtils
+			TrustManager[] trustManagers = TLSParameterJaxBUtils
 					.getTrustManagers(trustManagersType);
+			return trustManagers;
+		}
 
+		public static KeyManager[] createKeyManagers(KeyManagersType keyManager)
+				throws GeneralSecurityException, IOException {
+			KeyManager[] keyManagers = null;
 			if (keyManager != null) {
 				keyManagers = TLSParameterJaxBUtils.getKeyManagers(keyManager);
 			} else {
 				keyManagers = null;
 			}
+			return keyManagers;
+		}
+
+		public SSLConfigurer(Configurer parentConfigurer,
+				TrustManager[] trustManagers, KeyManager[] keyManagers) {
+			this.parentConfigurer = parentConfigurer;
+			this.trustManagers = trustManagers;
+			this.keyManagers = keyManagers;
 		}
 
 		@Override
