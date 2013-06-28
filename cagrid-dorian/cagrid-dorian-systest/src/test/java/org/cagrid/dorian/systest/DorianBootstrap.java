@@ -1,7 +1,5 @@
 package org.cagrid.dorian.systest;
 
-import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.replaceConfigurationFile;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,7 +9,6 @@ import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +24,6 @@ import org.cagrid.dorian.service.Dorian;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.systest.ContextLoader;
-import org.ops4j.pax.exam.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -115,33 +111,6 @@ public class DorianBootstrap {
 			OutputStream keyStoreStream = new FileOutputStream(keyStoreFile);
 			keyStore.store(keyStoreStream, STORE_PASSWORD);
 			keyStoreStream.close();
-		}
-	}
-
-	/**
-	 * Create file replacement options for everything in ${karaf.base}/etc.
-	 */
-	public List<Option> getFileOptions() {
-		List<Option> options = new ArrayList<Option>();
-
-		File karafBase = new File(
-				System.getProperty(ContextLoader.KARAF_BASE_KEY));
-		File karafEtc = new File(karafBase, "etc");
-		addFileOptions("etc", karafEtc, options);
-
-		return options;
-	}
-
-	private void addFileOptions(String path, File dir, List<Option> options) {
-		for (File file : dir.listFiles()) {
-			String filePath = path + "/" + file.getName();
-			if (file.isDirectory()) {
-				addFileOptions(filePath, file, options);
-			} else {
-				Option option = replaceConfigurationFile(
-						filePath, file);
-				options.add(option);
-			}
 		}
 	}
 
