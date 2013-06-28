@@ -19,6 +19,21 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-cds-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-cds-wsrf</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-cds-soap-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-metadata-model</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -129,6 +144,6 @@
         <module>cagrid-cds-service</module>
         <module>cagrid-cds-wsrf</module>
         <module>cagrid-cds-soap-client</module>
-        
+        <module>cagrid-cds-inttest</module>
     </modules>
 </project>

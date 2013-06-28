@@ -20,7 +20,7 @@ import static junit.framework.Assert.assertNotNull;
 @ContextConfiguration(locations = { "classpath*:test-beans.xml", "classpath:META-INF/spring/cds-beans-configuration.xml" })
 public class BaseTest {
 
-    @javax.annotation.Resource
+    @Resource
     protected CredentialDelegationService cds;
 
     @Resource

@@ -54,10 +54,11 @@ public class CDSImpl implements CredentialDelegationService {
     private ResourceProperty<ServiceMetadata> serviceMetadataResourceProperty;
     private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
 
-    public CDSImpl(CDSProperties cdsProperties, Map<String, String> jaxbResourcePropertiesMap) {
+    public CDSImpl(CDSProperties cdsProperties, Map<String, String> jaxbResourcePropertiesMap) throws DatabaseException, JAXBException {
         this.log = LoggerFactory.getLogger(this.getClass().getName());
         this.cdsProperties = cdsProperties;
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
+        initialize();
     }
 
     private void initialize() throws DatabaseException, JAXBException {
@@ -108,10 +109,12 @@ public class CDSImpl implements CredentialDelegationService {
                 getClass().getClassLoader(), descriptorsByField,
                 jaxbResourcePropertiesMap);
 
-        ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField
+        @SuppressWarnings("unchecked")
+		ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField
                 .get("serviceMetadata");
         if (serviceMetadataDescriptor != null) {
-            ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties
+            @SuppressWarnings("unchecked")
+			ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties
                     .getResourceProperties().get(serviceMetadataDescriptor);
             serviceMetadataResourceProperty = resourceProperty;
             resource.add(serviceMetadataResourceProperty);

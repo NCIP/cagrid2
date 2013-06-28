@@ -23,30 +23,27 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
+	<bean id="proxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.cds.wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.cds.wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.cds.wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.cds.wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.cds.wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.cds.wsrf.cipher-suites}" />
+	</bean>
+
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.cds.wsrf.port}">
-<!--
-			<httpj:tlsServerParameters>
-				<sec:keyManagers keyPassword="${cagrid.dorian.wsrf.keystore.alias-password}">
-					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.wsrf.keystore.password}" file="${cagrid.dorian.wsrf.keystore.path}" />
-				</sec:keyManagers>
-				<sec:trustManagers>
-					<sec:keyStore type="JKS"
-						password="${cagrid.dorian.wsrf.truststore.password}" file="${cagrid.dorian.wsrf.truststore.path}" />
-				</sec:trustManagers>
-				<sec:cipherSuitesFilter>
-					<sec:include>.*_WITH_3DES_.*</sec:include>
-					<sec:include>.*_WITH_DES_.*</sec:include>
-					<sec:include>.*_EXPORT_.*</sec:include>
-					<sec:include>.*_EXPORT1024_.*</sec:include>
-					<sec:include>.*_WITH_NULL_.*</sec:include>
-					<sec:exclude>.*_DH_anon_.*</sec:exclude>
-				</sec:cipherSuitesFilter>
-				<sec:clientAuthentication want="true"
-					required="false" />
-			</httpj:tlsServerParameters>
--->
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<property name="port" value="${cagrid.cds.wsrf.port}" />
+				</bean>
+			</httpj:connector>
 		</httpj:engine>
 	</httpj:engine-factory>
 

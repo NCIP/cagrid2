@@ -66,6 +66,7 @@ import org.xmlsoap.schemas.ws._2004._03.addressing.AttributedURI;
 import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 import org.xmlsoap.schemas.ws._2004._03.addressing.ReferencePropertiesType;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
@@ -338,12 +339,11 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
 
         try {
         	MessageContext msgContext = wsContext.getMessageContext();
-        	String transportURL = "my-url/";
-            transportURL = transportURL.substring(0, transportURL
-                    .lastIndexOf('/') + 1);
-            transportURL += "DelegatedCredential";
+        	HttpServletRequest request = (HttpServletRequest) msgContext.get("HTTP.REQUEST");
+        	StringBuffer transportURL = request.getRequestURL();
+            transportURL.append("/DelegatedCredential");
 
-            EndpointReferenceType epr = createEndpointReference(transportURL, getResourceKey(id));
+            EndpointReferenceType epr = createEndpointReference(transportURL.toString(), getResourceKey(id));
             DelegatedCredentialReference response = new DelegatedCredentialReference();
             response.setEndpointReference(epr);
             return response;
