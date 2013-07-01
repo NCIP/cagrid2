@@ -11,8 +11,10 @@
 
 	<properties>
 		<cds.db.name>int_cds</cds.db.name>
-		<grouper.db.name>int_grouper</grouper.db.name>
+		<!-- grouper is hardwired to this name! -->
+		<grouper.db.name>grouper</grouper.db.name>
 		<dorian.db.name>int_dorian</dorian.db.name>
+		<admin.id>/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian/CN=dorian</admin.id>
 		<pax.version>3.1.0</pax.version>
 		<pax.url.version>1.6.0</pax.url.version>
 	</properties>
@@ -28,9 +30,6 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/pax</directory>
-				<includes>
-					<include>**/dorian.properties</include>
-				</includes>
 			</resource>
 		</resources>
 		<plugins>
@@ -106,7 +105,7 @@
 				<executions>
 					<execution>
 						<id>create-db</id>
-						<phase>process-test-resources</phase>
+						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>execute</goal>
 						</goals>
@@ -122,6 +121,101 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>grouper-init</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<classpathScope>test</classpathScope>
+							<includePluginDependencies>true</includePluginDependencies>
+ 							<mainClass>edu.internet2.middleware.GrouperInit</mainClass>
+							<arguments>
+								<argument>${basedir}/target/classes/schema-export.sql</argument>
+								<argument>${basedir}/target/classes/grouper.hibernate.properties</argument>
+								<argument>${basedir}/target/classes/edu/internet2/middleware/grouper</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>internet2</groupId>
+						<artifactId>grouper</artifactId>
+						<version>1.1.0.1</version>
+						<scope>system</scope>
+						<systemPath>${basedir}/lib/grouper.jar</systemPath>
+					</dependency>
+					<dependency>
+						<groupId>internet2</groupId>
+						<artifactId>subject</artifactId>
+						<version>0.2.1</version>
+						<scope>system</scope>
+						<systemPath>${basedir}/lib/subject-0.2.1.jar</systemPath>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.7.0</version>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.hibernate</groupId>
+						<artifactId>hibernate</artifactId>
+						<version>2.1.8</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>grouper-bootstrap</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<classpathScope>test</classpathScope>
+							<includePluginDependencies>true</includePluginDependencies>
+ 							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
+							<arguments>
+								<argument>-a</argument>
+								<argument>-u</argument>
+								<argument>${admin.id}</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>internet2</groupId>
+						<artifactId>grouper</artifactId>
+						<version>1.1.0.1</version>
+						<scope>system</scope>
+						<systemPath>${basedir}/lib/grouper.jar</systemPath>
+					</dependency>
+					<dependency>
+						<groupId>internet2</groupId>
+						<artifactId>subject</artifactId>
+						<version>0.2.1</version>
+						<scope>system</scope>
+						<systemPath>${basedir}/lib/subject-0.2.1.jar</systemPath>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.hibernate</groupId>
+						<artifactId>hibernate</artifactId>
+						<version>2.1.8</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -166,6 +260,11 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-gridgrouper-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-gridgrouper-internet2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

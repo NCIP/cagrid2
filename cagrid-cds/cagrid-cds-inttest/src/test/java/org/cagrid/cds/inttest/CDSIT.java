@@ -90,7 +90,7 @@ public class CDSIT extends TestBase {
 				"cagrid-features");
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
-		options.add(features(featureURL, "cagrid-dorian"));
+		options.add(features(featureURL, "cagrid-dorian", "cagrid-gridgrouper"));
 		return options;
 	}
 
@@ -176,7 +176,7 @@ public class CDSIT extends TestBase {
 		application.setPassword(password);
 		application.setFirstName(firstName);
 		application.setLastName("User");
-		application.setEmail("endUser@test.org");
+		application.setEmail(firstName + ".User@test.org");
 		application.setAddress("123 Fake St.");
 		application.setCity("Columbus");
 		application.setState(StateCode.OH);
