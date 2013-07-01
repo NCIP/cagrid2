@@ -1,5 +1,7 @@
 package org.cagrid.cds.soapclient;
 
+import javax.net.ssl.KeyManager;
+
 import org.apache.cxf.configuration.security.KeyStoreType;
 import org.cagrid.cds.wsrf.stubs.CredentialDelegationServicePortType;
 
@@ -17,6 +19,6 @@ public abstract class CDSClientBase {
 		truststore.setType("JKS");
 		truststore.setPassword("changeit");
 
-		cds = CDSSoapClientFactory.createSoapClient(url, truststore, null);
+		cds = CDSSoapClientFactory.createSoapClient(url, truststore, (KeyManager) null);
 	}
 }
