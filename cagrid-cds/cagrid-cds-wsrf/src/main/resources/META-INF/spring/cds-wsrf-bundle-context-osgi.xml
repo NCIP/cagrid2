@@ -14,8 +14,8 @@
 		<prop key="cagrid.cds.wsrf.port">7736</prop>
 		<prop key="cagrid.cds.wsrf.path">cds</prop>
         <prop key="cagrid.cds.delegated.wsrf.path">dcs</prop>
-		<prop key="cagrid.cds.wsrf.url">http://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
-        <prop key="cagrid.cds.delegated.wsrf.url">http://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
+		<prop key="cagrid.cds.wsrf.url">https://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.wsrf.path}</prop>
+        <prop key="cagrid.cds.delegated.wsrf.url">https://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
 		<prop key="cagrid.cds.wsrf.keystore.path">${karaf.base}/etc/cagrid-cds-wsrf/cagrid-cds-wsrf-host.jks</prop>
 		<prop key="cagrid.cds.wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.cds.wsrf.keystore.alias">host</prop>
@@ -33,5 +33,5 @@
 	<ctx:property-placeholder properties-ref="preProps" />
 
 	<osgi:reference id="cds" interface="org.cagrid.cds.service.CredentialDelegationService" />
-    <osgi:reference id="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.CredentialDelegationService" />
+    <osgi:reference id="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.DelegatedCredentialService" />
 </beans>

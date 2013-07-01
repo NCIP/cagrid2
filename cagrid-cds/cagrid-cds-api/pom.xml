@@ -283,7 +283,6 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>
 							schema.org.cagrid.cds,
-							org.cagrid.cds,
                             org.cagrid.cds.service,
                             org.cagrid.cds.service.exception,
                             org.cagrid.cds.model,

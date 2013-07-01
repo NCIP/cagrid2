@@ -27,7 +27,7 @@
 		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
 		<property name="keyStorePath" value="${cagrid.cds.wsrf.keystore.path}" />
 		<property name="keyStorePassword" value="${cagrid.cds.wsrf.keystore.password}" />
-		<property name="keyManagerPassword" value="${cagrid.cds.wsrf.key.password}" />
+		<property name="keyManagerPassword" value="${cagrid.cds.wsrf.keystore.alias-password}" />
 		<property name="trustStore" value="${cagrid.cds.wsrf.truststore.path}" />
 		<property name="trustStorePassword" value="${cagrid.cds.wsrf.truststore.password}" />
 		<property name="wantClientAuth" value="true" />
@@ -77,7 +77,8 @@
     <jaxws:endpoint xmlns:e="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/service"
                     xmlns:s="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/service" id="dcsWSRFEP"
                     implementor="#dcsWSRF" bus="cxf" endpointName="e:DelegatedCredentialPortTypePort"
-                    serviceName="s:DelegatedCredentialService" address="${cagrid.cds.wsrf.url}"
+                    serviceName="s:DelegatedCredentialService" address="${cagrid.cds.delegated.wsrf.url}"
                     wsdlLocation="schema/org/cagrid/cds/DelegatedCredential_service.wsdl">
     </jaxws:endpoint>
+
 </beans>

@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.net.ssl.KeyManager;
 
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.cagrid.cds.service.CredentialDelegationService;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.dorian.DorianPortType;
 import org.cagrid.dorian.FindGridUsersRequest;
@@ -61,6 +62,9 @@ public class CDSIT extends TestBase {
 	@Inject
 	private Dorian dorian;
 
+	@Inject
+	CredentialDelegationService cds;
+
 	@Override
 	protected void prePAX() {
 		DorianBootstrap dorianBootstrap = null;
@@ -90,7 +94,8 @@ public class CDSIT extends TestBase {
 				"cagrid-features");
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
-		options.add(features(featureURL, "cagrid-dorian", "cagrid-gridgrouper"));
+		options.add(features(featureURL, "cagrid-dorian", "cagrid-gridgrouper",
+				"cagrid-cds"));
 		return options;
 	}
 
@@ -106,8 +111,10 @@ public class CDSIT extends TestBase {
 		}
 
 		final String dorianURL = "https://localhost:7734/dorian";
+		final String cdsURL = "https://localhost:7736/cds";
 
 		Assert.assertNotNull(dorian);
+		Assert.assertNotNull(cds);
 
 		String karafBase = System.getProperty(ContextLoader.KARAF_BASE_KEY);
 		KeyStoreType truststore = new KeyStoreType();
