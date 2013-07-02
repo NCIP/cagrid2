@@ -48,6 +48,8 @@ import org.globus.gsi.proxy.ext.GlobusProxyCertInfoExtension;
 import org.globus.gsi.proxy.ext.ProxyCertInfo;
 import org.globus.gsi.proxy.ext.ProxyCertInfoExtension;
 import org.globus.gsi.proxy.ext.ProxyPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -56,8 +58,10 @@ import org.globus.gsi.proxy.ext.ProxyPolicy;
  */
 public class BouncyCastleCertProcessingFactory {
 
-	private static BouncyCastleCertProcessingFactory factory;
+	public final static String SHA256_SIGNATURE_ALGORITHM = "SHA256withRSA";
 
+	private static BouncyCastleCertProcessingFactory factory;
+	private final static Logger logger = LoggerFactory.getLogger(BouncyCastleCertProcessingFactory.class);
 
 	protected BouncyCastleCertProcessingFactory() {
 	}
@@ -556,6 +560,11 @@ public class BouncyCastleCertProcessingFactory {
 
 		certGen.setSerialNumber(serialNum);
 		certGen.setPublicKey(publicKey);
+		
+		// Normalize signature algorithm
+		if (signatureAlgorithm.toLowerCase().startsWith(SHA256_SIGNATURE_ALGORITHM.toLowerCase()))
+			signatureAlgorithm = SHA256_SIGNATURE_ALGORITHM;
+		logger.debug("signatureAlgorithm = " + signatureAlgorithm);
 		certGen.setSignatureAlgorithm(signatureAlgorithm);
 
 		GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
