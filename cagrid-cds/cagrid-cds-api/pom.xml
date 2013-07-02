@@ -287,6 +287,7 @@
                             org.cagrid.cds.service.exception,
                             org.cagrid.cds.model,
                             org.cagrid.cds.types,
+                            org.cagrid.cds.util,
                             org.cagrid.cds.wsrf.service,
                             org.cagrid.cds.wsrf.stubs,
                             org.cagrid.delegatedcredential.service,

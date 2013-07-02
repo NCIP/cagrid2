@@ -134,9 +134,10 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
+							<skip>${skipTests}</skip>
 							<classpathScope>test</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
- 							<mainClass>edu.internet2.middleware.GrouperInit</mainClass>
+							<mainClass>edu.internet2.middleware.GrouperInit</mainClass>
 							<arguments>
 								<argument>${basedir}/target/classes/schema-export.sql</argument>
 								<argument>${basedir}/target/classes/grouper.hibernate.properties</argument>
@@ -184,9 +185,10 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
+							<skip>${skipTests}</skip>
 							<classpathScope>test</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
- 							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
+							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
 							<arguments>
 								<argument>-a</argument>
 								<argument>-u</argument>

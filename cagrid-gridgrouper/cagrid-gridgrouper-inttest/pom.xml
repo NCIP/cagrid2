@@ -131,6 +131,7 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
+							<skip>${skipTests}</skip>
 							<classpathScope>test</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
  							<mainClass>edu.internet2.middleware.GrouperInit</mainClass>
@@ -181,6 +182,7 @@
 							<goal>java</goal>
 						</goals>
 						<configuration>
+							<skip>${skipTests}</skip>
 							<classpathScope>test</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
  							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
