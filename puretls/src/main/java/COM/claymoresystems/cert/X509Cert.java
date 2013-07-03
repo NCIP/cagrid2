@@ -473,6 +473,8 @@ public class X509Cert implements Certificate {
 			}
 
 			// Ok, now we have to verify this certificate
+			SSLDebug.debug(SSLDebug.DEBUG_CERT, "verifying " + cert.subjectName.getNameString() + ", issuer " + cert.issuerName.getNameString() +
+					"; using " + last.subjectName.getNameString() + ", publicKey ", last.pubKey.getEncoded());
 			if (!cert.verify(last.getPublicKey())) {
 				String subject = cert.getSubjectName().getNameString();
 				throw new CertificateVerifyException("The signature of '"
