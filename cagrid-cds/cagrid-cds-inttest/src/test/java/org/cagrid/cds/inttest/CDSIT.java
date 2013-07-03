@@ -12,19 +12,24 @@ import javax.net.ssl.KeyManager;
 
 import org.apache.cxf.configuration.security.KeyStoreType;
 import org.cagrid.cds.model.AllowedParties;
+import org.cagrid.cds.model.CertificateChain;
 import org.cagrid.cds.model.DelegationIdentifier;
 import org.cagrid.cds.model.DelegationRequest;
 import org.cagrid.cds.model.DelegationSigningRequest;
+import org.cagrid.cds.model.DelegationSigningResponse;
 import org.cagrid.cds.model.IdentityDelegationPolicy;
 import org.cagrid.cds.model.ProxyLifetime;
 import org.cagrid.cds.service.CredentialDelegationService;
 import org.cagrid.cds.soapclient.CDSSoapClientFactory;
 import org.cagrid.cds.util.Utils;
+import org.cagrid.cds.wsrf.stubs.ApproveDelegationRequest;
+import org.cagrid.cds.wsrf.stubs.ApproveDelegationResponse;
 import org.cagrid.cds.wsrf.stubs.CredentialDelegationServicePortType;
 import org.cagrid.cds.wsrf.stubs.InitiateDelegationRequest;
 import org.cagrid.cds.wsrf.stubs.InitiateDelegationRequest.Req;
 import org.cagrid.cds.wsrf.stubs.InitiateDelegationResponse;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
+import org.cagrid.delegatedcredential.types.DelegatedCredentialReference;
 import org.cagrid.dorian.DorianPortType;
 import org.cagrid.dorian.FindGridUsersRequest;
 import org.cagrid.dorian.FindGridUsersRequest.Filter;
@@ -185,16 +190,24 @@ public class CDSIT extends TestBase {
 				.getDelegationIdentifier();
 		org.cagrid.cds.model.PublicKey cdsPublicKey = delegationSigningRequest.getPublicKey();
 		KeyUtil.loadPublicKey(cdsPublicKey.getKeyAsString());
-
-		X509Certificate[] cdsX509CertificateChain = ProxyCreator
+		X509Certificate[] cdsX509Certificates = ProxyCreator
 				.createImpersonationProxyCertificate(
 						endUserInfo.x509Certificate, endUserInfo.privateKey,
 						KeyUtil.loadPublicKey(cdsPublicKey.getKeyAsString()),
 						3, 0, 0);
-		Utils.toCertificateChain(cdsX509CertificateChain);
+		CertificateChain cdsX509CertificateChain = Utils.toCertificateChain(cdsX509Certificates);
+		DelegationSigningResponse delegationSigningResponse = new DelegationSigningResponse();
+		delegationSigningResponse.setDelegationIdentifier(delegationIdentifier);
+		delegationSigningResponse.setCertificateChain(cdsX509CertificateChain);
+		ApproveDelegationRequest.DelegationSigningResponse _delegationSigningResponse = new ApproveDelegationRequest.DelegationSigningResponse();
+		_delegationSigningResponse.setDelegationSigningResponse(delegationSigningResponse);
+		ApproveDelegationRequest approveDelegationRequest = new ApproveDelegationRequest();
+		approveDelegationRequest.setDelegationSigningResponse(_delegationSigningResponse);
+		ApproveDelegationResponse approveDelegationResponse = cdsSoapEnd.approveDelegation(approveDelegationRequest);
+		DelegatedCredentialReference delegatedCredentialReference = approveDelegationResponse.getDelegatedCredentialReference();
+		Assert.assertNotNull(delegatedCredentialReference);
 		
-		System.out.println("delegationIdentifier = "
-				+ delegationIdentifier.getDelegationId());
+		System.out.println(delegatedCredentialReference.getEndpointReference());
 	}
 
 	private UserInfo createLocalUser(DorianPortType dorianSoap, String userId,
