@@ -128,14 +128,19 @@
 						<id>grouper-init</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>java</goal>
+							<goal>exec</goal>
 						</goals>
 						<configuration>
 							<skip>${skipTests}</skip>
 							<classpathScope>test</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
- 							<mainClass>edu.internet2.middleware.GrouperInit</mainClass>
+							<executable>java</executable>
 							<arguments>
+								<argument>-Xmx1024m</argument>
+								<argument>-XX:MaxPermSize=256m</argument>
+								<argument>-classpath</argument>
+								<classpath />
+								<argument>edu.internet2.middleware.GrouperInit</argument>
 								<argument>${basedir}/target/classes/schema-export.sql</argument>
 								<argument>${basedir}/target/classes/grouper.hibernate.properties</argument>
 								<argument>${basedir}/target/classes/edu/internet2/middleware/grouper</argument>
@@ -152,7 +157,7 @@
 							<skip>${skipTests}</skip>
 							<classpathScope>test</classpathScope>
 							<includePluginDependencies>true</includePluginDependencies>
- 							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
+							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
 							<arguments>
 								<argument>-a</argument>
 								<argument>-u</argument>
