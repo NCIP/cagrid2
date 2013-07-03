@@ -128,6 +128,24 @@
 						<id>grouper-init</id>
 						<phase>pre-integration-test</phase>
 						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<skip>${skipTests}</skip>
+							<classpathScope>test</classpathScope>
+							<includePluginDependencies>true</includePluginDependencies>
+							<mainClass>edu.internet2.middleware.GrouperInit</mainClass>
+							<arguments>
+								<argument>${basedir}/target/classes/schema-export.sql</argument>
+								<argument>${basedir}/target/classes/grouper.hibernate.properties</argument>
+								<argument>${basedir}/target/classes/edu/internet2/middleware/grouper</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>grouper-bootstrap</id>
+						<phase>pre-integration-test</phase>
+						<goals>
 							<goal>exec</goal>
 						</goals>
 						<configuration>
@@ -140,25 +158,7 @@
 								<argument>-XX:MaxPermSize=256m</argument>
 								<argument>-classpath</argument>
 								<classpath />
-								<argument>edu.internet2.middleware.GrouperInit</argument>
-								<argument>${basedir}/target/classes/schema-export.sql</argument>
-								<argument>${basedir}/target/classes/grouper.hibernate.properties</argument>
-								<argument>${basedir}/target/classes/edu/internet2/middleware/grouper</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>grouper-bootstrap</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<skip>${skipTests}</skip>
-							<classpathScope>test</classpathScope>
-							<includePluginDependencies>true</includePluginDependencies>
-							<mainClass>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</mainClass>
-							<arguments>
+								<argument>org.cagrid.gridgrouper.service.impl.tools.GridGrouperBootstrapper</argument>
 								<argument>-a</argument>
 								<argument>-u</argument>
 								<argument>${admin.id}</argument>
