@@ -36,8 +36,8 @@ import org.bouncycastle.asn1.x509.X509Extension;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.asn1.x509.X509Name;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
-import org.bouncycastle.jce.X509V3CertificateGenerator;
 import org.bouncycastle.jce.provider.X509CertificateObject;
+import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.globus.gsi.CertUtil;
 import org.globus.gsi.GSIConstants;
 import org.globus.gsi.GlobusCredential;
@@ -57,8 +57,6 @@ import org.slf4j.LoggerFactory;
  * certificate requests, etc.
  */
 public class BouncyCastleCertProcessingFactory {
-
-	public final static String SHA256_SIGNATURE_ALGORITHM = "SHA256withRSA";
 
 	private static BouncyCastleCertProcessingFactory factory;
 	private final static Logger logger = LoggerFactory.getLogger(BouncyCastleCertProcessingFactory.class);
@@ -561,9 +559,6 @@ public class BouncyCastleCertProcessingFactory {
 		certGen.setSerialNumber(serialNum);
 		certGen.setPublicKey(publicKey);
 		
-		// Normalize signature algorithm
-		if (signatureAlgorithm.toLowerCase().startsWith(SHA256_SIGNATURE_ALGORITHM.toLowerCase()))
-			signatureAlgorithm = SHA256_SIGNATURE_ALGORITHM;
 		logger.debug("signatureAlgorithm = " + signatureAlgorithm);
 		certGen.setSignatureAlgorithm(signatureAlgorithm);
 

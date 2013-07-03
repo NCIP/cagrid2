@@ -163,7 +163,7 @@ public class CertUtil {
 		return generateCACertificate("BC", subject, start, expired, pair, numberOfCAs, SIGNATURE_ALGORITHM);
 	}
 
-	public static X509Certificate generateCACertificate(String provider, X509Name subject, Date start, Date expired, KeyPair pair, int numberOfCAs, String signartureAlgorthm)
+	public static X509Certificate generateCACertificate(String provider, X509Name subject, Date start, Date expired, KeyPair pair, int numberOfCAs, String signatureAlgorthm)
 			throws CertificateEncodingException, IllegalStateException, NoSuchProviderException, NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException {
 		// generate the certificate
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -173,7 +173,7 @@ public class CertUtil {
 		certGen.setNotAfter(expired);
 		certGen.setSubjectDN(subject);
 		certGen.setPublicKey(pair.getPublic());
-		certGen.setSignatureAlgorithm(signartureAlgorthm);
+		certGen.setSignatureAlgorithm(signatureAlgorthm);
 		certGen.addExtension(X509Extensions.BasicConstraints, true, new BasicConstraints(numberOfCAs));
 		certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyCertSign | KeyUsage.cRLSign));
 

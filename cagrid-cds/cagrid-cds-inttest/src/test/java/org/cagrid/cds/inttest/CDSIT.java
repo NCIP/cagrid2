@@ -11,7 +11,19 @@ import javax.inject.Inject;
 import javax.net.ssl.KeyManager;
 
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.cagrid.cds.model.AllowedParties;
+import org.cagrid.cds.model.DelegationIdentifier;
+import org.cagrid.cds.model.DelegationRequest;
+import org.cagrid.cds.model.DelegationSigningRequest;
+import org.cagrid.cds.model.IdentityDelegationPolicy;
+import org.cagrid.cds.model.ProxyLifetime;
 import org.cagrid.cds.service.CredentialDelegationService;
+import org.cagrid.cds.soapclient.CDSSoapClientFactory;
+import org.cagrid.cds.util.Utils;
+import org.cagrid.cds.wsrf.stubs.CredentialDelegationServicePortType;
+import org.cagrid.cds.wsrf.stubs.InitiateDelegationRequest;
+import org.cagrid.cds.wsrf.stubs.InitiateDelegationRequest.Req;
+import org.cagrid.cds.wsrf.stubs.InitiateDelegationResponse;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.dorian.DorianPortType;
 import org.cagrid.dorian.FindGridUsersRequest;
@@ -45,6 +57,7 @@ import org.cagrid.gaards.authentication.AuthenticateUserResponse;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gaards.pki.ProxyCreator;
 import org.cagrid.systest.ContextLoader;
 import org.cagrid.systest.TestBase;
 import org.junit.Assert;
@@ -125,46 +138,14 @@ public class CDSIT extends TestBase {
 		DorianPortType dorianSoapAnon = DorianSoapClientFactory
 				.createSoapClient(dorianURL, truststore, (KeyManager) null);
 
-		BasicAuthentication basicAuthentication = new BasicAuthentication();
-		basicAuthentication.setUserId(USERNAME);
-		basicAuthentication.setPassword(PASSWORD);
-		Credential credential = new Credential();
-		credential.setCredential(basicAuthentication);
-		AuthenticateUserRequest authenticateUserRequest = new AuthenticateUserRequest();
-		authenticateUserRequest.setCredential(credential);
-		AuthenticateUserResponse authenticateUserResponse = dorianSoapAnon
-				.authenticateUser(authenticateUserRequest);
-		AssertionType assertion = authenticateUserResponse.getAssertion();
-		Assert.assertNotNull(assertion);
-
-		KeyPair keyPair = KeyUtil.generateRSAKeyPair(2048);
-		Saml saml = new Saml();
-		saml.setAssertion(assertion);
-		PublicKey caPublicKey = new PublicKey();
-		caPublicKey.setKeyAsString(KeyUtil.writePublicKey(keyPair.getPublic()));
-		RequestUserCertificateRequest userCertificateRequest = new RequestUserCertificateRequest();
-		userCertificateRequest.setSaml(saml);
-		Key caKey = new Key();
-		caKey.setPublicKey(caPublicKey);
-		userCertificateRequest.setKey(caKey);
-		CertificateLifetime certificateLifetime = new CertificateLifetime();
-		certificateLifetime.setHours(6);
-		Lifetime lifetime = new Lifetime();
-		lifetime.setCertificateLifetime(certificateLifetime);
-		userCertificateRequest.setLifetime(lifetime);
-		RequestUserCertificateResponse requestUserCertificateResponse = dorianSoapAnon
-				.requestUserCertificate(userCertificateRequest);
-		String certificateString = requestUserCertificateResponse
-				.getX509Certificate().getCertificateAsString();
-		X509Certificate certificate = CertUtil
-				.loadCertificate(certificateString);
-		Assert.assertNotNull(certificate);
+		UserInfo adminUserInfo = login(dorianSoapAnon, USERNAME, PASSWORD);
+		Assert.assertNotNull(adminUserInfo.x509Certificate);
 
 		KeyManager keyManager = new SingleEntityKeyManager("client",
-				new X509Certificate[] { certificate }, keyPair.getPrivate());
+				new X509Certificate[] { adminUserInfo.x509Certificate },
+				adminUserInfo.privateKey);
 		DorianPortType dorianSoapAuth = DorianSoapClientFactory
-				.createSoapClient("https://localhost:7734/dorian", truststore,
-						keyManager);
+				.createSoapClient(dorianURL, truststore, keyManager);
 
 		UserInfo endUserInfo = createLocalUser(dorianSoapAuth, "endUser", "End");
 		Assert.assertNotNull(endUserInfo.gridId);
@@ -172,6 +153,48 @@ public class CDSIT extends TestBase {
 		UserInfo proxyUserInfo = createLocalUser(dorianSoapAuth, "proxyUser",
 				"Proxy");
 		Assert.assertNotNull(proxyUserInfo.gridId);
+
+		KeyManager endKeyManager = new SingleEntityKeyManager("client",
+				new X509Certificate[] { endUserInfo.x509Certificate },
+				endUserInfo.privateKey);
+		CredentialDelegationServicePortType cdsSoapEnd = CDSSoapClientFactory
+				.createSoapClient(cdsURL, truststore, endKeyManager);
+
+		AllowedParties allowedParties = new AllowedParties();
+		allowedParties.getGridIdentity().add(proxyUserInfo.gridId);
+		IdentityDelegationPolicy delegationPolicy = new IdentityDelegationPolicy();
+		delegationPolicy.setAllowedParties(allowedParties);
+		DelegationRequest delegationRequest = new DelegationRequest();
+		delegationRequest.setDelegationPolicy(delegationPolicy);
+		ProxyLifetime proxyLifetime = new ProxyLifetime();
+		proxyLifetime.setHours(6);
+		delegationRequest.setIssuedCredentialLifetime(proxyLifetime);
+		delegationRequest.setIssuedCredentialPathLength(0);
+		delegationRequest.setKeyLength(2048);
+		Req req = new InitiateDelegationRequest.Req();
+		req.setDelegationRequest(delegationRequest);
+		InitiateDelegationRequest initiateDelegationRequest = new InitiateDelegationRequest();
+		initiateDelegationRequest.setReq(req);
+		InitiateDelegationResponse initiateDelegationResponse = cdsSoapEnd
+				.initiateDelegation(initiateDelegationRequest);
+		DelegationSigningRequest delegationSigningRequest = initiateDelegationResponse
+				.getDelegationSigningRequest();
+		Assert.assertNotNull(delegationSigningRequest);
+
+		DelegationIdentifier delegationIdentifier = delegationSigningRequest
+				.getDelegationIdentifier();
+		org.cagrid.cds.model.PublicKey cdsPublicKey = delegationSigningRequest.getPublicKey();
+		KeyUtil.loadPublicKey(cdsPublicKey.getKeyAsString());
+
+		X509Certificate[] cdsX509CertificateChain = ProxyCreator
+				.createImpersonationProxyCertificate(
+						endUserInfo.x509Certificate, endUserInfo.privateKey,
+						KeyUtil.loadPublicKey(cdsPublicKey.getKeyAsString()),
+						3, 0, 0);
+		Utils.toCertificateChain(cdsX509CertificateChain);
+		
+		System.out.println("delegationIdentifier = "
+				+ delegationIdentifier.getDelegationId());
 	}
 
 	private UserInfo createLocalUser(DorianPortType dorianSoap, String userId,
@@ -219,6 +242,33 @@ public class CDSIT extends TestBase {
 		updateLocalUserRequest.setUser(user);
 		dorianSoap.updateLocalUser(updateLocalUserRequest);
 
+		UserInfo userInfo0 = login(dorianSoap, userId, password);
+
+		GridUserFilter gridUserFilter = new GridUserFilter();
+		gridUserFilter.setUID(userId);
+		Filter filter = new Filter();
+		filter.setGridUserFilter(gridUserFilter);
+		FindGridUsersRequest findGridUsersRequest = new FindGridUsersRequest();
+		findGridUsersRequest.setFilter(filter);
+		FindGridUsersResponse findGridUsersResponse = dorianSoap
+				.findGridUsers(findGridUsersRequest);
+		List<GridUser> gridUsers = findGridUsersResponse.getGridUser();
+		if (gridUsers.size() != 1) {
+			throw new Exception("findGridUsers returned " + gridUsers.size()
+					+ " users!");
+		}
+
+		GridUser gridUser = gridUsers.get(0);
+		String gridId = gridUser.getGridId();
+
+		UserInfo userInfo = new UserInfo(gridId, userInfo0.x509Certificate,
+				userInfo0.privateKey);
+		return userInfo;
+	}
+
+	private UserInfo login(DorianPortType dorianSoap, String userId,
+			String password) throws Exception {
+
 		BasicAuthentication basicAuthentication = new BasicAuthentication();
 		basicAuthentication.setUserId(userId);
 		basicAuthentication.setPassword(password);
@@ -229,6 +279,7 @@ public class CDSIT extends TestBase {
 		AuthenticateUserResponse authenticateUserResponse = dorianSoap
 				.authenticateUser(authenticateUserRequest);
 		AssertionType assertion = authenticateUserResponse.getAssertion();
+		Assert.assertNotNull(assertion);
 
 		KeyPair keyPair = KeyUtil.generateRSAKeyPair(2048);
 		Saml saml = new Saml();
@@ -252,24 +303,7 @@ public class CDSIT extends TestBase {
 		X509Certificate x509Certificate = CertUtil
 				.loadCertificate(certificateString);
 
-		GridUserFilter gridUserFilter = new GridUserFilter();
-		gridUserFilter.setUID(userId);
-		Filter filter = new Filter();
-		filter.setGridUserFilter(gridUserFilter);
-		FindGridUsersRequest findGridUsersRequest = new FindGridUsersRequest();
-		findGridUsersRequest.setFilter(filter);
-		FindGridUsersResponse findGridUsersResponse = dorianSoap
-				.findGridUsers(findGridUsersRequest);
-		List<GridUser> gridUsers = findGridUsersResponse.getGridUser();
-		if (gridUsers.size() != 1) {
-			throw new Exception("findGridUsers returned " + gridUsers.size()
-					+ " users!");
-		}
-
-		GridUser gridUser = gridUsers.get(0);
-		String gridId = gridUser.getGridId();
-
-		UserInfo userInfo = new UserInfo(gridId, x509Certificate,
+		UserInfo userInfo = new UserInfo(null, x509Certificate,
 				keyPair.getPrivate());
 		return userInfo;
 	}
