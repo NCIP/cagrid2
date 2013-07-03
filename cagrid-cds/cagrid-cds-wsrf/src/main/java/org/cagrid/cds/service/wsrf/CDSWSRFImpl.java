@@ -129,10 +129,13 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             response.setDelegatedCredentialReference(getDelegatedCredentialRefernce(id));
             return response;
         } catch (DelegationException e) {
+        	logger.debug(message, e);
             throw new DelegationFaultFaultMessage(message, e.getFault());
         } catch (PermissionDeniedException e) {
+        	logger.debug(message, e);
             throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
         } catch (CDSInternalException e) {
+        	logger.debug(message, e);
             throw new CDSInternalFaultFaultMessage(message, e.getFault());
         }
     }

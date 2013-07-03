@@ -459,6 +459,7 @@ public class DelegatedCredentialManager {
 									.getDefaultCertificateRevocationLists());
 
 				} catch (Exception e) {
+					log.debug(Errors.INVALID_CERTIFICATE_CHAIN, e);
 					throw Errors.makeException(DelegationException.class,
                             Errors.INVALID_CERTIFICATE_CHAIN, e);
 				}

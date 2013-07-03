@@ -353,7 +353,7 @@ public class X509Cert implements Certificate {
 			String alg = (String) oid2NameMap.get(signatureAlgorithm);
 			if (alg != null)
 				SSLDebug.debug(SSLDebug.DEBUG_CERT, "OID " + signatureAlgorithm
-						+ "mapped to " + alg);
+						+ " mapped to " + alg);
 			checkSignatureKey(key, alg);
 
 			Signature sig = null;

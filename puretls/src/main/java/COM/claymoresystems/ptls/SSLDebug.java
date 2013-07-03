@@ -91,7 +91,7 @@ public class SSLDebug {
 
      /** Print out handshake results */
      public static final int DEBUG_HANDSHAKE=64;
-     
+
      /**
 	Print out all debugging information available. This produces
 	incredibly copious output
@@ -101,6 +101,9 @@ public class SSLDebug {
 //     static int debugVal=DEBUG_CRYPTO;
      static int debugVal=0;
 
+     public static int getDebug() {
+    	 return debugVal;
+     }
 
      /** Set the debugging value.
 
@@ -113,7 +116,17 @@ public class SSLDebug {
      public static boolean getDebug(int flag){
        return ((debugVal & flag)>0)?true:false;
      }
-     
+
+     public static int addDebug(int flag) {
+    	 debugVal |= flag;
+    	 return debugVal;
+     }
+
+     public static int clrDebug(int flag) {
+    	 debugVal &= ~flag;
+    	 return debugVal;
+     }
+
      public static void debug(int type,String val){
        if((debugVal & type) > 0){
          String tid=Thread.currentThread().toString();
