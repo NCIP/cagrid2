@@ -135,7 +135,9 @@ public class CertContext {
 	public X509Cert signedByRoot(byte[] issuer) throws InvalidNameException {
 		X500Principal issuerPrincipal = new X500Principal(issuer);
 		LdapName issuerName = new LdapName(issuerPrincipal.getName());
+		SSLDebug.debug(SSLDebug.DEBUG_CERT, "Looking for root subject " + issuerName);
 
+		SSLDebug.debug(SSLDebug.DEBUG_CERT, "Checking " + root_list.size() + " root certs");
 		for (int i = 0; i < root_list.size(); i++) {
 			X509Cert root;
 
@@ -143,6 +145,7 @@ public class CertContext {
 			byte[] subject = root.getSubjectDER();
 			X500Principal subjectPrincipal = new X500Principal(subject);
 			LdapName subjectName = new LdapName(subjectPrincipal.getName());
+			SSLDebug.debug(SSLDebug.DEBUG_CERT, "Checking root cert " + subjectName);
 			if (ldapComparator.compare(subjectName, issuerName) == 0) return root;
 //			if (cryptix.util.core.ArrayUtil.areEqual(issuer, subject))
 //				return root;

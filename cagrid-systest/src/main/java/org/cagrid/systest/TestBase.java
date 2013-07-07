@@ -94,6 +94,9 @@ public abstract class TestBase {
 			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + localRepository));
 		}
 
+		File certificateDirectory = new File(ContextLoader.getKarafEtc(), "certificates");
+		options.add(vmOption("-DX509_CERT_DIR=" + certificateDirectory.getAbsolutePath()));
+		
 		List<Option> containerOptions = getContainerOptions();
 		if ((containerOptions == null) || containerOptions.isEmpty()) {
 			throw new RuntimeException("No container specified!");

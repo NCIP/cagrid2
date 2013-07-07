@@ -154,6 +154,10 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-dorian-service-tools</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-features</artifactId>
 			<classifier>features</classifier>
 			<type>xml</type>

@@ -41,7 +41,10 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-core</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-systest</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk14</artifactId>

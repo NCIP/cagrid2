@@ -31,6 +31,11 @@ public class ContextLoader {
 		return new File(karafBase);
 	}
 	
+	public static File getKarafEtc() {
+		File karafEtc = new File(getKarafBase(), "etc");
+		return karafEtc;
+	}
+
 	public static AbstractApplicationContext loadContext(String contextKey,
 			String contextConfigurationPath) throws IOException {
 		

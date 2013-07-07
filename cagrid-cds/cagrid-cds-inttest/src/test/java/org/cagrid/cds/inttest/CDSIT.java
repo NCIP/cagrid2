@@ -2,6 +2,7 @@ package org.cagrid.cds.inttest;
 
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ import org.cagrid.dorian.ifs.GridUser;
 import org.cagrid.dorian.ifs.GridUserFilter;
 import org.cagrid.dorian.ifs.PublicKey;
 import org.cagrid.dorian.service.Dorian;
+import org.cagrid.dorian.service.tools.DorianTestBootstrapper;
 import org.cagrid.dorian.soapclient.DorianSoapClientFactory;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest.Credential;
@@ -85,14 +87,14 @@ public class CDSIT extends TestBase {
 
 	@Override
 	protected void prePAX() {
-		DorianBootstrap dorianBootstrap = null;
+		DorianTestBootstrapper dorianTestBootstrapper = null;
 		try {
-			dorianBootstrap = new DorianBootstrap();
-			dorianBootstrap.createKeyAndTrustStores();
+			dorianTestBootstrapper = new DorianTestBootstrapper();
+			dorianTestBootstrapper.createKeyAndTrustStores();
 		} catch (Exception e) {
 			throw new RuntimeException("Exception bootstrapping Dorian", e);
 		} finally {
-			dorianBootstrap.close();
+			dorianTestBootstrapper.close();
 		}
 	}
 
@@ -100,7 +102,7 @@ public class CDSIT extends TestBase {
 	@SuppressWarnings("rawtypes")
 	public List<Class> getAdditionalClasses() {
 		List<Class> additionalClasses = new ArrayList<Class>(2);
-		additionalClasses.add(DorianBootstrap.class);
+		additionalClasses.add(DorianTestBootstrapper.class);
 		additionalClasses.add(UserInfo.class);
 		return additionalClasses;
 	}
@@ -126,6 +128,11 @@ public class CDSIT extends TestBase {
 			System.out.println(bundle.getBundleId() + ": "
 					+ bundle.getSymbolicName() + " - " + bundle.getLocation()
 					+ " [" + bundleState + "]");
+		}
+
+		System.out.println("X509_CERT_DIR=" + System.getProperty("X509_CERT_DIR"));
+		for (File certFile : new File(System.getProperty("X509_CERT_DIR")).listFiles()) {
+			System.out.println(certFile);
 		}
 
 		final String dorianURL = "https://localhost:7734/dorian";

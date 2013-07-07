@@ -24,6 +24,7 @@ import org.cagrid.dorian.RequestUserCertificateResponse;
 import org.cagrid.dorian.ifs.CertificateLifetime;
 import org.cagrid.dorian.ifs.PublicKey;
 import org.cagrid.dorian.service.Dorian;
+import org.cagrid.dorian.service.tools.DorianTestBootstrapper;
 import org.cagrid.dorian.soapclient.DorianSoapClientFactory;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest.Credential;
@@ -50,21 +51,21 @@ public class DorianIT extends TestBase {
 
 	@Override
 	protected void prePAX() {
-		DorianBootstrap dorianBootstrap = null;
+		DorianTestBootstrapper dorianTestBootstrapper = null;
 		try {
-			dorianBootstrap = new DorianBootstrap();
-			dorianBootstrap.createKeyAndTrustStores();
+			dorianTestBootstrapper = new DorianTestBootstrapper();
+			dorianTestBootstrapper.createKeyAndTrustStores();
 		} catch (Exception e) {
 			throw new RuntimeException("Exception bootstrapping Dorian", e);
 		} finally {
-			dorianBootstrap.close();
+			dorianTestBootstrapper.close();
 		}
 	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List<Class> getAdditionalClasses() {
-		return Collections.singletonList((Class) DorianBootstrap.class);
+		return Collections.singletonList((Class) DorianTestBootstrapper.class);
 	}
 
 	@Override
