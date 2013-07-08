@@ -26,19 +26,10 @@ import javax.xml.namespace.QName;
 import junit.framework.TestCase;
 
 import org.apache.xml.security.signature.XMLSignature;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
 import org.cagrid.dorian.common.AuditConstants;
 import org.cagrid.dorian.common.CommonUtils;
 import org.cagrid.dorian.common.Lifetime;
 import org.cagrid.dorian.common.SAMLConstants;
-import org.cagrid.dorian.federation.impl.AccountPolicy;
-import org.cagrid.dorian.federation.impl.AutoApprovalPolicy;
-import org.cagrid.dorian.federation.impl.FederationDefaults;
-import org.cagrid.dorian.federation.impl.FederationUtils;
-import org.cagrid.dorian.federation.impl.IdentityFederationManager;
-import org.cagrid.dorian.federation.impl.IdentityFederationProperties;
-import org.cagrid.dorian.federation.impl.ManualApprovalPolicy;
-import org.cagrid.dorian.federation.impl.UserManager;
 import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.dorian.model.exceptions.InvalidAssertionException;
 import org.cagrid.dorian.model.exceptions.InvalidHostCertificateException;
@@ -74,6 +65,15 @@ import org.cagrid.dorian.policy.SearchPolicyType;
 import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.DorianConstants;
 import org.cagrid.dorian.service.PropertyManager;
+import org.cagrid.dorian.service.ca.CertificateAuthorityManager;
+import org.cagrid.dorian.service.federation.AccountPolicy;
+import org.cagrid.dorian.service.federation.AutoApprovalPolicy;
+import org.cagrid.dorian.service.federation.FederationDefaults;
+import org.cagrid.dorian.service.federation.FederationUtils;
+import org.cagrid.dorian.service.federation.IdentityFederationManager;
+import org.cagrid.dorian.service.federation.IdentityFederationProperties;
+import org.cagrid.dorian.service.federation.ManualApprovalPolicy;
+import org.cagrid.dorian.service.federation.UserManager;
 import org.cagrid.gaards.dorian.test.CA;
 import org.cagrid.gaards.dorian.test.Credential;
 import org.cagrid.gaards.dorian.test.Utils;
@@ -1954,7 +1954,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 	private IdentityFederationProperties getConf(boolean autoHostCertificateApproval) throws Exception {
 		IdentityFederationProperties conf = new IdentityFederationProperties();
-		conf.setIdentityAssignmentPolicy(org.cagrid.dorian.federation.impl.IdentityAssignmentPolicy.NAME);
+		conf.setIdentityAssignmentPolicy(org.cagrid.dorian.service.federation.IdentityAssignmentPolicy.NAME);
 		Lifetime l = new Lifetime();
 		l.setYears(1);
 		l.setMonths(0);
@@ -1986,7 +1986,7 @@ public class TestIdentityFederationManager extends TestCase {
 	private IdentityFederationProperties getExpiringCredentialsConf() throws Exception {
 
 		IdentityFederationProperties conf = new IdentityFederationProperties();
-		conf.setIdentityAssignmentPolicy(org.cagrid.dorian.federation.impl.IdentityAssignmentPolicy.NAME);
+		conf.setIdentityAssignmentPolicy(org.cagrid.dorian.service.federation.IdentityAssignmentPolicy.NAME);
 		Lifetime l = new Lifetime();
 		l.setYears(0);
 		l.setMonths(0);

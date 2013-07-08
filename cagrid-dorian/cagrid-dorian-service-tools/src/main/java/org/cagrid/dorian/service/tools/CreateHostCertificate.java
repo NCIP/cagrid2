@@ -8,12 +8,12 @@ import java.security.cert.X509Certificate;
 import java.util.Properties;
 
 import org.cagrid.core.commandline.BaseCommandLine;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
-import org.cagrid.dorian.federation.impl.IdentityAssignmentPolicy;
 import org.cagrid.dorian.model.federation.HostCertificateRecord;
 import org.cagrid.dorian.model.federation.HostCertificateRequest;
 import org.cagrid.dorian.model.federation.PublicKey;
 import org.cagrid.dorian.service.Dorian;
+import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
+import org.cagrid.dorian.service.federation.IdentityAssignmentPolicy;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 

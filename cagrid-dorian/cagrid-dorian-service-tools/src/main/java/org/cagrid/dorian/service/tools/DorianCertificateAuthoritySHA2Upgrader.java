@@ -5,9 +5,9 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.asn1.x509.X509Name;
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
-import org.cagrid.dorian.ca.impl.CredentialsManager;
+import org.cagrid.dorian.service.ca.CertificateAuthority;
+import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
+import org.cagrid.dorian.service.ca.CredentialsManager;
 import org.cagrid.gaards.pki.CertUtil;
 
 public class DorianCertificateAuthoritySHA2Upgrader {

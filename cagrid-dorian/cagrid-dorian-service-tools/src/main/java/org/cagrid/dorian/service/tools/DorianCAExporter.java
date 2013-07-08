@@ -4,7 +4,7 @@ import java.io.File;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
+import org.cagrid.dorian.service.ca.CertificateAuthority;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 

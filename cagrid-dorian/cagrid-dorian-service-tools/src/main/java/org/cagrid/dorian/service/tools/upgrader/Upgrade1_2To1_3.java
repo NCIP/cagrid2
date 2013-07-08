@@ -4,18 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.cagrid.dorian.ca.impl.CredentialsManager;
-import org.cagrid.dorian.ca.impl.DBCertificateAuthority;
-import org.cagrid.dorian.ca.impl.EracomCertificateAuthority;
-import org.cagrid.dorian.federation.impl.AutoApprovalPolicy;
-import org.cagrid.dorian.federation.impl.CertificateBlacklistManager;
-import org.cagrid.dorian.federation.impl.HostCertificateManager;
-import org.cagrid.dorian.federation.impl.ManualApprovalPolicy;
-import org.cagrid.dorian.federation.impl.TrustedIdPManager;
-import org.cagrid.dorian.federation.impl.UserManager;
-import org.cagrid.dorian.idp.impl.PasswordSecurityManager;
 import org.cagrid.dorian.model.federation.TrustedIdP;
 import org.cagrid.dorian.service.PropertyManager;
+import org.cagrid.dorian.service.ca.CredentialsManager;
+import org.cagrid.dorian.service.ca.DBCertificateAuthority;
+import org.cagrid.dorian.service.ca.EracomCertificateAuthority;
+import org.cagrid.dorian.service.federation.AutoApprovalPolicy;
+import org.cagrid.dorian.service.federation.CertificateBlacklistManager;
+import org.cagrid.dorian.service.federation.HostCertificateManager;
+import org.cagrid.dorian.service.federation.ManualApprovalPolicy;
+import org.cagrid.dorian.service.federation.TrustedIdPManager;
+import org.cagrid.dorian.service.federation.UserManager;
+import org.cagrid.dorian.service.idp.PasswordSecurityManager;
 import org.cagrid.tools.database.Database;
 
 

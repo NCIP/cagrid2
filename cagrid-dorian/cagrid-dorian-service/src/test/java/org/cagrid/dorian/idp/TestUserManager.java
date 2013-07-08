@@ -2,8 +2,6 @@ package org.cagrid.dorian.idp;
 
 import junit.framework.TestCase;
 
-import org.cagrid.dorian.idp.impl.PasswordSecurityManager;
-import org.cagrid.dorian.idp.impl.UserManager;
 import org.cagrid.dorian.model.exceptions.InvalidUserPropertyException;
 import org.cagrid.dorian.model.exceptions.InvalidUserPropertyFault;
 import org.cagrid.dorian.model.exceptions.NoSuchUserException;
@@ -14,6 +12,8 @@ import org.cagrid.dorian.model.idp.LocalUserFilter;
 import org.cagrid.dorian.model.idp.LocalUserRole;
 import org.cagrid.dorian.model.idp.LocalUserStatus;
 import org.cagrid.dorian.model.idp.StateCode;
+import org.cagrid.dorian.service.idp.PasswordSecurityManager;
+import org.cagrid.dorian.service.idp.UserManager;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.tools.database.Database;

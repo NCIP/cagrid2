@@ -4,10 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.cagrid.dorian.federation.impl.TrustedIdPManager;
-import org.cagrid.dorian.idp.impl.UserManager;
 import org.cagrid.dorian.model.federation.TrustedIdP;
 import org.cagrid.dorian.service.PropertyManager;
+import org.cagrid.dorian.service.federation.TrustedIdPManager;
+import org.cagrid.dorian.service.idp.UserManager;
 import org.cagrid.tools.database.Database;
 
 

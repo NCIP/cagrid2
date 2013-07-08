@@ -7,14 +7,9 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
 import org.cagrid.dorian.common.CommonUtils;
 import org.cagrid.dorian.common.Lifetime;
 import org.cagrid.dorian.common.X509Certificate;
-import org.cagrid.dorian.federation.impl.CertificateBlacklistManager;
-import org.cagrid.dorian.federation.impl.HostCertificateManager;
-import org.cagrid.dorian.federation.impl.IdentityFederationProperties;
-import org.cagrid.dorian.federation.impl.Publisher;
 import org.cagrid.dorian.model.exceptions.InvalidHostCertificateException;
 import org.cagrid.dorian.model.exceptions.InvalidHostCertificateRequestException;
 import org.cagrid.dorian.model.federation.HostCertificateFilter;
@@ -24,6 +19,11 @@ import org.cagrid.dorian.model.federation.HostCertificateStatus;
 import org.cagrid.dorian.model.federation.HostCertificateUpdate;
 import org.cagrid.dorian.model.federation.HostSearchCriteria;
 import org.cagrid.dorian.model.federation.PublicKey;
+import org.cagrid.dorian.service.ca.CertificateAuthority;
+import org.cagrid.dorian.service.federation.CertificateBlacklistManager;
+import org.cagrid.dorian.service.federation.HostCertificateManager;
+import org.cagrid.dorian.service.federation.IdentityFederationProperties;
+import org.cagrid.dorian.service.federation.Publisher;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;

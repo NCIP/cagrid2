@@ -13,7 +13,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.cagrid.dorian.service.PropertyManager;
-import org.cagrid.dorian.service.impl.BeanUtils;
+import org.cagrid.dorian.service.core.BeanUtils;
 import org.cagrid.tools.database.Database;
 import org.springframework.core.io.FileSystemResource;
 

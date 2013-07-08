@@ -1,6 +1,6 @@
 package org.cagrid.dorian.service.tools.upgrader;
 
-import org.cagrid.dorian.service.impl.BeanUtils;
+import org.cagrid.dorian.service.core.BeanUtils;
 
 
 public abstract class Upgrade {

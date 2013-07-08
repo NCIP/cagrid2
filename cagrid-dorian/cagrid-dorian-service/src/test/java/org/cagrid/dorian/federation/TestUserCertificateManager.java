@@ -13,11 +13,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
 import org.cagrid.dorian.common.CommonUtils;
-import org.cagrid.dorian.federation.impl.CertificateBlacklistManager;
-import org.cagrid.dorian.federation.impl.Publisher;
-import org.cagrid.dorian.federation.impl.UserCertificateManager;
 import org.cagrid.dorian.model.exceptions.InvalidUserCertificateException;
 import org.cagrid.dorian.model.exceptions.InvalidUserCertificateFault;
 import org.cagrid.dorian.model.federation.DateRange;
@@ -26,6 +22,10 @@ import org.cagrid.dorian.model.federation.UserCertificateRecord;
 import org.cagrid.dorian.model.federation.UserCertificateStatus;
 import org.cagrid.dorian.model.federation.UserCertificateUpdate;
 import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
+import org.cagrid.dorian.service.ca.CertificateAuthority;
+import org.cagrid.dorian.service.federation.CertificateBlacklistManager;
+import org.cagrid.dorian.service.federation.Publisher;
+import org.cagrid.dorian.service.federation.UserCertificateManager;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;

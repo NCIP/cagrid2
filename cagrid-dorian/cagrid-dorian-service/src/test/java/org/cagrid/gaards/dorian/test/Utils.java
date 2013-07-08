@@ -6,20 +6,20 @@ import gov.nih.nci.cagrid.opensaml.SAMLAttributeStatement;
 
 import java.util.Iterator;
 
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
-import org.cagrid.dorian.federation.impl.AutoApprovalPolicy;
-import org.cagrid.dorian.federation.impl.IdentityFederationProperties;
-import org.cagrid.dorian.federation.impl.ManualApprovalPolicy;
-import org.cagrid.dorian.federation.impl.UserManager;
-import org.cagrid.dorian.idp.impl.AssertionCredentialsManager;
-import org.cagrid.dorian.idp.impl.IdentityProvider;
-import org.cagrid.dorian.idp.impl.IdentityProviderProperties;
 import org.cagrid.dorian.model.federation.GridUserPolicy;
 import org.cagrid.dorian.model.federation.TrustedIdP;
-import org.cagrid.dorian.service.impl.BeanUtils;
-import org.cagrid.dorian.service.impl.DorianProperties;
+import org.cagrid.dorian.service.ca.CertificateAuthority;
+import org.cagrid.dorian.service.ca.CertificateAuthorityManager;
+import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
+import org.cagrid.dorian.service.core.BeanUtils;
+import org.cagrid.dorian.service.core.DorianProperties;
+import org.cagrid.dorian.service.federation.AutoApprovalPolicy;
+import org.cagrid.dorian.service.federation.IdentityFederationProperties;
+import org.cagrid.dorian.service.federation.ManualApprovalPolicy;
+import org.cagrid.dorian.service.federation.UserManager;
+import org.cagrid.dorian.service.idp.AssertionCredentialsManager;
+import org.cagrid.dorian.service.idp.IdentityProvider;
+import org.cagrid.dorian.service.idp.IdentityProviderProperties;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.EventManager;
 import org.springframework.core.io.AbstractResource;
@@ -70,7 +70,7 @@ public class Utils {
 		return getBeanUtils().getAssertionCredentialsManager();
 	}
 
-	public static org.cagrid.dorian.idp.impl.UserManager getIdPUserManager() throws Exception {
+	public static org.cagrid.dorian.service.idp.UserManager getIdPUserManager() throws Exception {
 		return getBeanUtils().getIdPUserManager();
 	}
 

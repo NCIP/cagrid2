@@ -70,10 +70,10 @@
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package></Export-Package>
-						<Private-Package> org.cagrid.dorian.ca.impl,
-							org.cagrid.dorian.federation.impl, org.cagrid.dorian.idp.impl,
-							org.cagrid.dorian.idp.impl.dictionary,
-							org.cagrid.dorian.service.impl, org.cagrid.dorian.service.util 
+						<Private-Package> org.cagrid.dorian.service.ca,
+							org.cagrid.dorian.service.federation, org.cagrid.dorian.service.idp,
+							org.cagrid.dorian.service.idp.dictionary,
+							org.cagrid.dorian.service.core, org.cagrid.dorian.service.util 
 						</Private-Package>
 						<Import-Package>*</Import-Package>
 					</instructions>

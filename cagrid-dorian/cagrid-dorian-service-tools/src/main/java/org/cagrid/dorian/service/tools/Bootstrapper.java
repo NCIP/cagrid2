@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Properties;
 
 import org.cagrid.core.commandline.BaseCommandLine;
-import org.cagrid.dorian.ca.impl.CertificateAuthority;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityManager;
-import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
-import org.cagrid.dorian.federation.impl.IdentityAssignmentPolicy;
 import org.cagrid.dorian.model.federation.HostCertificateRecord;
 import org.cagrid.dorian.model.federation.HostCertificateRequest;
 import org.cagrid.dorian.model.federation.PublicKey;
-import org.cagrid.dorian.service.impl.DorianImpl;
+import org.cagrid.dorian.service.ca.CertificateAuthority;
+import org.cagrid.dorian.service.ca.CertificateAuthorityManager;
+import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
+import org.cagrid.dorian.service.core.DorianImpl;
+import org.cagrid.dorian.service.federation.IdentityAssignmentPolicy;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 

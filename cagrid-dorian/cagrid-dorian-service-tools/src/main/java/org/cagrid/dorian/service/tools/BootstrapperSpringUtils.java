@@ -1,6 +1,6 @@
 package org.cagrid.dorian.service.tools;
 
-import org.cagrid.dorian.service.impl.BeanUtils;
+import org.cagrid.dorian.service.core.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 

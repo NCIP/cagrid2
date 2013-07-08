@@ -2,7 +2,7 @@ package org.cagrid.dorian.idp;
 
 import junit.framework.TestCase;
 
-import org.cagrid.dorian.idp.impl.DictionaryCheck;
+import org.cagrid.dorian.service.idp.DictionaryCheck;
 
 
 public class TestDictionaryCheck extends TestCase {
