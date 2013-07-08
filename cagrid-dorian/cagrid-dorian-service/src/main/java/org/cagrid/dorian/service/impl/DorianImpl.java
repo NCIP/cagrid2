@@ -542,7 +542,7 @@ public class DorianImpl implements Dorian {
 		ifsConfiguration = dorianProperties.getIdentityFederationProperties();
 		FederationDefaults defaults = new FederationDefaults(idp, usr);
 		// TODO
-		final boolean ignoreCRL = true;
+		final boolean ignoreCRL = false;
 		ifm = new IdentityFederationManager(ifsConfiguration, db, propertyManager, caManager, this.eventManager, defaults, ignoreCRL);
 
 		if (!propertyManager.getVersion().equals(PropertyManager.CURRENT_VERSION)) {
