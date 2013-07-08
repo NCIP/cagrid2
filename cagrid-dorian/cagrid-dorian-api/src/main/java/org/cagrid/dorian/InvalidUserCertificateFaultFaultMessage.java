@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidUserCertificateFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidUserCertificateFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidUserCertificateFault invalidUserCertificateFault;
+    private org.cagrid.dorian.model.exceptions.InvalidUserCertificateFault invalidUserCertificateFault;
 
     public InvalidUserCertificateFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidUserCertificateFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidUserCertificateFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidUserCertificateFault invalidUserCertificateFault) {
+    public InvalidUserCertificateFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidUserCertificateFault invalidUserCertificateFault) {
         super(message);
         this.invalidUserCertificateFault = invalidUserCertificateFault;
     }
 
-    public InvalidUserCertificateFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidUserCertificateFault invalidUserCertificateFault, Throwable cause) {
+    public InvalidUserCertificateFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidUserCertificateFault invalidUserCertificateFault, Throwable cause) {
         super(message, cause);
         this.invalidUserCertificateFault = invalidUserCertificateFault;
     }
 
-    public org.cagrid.dorian.types.InvalidUserCertificateFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidUserCertificateFault getFaultInfo() {
         return this.invalidUserCertificateFault;
     }
 }

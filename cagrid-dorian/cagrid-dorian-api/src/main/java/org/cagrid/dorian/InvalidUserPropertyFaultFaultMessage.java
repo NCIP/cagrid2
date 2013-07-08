@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidUserPropertyFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidUserPropertyFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidUserPropertyFault invalidUserPropertyFault;
+    private org.cagrid.dorian.model.exceptions.InvalidUserPropertyFault invalidUserPropertyFault;
 
     public InvalidUserPropertyFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidUserPropertyFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidUserPropertyFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidUserPropertyFault invalidUserPropertyFault) {
+    public InvalidUserPropertyFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidUserPropertyFault invalidUserPropertyFault) {
         super(message);
         this.invalidUserPropertyFault = invalidUserPropertyFault;
     }
 
-    public InvalidUserPropertyFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidUserPropertyFault invalidUserPropertyFault, Throwable cause) {
+    public InvalidUserPropertyFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidUserPropertyFault invalidUserPropertyFault, Throwable cause) {
         super(message, cause);
         this.invalidUserPropertyFault = invalidUserPropertyFault;
     }
 
-    public org.cagrid.dorian.types.InvalidUserPropertyFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidUserPropertyFault getFaultInfo() {
         return this.invalidUserPropertyFault;
     }
 }

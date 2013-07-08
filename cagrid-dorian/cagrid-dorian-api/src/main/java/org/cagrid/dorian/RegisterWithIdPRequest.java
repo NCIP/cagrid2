@@ -177,17 +177,17 @@ public class RegisterWithIdPRequest
     {
 
         @XmlElement(name = "Application", namespace = "http://cagrid.nci.nih.gov/1/dorian-idp", required = true)
-        protected org.cagrid.dorian.idp.Application application;
+        protected org.cagrid.dorian.model.idp.Application application;
 
         /**
          * Gets the value of the application property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.idp.Application }
+         *     {@link org.cagrid.dorian.model.idp.Application }
          *     
          */
-        public org.cagrid.dorian.idp.Application getApplication() {
+        public org.cagrid.dorian.model.idp.Application getApplication() {
             return application;
         }
 
@@ -196,10 +196,10 @@ public class RegisterWithIdPRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.idp.Application }
+         *     {@link org.cagrid.dorian.model.idp.Application }
          *     
          */
-        public void setApplication(org.cagrid.dorian.idp.Application value) {
+        public void setApplication(org.cagrid.dorian.model.idp.Application value) {
             this.application = value;
         }
 
@@ -219,7 +219,7 @@ public class RegisterWithIdPRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.idp.Application theApplication;
+                org.cagrid.dorian.model.idp.Application theApplication;
                 theApplication = this.getApplication();
                 strategy.appendField(locator, this, "application", buffer, theApplication);
             }
@@ -229,7 +229,7 @@ public class RegisterWithIdPRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.idp.Application theApplication;
+                org.cagrid.dorian.model.idp.Application theApplication;
                 theApplication = this.getApplication();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "application", theApplication), currentHashCode, theApplication);
             }
@@ -250,9 +250,9 @@ public class RegisterWithIdPRequest
             }
             final RegisterWithIdPRequest.Application that = ((RegisterWithIdPRequest.Application) object);
             {
-                org.cagrid.dorian.idp.Application lhsApplication;
+                org.cagrid.dorian.model.idp.Application lhsApplication;
                 lhsApplication = this.getApplication();
-                org.cagrid.dorian.idp.Application rhsApplication;
+                org.cagrid.dorian.model.idp.Application rhsApplication;
                 rhsApplication = that.getApplication();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "application", lhsApplication), LocatorUtils.property(thatLocator, "application", rhsApplication), lhsApplication, rhsApplication)) {
                     return false;

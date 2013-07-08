@@ -177,17 +177,17 @@ public class FindUserCertificatesRequest
     {
 
         @XmlElement(name = "UserCertificateFilter", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.UserCertificateFilter userCertificateFilter;
+        protected org.cagrid.dorian.model.federation.UserCertificateFilter userCertificateFilter;
 
         /**
          * Gets the value of the userCertificateFilter property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.UserCertificateFilter }
+         *     {@link org.cagrid.dorian.model.federation.UserCertificateFilter }
          *     
          */
-        public org.cagrid.dorian.ifs.UserCertificateFilter getUserCertificateFilter() {
+        public org.cagrid.dorian.model.federation.UserCertificateFilter getUserCertificateFilter() {
             return userCertificateFilter;
         }
 
@@ -196,10 +196,10 @@ public class FindUserCertificatesRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.UserCertificateFilter }
+         *     {@link org.cagrid.dorian.model.federation.UserCertificateFilter }
          *     
          */
-        public void setUserCertificateFilter(org.cagrid.dorian.ifs.UserCertificateFilter value) {
+        public void setUserCertificateFilter(org.cagrid.dorian.model.federation.UserCertificateFilter value) {
             this.userCertificateFilter = value;
         }
 
@@ -219,7 +219,7 @@ public class FindUserCertificatesRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.UserCertificateFilter theUserCertificateFilter;
+                org.cagrid.dorian.model.federation.UserCertificateFilter theUserCertificateFilter;
                 theUserCertificateFilter = this.getUserCertificateFilter();
                 strategy.appendField(locator, this, "userCertificateFilter", buffer, theUserCertificateFilter);
             }
@@ -229,7 +229,7 @@ public class FindUserCertificatesRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.UserCertificateFilter theUserCertificateFilter;
+                org.cagrid.dorian.model.federation.UserCertificateFilter theUserCertificateFilter;
                 theUserCertificateFilter = this.getUserCertificateFilter();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "userCertificateFilter", theUserCertificateFilter), currentHashCode, theUserCertificateFilter);
             }
@@ -250,9 +250,9 @@ public class FindUserCertificatesRequest
             }
             final FindUserCertificatesRequest.UserCertificateFilter that = ((FindUserCertificatesRequest.UserCertificateFilter) object);
             {
-                org.cagrid.dorian.ifs.UserCertificateFilter lhsUserCertificateFilter;
+                org.cagrid.dorian.model.federation.UserCertificateFilter lhsUserCertificateFilter;
                 lhsUserCertificateFilter = this.getUserCertificateFilter();
-                org.cagrid.dorian.ifs.UserCertificateFilter rhsUserCertificateFilter;
+                org.cagrid.dorian.model.federation.UserCertificateFilter rhsUserCertificateFilter;
                 rhsUserCertificateFilter = that.getUserCertificateFilter();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "userCertificateFilter", lhsUserCertificateFilter), LocatorUtils.property(thatLocator, "userCertificateFilter", rhsUserCertificateFilter), lhsUserCertificateFilter, rhsUserCertificateFilter)) {
                     return false;

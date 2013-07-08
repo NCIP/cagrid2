@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidHostCertificateRequestFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidHostCertificateRequestFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidHostCertificateRequestFault invalidHostCertificateRequestFault;
+    private org.cagrid.dorian.model.exceptions.InvalidHostCertificateRequestFault invalidHostCertificateRequestFault;
 
     public InvalidHostCertificateRequestFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidHostCertificateRequestFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidHostCertificateRequestFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidHostCertificateRequestFault invalidHostCertificateRequestFault) {
+    public InvalidHostCertificateRequestFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidHostCertificateRequestFault invalidHostCertificateRequestFault) {
         super(message);
         this.invalidHostCertificateRequestFault = invalidHostCertificateRequestFault;
     }
 
-    public InvalidHostCertificateRequestFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidHostCertificateRequestFault invalidHostCertificateRequestFault, Throwable cause) {
+    public InvalidHostCertificateRequestFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidHostCertificateRequestFault invalidHostCertificateRequestFault, Throwable cause) {
         super(message, cause);
         this.invalidHostCertificateRequestFault = invalidHostCertificateRequestFault;
     }
 
-    public org.cagrid.dorian.types.InvalidHostCertificateRequestFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidHostCertificateRequestFault getFaultInfo() {
         return this.invalidHostCertificateRequestFault;
     }
 }

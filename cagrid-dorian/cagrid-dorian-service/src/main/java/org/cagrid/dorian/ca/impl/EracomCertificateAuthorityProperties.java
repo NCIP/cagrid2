@@ -1,7 +1,7 @@
 package org.cagrid.dorian.ca.impl;
 
 import org.cagrid.dorian.common.Lifetime;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 
 
 public class EracomCertificateAuthorityProperties extends CertificateAuthorityProperties {

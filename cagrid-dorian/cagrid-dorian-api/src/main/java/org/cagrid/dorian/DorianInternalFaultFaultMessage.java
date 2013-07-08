@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "DorianInternalFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class DorianInternalFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.DorianInternalFault dorianInternalFault;
+    private org.cagrid.dorian.model.exceptions.DorianInternalFault dorianInternalFault;
 
     public DorianInternalFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class DorianInternalFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public DorianInternalFaultFaultMessage(String message, org.cagrid.dorian.types.DorianInternalFault dorianInternalFault) {
+    public DorianInternalFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.DorianInternalFault dorianInternalFault) {
         super(message);
         this.dorianInternalFault = dorianInternalFault;
     }
 
-    public DorianInternalFaultFaultMessage(String message, org.cagrid.dorian.types.DorianInternalFault dorianInternalFault, Throwable cause) {
+    public DorianInternalFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.DorianInternalFault dorianInternalFault, Throwable cause) {
         super(message, cause);
         this.dorianInternalFault = dorianInternalFault;
     }
 
-    public org.cagrid.dorian.types.DorianInternalFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.DorianInternalFault getFaultInfo() {
         return this.dorianInternalFault;
     }
 }

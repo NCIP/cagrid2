@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidTrustedIdPFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidTrustedIdPFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidTrustedIdPFault invalidTrustedIdPFault;
+    private org.cagrid.dorian.model.exceptions.InvalidTrustedIdPFault invalidTrustedIdPFault;
 
     public InvalidTrustedIdPFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidTrustedIdPFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidTrustedIdPFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidTrustedIdPFault invalidTrustedIdPFault) {
+    public InvalidTrustedIdPFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidTrustedIdPFault invalidTrustedIdPFault) {
         super(message);
         this.invalidTrustedIdPFault = invalidTrustedIdPFault;
     }
 
-    public InvalidTrustedIdPFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidTrustedIdPFault invalidTrustedIdPFault, Throwable cause) {
+    public InvalidTrustedIdPFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidTrustedIdPFault invalidTrustedIdPFault, Throwable cause) {
         super(message, cause);
         this.invalidTrustedIdPFault = invalidTrustedIdPFault;
     }
 
-    public org.cagrid.dorian.types.InvalidTrustedIdPFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidTrustedIdPFault getFaultInfo() {
         return this.invalidTrustedIdPFault;
     }
 }

@@ -177,17 +177,17 @@ public class HostSearchRequest
     {
 
         @XmlElement(name = "HostSearchCriteria", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.HostSearchCriteria hostSearchCriteria;
+        protected org.cagrid.dorian.model.federation.HostSearchCriteria hostSearchCriteria;
 
         /**
          * Gets the value of the hostSearchCriteria property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.HostSearchCriteria }
+         *     {@link org.cagrid.dorian.model.federation.HostSearchCriteria }
          *     
          */
-        public org.cagrid.dorian.ifs.HostSearchCriteria getHostSearchCriteria() {
+        public org.cagrid.dorian.model.federation.HostSearchCriteria getHostSearchCriteria() {
             return hostSearchCriteria;
         }
 
@@ -196,10 +196,10 @@ public class HostSearchRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.HostSearchCriteria }
+         *     {@link org.cagrid.dorian.model.federation.HostSearchCriteria }
          *     
          */
-        public void setHostSearchCriteria(org.cagrid.dorian.ifs.HostSearchCriteria value) {
+        public void setHostSearchCriteria(org.cagrid.dorian.model.federation.HostSearchCriteria value) {
             this.hostSearchCriteria = value;
         }
 
@@ -219,7 +219,7 @@ public class HostSearchRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.HostSearchCriteria theHostSearchCriteria;
+                org.cagrid.dorian.model.federation.HostSearchCriteria theHostSearchCriteria;
                 theHostSearchCriteria = this.getHostSearchCriteria();
                 strategy.appendField(locator, this, "hostSearchCriteria", buffer, theHostSearchCriteria);
             }
@@ -229,7 +229,7 @@ public class HostSearchRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.HostSearchCriteria theHostSearchCriteria;
+                org.cagrid.dorian.model.federation.HostSearchCriteria theHostSearchCriteria;
                 theHostSearchCriteria = this.getHostSearchCriteria();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostSearchCriteria", theHostSearchCriteria), currentHashCode, theHostSearchCriteria);
             }
@@ -250,9 +250,9 @@ public class HostSearchRequest
             }
             final HostSearchRequest.HostSearchCriteria that = ((HostSearchRequest.HostSearchCriteria) object);
             {
-                org.cagrid.dorian.ifs.HostSearchCriteria lhsHostSearchCriteria;
+                org.cagrid.dorian.model.federation.HostSearchCriteria lhsHostSearchCriteria;
                 lhsHostSearchCriteria = this.getHostSearchCriteria();
-                org.cagrid.dorian.ifs.HostSearchCriteria rhsHostSearchCriteria;
+                org.cagrid.dorian.model.federation.HostSearchCriteria rhsHostSearchCriteria;
                 rhsHostSearchCriteria = that.getHostSearchCriteria();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "hostSearchCriteria", lhsHostSearchCriteria), LocatorUtils.property(thatLocator, "hostSearchCriteria", rhsHostSearchCriteria), lhsHostSearchCriteria, rhsHostSearchCriteria)) {
                     return false;

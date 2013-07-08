@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.dorian.common.Metadata;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.tools.database.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

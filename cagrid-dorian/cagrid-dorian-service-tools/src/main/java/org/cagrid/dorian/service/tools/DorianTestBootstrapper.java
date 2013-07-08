@@ -17,9 +17,9 @@ import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
 import org.cagrid.dorian.ca.impl.CertificateAuthorityProperties;
-import org.cagrid.dorian.ifs.HostCertificateRecord;
-import org.cagrid.dorian.ifs.HostCertificateRequest;
-import org.cagrid.dorian.ifs.PublicKey;
+import org.cagrid.dorian.model.federation.HostCertificateRecord;
+import org.cagrid.dorian.model.federation.HostCertificateRequest;
+import org.cagrid.dorian.model.federation.PublicKey;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;

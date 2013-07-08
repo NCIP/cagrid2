@@ -6,10 +6,10 @@ import java.util.StringTokenizer;
 
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.dorian.common.Lifetime;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.dorian.policy.HostCertificateRenewalPolicy;
 import org.cagrid.dorian.policy.SearchPolicyType;
 import org.cagrid.dorian.service.impl.CredentialManager;
-import org.cagrid.dorian.types.DorianInternalException;
 
 public class IdentityFederationProperties {
 

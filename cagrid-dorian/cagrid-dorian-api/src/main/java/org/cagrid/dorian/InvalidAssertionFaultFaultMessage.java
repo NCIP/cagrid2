@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidAssertionFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidAssertionFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidAssertionFault invalidAssertionFault;
+    private org.cagrid.dorian.model.exceptions.InvalidAssertionFault invalidAssertionFault;
 
     public InvalidAssertionFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidAssertionFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidAssertionFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidAssertionFault invalidAssertionFault) {
+    public InvalidAssertionFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidAssertionFault invalidAssertionFault) {
         super(message);
         this.invalidAssertionFault = invalidAssertionFault;
     }
 
-    public InvalidAssertionFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidAssertionFault invalidAssertionFault, Throwable cause) {
+    public InvalidAssertionFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidAssertionFault invalidAssertionFault, Throwable cause) {
         super(message, cause);
         this.invalidAssertionFault = invalidAssertionFault;
     }
 
-    public org.cagrid.dorian.types.InvalidAssertionFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidAssertionFault getFaultInfo() {
         return this.invalidAssertionFault;
     }
 }

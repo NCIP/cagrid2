@@ -4,10 +4,10 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import java.util.Arrays;
 
-import org.cagrid.dorian.ifs.GridUser;
-import org.cagrid.dorian.ifs.HostCertificateRecord;
-import org.cagrid.dorian.ifs.TrustedIdP;
-import org.cagrid.dorian.ifs.UserCertificateRecord;
+import org.cagrid.dorian.model.federation.GridUser;
+import org.cagrid.dorian.model.federation.HostCertificateRecord;
+import org.cagrid.dorian.model.federation.TrustedIdP;
+import org.cagrid.dorian.model.federation.UserCertificateRecord;
 
 public class ReportUtils {
 

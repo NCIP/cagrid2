@@ -7,8 +7,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import org.cagrid.dorian.ifs.CertificateLifetime;
-import org.cagrid.dorian.ifs.PublicKey;
+
+import org.cagrid.dorian.model.federation.CertificateLifetime;
+import org.cagrid.dorian.model.federation.PublicKey;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
 import org.jvnet.jaxb2_commons.lang.HashCode;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.tools.database.Database;
 import org.slf4j.Logger;

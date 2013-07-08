@@ -9,11 +9,11 @@ import java.security.cert.X509Certificate;
 import javax.xml.namespace.QName;
 
 import org.cagrid.core.common.JAXBUtils;
-import org.cagrid.dorian.ifs.CertificateLifetime;
-import org.cagrid.dorian.ifs.TrustedIdentityProviders;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
+import org.cagrid.dorian.model.federation.CertificateLifetime;
+import org.cagrid.dorian.model.federation.TrustedIdentityProviders;
 import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
-import org.cagrid.dorian.types.DorianInternalException;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.pki.KeyUtil;

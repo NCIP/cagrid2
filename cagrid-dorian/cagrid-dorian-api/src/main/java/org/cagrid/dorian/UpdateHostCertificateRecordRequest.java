@@ -177,17 +177,17 @@ public class UpdateHostCertificateRecordRequest
     {
 
         @XmlElement(name = "HostCertificateUpdate", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.HostCertificateUpdate hostCertificateUpdate;
+        protected org.cagrid.dorian.model.federation.HostCertificateUpdate hostCertificateUpdate;
 
         /**
          * Gets the value of the hostCertificateUpdate property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.HostCertificateUpdate }
+         *     {@link org.cagrid.dorian.model.federation.HostCertificateUpdate }
          *     
          */
-        public org.cagrid.dorian.ifs.HostCertificateUpdate getHostCertificateUpdate() {
+        public org.cagrid.dorian.model.federation.HostCertificateUpdate getHostCertificateUpdate() {
             return hostCertificateUpdate;
         }
 
@@ -196,10 +196,10 @@ public class UpdateHostCertificateRecordRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.HostCertificateUpdate }
+         *     {@link org.cagrid.dorian.model.federation.HostCertificateUpdate }
          *     
          */
-        public void setHostCertificateUpdate(org.cagrid.dorian.ifs.HostCertificateUpdate value) {
+        public void setHostCertificateUpdate(org.cagrid.dorian.model.federation.HostCertificateUpdate value) {
             this.hostCertificateUpdate = value;
         }
 
@@ -219,7 +219,7 @@ public class UpdateHostCertificateRecordRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.HostCertificateUpdate theHostCertificateUpdate;
+                org.cagrid.dorian.model.federation.HostCertificateUpdate theHostCertificateUpdate;
                 theHostCertificateUpdate = this.getHostCertificateUpdate();
                 strategy.appendField(locator, this, "hostCertificateUpdate", buffer, theHostCertificateUpdate);
             }
@@ -229,7 +229,7 @@ public class UpdateHostCertificateRecordRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.HostCertificateUpdate theHostCertificateUpdate;
+                org.cagrid.dorian.model.federation.HostCertificateUpdate theHostCertificateUpdate;
                 theHostCertificateUpdate = this.getHostCertificateUpdate();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostCertificateUpdate", theHostCertificateUpdate), currentHashCode, theHostCertificateUpdate);
             }
@@ -250,9 +250,9 @@ public class UpdateHostCertificateRecordRequest
             }
             final UpdateHostCertificateRecordRequest.HostCertificateUpdate that = ((UpdateHostCertificateRecordRequest.HostCertificateUpdate) object);
             {
-                org.cagrid.dorian.ifs.HostCertificateUpdate lhsHostCertificateUpdate;
+                org.cagrid.dorian.model.federation.HostCertificateUpdate lhsHostCertificateUpdate;
                 lhsHostCertificateUpdate = this.getHostCertificateUpdate();
-                org.cagrid.dorian.ifs.HostCertificateUpdate rhsHostCertificateUpdate;
+                org.cagrid.dorian.model.federation.HostCertificateUpdate rhsHostCertificateUpdate;
                 rhsHostCertificateUpdate = that.getHostCertificateUpdate();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "hostCertificateUpdate", lhsHostCertificateUpdate), LocatorUtils.property(thatLocator, "hostCertificateUpdate", rhsHostCertificateUpdate), lhsHostCertificateUpdate, rhsHostCertificateUpdate)) {
                     return false;

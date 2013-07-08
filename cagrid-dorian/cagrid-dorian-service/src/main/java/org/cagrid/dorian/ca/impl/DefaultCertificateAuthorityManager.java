@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

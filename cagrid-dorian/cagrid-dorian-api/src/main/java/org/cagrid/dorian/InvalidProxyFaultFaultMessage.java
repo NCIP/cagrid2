@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidProxyFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidProxyFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidProxyFault invalidProxyFault;
+    private org.cagrid.dorian.model.exceptions.InvalidProxyFault invalidProxyFault;
 
     public InvalidProxyFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidProxyFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidProxyFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidProxyFault invalidProxyFault) {
+    public InvalidProxyFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidProxyFault invalidProxyFault) {
         super(message);
         this.invalidProxyFault = invalidProxyFault;
     }
 
-    public InvalidProxyFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidProxyFault invalidProxyFault, Throwable cause) {
+    public InvalidProxyFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidProxyFault invalidProxyFault, Throwable cause) {
         super(message, cause);
         this.invalidProxyFault = invalidProxyFault;
     }
 
-    public org.cagrid.dorian.types.InvalidProxyFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidProxyFault getFaultInfo() {
         return this.invalidProxyFault;
     }
 }

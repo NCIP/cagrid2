@@ -3,11 +3,11 @@ package org.cagrid.dorian.idp;
 import junit.framework.TestCase;
 
 import org.cagrid.dorian.common.Lifetime;
-import org.cagrid.dorian.idp.PasswordSecurity;
-import org.cagrid.dorian.idp.PasswordStatus;
 import org.cagrid.dorian.idp.impl.PasswordSecurityManager;
 import org.cagrid.dorian.idp.impl.PasswordSecurityPolicy;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
+import org.cagrid.dorian.model.idp.PasswordSecurity;
+import org.cagrid.dorian.model.idp.PasswordStatus;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.tools.database.Database;
 

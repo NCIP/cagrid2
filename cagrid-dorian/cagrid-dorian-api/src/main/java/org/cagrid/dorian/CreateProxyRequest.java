@@ -8,8 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import org.cagrid.dorian.common.SAMLAssertion;
-import org.cagrid.dorian.ifs.DelegationPathLength;
-import org.cagrid.dorian.ifs.ProxyLifetime;
+import org.cagrid.dorian.model.federation.DelegationPathLength;
+import org.cagrid.dorian.model.federation.ProxyLifetime;
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
 import org.jvnet.jaxb2_commons.lang.HashCode;
@@ -591,17 +591,17 @@ public class CreateProxyRequest
     {
 
         @XmlElement(name = "PublicKey", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.PublicKey publicKey;
+        protected org.cagrid.dorian.model.federation.PublicKey publicKey;
 
         /**
          * Gets the value of the publicKey property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.PublicKey }
+         *     {@link org.cagrid.dorian.model.federation.PublicKey }
          *     
          */
-        public org.cagrid.dorian.ifs.PublicKey getPublicKey() {
+        public org.cagrid.dorian.model.federation.PublicKey getPublicKey() {
             return publicKey;
         }
 
@@ -610,10 +610,10 @@ public class CreateProxyRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.PublicKey }
+         *     {@link org.cagrid.dorian.model.federation.PublicKey }
          *     
          */
-        public void setPublicKey(org.cagrid.dorian.ifs.PublicKey value) {
+        public void setPublicKey(org.cagrid.dorian.model.federation.PublicKey value) {
             this.publicKey = value;
         }
 
@@ -633,7 +633,7 @@ public class CreateProxyRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.PublicKey thePublicKey;
+                org.cagrid.dorian.model.federation.PublicKey thePublicKey;
                 thePublicKey = this.getPublicKey();
                 strategy.appendField(locator, this, "publicKey", buffer, thePublicKey);
             }
@@ -643,7 +643,7 @@ public class CreateProxyRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.PublicKey thePublicKey;
+                org.cagrid.dorian.model.federation.PublicKey thePublicKey;
                 thePublicKey = this.getPublicKey();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "publicKey", thePublicKey), currentHashCode, thePublicKey);
             }
@@ -664,9 +664,9 @@ public class CreateProxyRequest
             }
             final CreateProxyRequest.PublicKey that = ((CreateProxyRequest.PublicKey) object);
             {
-                org.cagrid.dorian.ifs.PublicKey lhsPublicKey;
+                org.cagrid.dorian.model.federation.PublicKey lhsPublicKey;
                 lhsPublicKey = this.getPublicKey();
-                org.cagrid.dorian.ifs.PublicKey rhsPublicKey;
+                org.cagrid.dorian.model.federation.PublicKey rhsPublicKey;
                 rhsPublicKey = that.getPublicKey();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "publicKey", lhsPublicKey), LocatorUtils.property(thatLocator, "publicKey", rhsPublicKey), lhsPublicKey, rhsPublicKey)) {
                     return false;

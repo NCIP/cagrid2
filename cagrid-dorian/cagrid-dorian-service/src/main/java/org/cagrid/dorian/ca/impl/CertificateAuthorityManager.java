@@ -2,7 +2,7 @@ package org.cagrid.dorian.ca.impl;
 
 import java.util.List;
 
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 
 public interface CertificateAuthorityManager {
 

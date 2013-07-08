@@ -215,17 +215,17 @@ public class SetPublishRequest
     {
 
         @XmlElement(name = "TrustedIdP", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.TrustedIdP trustedIdP;
+        protected org.cagrid.dorian.model.federation.TrustedIdP trustedIdP;
 
         /**
          * Gets the value of the trustedIdP property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.TrustedIdP }
+         *     {@link org.cagrid.dorian.model.federation.TrustedIdP }
          *     
          */
-        public org.cagrid.dorian.ifs.TrustedIdP getTrustedIdP() {
+        public org.cagrid.dorian.model.federation.TrustedIdP getTrustedIdP() {
             return trustedIdP;
         }
 
@@ -234,10 +234,10 @@ public class SetPublishRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.TrustedIdP }
+         *     {@link org.cagrid.dorian.model.federation.TrustedIdP }
          *     
          */
-        public void setTrustedIdP(org.cagrid.dorian.ifs.TrustedIdP value) {
+        public void setTrustedIdP(org.cagrid.dorian.model.federation.TrustedIdP value) {
             this.trustedIdP = value;
         }
 
@@ -257,7 +257,7 @@ public class SetPublishRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.TrustedIdP theTrustedIdP;
+                org.cagrid.dorian.model.federation.TrustedIdP theTrustedIdP;
                 theTrustedIdP = this.getTrustedIdP();
                 strategy.appendField(locator, this, "trustedIdP", buffer, theTrustedIdP);
             }
@@ -267,7 +267,7 @@ public class SetPublishRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.TrustedIdP theTrustedIdP;
+                org.cagrid.dorian.model.federation.TrustedIdP theTrustedIdP;
                 theTrustedIdP = this.getTrustedIdP();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "trustedIdP", theTrustedIdP), currentHashCode, theTrustedIdP);
             }
@@ -288,9 +288,9 @@ public class SetPublishRequest
             }
             final SetPublishRequest.TrustedIdP that = ((SetPublishRequest.TrustedIdP) object);
             {
-                org.cagrid.dorian.ifs.TrustedIdP lhsTrustedIdP;
+                org.cagrid.dorian.model.federation.TrustedIdP lhsTrustedIdP;
                 lhsTrustedIdP = this.getTrustedIdP();
-                org.cagrid.dorian.ifs.TrustedIdP rhsTrustedIdP;
+                org.cagrid.dorian.model.federation.TrustedIdP rhsTrustedIdP;
                 rhsTrustedIdP = that.getTrustedIdP();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "trustedIdP", lhsTrustedIdP), LocatorUtils.property(thatLocator, "trustedIdP", rhsTrustedIdP), lhsTrustedIdP, rhsTrustedIdP)) {
                     return false;

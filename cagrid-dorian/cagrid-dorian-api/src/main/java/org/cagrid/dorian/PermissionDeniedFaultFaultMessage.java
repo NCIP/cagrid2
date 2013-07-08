@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "PermissionDeniedFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class PermissionDeniedFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.PermissionDeniedFault permissionDeniedFault;
+    private org.cagrid.dorian.model.exceptions.PermissionDeniedFault permissionDeniedFault;
 
     public PermissionDeniedFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class PermissionDeniedFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public PermissionDeniedFaultFaultMessage(String message, org.cagrid.dorian.types.PermissionDeniedFault permissionDeniedFault) {
+    public PermissionDeniedFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.PermissionDeniedFault permissionDeniedFault) {
         super(message);
         this.permissionDeniedFault = permissionDeniedFault;
     }
 
-    public PermissionDeniedFaultFaultMessage(String message, org.cagrid.dorian.types.PermissionDeniedFault permissionDeniedFault, Throwable cause) {
+    public PermissionDeniedFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.PermissionDeniedFault permissionDeniedFault, Throwable cause) {
         super(message, cause);
         this.permissionDeniedFault = permissionDeniedFault;
     }
 
-    public org.cagrid.dorian.types.PermissionDeniedFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.PermissionDeniedFault getFaultInfo() {
         return this.permissionDeniedFault;
     }
 }

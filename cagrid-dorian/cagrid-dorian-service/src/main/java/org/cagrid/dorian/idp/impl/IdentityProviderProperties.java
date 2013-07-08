@@ -3,8 +3,8 @@ package org.cagrid.dorian.idp.impl;
 import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.core.common.FaultHelper;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.dorian.policy.AccountInformationModificationPolicy;
-import org.cagrid.dorian.types.DorianInternalException;
 
 public class IdentityProviderProperties {
 	private static final String DEFAULT_NAME = "Dorian";

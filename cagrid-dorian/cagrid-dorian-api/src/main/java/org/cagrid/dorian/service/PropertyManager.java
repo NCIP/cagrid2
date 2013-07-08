@@ -1,7 +1,7 @@
 package org.cagrid.dorian.service;
 
 import org.cagrid.dorian.common.Metadata;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.tools.database.Database;
 
 /**

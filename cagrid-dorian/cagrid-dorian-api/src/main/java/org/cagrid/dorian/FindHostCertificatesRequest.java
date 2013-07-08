@@ -177,17 +177,17 @@ public class FindHostCertificatesRequest
     {
 
         @XmlElement(name = "HostCertificateFilter", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.HostCertificateFilter hostCertificateFilter;
+        protected org.cagrid.dorian.model.federation.HostCertificateFilter hostCertificateFilter;
 
         /**
          * Gets the value of the hostCertificateFilter property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.HostCertificateFilter }
+         *     {@link org.cagrid.dorian.model.federation.HostCertificateFilter }
          *     
          */
-        public org.cagrid.dorian.ifs.HostCertificateFilter getHostCertificateFilter() {
+        public org.cagrid.dorian.model.federation.HostCertificateFilter getHostCertificateFilter() {
             return hostCertificateFilter;
         }
 
@@ -196,10 +196,10 @@ public class FindHostCertificatesRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.HostCertificateFilter }
+         *     {@link org.cagrid.dorian.model.federation.HostCertificateFilter }
          *     
          */
-        public void setHostCertificateFilter(org.cagrid.dorian.ifs.HostCertificateFilter value) {
+        public void setHostCertificateFilter(org.cagrid.dorian.model.federation.HostCertificateFilter value) {
             this.hostCertificateFilter = value;
         }
 
@@ -219,7 +219,7 @@ public class FindHostCertificatesRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.HostCertificateFilter theHostCertificateFilter;
+                org.cagrid.dorian.model.federation.HostCertificateFilter theHostCertificateFilter;
                 theHostCertificateFilter = this.getHostCertificateFilter();
                 strategy.appendField(locator, this, "hostCertificateFilter", buffer, theHostCertificateFilter);
             }
@@ -229,7 +229,7 @@ public class FindHostCertificatesRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.HostCertificateFilter theHostCertificateFilter;
+                org.cagrid.dorian.model.federation.HostCertificateFilter theHostCertificateFilter;
                 theHostCertificateFilter = this.getHostCertificateFilter();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "hostCertificateFilter", theHostCertificateFilter), currentHashCode, theHostCertificateFilter);
             }
@@ -250,9 +250,9 @@ public class FindHostCertificatesRequest
             }
             final FindHostCertificatesRequest.HostCertificateFilter that = ((FindHostCertificatesRequest.HostCertificateFilter) object);
             {
-                org.cagrid.dorian.ifs.HostCertificateFilter lhsHostCertificateFilter;
+                org.cagrid.dorian.model.federation.HostCertificateFilter lhsHostCertificateFilter;
                 lhsHostCertificateFilter = this.getHostCertificateFilter();
-                org.cagrid.dorian.ifs.HostCertificateFilter rhsHostCertificateFilter;
+                org.cagrid.dorian.model.federation.HostCertificateFilter rhsHostCertificateFilter;
                 rhsHostCertificateFilter = that.getHostCertificateFilter();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "hostCertificateFilter", lhsHostCertificateFilter), LocatorUtils.property(thatLocator, "hostCertificateFilter", rhsHostCertificateFilter), lhsHostCertificateFilter, rhsHostCertificateFilter)) {
                     return false;

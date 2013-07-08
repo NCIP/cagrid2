@@ -2,18 +2,18 @@ package org.cagrid.dorian.idp;
 
 import junit.framework.TestCase;
 
-import org.cagrid.dorian.idp.CountryCode;
-import org.cagrid.dorian.idp.LocalUser;
-import org.cagrid.dorian.idp.LocalUserFilter;
-import org.cagrid.dorian.idp.LocalUserRole;
-import org.cagrid.dorian.idp.LocalUserStatus;
-import org.cagrid.dorian.idp.StateCode;
 import org.cagrid.dorian.idp.impl.PasswordSecurityManager;
 import org.cagrid.dorian.idp.impl.UserManager;
-import org.cagrid.dorian.types.InvalidUserPropertyException;
-import org.cagrid.dorian.types.InvalidUserPropertyFault;
-import org.cagrid.dorian.types.NoSuchUserException;
-import org.cagrid.dorian.types.NoSuchUserFault;
+import org.cagrid.dorian.model.exceptions.InvalidUserPropertyException;
+import org.cagrid.dorian.model.exceptions.InvalidUserPropertyFault;
+import org.cagrid.dorian.model.exceptions.NoSuchUserException;
+import org.cagrid.dorian.model.exceptions.NoSuchUserFault;
+import org.cagrid.dorian.model.idp.CountryCode;
+import org.cagrid.dorian.model.idp.LocalUser;
+import org.cagrid.dorian.model.idp.LocalUserFilter;
+import org.cagrid.dorian.model.idp.LocalUserRole;
+import org.cagrid.dorian.model.idp.LocalUserStatus;
+import org.cagrid.dorian.model.idp.StateCode;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.dorian.test.Utils;
 import org.cagrid.tools.database.Database;

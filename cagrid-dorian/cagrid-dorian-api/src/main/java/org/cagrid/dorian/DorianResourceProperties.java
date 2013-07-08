@@ -8,7 +8,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import org.cagrid.dorian.ifs.TrustedIdentityProviders;
+
+import org.cagrid.dorian.model.federation.TrustedIdentityProviders;
 import org.cagrid.dorian.policy.DorianPolicy;
 import org.cagrid.gaards.authentication.AuthenticationProfiles;
 import org.jvnet.jaxb2_commons.lang.Equals;

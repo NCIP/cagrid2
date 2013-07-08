@@ -1,6 +1,6 @@
 package org.cagrid.dorian.idp.impl;
 
-import org.cagrid.dorian.idp.LocalUser;
+import org.cagrid.dorian.model.idp.LocalUser;
 
 public class ReportUtils {
 

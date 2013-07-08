@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.cagrid.dorian.common.Lifetime;
-import org.cagrid.dorian.idp.BasicAuthCredential;
+import org.cagrid.dorian.model.idp.BasicAuthCredential;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 
 public class Utils {

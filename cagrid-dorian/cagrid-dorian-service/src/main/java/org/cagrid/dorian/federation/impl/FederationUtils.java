@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.cagrid.dorian.ifs.CertificateLifetime;
+import org.cagrid.dorian.model.federation.CertificateLifetime;
 
 
 public class FederationUtils {

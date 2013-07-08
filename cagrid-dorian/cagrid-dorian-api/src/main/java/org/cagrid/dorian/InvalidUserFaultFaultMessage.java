@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "InvalidUserFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class InvalidUserFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.InvalidUserFault invalidUserFault;
+    private org.cagrid.dorian.model.exceptions.InvalidUserFault invalidUserFault;
 
     public InvalidUserFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class InvalidUserFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public InvalidUserFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidUserFault invalidUserFault) {
+    public InvalidUserFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidUserFault invalidUserFault) {
         super(message);
         this.invalidUserFault = invalidUserFault;
     }
 
-    public InvalidUserFaultFaultMessage(String message, org.cagrid.dorian.types.InvalidUserFault invalidUserFault, Throwable cause) {
+    public InvalidUserFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.InvalidUserFault invalidUserFault, Throwable cause) {
         super(message, cause);
         this.invalidUserFault = invalidUserFault;
     }
 
-    public org.cagrid.dorian.types.InvalidUserFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.InvalidUserFault getFaultInfo() {
         return this.invalidUserFault;
     }
 }

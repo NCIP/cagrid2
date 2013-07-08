@@ -1,7 +1,7 @@
 package org.cagrid.dorian.federation.impl;
 
-import org.cagrid.dorian.ifs.GridUser;
-import org.cagrid.dorian.ifs.TrustedIdP;
+import org.cagrid.dorian.model.federation.GridUser;
+import org.cagrid.dorian.model.federation.TrustedIdP;
 
 public class FederationDefaults {
     private GridUser defaultUser;

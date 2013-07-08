@@ -4,7 +4,7 @@ import gov.nih.nci.cagrid.common.Utils;
 
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.dorian.common.Lifetime;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 
 public class CertificateAuthorityCreationPolicy {
 	private String subject;

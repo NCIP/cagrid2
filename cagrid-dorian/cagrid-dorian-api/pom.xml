@@ -50,13 +50,13 @@
 												<extraarg>-p</extraarg>
 												<extraarg>http://cagrid.nci.nih.gov/Dorian/service=org.cagrid.dorian.service</extraarg>
 												<extraargs>-p</extraargs>
-												<extraargs>http://cagrid.nci.nih.gov/Dorian/types=org.cagrid.dorian.types</extraargs>
+												<extraargs>http://cagrid.nci.nih.gov/Dorian/types=org.cagrid.dorian.model.exceptions</extraargs>
 												<extrargs>-p</extrargs>
 												<extraargs>http://cagrid.nci.nih.gov/1/dorian-common=org.cagrid.dorian.common</extraargs>
 												<extraargs>-p</extraargs>
-												<extraargs>http://cagrid.nci.nih.gov/1/dorian-idp=org.cagrid.dorian.idp</extraargs>
+												<extraargs>http://cagrid.nci.nih.gov/1/dorian-idp=org.cagrid.dorian.model.idp</extraargs>
 												<extraargs>-p</extraargs>
-												<extraargs>http://cagrid.nci.nih.gov/1/dorian-ifs=org.cagrid.dorian.ifs</extraargs>
+												<extraargs>http://cagrid.nci.nih.gov/1/dorian-ifs=org.cagrid.dorian.model.federation</extraargs>
 												<extraargs>-p</extraargs>
 												<extraargs>http://cagrid.nci.nih.gov/1/dorian-policy=org.cagrid.dorian.policy</extraargs>
 												<extraarg>-nexclude</extraarg>
@@ -223,21 +223,21 @@
 							schema.org.cagrid.dorian,
 							org.cagrid.dorian,
 							org.cagrid.dorian.common,
-							org.cagrid.dorian.idp,
-							org.cagrid.dorian.ifs,
+							org.cagrid.dorian.model.idp,
+							org.cagrid.dorian.model.federation,
 							org.cagrid.dorian.policy,
 							org.cagrid.dorian.service,
-							org.cagrid.dorian.types
+							org.cagrid.dorian.model.exceptions
 						</Export-Package>
 						<Import-Package>
 							schema.org.cagrid.dorian,
 							org.cagrid.dorian,
 							org.cagrid.dorian.common,
-							org.cagrid.dorian.idp,
-							org.cagrid.dorian.ifs,
+							org.cagrid.dorian.model.idp,
+							org.cagrid.dorian.model.federation,
+							org.cagrid.dorian.model.exceptions,
 							org.cagrid.dorian.policy,
 							org.cagrid.dorian.service,
-							org.cagrid.dorian.types,
 							*
 						</Import-Package>
 					</instructions>

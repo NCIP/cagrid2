@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "NoSuchUserFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class NoSuchUserFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.NoSuchUserFault noSuchUserFault;
+    private org.cagrid.dorian.model.exceptions.NoSuchUserFault noSuchUserFault;
 
     public NoSuchUserFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class NoSuchUserFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public NoSuchUserFaultFaultMessage(String message, org.cagrid.dorian.types.NoSuchUserFault noSuchUserFault) {
+    public NoSuchUserFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.NoSuchUserFault noSuchUserFault) {
         super(message);
         this.noSuchUserFault = noSuchUserFault;
     }
 
-    public NoSuchUserFaultFaultMessage(String message, org.cagrid.dorian.types.NoSuchUserFault noSuchUserFault, Throwable cause) {
+    public NoSuchUserFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.NoSuchUserFault noSuchUserFault, Throwable cause) {
         super(message, cause);
         this.noSuchUserFault = noSuchUserFault;
     }
 
-    public org.cagrid.dorian.types.NoSuchUserFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.NoSuchUserFault getFaultInfo() {
         return this.noSuchUserFault;
     }
 }

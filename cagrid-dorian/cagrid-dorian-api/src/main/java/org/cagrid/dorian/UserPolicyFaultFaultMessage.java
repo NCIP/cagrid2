@@ -13,7 +13,7 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "UserPolicyFault", targetNamespace = "http://cagrid.nci.nih.gov/Dorian/types")
 public class UserPolicyFaultFaultMessage extends Exception {
     
-    private org.cagrid.dorian.types.UserPolicyFault userPolicyFault;
+    private org.cagrid.dorian.model.exceptions.UserPolicyFault userPolicyFault;
 
     public UserPolicyFaultFaultMessage() {
         super();
@@ -27,17 +27,17 @@ public class UserPolicyFaultFaultMessage extends Exception {
         super(message, cause);
     }
 
-    public UserPolicyFaultFaultMessage(String message, org.cagrid.dorian.types.UserPolicyFault userPolicyFault) {
+    public UserPolicyFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.UserPolicyFault userPolicyFault) {
         super(message);
         this.userPolicyFault = userPolicyFault;
     }
 
-    public UserPolicyFaultFaultMessage(String message, org.cagrid.dorian.types.UserPolicyFault userPolicyFault, Throwable cause) {
+    public UserPolicyFaultFaultMessage(String message, org.cagrid.dorian.model.exceptions.UserPolicyFault userPolicyFault, Throwable cause) {
         super(message, cause);
         this.userPolicyFault = userPolicyFault;
     }
 
-    public org.cagrid.dorian.types.UserPolicyFault getFaultInfo() {
+    public org.cagrid.dorian.model.exceptions.UserPolicyFault getFaultInfo() {
         return this.userPolicyFault;
     }
 }

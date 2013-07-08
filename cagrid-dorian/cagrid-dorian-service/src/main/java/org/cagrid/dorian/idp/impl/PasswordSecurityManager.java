@@ -13,9 +13,9 @@ import java.util.GregorianCalendar;
 
 import org.bouncycastle.util.encoders.Base64;
 import org.cagrid.core.common.FaultHelper;
-import org.cagrid.dorian.idp.PasswordSecurity;
-import org.cagrid.dorian.idp.PasswordStatus;
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
+import org.cagrid.dorian.model.idp.PasswordSecurity;
+import org.cagrid.dorian.model.idp.PasswordStatus;
 import org.cagrid.tools.database.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

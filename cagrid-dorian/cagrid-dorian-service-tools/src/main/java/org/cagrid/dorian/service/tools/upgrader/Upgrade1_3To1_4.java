@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 import org.cagrid.dorian.federation.impl.TrustedIdPManager;
 import org.cagrid.dorian.idp.impl.UserManager;
-import org.cagrid.dorian.ifs.TrustedIdP;
+import org.cagrid.dorian.model.federation.TrustedIdP;
 import org.cagrid.dorian.service.PropertyManager;
 import org.cagrid.tools.database.Database;
 

@@ -2,7 +2,7 @@ package org.cagrid.dorian.service.tools.upgrader;
 
 import java.util.ArrayList;
 
-import org.cagrid.dorian.types.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.AbstractResource;
 

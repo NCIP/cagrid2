@@ -177,17 +177,17 @@ public class UserSearchRequest
     {
 
         @XmlElement(name = "GridUserSearchCriteria", namespace = "http://cagrid.nci.nih.gov/1/dorian-ifs", required = true)
-        protected org.cagrid.dorian.ifs.GridUserSearchCriteria gridUserSearchCriteria;
+        protected org.cagrid.dorian.model.federation.GridUserSearchCriteria gridUserSearchCriteria;
 
         /**
          * Gets the value of the gridUserSearchCriteria property.
          * 
          * @return
          *     possible object is
-         *     {@link org.cagrid.dorian.ifs.GridUserSearchCriteria }
+         *     {@link org.cagrid.dorian.model.federation.GridUserSearchCriteria }
          *     
          */
-        public org.cagrid.dorian.ifs.GridUserSearchCriteria getGridUserSearchCriteria() {
+        public org.cagrid.dorian.model.federation.GridUserSearchCriteria getGridUserSearchCriteria() {
             return gridUserSearchCriteria;
         }
 
@@ -196,10 +196,10 @@ public class UserSearchRequest
          * 
          * @param value
          *     allowed object is
-         *     {@link org.cagrid.dorian.ifs.GridUserSearchCriteria }
+         *     {@link org.cagrid.dorian.model.federation.GridUserSearchCriteria }
          *     
          */
-        public void setGridUserSearchCriteria(org.cagrid.dorian.ifs.GridUserSearchCriteria value) {
+        public void setGridUserSearchCriteria(org.cagrid.dorian.model.federation.GridUserSearchCriteria value) {
             this.gridUserSearchCriteria = value;
         }
 
@@ -219,7 +219,7 @@ public class UserSearchRequest
 
         public StringBuilder appendFields(ObjectLocator locator, StringBuilder buffer, ToStringStrategy strategy) {
             {
-                org.cagrid.dorian.ifs.GridUserSearchCriteria theGridUserSearchCriteria;
+                org.cagrid.dorian.model.federation.GridUserSearchCriteria theGridUserSearchCriteria;
                 theGridUserSearchCriteria = this.getGridUserSearchCriteria();
                 strategy.appendField(locator, this, "gridUserSearchCriteria", buffer, theGridUserSearchCriteria);
             }
@@ -229,7 +229,7 @@ public class UserSearchRequest
         public int hashCode(ObjectLocator locator, HashCodeStrategy strategy) {
             int currentHashCode = 1;
             {
-                org.cagrid.dorian.ifs.GridUserSearchCriteria theGridUserSearchCriteria;
+                org.cagrid.dorian.model.federation.GridUserSearchCriteria theGridUserSearchCriteria;
                 theGridUserSearchCriteria = this.getGridUserSearchCriteria();
                 currentHashCode = strategy.hashCode(LocatorUtils.property(locator, "gridUserSearchCriteria", theGridUserSearchCriteria), currentHashCode, theGridUserSearchCriteria);
             }
@@ -250,9 +250,9 @@ public class UserSearchRequest
             }
             final UserSearchRequest.GridUserSearchCriteria that = ((UserSearchRequest.GridUserSearchCriteria) object);
             {
-                org.cagrid.dorian.ifs.GridUserSearchCriteria lhsGridUserSearchCriteria;
+                org.cagrid.dorian.model.federation.GridUserSearchCriteria lhsGridUserSearchCriteria;
                 lhsGridUserSearchCriteria = this.getGridUserSearchCriteria();
-                org.cagrid.dorian.ifs.GridUserSearchCriteria rhsGridUserSearchCriteria;
+                org.cagrid.dorian.model.federation.GridUserSearchCriteria rhsGridUserSearchCriteria;
                 rhsGridUserSearchCriteria = that.getGridUserSearchCriteria();
                 if (!strategy.equals(LocatorUtils.property(thisLocator, "gridUserSearchCriteria", lhsGridUserSearchCriteria), LocatorUtils.property(thatLocator, "gridUserSearchCriteria", rhsGridUserSearchCriteria), lhsGridUserSearchCriteria, rhsGridUserSearchCriteria)) {
                     return false;

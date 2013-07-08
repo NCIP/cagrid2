@@ -1,9 +1,9 @@
 package org.cagrid.dorian.federation.impl;
 
-import org.cagrid.dorian.ifs.GridUser;
-import org.cagrid.dorian.ifs.TrustedIdP;
-import org.cagrid.dorian.types.DorianInternalException;
-import org.cagrid.dorian.types.UserPolicyException;
+import org.cagrid.dorian.model.exceptions.DorianInternalException;
+import org.cagrid.dorian.model.exceptions.UserPolicyException;
+import org.cagrid.dorian.model.federation.GridUser;
+import org.cagrid.dorian.model.federation.TrustedIdP;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
