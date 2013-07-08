@@ -1,7 +1,6 @@
 package org.cagrid.core.resource;
 
 import org.cagrid.wsrf.properties.ResourceKey;
-import org.globus.util.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,8 +8,6 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
 
 public class SimpleResourceKey implements ResourceKey {
-
-    private static I18n i18n = I18n.getI18n(SimpleResourceKey.class.getName());
 
     private final Logger logger = LoggerFactory.getLogger(SimpleResourceKey.class.getName());
 
@@ -50,6 +47,7 @@ public class SimpleResourceKey implements ResourceKey {
     }
     
     public SOAPElement toSOAPElement() {
+    	System.out.println("!!! resource key " + name + " -> " + value);
             //TODO
         throw new RuntimeException("toSOAPElement not implemented");
     }
