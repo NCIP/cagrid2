@@ -29,6 +29,7 @@ import org.cagrid.cds.wsrf.stubs.CredentialDelegationServicePortType;
 import org.cagrid.cds.wsrf.stubs.InitiateDelegationRequest;
 import org.cagrid.cds.wsrf.stubs.InitiateDelegationRequest.Req;
 import org.cagrid.cds.wsrf.stubs.InitiateDelegationResponse;
+import org.cagrid.core.common.JAXBUtils;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.delegatedcredential.types.DelegatedCredentialReference;
 import org.cagrid.dorian.DorianPortType;
@@ -214,7 +215,12 @@ public class CDSIT extends TestBase {
 		DelegatedCredentialReference delegatedCredentialReference = approveDelegationResponse.getDelegatedCredentialReference();
 		Assert.assertNotNull(delegatedCredentialReference);
 		
-		System.out.println(delegatedCredentialReference.getEndpointReference());
+		JAXBUtils.marshal(delegatedCredentialReference.getEndpointReference());
+		
+		//TODO: use the DelegatedCredential client to get the delegatedCredential
+		//DelegatedCredentialPortType.getDelegatedCredential(epr)
+		
+		
 	}
 
 	private UserInfo createLocalUser(DorianPortType dorianSoap, String userId,
