@@ -92,7 +92,7 @@ public class TestDorian extends TestCase {
 		try {
 			// initialize a Dorian object
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 
 			String gridSubject = getDorianIdPUserId(conf, dorian, DorianImpl.IDP_ADMIN_USER_ID);
@@ -196,7 +196,7 @@ public class TestDorian extends TestCase {
 	public void testFindUpdateRemoveIdPUser() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 
 			assertNotNull(dorian.getDatabase());
@@ -302,7 +302,7 @@ public class TestDorian extends TestCase {
 		try {
 
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 			BasicAuthentication auth = new BasicAuthentication();
@@ -333,7 +333,7 @@ public class TestDorian extends TestCase {
 	public void testRemoveDorianIdPDefaultAdmin() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian, DorianImpl.IDP_ADMIN_USER_ID);
@@ -386,7 +386,7 @@ public class TestDorian extends TestCase {
 			assertTrue(found1);
 			assertTrue(found2);
 			dorian.removeLocalUser(userGridId, DorianImpl.IDP_ADMIN_USER_ID);
-			DorianImpl dorian2 = new DorianImpl(conf, null);
+			DorianImpl dorian2 = new DorianImpl(conf);
 			dorian2.initialize();
 			assertEquals(1, dorian2.findGridUsers(userGridId, null).length);
 			assertEquals(0, dorian2.findGridUsers(userGridId, uf).length);
@@ -421,7 +421,7 @@ public class TestDorian extends TestCase {
 	public void testSuspendDorianIdPDefaultAdmin() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian, DorianImpl.IDP_ADMIN_USER_ID);
@@ -467,7 +467,7 @@ public class TestDorian extends TestCase {
 			list2[0].setStatus(LocalUserStatus.SUSPENDED);
 			dorian.updateLocalUser(userGridId, list2[0]);
 
-			DorianImpl dorian2 = new DorianImpl(conf, null);
+			DorianImpl dorian2 = new DorianImpl(conf);
 			dorian2.initialize();
 			try {
 				dorian2.findLocalUsers(gridId, null);
@@ -502,7 +502,7 @@ public class TestDorian extends TestCase {
 	public void testMembershipRemovalOnIdPUserRemoval() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian, DorianImpl.IDP_ADMIN_USER_ID);
@@ -575,7 +575,7 @@ public class TestDorian extends TestCase {
 	public void testMembershipRemovalOnUserRemoval() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 			String gridSubject = getDorianIdPUserId(conf, dorian, DorianImpl.IDP_ADMIN_USER_ID);
@@ -635,7 +635,7 @@ public class TestDorian extends TestCase {
 	public void testAutoApproval() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 
@@ -676,7 +676,7 @@ public class TestDorian extends TestCase {
 	public void testManualApproval() {
 		try {
 			DorianProperties conf = Utils.getDorianProperties();
-			dorian = new DorianImpl(conf, null);
+			dorian = new DorianImpl(conf);
 			dorian.initialize();
 			assertNotNull(dorian.getDatabase());
 

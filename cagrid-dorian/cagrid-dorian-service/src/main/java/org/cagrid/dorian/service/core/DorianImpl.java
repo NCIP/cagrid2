@@ -1,34 +1,19 @@
 package org.cagrid.dorian.service.core;
 
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.core.common.JAXBUtils;
-import org.cagrid.core.resource.ExternalSingletonResourceProperty;
-import org.cagrid.core.resource.ExternalSingletonResourcePropertyValue;
-import org.cagrid.core.resource.JAXBResourceProperties;
-import org.cagrid.core.resource.JAXBResourcePropertySupport;
-import org.cagrid.core.resource.ResourceImpl;
-import org.cagrid.core.resource.ResourcePropertyDescriptor;
-import org.cagrid.core.resource.SingletonResourceHomeImpl;
-import org.cagrid.dorian.DorianResourceProperties;
 import org.cagrid.dorian.common.AuditConstants;
 import org.cagrid.dorian.common.SAMLConstants;
 import org.cagrid.dorian.model.exceptions.DorianInternalException;
@@ -93,26 +78,17 @@ import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.database.DatabaseException;
 import org.cagrid.tools.events.EventManager;
-import org.cagrid.wsrf.properties.ResourceHome;
-import org.cagrid.wsrf.properties.ResourceProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 
 public class DorianImpl implements Dorian {
 
 	public static final String IDP_ADMIN_USER_ID = "dorian";
 	public static final String IDP_ADMIN_PASSWORD = "DorianAdmin$1";
 
-	private final static String AUTHENTICATION_PROFILES_PREFIX = "gauth";
-
 	private final static Logger log = LoggerFactory.getLogger(DorianImpl.class);
 
-	private final ResourceImpl resource = new ResourceImpl(null);
-	private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
-
 	private final DorianProperties dorianProperties;
-	private final Map<String, String> jaxbResourcePropertiesMap;
 
 	private EventManager eventManager;
 	private Database db;
@@ -122,12 +98,8 @@ public class DorianImpl implements Dorian {
 	private IdentityFederationProperties ifsConfiguration;
 	private IdentityFederationManager ifm;
 
-	private ResourceProperty<ServiceMetadata> serviceMetadataResourceProperty;
-	private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
-
-	public DorianImpl(DorianProperties dorianProperties, Map<String, String> jaxbResourcePropertiesMap) {
+	public DorianImpl(DorianProperties dorianProperties) {
 		this.dorianProperties = dorianProperties;
-		this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
 	}
 
 	public Database getDatabase() {
@@ -423,65 +395,11 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public ServiceMetadata getServiceMetadata() {
-		return (serviceMetadataResourceProperty != null) ? serviceMetadataResourceProperty.get(0) : null;
-	}
-
-	@Override
 	public AuthenticationProfiles getAuthenticationProfiles() {
 		AuthenticationProfiles authProfiles = new AuthenticationProfiles();
 		QName basicAuthenticationQName = JAXBUtils.getQName(BasicAuthentication.class);
 		authProfiles.getProfile().add(basicAuthenticationQName);
 		return authProfiles;
-	}
-
-	/*
-	 * The client-side reconstruction of QNames from the getResourceProperty
-	 * response is broken. It depends on the namespace prefix in the 'profile'
-	 * element content being the same as in the element tag. To try to work
-	 * around this, regenerate the appropriate QNames with a specific prefix and
-	 * marshal the container with that prefix. The final response probably won't
-	 * have the prefix used here, but the necessary prefixes should agree.
-	 */
-	private Element getAuthenticationProfilesElement() {
-		AuthenticationProfiles authProfiles = getAuthenticationProfiles();
-		QName authProfilesQName = JAXBUtils.getQName(AuthenticationProfiles.class);
-		String authProfilesNamespace = authProfilesQName.getNamespaceURI();
-
-		// New QName for marshalling
-		authProfilesQName = new QName(authProfilesNamespace, authProfilesQName.getLocalPart(), AUTHENTICATION_PROFILES_PREFIX);
-
-		// New QName elements
-		List<QName> oldQNames = authProfiles.getProfile();
-		List<QName> newQNames = new ArrayList<QName>(oldQNames.size());
-		for (QName oldQName : oldQNames) {
-			QName newQName = oldQName;
-			if (authProfilesNamespace.equals(oldQName.getNamespaceURI())) {
-				newQName = new QName(authProfilesNamespace, oldQName.getLocalPart(), AUTHENTICATION_PROFILES_PREFIX);
-			}
-			newQNames.add(newQName);
-		}
-		oldQNames.clear();
-		oldQNames.addAll(newQNames);
-
-		// Marshal to element with, hopefully, consistent prefixes.
-		Element authProfilesElement = null;
-		try {
-			authProfilesElement = JAXBUtils.marshalToElement(authProfiles, authProfilesQName);
-		} catch (Exception e) {
-			log.error("Exception marshalling AuthenticationProfiles", e);
-		}
-		return authProfilesElement;
-	}
-
-	@Override
-	public ResourceHome getResourceHome() {
-		return resourceHome;
-	}
-
-	@Override
-	public ServiceSecurityMetadata getServiceSecurityMetadata() {
-		return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty.get(0) : null;
 	}
 
 	public void initialize() throws JAXBException, DatabaseException, DorianInternalException, IOException {
@@ -551,97 +469,5 @@ public class DorianImpl implements Dorian {
 			throw fault;
 		}
 
-		// What resource properties should we know about?
-		Collection<ResourcePropertyDescriptor<?>> resourcePropertyDescriptors = ResourcePropertyDescriptor.analyzeResourcePropertiesHolder(DorianResourceProperties.class);
-
-		// Map them by field.
-		Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor.mapByField(resourcePropertyDescriptors);
-
-		// Load the static jaxb resource properties.
-		if (jaxbResourcePropertiesMap != null) {
-			JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(getClass().getClassLoader(), descriptorsByField, jaxbResourcePropertiesMap);
-
-			// The serviceMetadata property is static.
-			@SuppressWarnings("unchecked")
-			ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField.get("serviceMetadata");
-			if (serviceMetadataDescriptor != null) {
-				@SuppressWarnings("unchecked")
-				ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties.getResourceProperties().get(serviceMetadataDescriptor);
-				serviceMetadataResourceProperty = resourceProperty;
-				resource.add(serviceMetadataResourceProperty);
-			}
-
-			// The rest of the properties are callbacks.
-			@SuppressWarnings("unchecked")
-			ResourcePropertyDescriptor<AuthenticationProfiles> authenticationProfilesDescriptor = (ResourcePropertyDescriptor<AuthenticationProfiles>) descriptorsByField.get("authenticationProfiles");
-			if (authenticationProfilesDescriptor != null) {
-				// Must treat auth profiles as Element!
-				ResourcePropertyDescriptor<Element> authenticationProfilesElementDescriptor = new ResourcePropertyDescriptor<Element>(authenticationProfilesDescriptor.getResourcePropertyQName(),
-						Element.class, authenticationProfilesDescriptor.getFieldName());
-
-				ExternalSingletonResourcePropertyValue<Element> propertyValue = new ExternalSingletonResourcePropertyValue<Element>() {
-					@Override
-					public Element getPropertyValue() {
-						return getAuthenticationProfilesElement();
-					}
-				};
-				ResourceProperty<Element> resourceProperty = new ExternalSingletonResourceProperty<Element>(authenticationProfilesElementDescriptor, propertyValue);
-				resource.add(resourceProperty);
-			}
-
-			@SuppressWarnings("unchecked")
-			ResourcePropertyDescriptor<TrustedIdentityProviders> trustedIdentityProvidersDescriptor = (ResourcePropertyDescriptor<TrustedIdentityProviders>) descriptorsByField
-					.get("trustedIdentityProviders");
-			if (trustedIdentityProvidersDescriptor != null) {
-				ExternalSingletonResourcePropertyValue<TrustedIdentityProviders> propertyValue = new ExternalSingletonResourcePropertyValue<TrustedIdentityProviders>() {
-					@Override
-					public TrustedIdentityProviders getPropertyValue() {
-						TrustedIdentityProviders trustedIdentityProviders = null;
-						try {
-							trustedIdentityProviders = getTrustedIdentityProviders();
-						} catch (DorianInternalException ignored) {
-						}
-						return trustedIdentityProviders;
-					}
-				};
-				ResourceProperty<TrustedIdentityProviders> resourceProperty = new ExternalSingletonResourceProperty<TrustedIdentityProviders>(trustedIdentityProvidersDescriptor, propertyValue);
-				resource.add(resourceProperty);
-			}
-
-			@SuppressWarnings("unchecked")
-			ResourcePropertyDescriptor<DorianPolicy> dorianPolicyDescriptor = (ResourcePropertyDescriptor<DorianPolicy>) descriptorsByField.get("dorianPolicy");
-			if (dorianPolicyDescriptor != null) {
-				ExternalSingletonResourcePropertyValue<DorianPolicy> propertyValue = new ExternalSingletonResourcePropertyValue<DorianPolicy>() {
-					@Override
-					public DorianPolicy getPropertyValue() {
-						return getDorianPolicy();
-					}
-				};
-				ResourceProperty<DorianPolicy> resourceProperty = new ExternalSingletonResourceProperty<DorianPolicy>(dorianPolicyDescriptor, propertyValue);
-				resource.add(resourceProperty);
-			}
-
-			/*
-			 * ServiceSecurityMetadata isn't a resource property, but use that
-			 * framework to handle it.
-			 */
-			String serviceSecurityMetadataURLString = jaxbResourcePropertiesMap.get("serviceSecurityMetadata");
-			if (serviceSecurityMetadataURLString != null) {
-				URL url = null;
-				try {
-					url = new URL(serviceSecurityMetadataURLString);
-				} catch (MalformedURLException ignored) {
-				}
-				if (url == null) {
-					url = getClass().getClassLoader().getResource(serviceSecurityMetadataURLString);
-				}
-				if (url != null) {
-					QName serviceSecurityMetadataQName = new QName(DorianImpl.class.getName(), "serviceSecurityMetadata");
-					ResourcePropertyDescriptor<ServiceSecurityMetadata> serviceSecurityMetadataDescriptor = new ResourcePropertyDescriptor<ServiceSecurityMetadata>(serviceSecurityMetadataQName,
-							ServiceSecurityMetadata.class, "serviceSecurityMetadata");
-					serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport.createJAXBResourceProperty(serviceSecurityMetadataDescriptor, url);
-				}
-			}
-		}
 	}
 }

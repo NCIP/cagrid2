@@ -6,24 +6,14 @@ import java.io.ByteArrayInputStream;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 
-import javax.xml.namespace.QName;
-
 import org.cagrid.core.common.JAXBUtils;
-import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.dorian.model.federation.CertificateLifetime;
-import org.cagrid.dorian.model.federation.TrustedIdentityProviders;
 import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.gaards.authentication.AuthenticateUserRequest;
 import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.saml.encoding.SAMLUtils;
-import org.cagrid.wsrf.properties.InvalidResourceKeyException;
-import org.cagrid.wsrf.properties.NoSuchResourceException;
-import org.cagrid.wsrf.properties.ResourceException;
-import org.cagrid.wsrf.properties.ResourceHome;
-import org.cagrid.wsrf.properties.ResourceProperty;
-import org.cagrid.wsrf.properties.ResourcePropertySet;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,28 +34,6 @@ public class DorianImplTest {
 		Assert.assertNotNull(dorian);
 	}
 
-	@Test
-	public void testGetServiceMetadata() {
-		Assert.assertNotNull(dorian.getServiceMetadata());
-	}
-
-	@Test
-	public void testGetServiceSecurityMetadata() {
-		Assert.assertNotNull(dorian.getServiceSecurityMetadata());
-	}
-
-	@Test
-	public void testGetTrustedIdentityProviders() throws DorianInternalException, NoSuchResourceException, InvalidResourceKeyException, ResourceException {
-		Assert.assertNotNull(dorian.getTrustedIdentityProviders());
-
-		ResourceHome resourceHome = dorian.getResourceHome();
-		ResourcePropertySet resourceImpl = (ResourcePropertySet) resourceHome.find(null);
-		@SuppressWarnings("unchecked")
-		ResourceProperty<TrustedIdentityProviders> trustedIdentityProvidersProperty = (ResourceProperty<TrustedIdentityProviders>) resourceImpl.get(new QName("http://cagrid.nci.nih.gov/1/dorian-ifs",
-				"TrustedIdentityProviders"));
-		TrustedIdentityProviders trustedIdentityProviders = trustedIdentityProvidersProperty.get(0);
-		Assert.assertNotNull(trustedIdentityProviders);
-	}
 
 	@Test
 	public void testAuthenticate() throws Exception {

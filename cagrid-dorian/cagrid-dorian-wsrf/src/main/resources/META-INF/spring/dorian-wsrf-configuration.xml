@@ -38,16 +38,27 @@
 	<bean id="legacyProxySslContextFactory"
 		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
 		<property name="keyStorePath" value="${cagrid.dorian.legacy-wsrf.keystore.path}" />
-		<property name="keyStorePassword" value="${cagrid.dorian.legacy-wsrf.keystore.password}" />
+		<property name="keyStorePassword"
+			value="${cagrid.dorian.legacy-wsrf.keystore.password}" />
 		<property name="keyManagerPassword" value="${cagrid.dorian.legacy-wsrf.key.password}" />
 		<property name="trustStore" value="${cagrid.dorian.legacy-wsrf.truststore.path}" />
-		<property name="trustStorePassword" value="${cagrid.dorian.legacy-wsrf.truststore.password}" />
+		<property name="trustStorePassword"
+			value="${cagrid.dorian.legacy-wsrf.truststore.password}" />
 		<property name="wantClientAuth" value="true" />
 		<property name="needClientAuth" value="false" />
 		<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
 	</bean>
 
-<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
+	<bean id="jaxbResourceProperties" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="serviceMetadata" value="${cagrid.dorian.wsrf.metadata.url}" />
+				<entry key="serviceSecurityMetadata" value="${cagrid.dorian.wsrf.security.metadata.url}" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.dorian.wsrf.port}">
 			<httpj:tlsServerParameters />
@@ -63,7 +74,8 @@
 			<httpj:tlsServerParameters />
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="legacyProxySslContextFactory" />
+					<constructor-arg index="0"
+						ref="legacyProxySslContextFactory" />
 					<property name="port" value="${cagrid.dorian.legacy-wsrf.port}" />
 				</bean>
 			</httpj:connector>
@@ -79,14 +91,29 @@
 		</entry>
 	</util:map>
 
+	<bean id="dorianOverloader"
+		class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
+		<constructor-arg index="0" value="${cagrid.dorian.wsrf.trusted.idp.mapping}" />
+	</bean>
+	
+	<bean id="dorianLegacyOverloader"
+		class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
+		<constructor-arg index="0" value="${cagrid.dorian.legacy-wsrf.trusted.idp.mapping}" />
+	</bean>
+	
+
 	<bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
 		<constructor-arg index="0" ref="dorianService" />
 		<constructor-arg index="1" value="SHA2" />
+		<constructor-arg index="2" ref="jaxbResourceProperties" />
+		<constructor-arg index="3" ref="dorianOverloader" />
 	</bean>
 
 	<bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
 		<constructor-arg index="0" ref="dorianService" />
 		<constructor-arg index="1" value="SHA1" />
+		<constructor-arg index="2" ref="jaxbResourceProperties" />
+		<constructor-arg index="3" ref="dorianLegacyOverloader" />
 	</bean>
 
 	<bean id="dummyLegacyDorianWSRF" class="org.cagrid.dorian.DorianPortTypeImpl">

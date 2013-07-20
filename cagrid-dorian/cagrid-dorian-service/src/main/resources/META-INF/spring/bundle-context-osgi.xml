@@ -90,8 +90,6 @@
 		<prop key="cagrid.dorian.service.legacy-ca.auto.renew.lifetime.hours">0</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.auto.renew.lifetime.minutes">0</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.auto.renew.lifetime.seconds">0</prop>
-		<prop key="cagrid.dorian.service.metadata.url">serviceMetadata.xml</prop>
-		<prop key="cagrid.dorian.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />

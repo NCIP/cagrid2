@@ -277,19 +277,10 @@
 		<constructor-arg index="4" ref="eventManager" />
 	</bean>
 
-	<bean id="jaxbResourceProperties" class="java.util.HashMap">
-		<constructor-arg>
-			<map>
-				<entry key="serviceMetadata" value="${cagrid.dorian.service.metadata.url}" />
-				<entry key="serviceSecurityMetadata" value="${cagrid.dorian.service.security.metadata.url}" />
-			</map>
-		</constructor-arg>
-	</bean>
 
 	<bean id="dorian" class="org.cagrid.dorian.service.core.DorianImpl"
 		init-method="initialize">
 		<constructor-arg index="0" ref="dorianProperties" />
-		<constructor-arg index="1" ref="jaxbResourceProperties" />
 	</bean>
 
 
