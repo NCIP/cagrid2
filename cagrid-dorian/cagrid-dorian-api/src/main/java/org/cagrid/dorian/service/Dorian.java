@@ -105,12 +105,13 @@ public interface Dorian {
 
 	public String[] getAdmins(String callerGridIdentity) throws RemoteException, DorianInternalException, PermissionDeniedException;
 
-	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException,
-			InvalidHostCertificateException, PermissionDeniedException;
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req, CertificateSignatureAlgorithm alg) throws DorianInternalException,
+			InvalidHostCertificateRequestException, InvalidHostCertificateException, PermissionDeniedException;
 
 	public HostCertificateRecord[] getOwnedHostCertificates(String callerGridId) throws DorianInternalException, PermissionDeniedException;
 
-	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException;
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId, CertificateSignatureAlgorithm alg) throws DorianInternalException, InvalidHostCertificateException,
+			PermissionDeniedException;
 
 	public HostCertificateRecord[] findHostCertificates(String callerGridId, HostCertificateFilter hostCertificateFilter) throws DorianInternalException, PermissionDeniedException;
 

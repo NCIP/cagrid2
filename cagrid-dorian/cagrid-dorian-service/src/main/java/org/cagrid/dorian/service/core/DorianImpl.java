@@ -12,6 +12,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.lang.StringUtils;
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.core.common.JAXBUtils;
 import org.cagrid.dorian.common.AuditConstants;
@@ -257,9 +258,9 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException,
-			InvalidHostCertificateException, PermissionDeniedException {
-		return ifm.requestHostCertificate(callerGridId, req);
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req, CertificateSignatureAlgorithm alg) throws DorianInternalException,
+			InvalidHostCertificateRequestException, InvalidHostCertificateException, PermissionDeniedException {
+		return ifm.requestHostCertificate(callerGridId, req, alg);
 	}
 
 	@Override
@@ -268,8 +269,9 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
-		return ifm.approveHostCertificate(callerGridId, recordId);
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId, CertificateSignatureAlgorithm alg) throws DorianInternalException, InvalidHostCertificateException,
+			PermissionDeniedException {
+		return ifm.approveHostCertificate(callerGridId, recordId, alg);
 	}
 
 	@Override
@@ -459,8 +461,17 @@ public class DorianImpl implements Dorian {
 
 		ifsConfiguration = dorianProperties.getIdentityFederationProperties();
 		FederationDefaults defaults = new FederationDefaults(idp, usr);
-		// TODO
-		final boolean ignoreCRL = false;
+		boolean ignoreCRL = true;
+
+		List<String> crls = ifsConfiguration.getCRLPublishingList();
+		if (crls != null) {
+			for (String crl : crls) {
+				if (!StringUtils.isBlank(crl)) {
+					ignoreCRL = false;
+				}
+			}
+		}
+
 		ifm = new IdentityFederationManager(ifsConfiguration, db, propertyManager, caManager, this.eventManager, defaults, ignoreCRL);
 
 		if (!propertyManager.getVersion().equals(PropertyManager.CURRENT_VERSION)) {

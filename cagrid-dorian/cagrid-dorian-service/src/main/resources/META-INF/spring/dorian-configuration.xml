@@ -131,7 +131,6 @@
 				<ref bean="legacyCertificateAuthority" />
 			</list>
 		</constructor-arg>
-
 	</bean>
 
 	<bean id="certificateAuthority" class="org.cagrid.dorian.service.ca.DBCertificateAuthority">

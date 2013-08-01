@@ -32,6 +32,7 @@ public class TrustedIdPMetadataOverloader {
 	}
 
 	private void parseProperties(String properties) {
+		logger.debug("Properties " + properties);
 		StringTokenizer st = new StringTokenizer(properties, SET_DELIM);
 		while (st.hasMoreTokens()) {
 			String set = st.nextToken();
@@ -41,6 +42,7 @@ public class TrustedIdPMetadataOverloader {
 			String identity = null;
 			if (st2.hasMoreTokens()) {
 				name = st2.nextToken();
+				logger.debug("Name " + name);
 				if (st2.hasMoreTokens()) {
 					url = st2.nextToken();
 					if (st2.hasMoreTokens()) {

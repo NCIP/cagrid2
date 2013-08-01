@@ -33,6 +33,8 @@
 					</instructions>
 				</configuration>
 			</plugin>
+
+
 		</plugins>
 	</build>
 
@@ -49,5 +51,10 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-proxy-trust</artifactId>
 		</dependency>
+
+		
 	</dependencies>
+
+
+
 </project>

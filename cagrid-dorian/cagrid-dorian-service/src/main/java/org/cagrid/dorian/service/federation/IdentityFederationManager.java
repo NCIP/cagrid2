@@ -844,8 +844,8 @@ public class IdentityFederationManager implements Publisher {
 	// ///////////////////////////////
 	/* HOST CERTIFICATE OPERATIONS */
 	// ///////////////////////////////
-	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException,
-			InvalidHostCertificateException, PermissionDeniedException {
+	public HostCertificateRecord requestHostCertificate(String callerGridId, HostCertificateRequest req, CertificateSignatureAlgorithm alg) throws DorianInternalException,
+			InvalidHostCertificateRequestException, InvalidHostCertificateException, PermissionDeniedException {
 		try {
 			GridUser caller = getUser(callerGridId);
 			verifyActiveUser(caller);
@@ -853,7 +853,7 @@ public class IdentityFederationManager implements Publisher {
 			this.eventManager.logEvent(String.valueOf(id), callerGridId, FederationAudit.HOST_CERTIFICATE_REQUESTED.value(), "Host certificate requested for " + req.getHostname() + ".");
 			HostCertificateRecord record = null;
 			if (this.conf.autoHostCertificateApproval()) {
-				record = hostManager.approveHostCertifcate(id);
+				record = hostManager.approveHostCertifcate(id, alg);
 				this.eventManager.logEvent(String.valueOf(id), AuditConstants.SYSTEM_ID, FederationAudit.HOST_CERTIFICATE_APPROVED.value(), "The host certificate for the host " + req.getHostname()
 						+ " was automatically approved.");
 			} else {
@@ -895,12 +895,13 @@ public class IdentityFederationManager implements Publisher {
 		}
 	}
 
-	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
+	public HostCertificateRecord approveHostCertificate(String callerGridId, long recordId, CertificateSignatureAlgorithm alg) throws DorianInternalException, InvalidHostCertificateException,
+			PermissionDeniedException {
 		try {
 			GridUser caller = getUser(callerGridId);
 			verifyActiveUser(caller);
 			verifyAdminUser(caller);
-			HostCertificateRecord record = hostManager.approveHostCertifcate(recordId);
+			HostCertificateRecord record = hostManager.approveHostCertifcate(recordId, alg);
 			this.eventManager.logEvent(String.valueOf(recordId), callerGridId, FederationAudit.HOST_CERTIFICATE_APPROVED.value(), "The host certificate for the host " + record.getHost()
 					+ " was approved by " + callerGridId + ".");
 			return record;
@@ -1033,7 +1034,7 @@ public class IdentityFederationManager implements Publisher {
 										String uri = services.get(i);
 										try {
 											logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
-											GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);			
+											GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
 											UpdateCRLRequest req = new UpdateCRLRequest();
 											req.setTrustedAuthorityName(issuer);
 											UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();

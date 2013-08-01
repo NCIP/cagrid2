@@ -3,6 +3,9 @@ package org.cagrid.dorian.service.tools.upgrader;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.bouncycastle.asn1.x509.X509Name;
 import org.cagrid.dorian.service.PropertyManager;
@@ -125,9 +128,17 @@ public class Upgrade1_4To2_0 extends Upgrade {
 
 				KeyPair pair = new KeyPair(legacyCert.getPublicKey(), key);
 
-				// TODO: Decide on the dates for the upgrade
-				X509Certificate cacert = CertUtil.generateCACertificate("BC", new X509Name(caProperties.getCreationPolicy().getSubject()), legacyCert.getNotBefore(), legacyCert.getNotAfter(), pair,
-						CertUtil.SHA2_SIGNATURE_ALGORITHM);
+				Date now = new Date();
+				Calendar c = new GregorianCalendar();
+				c.add(Calendar.YEAR, caProperties.getCreationPolicy().getLifetime().getYears());
+				c.add(Calendar.MONTH, caProperties.getCreationPolicy().getLifetime().getMonths());
+				c.add(Calendar.DATE, caProperties.getCreationPolicy().getLifetime().getMonths());
+				c.add(Calendar.HOUR, caProperties.getCreationPolicy().getLifetime().getDays());
+				c.add(Calendar.MINUTE, caProperties.getCreationPolicy().getLifetime().getMinutes());
+				c.add(Calendar.SECOND, caProperties.getCreationPolicy().getLifetime().getSeconds());
+				Date end = c.getTime();
+
+				X509Certificate cacert = CertUtil.generateCACertificate("BC", new X509Name(caProperties.getCreationPolicy().getSubject()), now, end, pair, CertUtil.SHA2_SIGNATURE_ALGORITHM);
 				System.out.println(cacert.getSubjectDN().getName());
 				String certStr = CertUtil.writeCertificate(cacert);
 				getBeanUtils().getDatabase().update(

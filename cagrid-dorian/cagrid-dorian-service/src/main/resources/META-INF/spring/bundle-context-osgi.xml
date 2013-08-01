@@ -24,7 +24,7 @@
 		<prop key="cagrid.dorian.service.idp.renew.asserting.credentials">true</prop>
 		<prop key="cagrid.dorian.service.idp.asserting.credentials.password">idpkey</prop>
 		<prop key="cagrid.dorian.service.idp.min.uid">4</prop>
-		<prop key="cagrid.dorian.service.idp.max.uid">10</prop>
+		<prop key="cagrid.dorian.service.idp.max.uid">15</prop>
 		<prop key="cagrid.dorian.service.idp.password.min.length">10</prop>
 		<prop key="cagrid.dorian.service.idp.password.max.length">20</prop>
 		<prop key="cagrid.dorian.service.idp.password.lock.hours">4</prop>
@@ -32,23 +32,23 @@
 		<prop key="cagrid.dorian.service.idp.password.lock.seconds">0</prop>
 		<prop key="cagrid.dorian.service.idp.password.cons.invalid.login">5</prop>
 		<prop key="cagrid.dorian.service.idp.password.max.invalid.login">500</prop>
-		<prop key="cagrid.dorian.service.idp.account.modification.policy">Admin</prop>
+		<prop key="cagrid.dorian.service.idp.account.modification.policy">User</prop>
 		<prop key="cagrid.dorian.service.federation.identity.policy">name</prop>
 		<prop key="cagrid.dorian.service.federation.min.idp.name.length">3</prop>
-		<prop key="cagrid.dorian.service.federation.max.idp.name.length">50</prop>
-		<prop key="cagrid.dorian.service.federation.certificate.lifetime.years">1</prop>
+		<prop key="cagrid.dorian.service.federation.max.idp.name.length">60</prop>
+		<prop key="cagrid.dorian.service.federation.certificate.lifetime.years">5</prop>
 		<prop key="cagrid.dorian.service.federation.certificate.lifetime.months">0</prop>
 		<prop key="cagrid.dorian.service.federation.certificate.lifetime.days">0</prop>
 		<prop key="cagrid.dorian.service.federation.certificate.lifetime.hours">0</prop>
 		<prop key="cagrid.dorian.service.federation.certificate.lifetime.minutes">0</prop>
 		<prop key="cagrid.dorian.service.federation.certificate.lifetime.seconds">0</prop>
-		<prop key="cagrid.dorian.service.federation.auto.host.certificate.approval">false</prop>
+		<prop key="cagrid.dorian.service.federation.auto.host.certificate.approval">true</prop>
 		<prop key="cagrid.dorian.service.federation.host.certificate.renewal.policy">Admin</prop>
 		<prop key="cagrid.dorian.service.federation.user.certificate.lifetime.hours">12</prop>
 		<prop key="cagrid.dorian.service.federation.user.certificate.lifetime.minutes">0</prop>
 		<prop key="cagrid.dorian.service.federation.user.certificate.lifetime.seconds">0</prop>
-		<prop key="cagrid.dorian.service.federation.user.search.policy">Admin</prop>
-		<prop key="cagrid.dorian.service.federation.host.search.policy">Admin</prop>
+		<prop key="cagrid.dorian.service.federation.user.search.policy">Public</prop>
+		<prop key="cagrid.dorian.service.federation.host.search.policy">Public</prop>
 		<prop key="cagrid.dorian.service.federation.crl.publish"></prop>
 		<prop key="cagrid.dorian.service.ca.db.alias">dorianca</prop>
 		<prop key="cagrid.dorian.service.ca.password">admin</prop>
@@ -57,7 +57,7 @@
 		<prop key="cagrid.dorian.service.ca.auto.create">true</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.subject">C=US,O=abc,OU=xyz,OU=caGrid,CN=caGrid Dorian CA</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.key.size">2048</prop>
-		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.years">10</prop>
+		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.years">25</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.months">0</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.days">0</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.lifetime.hours">0</prop>

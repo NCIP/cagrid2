@@ -175,7 +175,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "myhost.example.com";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			HostSearchCriteria criteria = new HostSearchCriteria();
 			criteria.setHostname(host);
@@ -231,7 +231,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "myhost.example.com";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			HostSearchCriteria criteria = new HostSearchCriteria();
 			criteria.setHostname(host);
@@ -288,7 +288,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "myhost.example.com";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			HostSearchCriteria criteria = new HostSearchCriteria();
 			criteria.setHostname(host);
@@ -439,14 +439,14 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 			assertEquals(HostCertificateStatus.PENDING, record.getStatus());
 			assertEquals(null, record.getCertificate());
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr.getGridId(), FederationAudit.HOST_CERTIFICATE_REQUESTED);
 
 			String subject = org.cagrid.dorian.service.util.Utils.getHostCertificateSubject(ca.getDefaultCertificateAuthority().getCACertificate(), host);
-			record = ifs.approveHostCertificate(adminGridId, record.getId());
+			record = ifs.approveHostCertificate(adminGridId, record.getId(), CertificateSignatureAlgorithm.SHA2);
 			assertEquals(HostCertificateStatus.ACTIVE, record.getStatus());
 			;
 			assertEquals(subject, record.getSubject());
@@ -478,7 +478,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 			String subject = org.cagrid.dorian.service.util.Utils.getHostCertificateSubject(ca.getDefaultCertificateAuthority().getCACertificate(), host);
 			assertEquals(HostCertificateStatus.ACTIVE, record.getStatus());
 			;
@@ -514,7 +514,7 @@ public class TestIdentityFederationManager extends TestCase {
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
 			try {
-				ifs.requestHostCertificate("bad user", req);
+				ifs.requestHostCertificate("bad user", req, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed.");
 			} catch (PermissionDeniedException f) {
 
@@ -547,7 +547,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 			assertEquals(HostCertificateStatus.PENDING, record.getStatus());
 			assertEquals(null, record.getCertificate());
 
@@ -555,7 +555,7 @@ public class TestIdentityFederationManager extends TestCase {
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr.getGridId(), FederationAudit.HOST_CERTIFICATE_REQUESTED);
 
 			try {
-				ifs.approveHostCertificate("bad subject", record.getId());
+				ifs.approveHostCertificate("bad subject", record.getId(), CertificateSignatureAlgorithm.SHA2);
 			} catch (PermissionDeniedException f) {
 
 			}
@@ -592,7 +592,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			for (int i = 0; i < total; i++) {
 				HostCertificateRequest req = getHostCertificateRequest(hostPrefix + i);
-				String hostId = String.valueOf(ifs.requestHostCertificate(usr.getGridId(), req).getId());
+				String hostId = String.valueOf(ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2).getId());
 				performAndValidateSingleAudit(ifs, adminGridId, hostId, usr.getGridId(), FederationAudit.HOST_CERTIFICATE_REQUESTED);
 				performAndValidateSingleAudit(ifs, adminGridId, hostId, AuditConstants.SYSTEM_ID, FederationAudit.HOST_CERTIFICATE_APPROVED);
 			}
@@ -690,7 +690,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 			String subject = org.cagrid.dorian.service.util.Utils.getHostCertificateSubject(ca.getDefaultCertificateAuthority().getCACertificate(), host);
 			assertEquals(HostCertificateStatus.ACTIVE, record.getStatus());
 			;
@@ -769,7 +769,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 			String hostId = String.valueOf(record.getId());
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr.getGridId(), FederationAudit.HOST_CERTIFICATE_REQUESTED);
 			try {
@@ -846,7 +846,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			for (int i = 0; i < total; i++) {
 				HostCertificateRequest req = getHostCertificateRequest(hostPrefix + i);
-				String hostId = String.valueOf(ifs.requestHostCertificate(usr.getGridId(), req).getId());
+				String hostId = String.valueOf(ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2).getId());
 				performAndValidateSingleAudit(ifs, adminGridId, hostId, usr.getGridId(), FederationAudit.HOST_CERTIFICATE_REQUESTED);
 				performAndValidateSingleAudit(ifs, adminGridId, hostId, AuditConstants.SYSTEM_ID, FederationAudit.HOST_CERTIFICATE_APPROVED);
 			}
@@ -925,7 +925,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr = createUser(ifs, adminGridId, idp, "user");
 			String host = "localhost1";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 			String hostId = String.valueOf(record.getId());
 			assertEquals(HostCertificateStatus.PENDING, record.getStatus());
 			assertEquals(null, record.getCertificate());
@@ -933,7 +933,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			performAndValidateSingleAudit(ifs, adminGridId, hostId, usr.getGridId(), FederationAudit.HOST_CERTIFICATE_REQUESTED);
 
-			record = ifs.approveHostCertificate(adminGridId, record.getId());
+			record = ifs.approveHostCertificate(adminGridId, record.getId(), CertificateSignatureAlgorithm.SHA2);
 
 			assertEquals(HostCertificateStatus.ACTIVE, record.getStatus());
 			assertEquals(subject, record.getSubject());
@@ -943,7 +943,7 @@ public class TestIdentityFederationManager extends TestCase {
 
 			String host2 = "localhost2";
 			HostCertificateRequest req2 = getHostCertificateRequest(host2);
-			HostCertificateRecord record2 = ifs.requestHostCertificate(usr.getGridId(), req2);
+			HostCertificateRecord record2 = ifs.requestHostCertificate(usr.getGridId(), req2, CertificateSignatureAlgorithm.SHA2);
 			assertEquals(HostCertificateStatus.PENDING, record2.getStatus());
 			assertEquals(null, record2.getCertificate());
 			String hostId2 = String.valueOf(record.getId());
@@ -1140,7 +1140,8 @@ public class TestIdentityFederationManager extends TestCase {
 
 				checkCertificate(expectedIdentity, lifetime, pair.getPrivate(), cert);
 
-				crl = getDefaultCRL(ifs);;
+				crl = getDefaultCRL(ifs);
+				;
 				assertEquals(alreadyRevokedCertificates, crl.getRevokedCertificates().size());
 				assertNull(crl.getRevokedCertificate(cert));
 				UserCertificateUpdate u = new UserCertificateUpdate();
@@ -1452,7 +1453,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr2 = createUser(ifs, adminGridId, idp, "user2");
 			String host = "myhost.example.com";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			try {
 				ifs.renewHostCertificate(usr2.getGridId(), record.getId());
@@ -1500,7 +1501,7 @@ public class TestIdentityFederationManager extends TestCase {
 			GridUser usr2 = createUser(ifs, adminGridId, idp, "user2");
 			String host = "myhost.example.com";
 			HostCertificateRequest req = getHostCertificateRequest(host);
-			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req);
+			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			try {
 				ifs.renewHostCertificate(usr2.getGridId(), record.getId());
@@ -2378,10 +2379,10 @@ public class TestIdentityFederationManager extends TestCase {
 
 	private HostCertificateRecord createAndSubmitHostCert(IdentityFederationManager ifs, IdentityFederationProperties conf, String admin, String owner, String host) throws Exception {
 		HostCertificateRequest req = getHostCertificateRequest(host);
-		HostCertificateRecord record = ifs.requestHostCertificate(owner, req);
+		HostCertificateRecord record = ifs.requestHostCertificate(owner, req, CertificateSignatureAlgorithm.SHA2);
 		if (!conf.autoHostCertificateApproval()) {
 			assertEquals(HostCertificateStatus.PENDING, record.getStatus());
-			record = ifs.approveHostCertificate(admin, record.getId());
+			record = ifs.approveHostCertificate(admin, record.getId(), CertificateSignatureAlgorithm.SHA2);
 		}
 		assertEquals(HostCertificateStatus.ACTIVE, record.getStatus());
 		assertEquals(host, record.getHost());

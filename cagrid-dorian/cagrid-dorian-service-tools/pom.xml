@@ -95,4 +95,75 @@
 
 
 	</dependencies>
+	
+		<profiles>
+		<profile>
+			<id>upgrade</id>
+			<activation>
+				<property>
+					<name>upgrade</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>org.cagrid.dorian.service.tools.upgrader.Upgrader</mainClass>
+							<arguments>
+								<argument>org.cagrid.dorian.service.tools.upgrader.Upgrader</argument>
+								<argument>-c</argument>
+								<argument>../cagrid-dorian-service/src/main/resources/META-INF/spring/dorian-configuration.xml</argument>
+								<argument>-p</argument>
+								<argument>src/main/resources/dorian.properties</argument>
+								<argument>-u</argument>
+								<argument>src/main/resources/dorian-upgrader-configuration.xml</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>configure</id>
+			<activation>
+				<property>
+					<name>configure</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>org.cagrid.dorian.service.tools.Bootstrapper</mainClass>
+							<arguments>
+								
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

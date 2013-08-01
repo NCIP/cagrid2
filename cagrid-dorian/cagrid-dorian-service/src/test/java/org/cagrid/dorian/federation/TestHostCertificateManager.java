@@ -19,6 +19,7 @@ import org.cagrid.dorian.model.federation.HostCertificateStatus;
 import org.cagrid.dorian.model.federation.HostCertificateUpdate;
 import org.cagrid.dorian.model.federation.HostSearchCriteria;
 import org.cagrid.dorian.model.federation.PublicKey;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.ca.CertificateAuthority;
 import org.cagrid.dorian.service.federation.CertificateBlacklistManager;
 import org.cagrid.dorian.service.federation.HostCertificateManager;
@@ -64,7 +65,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			HostCertificateRecord renewed = hcm.renewHostCertificate(id);
 			assertEquals(record.getId(), renewed.getId());
@@ -103,7 +104,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 			}
 
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 
 			setHostCertificateStatus(hcm, id, HostCertificateStatus.SUSPENDED);
@@ -153,7 +154,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 			for (int i = 0; i < total; i++) {
 				long id = ids.get(i).longValue();
-				hcm.approveHostCertifcate(id);
+				hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				List<Long> sn = hcm.getHostCertificateRecordsSerialNumbers(owner);
 				assertEquals((i + 1), sn.size());
 				for (int j = 0; j < (i + 1); j++) {
@@ -195,7 +196,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 			for (int i = 0; i < total; i++) {
 				long id = ids.get(i).longValue();
-				hcm.approveHostCertifcate(id);
+				hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				assertEquals(0, hcm.getDisabledHostCertificatesSerialNumbers().size());
 				List<Long> sn = hcm.getHostCertificateRecordsSerialNumbers(owner);
 				assertEquals((i + 1), sn.size());
@@ -275,7 +276,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 			for (int i = 0; i < total; i++) {
 				long id = ids.get(i).longValue();
-				HostCertificateRecord hr = hcm.approveHostCertifcate(id);
+				HostCertificateRecord hr = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 
 				assertEquals((i + 1), hcm.getHostRecords(new HostSearchCriteria()).size());
 				HostSearchCriteria hs = new HostSearchCriteria();
@@ -375,7 +376,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 				long id = ids.get(i).longValue();
 				HostCertificateRequest req = requests.get(i);
 				String owner = OWNER + i;
-				HostCertificateRecord record = hcm.approveHostCertifcate(id);
+				HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				validateAfterCertificateApproval(total, (i + 1), hcm, id, owner, req, record);
 				HostCertificateFilter f = new HostCertificateFilter();
 				f.setStatus(HostCertificateStatus.PENDING);
@@ -473,7 +474,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			Thread.currentThread().yield();
 			long id1 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost1"));
-			hcm.approveHostCertifcate(id1);
+			hcm.approveHostCertifcate(id1, CertificateSignatureAlgorithm.SHA2);
 			long id2 = hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost2"));
 			HostCertificateFilter f1 = new HostCertificateFilter();
 			f1.setIsExpired(Boolean.TRUE);
@@ -484,7 +485,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			Thread.sleep((conf.getIssuedCertificateLifetime().getSeconds() * 1000) + 100);
 			assertEquals(1, hcm.findHostCertificates(f1).size());
 			assertEquals(0, hcm.findHostCertificates(f2).size());
-			hcm.approveHostCertifcate(id2);
+			hcm.approveHostCertifcate(id2, CertificateSignatureAlgorithm.SHA2);
 			assertEquals(1, hcm.findHostCertificates(f1).size());
 			assertEquals(1, hcm.findHostCertificates(f2).size());
 			Thread.sleep((conf.getIssuedCertificateLifetime().getSeconds() * 1000) + 100);
@@ -503,7 +504,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -518,10 +519,10 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			try {
-				hcm.approveHostCertifcate(id);
+				hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed.");
 			} catch (InvalidHostCertificateException f) {
 
@@ -545,7 +546,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			update.setStatus(HostCertificateStatus.REJECTED);
 			hcm.updateHostCertificateRecord(update);
 			try {
-				hcm.approveHostCertifcate(id);
+				hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed.");
 			} catch (InvalidHostCertificateException f) {
 
@@ -563,7 +564,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 
 			HostCertificateUpdate update = new HostCertificateUpdate();
@@ -571,7 +572,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			update.setStatus(HostCertificateStatus.SUSPENDED);
 			hcm.updateHostCertificateRecord(update);
 			try {
-				hcm.approveHostCertifcate(id);
+				hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed.");
 			} catch (InvalidHostCertificateException f) {
 
@@ -589,7 +590,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 
 			HostCertificateUpdate update = new HostCertificateUpdate();
@@ -597,7 +598,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			update.setStatus(HostCertificateStatus.COMPROMISED);
 			hcm.updateHostCertificateRecord(update);
 			try {
-				hcm.approveHostCertifcate(id);
+				hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed.");
 			} catch (InvalidHostCertificateException f) {
 
@@ -615,7 +616,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			try {
 				hcm.requestHostCertifcate(OWNER, getHostCertificateRequest("localhost"));
@@ -630,7 +631,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			hcm.updateHostCertificateRecord(update);
 			HostCertificateRequest req2 = getHostCertificateRequest("localhost");
 			long id2 = hcm.requestHostCertifcate(OWNER, req2);
-			hcm.approveHostCertifcate(id2);
+			hcm.approveHostCertifcate(id2, CertificateSignatureAlgorithm.SHA2);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -645,7 +646,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			HostCertificateUpdate update = new HostCertificateUpdate();
 			update.setId(id);
@@ -771,7 +772,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			} catch (InvalidHostCertificateException f) {
 
 			}
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			hcm.updateHostCertificateRecord(update);
 			assertEquals(HostCertificateStatus.SUSPENDED, hcm.getHostCertificateRecord(id).getStatus());
@@ -807,7 +808,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			String newOwner = "newowner";
 			HostCertificateUpdate update = new HostCertificateUpdate();
@@ -828,7 +829,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			String newOwner = "newowner";
 			HostCertificateUpdate update = new HostCertificateUpdate();
@@ -852,7 +853,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 
 			try {
@@ -878,7 +879,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			HostCertificateUpdate u = new HostCertificateUpdate();
 			u.setId(id);
@@ -907,7 +908,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			try {
 				HostCertificateUpdate update = new HostCertificateUpdate();
@@ -932,7 +933,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			HostCertificateRequest req = getHostCertificateRequest("localhost");
 			long id = hcm.requestHostCertifcate(OWNER, req);
 			validateAfterCertificateRequest(hcm, req, id);
-			HostCertificateRecord record = hcm.approveHostCertifcate(id);
+			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
 			HostCertificateUpdate update = new HostCertificateUpdate();
 			update.setId(id);

@@ -19,6 +19,7 @@ import javax.naming.ldap.Rdn;
 import org.cagrid.dorian.model.federation.HostCertificateRecord;
 import org.cagrid.dorian.model.federation.HostCertificateRequest;
 import org.cagrid.dorian.model.federation.PublicKey;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
 import org.cagrid.gaards.pki.CertUtil;
@@ -35,24 +36,21 @@ public class DorianTestBootstrapper {
 	public final static String KEY_ALIAS = "host";
 	public final static char[] STORE_PASSWORD = "changeit".toCharArray();
 
-	private final static Logger logger = LoggerFactory
-			.getLogger(DorianTestBootstrapper.class);
+	private final static Logger logger = LoggerFactory.getLogger(DorianTestBootstrapper.class);
 
 	private final AbstractApplicationContext dorianContext;
 	private final Dorian dorian;
 	private final String gridId = "/C=US/O=abc/OU=xyz/OU=caGrid/OU=Dorian/CN=dorian";
 
 	public DorianTestBootstrapper() throws IOException {
-		dorianContext = ContextLoader.loadContext("Dorian",
-				DORIAN_CONFIGURATION_PATH);
+		dorianContext = ContextLoader.loadContext("Dorian", DORIAN_CONFIGURATION_PATH);
 		dorian = dorianContext.getBean(Dorian.class);
 	}
 
 	public void createKeyAndTrustStores() throws Exception {
 		File karafEtc = ContextLoader.getKarafEtc();
 		if (!karafEtc.exists() || !karafEtc.isDirectory()) {
-			logger.warn("No " + ContextLoader.KARAF_BASE_KEY
-					+ " etc directory " + karafEtc.getAbsolutePath());
+			logger.warn("No " + ContextLoader.KARAF_BASE_KEY + " etc directory " + karafEtc.getAbsolutePath());
 		}
 
 		X509Certificate certificate = dorian.getCACertificate();
@@ -65,8 +63,7 @@ public class DorianTestBootstrapper {
 		File certificateFile = new File(certificatesDir, certificate.getSerialNumber().toString() + ".0");
 		CertUtil.writeCertificate(certificate, certificateFile);
 
-		LdapName caDN = new LdapName(certificate.getSubjectX500Principal()
-				.getName());
+		LdapName caDN = new LdapName(certificate.getSubjectX500Principal().getName());
 		List<Rdn> baseRDNs = new LinkedList<Rdn>(caDN.getRdns());
 		for (Iterator<Rdn> rdnIter = baseRDNs.iterator(); rdnIter.hasNext();) {
 			Rdn rdn = rdnIter.next();
@@ -78,8 +75,7 @@ public class DorianTestBootstrapper {
 
 		String hostName = InetAddress.getLocalHost().getHostName();
 
-		CertificateAuthorityProperties caProperties = dorianContext.getBean(
-				"caProperties", CertificateAuthorityProperties.class);
+		CertificateAuthorityProperties caProperties = dorianContext.getBean("caProperties", CertificateAuthorityProperties.class);
 		int keySize = caProperties.getIssuedCertificateKeySize();
 
 		for (File dir : karafEtc.listFiles()) {
@@ -94,17 +90,13 @@ public class DorianTestBootstrapper {
 			PublicKey publicKey = new PublicKey();
 			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
 			req.setPublicKey(publicKey);
-			HostCertificateRecord record = dorian.requestHostCertificate(
-					gridId, req);
-			org.cagrid.dorian.common.X509Certificate cert = record
-					.getCertificate();
-			X509Certificate hostCertificate = CertUtil.loadCertificate(cert
-					.getCertificateAsString());
+			HostCertificateRecord record = dorian.requestHostCertificate(gridId, req, CertificateSignatureAlgorithm.SHA2);
+			org.cagrid.dorian.common.X509Certificate cert = record.getCertificate();
+			X509Certificate hostCertificate = CertUtil.loadCertificate(cert.getCertificateAsString());
 
 			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
 			keyStore.load(null, null);
-			keyStore.setKeyEntry(KEY_ALIAS, pair.getPrivate(), STORE_PASSWORD,
-					new Certificate[] { hostCertificate });
+			keyStore.setKeyEntry(KEY_ALIAS, pair.getPrivate(), STORE_PASSWORD, new Certificate[] { hostCertificate });
 
 			File trustStoreFile = new File(dir, "truststore.jks");
 			OutputStream trustStoreStream = new FileOutputStream(trustStoreFile);

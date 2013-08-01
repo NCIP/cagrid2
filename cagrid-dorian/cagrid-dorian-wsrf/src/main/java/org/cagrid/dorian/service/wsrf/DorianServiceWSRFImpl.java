@@ -970,7 +970,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		String gridId = getCallerId();
 		RequestHostCertificateResponse response = null;
 		try {
-			HostCertificateRecord hostCertificateRecord = dorian.requestHostCertificate(gridId, hostCertificateRequest);
+			HostCertificateRecord hostCertificateRecord = dorian.requestHostCertificate(gridId, hostCertificateRequest, CertificateSignatureAlgorithm.SHA2);
 			response = new RequestHostCertificateResponse();
 			response.setHostCertificateRecord(hostCertificateRecord);
 		} catch (DorianInternalException die) {
@@ -1035,7 +1035,7 @@ public class DorianServiceWSRFImpl extends DorianPortTypeImpl {
 		String gridId = getCallerId();
 		ApproveHostCertificateResponse response = null;
 		try {
-			HostCertificateRecord hostCertificateRecord = dorian.approveHostCertificate(gridId, recordId);
+			HostCertificateRecord hostCertificateRecord = dorian.approveHostCertificate(gridId, recordId, CertificateSignatureAlgorithm.SHA2);
 			response = new ApproveHostCertificateResponse();
 			response.setHostCertificateRecord(hostCertificateRecord);
 		} catch (DorianInternalException die) {

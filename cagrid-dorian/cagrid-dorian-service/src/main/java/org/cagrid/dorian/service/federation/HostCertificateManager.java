@@ -122,7 +122,7 @@ public class HostCertificateManager {
 		}
 	}
 
-	public synchronized HostCertificateRecord approveHostCertifcate(long id) throws DorianInternalException, InvalidHostCertificateException {
+	public synchronized HostCertificateRecord approveHostCertifcate(long id, CertificateSignatureAlgorithm alg) throws DorianInternalException, InvalidHostCertificateException {
 		Connection c = null;
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
 
@@ -141,7 +141,7 @@ public class HostCertificateManager {
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-			java.security.cert.X509Certificate cert = ca.signHostCertificate(host, key, start, end, CertificateSignatureAlgorithm.SHA2);
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(host, key, start, end, alg);
 
 			record.setSerialNumber(cert.getSerialNumber().longValue());
 			record.setSubject(cert.getSubjectDN().getName());

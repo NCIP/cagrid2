@@ -11,6 +11,7 @@ import org.cagrid.core.commandline.BaseCommandLine;
 import org.cagrid.dorian.model.federation.HostCertificateRecord;
 import org.cagrid.dorian.model.federation.HostCertificateRequest;
 import org.cagrid.dorian.model.federation.PublicKey;
+import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.Dorian;
 import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
 import org.cagrid.dorian.service.federation.IdentityAssignmentPolicy;
@@ -46,25 +47,18 @@ public class CreateHostCertificate extends BaseCommandLine {
 		Dorian dorian = utils.getDorian();
 		String hostname = getValue(HOSTNAME_PROMPT, HOSTNAME_PROPERTY);
 		String userId = getValue(ADMIN_USER_ID_PROMPT, ADMIN_USER_ID_PROPERTY);
-		CertificateAuthorityProperties caProperties = utils
-				.getCertificateAuthorityProperties();
-		KeyPair pair = KeyUtil.generateRSAKeyPair(caProperties
-				.getIssuedCertificateKeySize());
+		CertificateAuthorityProperties caProperties = utils.getCertificateAuthorityProperties();
+		KeyPair pair = KeyUtil.generateRSAKeyPair(caProperties.getIssuedCertificateKeySize());
 		X509Certificate cacert = dorian.getCACertificate();
 		String caSubject = cacert.getSubjectDN().getName();
 		int index = caSubject.lastIndexOf(",");
 		String subjectPrefix = caSubject.substring(0, index);
 
 		String gridId = null;
-		if (utils.getIdentityFederationProperties()
-				.getIdentityAssignmentPolicy()
-				.equals(IdentityAssignmentPolicy.NAME)) {
-			gridId = CertUtil.subjectToIdentity(subjectPrefix + ",OU="
-					+ utils.getIdentityProviderProperties().getName() + "/CN="
-					+ userId);
+		if (utils.getIdentityFederationProperties().getIdentityAssignmentPolicy().equals(IdentityAssignmentPolicy.NAME)) {
+			gridId = CertUtil.subjectToIdentity(subjectPrefix + ",OU=" + utils.getIdentityProviderProperties().getName() + "/CN=" + userId);
 		} else {
-			gridId = CertUtil.subjectToIdentity(subjectPrefix
-					+ ",OU=IdP [1]/CN=" + userId);
+			gridId = CertUtil.subjectToIdentity(subjectPrefix + ",OU=IdP [1]/CN=" + userId);
 		}
 		System.out.println(gridId);
 		HostCertificateRequest req = new HostCertificateRequest();
@@ -72,33 +66,26 @@ public class CreateHostCertificate extends BaseCommandLine {
 		PublicKey publicKey = new PublicKey();
 		publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
 		req.setPublicKey(publicKey);
-		HostCertificateRecord record = dorian.requestHostCertificate(gridId,
-				req);
-		X509Certificate cert = CertUtil.loadCertificate(record.getCertificate()
-				.getCertificateAsString());
+		HostCertificateRecord record = dorian.requestHostCertificate(gridId, req, CertificateSignatureAlgorithm.SHA2);
+		X509Certificate cert = CertUtil.loadCertificate(record.getCertificate().getCertificateAsString());
 		System.out.println("Successfully created the host certificate:");
 		System.out.println("Subject: " + cert.getSubjectDN());
 		System.out.println("Created: " + cert.getNotBefore());
 		System.out.println("Expires: " + cert.getNotAfter());
 
-		String keyStorePassword = getValue(KEYSTORE_PASSWORD_PROMPT,
-				KEYSTORE_PASSWORD_PROPERTY);
-		String keyPassword = getValue(KEY_PASSWORD_PROMPT,
-				KEY_PASSWORD_PROPERTY);
-		String keyStoreAlias = getValue(KEYSTORE_ALIAS_PROMPT,
-				KEYSTORE_ALIAS_PROPERTY);
+		String keyStorePassword = getValue(KEYSTORE_PASSWORD_PROMPT, KEYSTORE_PASSWORD_PROPERTY);
+		String keyPassword = getValue(KEY_PASSWORD_PROMPT, KEY_PASSWORD_PROPERTY);
+		String keyStoreAlias = getValue(KEYSTORE_ALIAS_PROMPT, KEYSTORE_ALIAS_PROPERTY);
 
 		KeyStore hks = KeyStore.getInstance("jks");
 		hks.load(null);
 		java.security.cert.Certificate[] hostCertChain = { cert };
-		hks.setKeyEntry(keyStoreAlias, pair.getPrivate(),
-				keyPassword.toCharArray(), hostCertChain);
+		hks.setKeyEntry(keyStoreAlias, pair.getPrivate(), keyPassword.toCharArray(), hostCertChain);
 		File keyStoreFile = new File(hostname + ".jks");
 		FileOutputStream out = new FileOutputStream(keyStoreFile);
 		hks.store(out, keyStorePassword.toCharArray());
 		out.close();
-		System.out.println("Keystore created for " + cert.getSubjectDN()
-				+ " at " + keyStoreFile);
+		System.out.println("Keystore created for " + cert.getSubjectDN() + " at " + keyStoreFile);
 	}
 
 	/**
@@ -106,8 +93,7 @@ public class CreateHostCertificate extends BaseCommandLine {
 	 */
 	public static void main(String[] args) {
 		try {
-			CreateHostCertificate main = new CreateHostCertificate(new File(
-					PROPERTIES_FILE));
+			CreateHostCertificate main = new CreateHostCertificate(new File(PROPERTIES_FILE));
 			main.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
