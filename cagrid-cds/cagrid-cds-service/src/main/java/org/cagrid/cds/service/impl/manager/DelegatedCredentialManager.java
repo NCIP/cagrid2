@@ -99,12 +99,12 @@ public class DelegatedCredentialManager {
 		}
 		String currentKeyManager = properties.getKeyManager();
 		if ((currentKeyManager != null)
-				&& (!currentKeyManager.equals(keyManager.getClass().getName()))) {
+				&& (!currentKeyManager.equals(keyManager.getName()))) {
 			throw Errors.makeException(CDSInternalException.class, Errors.KEY_MANAGER_CHANGED);
 		}
 		this.keyManager = keyManager;
 		if (currentKeyManager == null) {
-			properties.setKeyManager(this.keyManager.getClass().getName());
+			properties.setKeyManager(this.keyManager.getName());
 		}
 	}
 

@@ -1367,6 +1367,10 @@ public class DelegatedCredentialManagerTest extends TestCase {
 				throws CDSInternalException, DelegationException {
 
 		}
+		
+		public String getName() {
+		    return "Invalid Key Manager";
+		}
 
 	}
 

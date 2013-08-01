@@ -30,4 +30,6 @@ public interface KeyManager {
 	public abstract void delete(String alias) throws CDSInternalException;
 
 	public abstract void deleteAll() throws CDSInternalException;
+	
+	public abstract String getName();
 }

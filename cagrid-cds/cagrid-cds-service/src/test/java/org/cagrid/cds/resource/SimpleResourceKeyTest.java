@@ -36,27 +36,31 @@ public class SimpleResourceKeyTest {
         }
 
         SOAPElement soapElement = resourceKey.toSOAPElement();
-        Assert.assertEquals(DelegatedCredentialResourceHome.RESOURCE_KEY.getNamespaceURI(),soapElement.getNamespaceURI());
-        Assert.assertEquals(DelegatedCredentialResourceHome.RESOURCE_KEY.getLocalPart(),soapElement.getNodeName());
+        Assert.assertEquals(DelegatedCredentialResourceHome.RESOURCE_KEY,soapElement.getElementQName());
 
         soapElement.getChildElements();
         
-//        MessageFactory factory = MessageFactory.newInstance();  
-//        SOAPMessage message = factory.createMessage();
-//        SOAPBody body = message.getSOAPBody();
-//        body.addChildElement(soapElement);
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        message.writeTo(out);
-//        System.out.println(out.toString());        
-//        Assert.assertNotNull(soapElement);
+        MessageFactory factory = MessageFactory.newInstance();  
+        SOAPMessage message = factory.createMessage();
+        SOAPBody body = message.getSOAPBody();
+        body.addChildElement(soapElement);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        message.writeTo(out);
+        System.out.println(out.toString());        
+        Assert.assertNotNull(soapElement);
         /**
-         * <DelegatedCredentialKey xmlns="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential">
-         *      <delegationIdentifier xmlns="http://gaards.cagrid.org/cds"
-         *                            xmlns:ns2="http://schemas.xmlsoap.org/ws/2004/03/addressing"
-         *                            xmlns:ns3="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/types">
-         *          <delegationId>5</delegationId>
-         *      </delegationIdentifier>
-         * </DelegatedCredentialKey>
+         * Relevant portion should look like this
+         *    <ns4:DelegatedCredentialKey xmlns="http://gaards.cagrid.org/cds"
+         *           xmlns:ns4="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential">
+         *       <delegationId>5</delegationId>
+         *    </ns4:DelegatedCredentialKey>
+         */
+        
+        /**
+         * caGrid-1.4 CDS looks like this:
+         *       <ns2:DelegatedCredentialKey xmlns:ns2="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential">
+         *           <ns3:delegationId xmlns:ns3="http://gaards.cagrid.org/cds">2</ns3:delegationId>
+         *       </ns2:DelegatedCredentialKey>
          */
 
     }

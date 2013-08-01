@@ -42,5 +42,10 @@ public class DBKeyManager extends AbstractDBKeyManager {
 			throw Errors.makeException(CDSInternalException.class, "Unexpected error wrapping key.",e);
 		}
 	}
+	
+	public String getName() {
+	    //for backwards compatibility
+	    return "org.cagrid.gaards.cds.service.DBKeyManager";
+	}
 
 }

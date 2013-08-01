@@ -1,6 +1,7 @@
 package org.cagrid.core.resource;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
@@ -54,16 +55,18 @@ public class SimpleResourceKey implements ResourceKey {
     }
 
     public SOAPElement toSOAPElement() {
-        // throw new RuntimeException("toSOAPElement not implemented");
-        // String marshal = JAXBUtils.marshal(getValue(),getName());
         SOAPElement element = null;
         try {
             JAXBContext jc1 = JAXBUtils.getJAXBContext(getValue().getClass());
             Marshaller marshaller = jc1.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            /* tell JAXB to marshal directly into a SOAPBody */
-            element = SOAPFactory.newInstance().createElement(getName());
-            marshaller.marshal(getValue(), element);
+            // tell JAXB to marshal directly into an element
+            element = SOAPFactory.newInstance().createElement("parent");
+            // i had to do this mojo to get it to serialize the "type" into an element of the name's QName
+            // if you just marshall the getValue(), you'll get errors about it not being a root element (unless it is), or you'll get an extra element for the
+            // getValue() itself, instead of it's "type" information being serialized into an element of the name's QName
+            JAXBElement<?> f = new JAXBElement(getName(), getValue().getClass(), getValue());
+            marshaller.marshal(f, element);
         } catch (JAXBException e) {
             e.printStackTrace();
             logger.error(e.getMessage(), e);
@@ -71,7 +74,7 @@ public class SimpleResourceKey implements ResourceKey {
             logger.error(e.getMessage(), e);
         }
 
-        return element;
+        return (SOAPElement)element.getChildElements().next() ;
     }
 
     public String toString() {
