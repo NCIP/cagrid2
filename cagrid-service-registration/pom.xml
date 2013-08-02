@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.cagrid</groupId>
+		<artifactId>cagrid-osgi</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>cagrid-service-registration</artifactId>
+	<packaging>pom</packaging>
+	<name>caGrid Service Registration</name>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-service-registration-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-systest</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${wsrf.group}</groupId>
+				<artifactId>wsrf-faults-api</artifactId>
+				<version>${wsrf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${wsrf.group}</groupId>
+				<artifactId>wsrf-properties-api</artifactId>
+				<version>${wsrf.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>cagrid-service-registration-api</module>
+		<module>cagrid-service-registration-systest</module>
+	</modules>
+</project>
