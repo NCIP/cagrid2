@@ -2,6 +2,7 @@ package org.cagrid.serviceregistration.systest;
 
 import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 
+import java.io.PrintWriter;
 import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -10,8 +11,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.net.ssl.KeyManager;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.apache.cxf.helpers.XMLUtils;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.dorian.DoesLocalUserExistRequest;
 import org.cagrid.dorian.DoesLocalUserExistResponse;
@@ -39,9 +45,12 @@ import org.cagrid.systest.TestBase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.oasis.names.tc.saml.assertion.AssertionType;
+import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.GetMultipleResourceProperties;
+import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.GetMultipleResourcePropertiesResponse;
 import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
 import org.osgi.framework.Bundle;
+import org.w3c.dom.Element;
 import org.xmlsoap.schemas.ws._2004._03.addressing.AttributedURI;
 import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 
@@ -64,6 +73,11 @@ public class ServiceRegistrationIT extends TestBase {
 		} finally {
 			dorianTestBootstrapper.close();
 		}
+//		try {
+//			//Thread.sleep(10000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -174,5 +188,20 @@ public class ServiceRegistrationIT extends TestBase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		DorianPortType dorianSoapAuth2 = DorianSoapClientFactory
+				.createSoapClient("https://localhost:7734/dorian", truststore,
+						(KeyManager)null);
+		
+		
+		GetMultipleResourceProperties request = new GetMultipleResourceProperties();
+		request.getResourceProperty().add(new QName("gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata","ServiceMetadata"));
+		GetMultipleResourcePropertiesResponse response = dorianSoapAuth2.getMultipleResourceProperties(request);
+//		System.out.println(response.getAny().get(0));
+//		
+//		JAXBContext jc = JAXBContext.newInstance(((JAXBElement)response.getAny().get(0)).getValue().getClass());  
+//        Marshaller marshaller = jc.createMarshaller();  
+//        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE); 
+//        marshaller.marshal(response.getAny().get(0), System.out);
 	}
 }
