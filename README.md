@@ -11,11 +11,10 @@ national-scale, multi-institutional environment.
 
 caGrid2 is an open source project development in JAVA, and leverages or supports:
  * WS* web service standards
- * SHA2 digest algorithm for PKI certificates 
+ * SHA-2 digest algorithm for PKI certificates 
  * Central Authentication Service (CAS, from JA-SIG)
  * Cancer Data Standards Repository (caDSR)
  * Enterprise Vocabulary Services (EVS)
- * Globus Toolkit v. 4.0.3
  * Grouper (from Internet2)
  * Taverna
  * Persistent URLs (PURLs)
@@ -25,9 +24,9 @@ Please see the NOTICE and LICENSE files for details.
 
 You will find more details about caGrid-core in the following links:
 
-    *  Mailing List: https://list.nih.gov/cgi-bin/wa.exe?A0=cagrid_users-l
-    *  JIRA: https://tracker.nci.nih.gov/browse/CAGRID
-    *  Wiki: https://wiki.cagrid.org
-    *  https://github.com/NCIP/caGrid2
+ * [caGrid.org Wiki] (https://wiki.cagrid.org)
+ * [Code Repository] (https://github.com/NCIP/cagrid-core)
+ * [Issue Tracker] (https://tracker.nci.nih.gov/browse/CAGRID)
+ * [Mailing List] (https://list.nih.gov/cgi-bin/wa.exe?A0=cagrid_users-l)
 
 Please join us in further developing and improving caGrid2!
