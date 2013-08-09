@@ -2,7 +2,7 @@ Welcome to the caGrid2 Project!
 =====================================
 
 caGrid is the underlying service-oriented infrastructure that supports the National Cancer Informatics Program (NCIP). 
-Driven primarily by scientific use cases from the cancer research community, it caGrid provides the necessary core 
+Driven primarily by scientific use cases from the cancer research community, caGrid provides the necessary core 
 infrastructure to facilitate interoperability.
 
 caGrid provides the technology that enables collaborating institutions to share information and analytical resources 
