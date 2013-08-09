@@ -73,11 +73,11 @@ public class ServiceRegistrationIT extends TestBase {
 		} finally {
 			dorianTestBootstrapper.close();
 		}
-//		try {
-//			//Thread.sleep(10000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -174,7 +174,7 @@ public class ServiceRegistrationIT extends TestBase {
 				.doesLocalUserExist(doesLocalUserExistRequest);
 		localUserExists = doesLocalUserExistResponse.isResponse();
 		Assert.assertFalse(localUserExists);
-		
+//		
 		ServiceGroupRegistrationClient client = new ServiceGroupRegistrationClient();
 		try {
 			EndpointReferenceType epr = new EndpointReferenceType();

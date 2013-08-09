@@ -444,6 +444,7 @@
 		<module>cagrid-gridgrouper</module>
         <module>cagrid-gme</module>
 		<!-- TODO: MOVE THIS <module>puretls</module> -->
+		<module>cagrid-service-registration</module>
 		<module>cagrid-systest</module>
 	</modules>
 </project>
