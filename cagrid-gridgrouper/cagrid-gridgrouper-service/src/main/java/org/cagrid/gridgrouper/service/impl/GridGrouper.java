@@ -114,6 +114,7 @@ public class GridGrouper {
                         GROUPER_ADMIN_GROUP_DISPLAY_NAME_EXTENTION);
             }
         } catch (Exception e) {
+        	e.printStackTrace();
             this.log.error(ExceptionUtils.getFullStackTrace(e));
             throw Errors.makeException(GridGrouperRuntimeException.class, "Error occurred initializing Grid Grouper: " + e.getMessage(), e);
         }

@@ -93,5 +93,6 @@
 		<module>cagrid-gridgrouper-soap-client</module>
 		<module>cagrid-gridgrouper-systest</module>
 		<!-- <module>cagrid-gridgrouper-inttest</module> -->
+		<module>cagrid-gridgrouper-service-tools</module>
 	</modules>
 </project>
