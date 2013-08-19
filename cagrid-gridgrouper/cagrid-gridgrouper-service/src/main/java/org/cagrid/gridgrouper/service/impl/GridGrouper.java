@@ -152,15 +152,18 @@ public class GridGrouper {
     public List<StemDescriptor> getChildStems(String gridIdentity, StemIdentifier parentStemId) throws 
             GridGrouperRuntimeException, StemNotFoundException {
         GrouperSession session = null;
+        List<StemDescriptor> out = new ArrayList<StemDescriptor>();
         try {
             Subject subject = SubjectFinder.findById(gridIdentity);
             session = GrouperSession.start(subject);
             Stem parent = StemFinder.findByName(session, parentStemId.getStemName());
-            Set set = parent.getChildStems();
-            if (set == null) {
-                return Collections.emptyList();
+            Set<Stem> set = parent.getChildStems();
+            if (set != null) {
+                for(Stem stem : set) {
+                    out.add(stemtoStemDescriptor(stem));
+                }
             }
-            return new ArrayList<StemDescriptor>(set);
+            return out;
         } catch (edu.internet2.middleware.grouper.StemNotFoundException e) {
             log.error(e.getMessage(), e);
             throw Errors.makeException(StemNotFoundException.class, "The parent stem, " + parentStemId.getStemName() + "was not found.", e);
