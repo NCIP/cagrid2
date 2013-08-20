@@ -58,9 +58,6 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="logInbound" class="org.apache.cxf.interceptor.LoggingInInterceptor" />
-	<bean id="logOutbound" class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
-
 	<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.dorian.wsrf.port}">
@@ -129,15 +126,6 @@
 		implementor="#dorianWSRF" bus="cxf" endpointName="e:DorianPortTypePort"
 		serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}"
 		wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
-		<jaxws:inInterceptors>
-			<ref bean="logInbound" />
-		</jaxws:inInterceptors>
-		<jaxws:outInterceptors>
-			<ref bean="logOutbound" />
-		</jaxws:outInterceptors>
-		<jaxws:properties>
-			<entry key="faultStackTraceEnabled" value="true" />
-		</jaxws:properties>
 	</jaxws:endpoint>
 
 	<jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service"
@@ -145,15 +133,5 @@
 		implementor="#legacyDorianWSRF" bus="cxf" endpointName="e:DorianPortTypePort"
 		serviceName="s:DorianService" address="${cagrid.dorian.legacy-wsrf.url}"
 		wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
-		<jaxws:inInterceptors>
-			<ref bean="logInbound" />
-		</jaxws:inInterceptors>
-		<jaxws:outInterceptors>
-			<ref bean="logOutbound" />
-		</jaxws:outInterceptors>
-
-		<jaxws:properties>
-			<entry key="faultStackTraceEnabled" value="true" />
-		</jaxws:properties>
 	</jaxws:endpoint>
 </beans>
