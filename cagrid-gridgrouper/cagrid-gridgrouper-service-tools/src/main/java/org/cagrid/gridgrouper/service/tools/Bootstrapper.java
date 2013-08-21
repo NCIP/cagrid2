@@ -17,6 +17,7 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String PROPERTIES_FILE = "src/main/resources/bootstrapper.properties";
 	private static final String GROUPER_SERVICE_DIR = "cagrid-grid-grouper";
 	private static final String GROUPER_SERVICE_CFG = "cagrid.gridgrouper.service.cfg";
+	private static final String GROUPER_CFG = "cagrid.gridgrouper.internet2.cfg";
 	private static final String GROUPER_WSRF_CFG = "cagrid.gridgrouper.wsrf.cfg";
 
 	public static final String CONFIGURE_LEGACY_WSRF_PROMPT = "Do you want to configure a Legacy WSRF Endpoint (true|false)";
@@ -68,17 +69,12 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String LEGACY_WSRF_URL_PROPERTY = "cagrid.gridgrouper.legacy-wsrf.url";
 	private static final String LEGACY_WSRF_PORT_PROMPT = "Enter a port number for the legacy WSRF service";
 	private static final String LEGACY_WSRF_PORT_PROPERTY = "cagrid.gridgrouper.legacy-wsrf.port";
-
-	private static final String DB_NAME_PROMPT = "Please enter the name of the database";
-	private static final String DB_NAME_PROPERTY = "cagrid.gridgrouper.service.name";
+	private static final String DB_URL_PROMPT = "Please enter the database URL";
+	private static final String DB_URL_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.url";
 	private static final String DB_USER_PROMPT = "Please enter the database username";
-	private static final String DB_USER_PROPERTY = "cagrid.gridgrouper.service.db.user";
+	private static final String DB_USER_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.username";
 	private static final String DB_PASSWORD_PROMPT = "Please enter the database password";
-	private static final String DB_PASSWORD_PROPERTY = "cagrid.gridgrouper.service.db.password";
-	private static final String DB_HOST_PROMPT = "Please enter the database hostname";
-	private static final String DB_HOST_PROPERTY = "cagrid.gridgrouper.service.db.host";
-	private static final String DB_PORT_PROMPT = "Please enter the database port";
-	private static final String DB_PORT_PROPERTY = "cagrid.gridgrouper.service.db.port";
+	private static final String DB_PASSWORD_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.password";;
 
 	private String truststorePassword;
 	private Boolean configureLegacyWSRF;
@@ -113,14 +109,23 @@ public class Bootstrapper extends BaseCommandLine {
 		configureTruststore();
 		createWSRFKeystore();
 		configureLegacyWSRFCredentials();
-		configureGridGrouper();
+		configureGrouper();
 		configureWSRFService();
 
 	}
 
+	private void configureGrouper() throws Exception {
+		Properties props = new Properties();
+		props.setProperty(DB_URL_PROPERTY, getValue(DB_URL_PROMPT, DB_URL_PROPERTY));
+		props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT, DB_USER_PROPERTY));
+		props.setProperty(DB_PASSWORD_PROPERTY, getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
+		File config = new File(getServiceMixEtc(), GROUPER_CFG);
+		props.store(new FileOutputStream(config), "Grouper Service Configuration saved by bootstrapper on " + new Date());
+	}
+/*
 	private void configureGridGrouper() throws Exception {
 		Properties props = new Properties();
-		props.setProperty(DB_NAME_PROPERTY, getValue(DB_NAME_PROMPT, DB_NAME_PROPERTY));
+		props.setProperty(DB_URL_PROPERTY, getValue(DB_URL_PROMPT, DB_URL_PROPERTY));
 		props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT, DB_USER_PROPERTY));
 		props.setProperty(DB_PASSWORD_PROPERTY, getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
 		props.setProperty(DB_HOST_PROPERTY, getValue(DB_HOST_PROMPT, DB_HOST_PROPERTY));
@@ -128,6 +133,7 @@ public class Bootstrapper extends BaseCommandLine {
 		File config = new File(getServiceMixEtc(), GROUPER_SERVICE_CFG);
 		props.store(new FileOutputStream(config), "Grouper Service Configuration saved by bootstrapper on " + new Date());
 	}
+	*/
 
 	private void configureWSRFService() throws Exception {
 		Properties props = new Properties();
