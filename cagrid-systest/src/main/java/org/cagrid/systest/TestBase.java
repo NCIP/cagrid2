@@ -24,6 +24,7 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.options.SystemPropertyOption;
 import org.ops4j.pax.exam.spi.intern.TestProbeBuilderImpl;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -92,6 +93,10 @@ public abstract class TestBase {
 		System.out.println("!!! localRepository = " + localRepository);
 		if (localRepository != null) {
 			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + localRepository));
+		} else {
+			options.add(new SystemPropertyOption(
+					"org.ops4j.pax.url.mvn.localRepository")
+					.value("~/.m2/repository"));
 		}
 
 		File certificateDirectory = new File(ContextLoader.getKarafEtc(), "certificates");
