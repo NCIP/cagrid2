@@ -9,10 +9,24 @@
                         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.gridgrouper.internet2">
-
+        <!-- default values for this are picked up from grouper.hibernate.properties -->
+        <prop key="cagrid.gridgrouper.internet2.hibernate.connection.url"/>
+        <prop key="cagrid.gridgrouper.internet2.hibernate.dialect"/>
+        <prop key="cagrid.gridgrouper.internet2.hibernate.connection.driver_class"/>
+        <prop key="cagrid.gridgrouper.internet2.hibernate.connection.username"/>
+        <prop key="cagrid.gridgrouper.internet2.hibernate.connection.password"/>
+        <prop key="cagrid.gridgrouper.internet2.hibernate.show_sql"/>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
+    <bean class="edu.internet2.middleware.grouper.GrouperConfigHelper">
+        <property name="hibernateConnectionUrl" value="${cagrid.gridgrouper.internet2.hibernate.connection.url}"/>
+        <property name="hibernateDialect" value="${cagrid.gridgrouper.internet2.hibernate.dialect}"/>
+        <property name="hibernateConnectionDriverClass" value="${cagrid.gridgrouper.internet2.hibernate.connection.driver_class}"/>
+        <property name="hibernateConnectionUsername" value="${cagrid.gridgrouper.internet2.hibernate.connection.username}"/>
+        <property name="hibernateConnectionPassword" value="${cagrid.gridgrouper.internet2.hibernate.connection.password}"/>
+        <property name="hibernateShowSql" value="${cagrid.gridgrouper.internet2.hibernate.show_sql}"/>
+    </bean>
 
 </beans>

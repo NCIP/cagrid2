@@ -81,13 +81,22 @@
 
 	<!-- GridGrouper -->
 	<feature name="cagrid-gridgrouper" version="${project.version}">
-		<feature version="${project.version}">cagrid-gridgrouper-client</feature>
-		<feature version="${project.version}">cagrid-gridgrouper-internet2</feature>
+        <feature version="${project.version}">cagrid-gaards</feature>
+
+        <!-- client -->
+        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-soap-client/${project.version}</bundle>
+
+        <!-- internet2 -->
+        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
+        <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.discovery/0.4.0</bundle>
+        <bundle>mvn:org.doomdark/com.springsource.org.doomdark.uuid/1.1.2</bundle>
+        <bundle>wrap:mvn:odmg/odmg/3.0</bundle>
+
 		<!-- service -->
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}
-		</bundle>
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}
-		</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}</bundle>
 	</feature>
 
 	<feature name="cagrid-gridgrouper-client" version="${project.version}">
@@ -96,22 +105,6 @@
 		</bundle>
 		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-soap-client/${project.version}
 		</bundle>
-	</feature>
-
-	<feature name="cagrid-gridgrouper-internet2" version="${project.version}">
-		<feature version="${project.version}">cagrid-gaards</feature>
-
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}
-		</bundle>
-
-		<!-- internet2 needs the following bundles -->
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}
-		</bundle>
-		<bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.discovery/0.4.0
-		</bundle>
-		<bundle>mvn:org.doomdark/com.springsource.org.doomdark.uuid/1.1.2
-		</bundle>
-		<bundle>wrap:mvn:odmg/odmg/3.0</bundle>
 	</feature>
 
 	<!-- CDS -->

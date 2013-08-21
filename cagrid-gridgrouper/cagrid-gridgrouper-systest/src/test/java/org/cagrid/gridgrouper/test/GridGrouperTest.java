@@ -45,13 +45,13 @@ public class GridGrouperTest extends CaGridTestSupport {
 
     private static final String GRIDGROUPER_URL = "https://localhost:7738/gridgrouper";
 
-    private static final String HOST = "etc/gridgrouper/host.jks";
-    private static final String TRUSTSTORE = "etc/gridgrouper/truststore.jks";
+    private static final String HOST = "etc/cagrid-grid-grouper/grid-grouper-host.jks";
+    private static final String TRUSTSTORE = "etc/cagrid-grid-grouper/truststore.jks";
     private static final String TRUSTSTORETYPE = "JKS";
-    private static final String KEYALIAS = "tomcat";
-    private static final String TRUSTSTOREPASSWORD = "inventrio";
-    private static final String KEYSTOREPASSWORD = "inventrio";
-    private static final String KEYPASSWORD = "inventrio";
+    private static final String KEYALIAS = "host";
+    private static final String TRUSTSTOREPASSWORD = "changeit";
+    private static final String KEYSTOREPASSWORD = "changeit";
+    private static final String KEYPASSWORD = "changeit";
 
     @Override
     @Configuration
@@ -65,7 +65,9 @@ public class GridGrouperTest extends CaGridTestSupport {
 
                 // Get our resource files to the "etc" area
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gridgrouper.wsrf.cfg", new File("src/test/resources/cagrid.gridgrouper.wsrf.cfg")),
-                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
+                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gridgrouper.service.cfg", new File("src/test/resources/cagrid.gridgrouper.service.cfg")),
+                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/grid-grouper-host.jks")),
+                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid-grid-grouper/legacy-grid-grouper-host.jks", new File("src/test/resources/legacy-grid-grouper-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
 
                 // work around smx vs jre soap conflict
@@ -76,7 +78,7 @@ public class GridGrouperTest extends CaGridTestSupport {
     }
 
     @Test
-    public void testGME() throws Exception {
+    public void testGrouper() throws Exception {
         try {
             //
             // DB must be initialized before we deploy the service
@@ -115,8 +117,19 @@ public class GridGrouperTest extends CaGridTestSupport {
             assertEquals("Grouper Administration", stem.getDisplayExtension());
             assertEquals("GrouperSystem", stem.getCreateSubject());
             assertEquals("GrouperSystem", stem.getModifySubject());
+
+//            doNothing();
         } catch(Throwable t) {
             fail(ExceptionUtils.getFullStackTrace(t));
+        }
+    }
+
+    private void doNothing() throws Exception {
+        try {
+            System.out.println("Sleeping......");
+            Thread.sleep(1000l * 60l * 60l * 24l);//TWENTY_FOUR_HOURS_IN_MILLISECONDS);
+        } catch (InterruptedException e) {
+            System.out.println("sleep interrupted");
         }
     }
 
