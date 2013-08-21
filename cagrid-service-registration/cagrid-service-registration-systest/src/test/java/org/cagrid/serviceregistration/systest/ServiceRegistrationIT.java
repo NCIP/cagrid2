@@ -85,7 +85,7 @@ public class ServiceRegistrationIT extends TestBase {
 				"cagrid-features");
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
-		options.add(features(featureURL, "cagrid-dorian"));Œ
+		options.add(features(featureURL, "cagrid-dorian"));
 		options.add(features(featureURL, "cagrid-service-registration"));
 		options.add(new SystemPropertyOption(
 				"org.ops4j.pax.url.mvn.localRepository")
