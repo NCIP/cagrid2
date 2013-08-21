@@ -65,7 +65,7 @@ public class GridGrouperTest extends CaGridTestSupport {
 
                 // Get our resource files to the "etc" area
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gridgrouper.wsrf.cfg", new File("src/test/resources/cagrid.gridgrouper.wsrf.cfg")),
-                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gridgrouper.service.cfg", new File("src/test/resources/cagrid.gridgrouper.service.cfg")),
+//                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gridgrouper.service.cfg", new File("src/test/resources/cagrid.gridgrouper.service.cfg")),
                 new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/grid-grouper-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid-grid-grouper/legacy-grid-grouper-host.jks", new File("src/test/resources/legacy-grid-grouper-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
