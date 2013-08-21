@@ -93,10 +93,6 @@ public abstract class TestBase {
 		System.out.println("!!! localRepository = " + localRepository);
 		if (localRepository != null) {
 			options.add(vmOption("-Dorg.ops4j.pax.url.mvn.localRepository=" + localRepository));
-		} else {
-			options.add(new SystemPropertyOption(
-					"org.ops4j.pax.url.mvn.localRepository")
-					.value("~/.m2/repository"));
 		}
 
 		File certificateDirectory = new File(ContextLoader.getKarafEtc(), "certificates");
