@@ -3,11 +3,14 @@ package org.cagrid.gts.service.wsrf;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceContext;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.cagrid.core.common.JAXBUtils;
 import org.cagrid.gaards.authentication.WebServiceCallerId;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataRequest;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataResponse;
@@ -38,7 +41,6 @@ import org.cagrid.gts.wsrf.stubs.AddTrustedAuthorityRequest;
 import org.cagrid.gts.wsrf.stubs.AddTrustedAuthorityResponse;
 import org.cagrid.gts.wsrf.stubs.CertificateValidationFaultFaultMessage;
 import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest;
-import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest.Filter;
 import org.cagrid.gts.wsrf.stubs.FindPermissionsResponse;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesResponse;
@@ -77,7 +79,13 @@ import org.cagrid.gts.wsrf.stubs.UpdateTrustedAuthorityRequest;
 import org.cagrid.gts.wsrf.stubs.UpdateTrustedAuthorityResponse;
 import org.cagrid.gts.wsrf.stubs.ValidateRequest;
 import org.cagrid.gts.wsrf.stubs.ValidateResponse;
+import org.cagrid.wsrf.properties.InvalidResourceKeyException;
+import org.cagrid.wsrf.properties.NoSuchResourceException;
+import org.cagrid.wsrf.properties.Resource;
+import org.cagrid.wsrf.properties.ResourceException;
 import org.cagrid.wsrf.properties.ResourceHome;
+import org.cagrid.wsrf.properties.ResourceProperty;
+import org.cagrid.wsrf.properties.ResourcePropertySet;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.GetMultipleResourceProperties;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.GetMultipleResourcePropertiesResponse;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01.GetResourcePropertyResponse;
@@ -90,6 +98,7 @@ import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_0
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01_wsdl.UnknownQueryExpressionDialectFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 
 public class GTSWSRFImpl extends GTSPortTypeImpl {
 
@@ -163,9 +172,36 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
     @Override
     public GetMultipleResourcePropertiesResponse getMultipleResourceProperties(GetMultipleResourceProperties getMultipleResourcePropertiesRequest)
             throws ResourceUnknownFault, InvalidResourcePropertyQNameFault {
-        logger.debug("Executing operation getMultipleResourceProperties");
-        // TODO
-        return null;
+        logger.info("getMultipleResourceProperty " + getMultipleResourcePropertiesRequest);
+        System.out.println(getMultipleResourcePropertiesRequest);
+        GetMultipleResourcePropertiesResponse response = new GetMultipleResourcePropertiesResponse();
+        for (Iterator iterator = getMultipleResourcePropertiesRequest.getResourceProperty().iterator(); iterator.hasNext();) {
+            QName qname = (QName) iterator.next();
+            Exception e;
+            try {
+                Resource resource = resourceHome.find(null);
+                if (resource instanceof ResourcePropertySet) {
+                    ResourcePropertySet resourcePropertySet = (ResourcePropertySet) resource;
+                    ResourceProperty<?> resourceProperty = resourcePropertySet.get(qname);
+                    if (resourceProperty != null) {
+                        Object resourcePropertyValue = resourceProperty.get(0);
+                        logger.info("getResourceProperty " + qname + " returning " + resourcePropertyValue);
+                        if (!(resourcePropertyValue instanceof Node) && !(resourcePropertyValue instanceof JAXBElement<?>)) {
+                            resourcePropertyValue = JAXBUtils.wrap(resourcePropertyValue);
+                        }
+                        response.getAny().add(resourcePropertyValue);
+                    }
+                }
+            } catch (NoSuchResourceException nsre) {
+                e = nsre;
+            } catch (InvalidResourceKeyException irke) {
+                e = irke;
+            } catch (ResourceException re) {
+                e = re;
+            }
+        }
+
+        return response;
     }
 
     @Override
@@ -409,9 +445,36 @@ public class GTSWSRFImpl extends GTSPortTypeImpl {
     }
 
     @Override
-    public GetResourcePropertyResponse getResourceProperty(QName getResourcePropertyRequest) throws ResourceUnknownFault, InvalidResourcePropertyQNameFault {
-        // TODO Auto-generated method stub
-        return super.getResourceProperty(getResourcePropertyRequest);
+    public GetResourcePropertyResponse getResourceProperty(QName resourcePropertyQName) throws ResourceUnknownFault, InvalidResourcePropertyQNameFault {
+        logger.info("getResourceProperty " + resourcePropertyQName);
+        Exception e = null;
+        GetResourcePropertyResponse response = null;
+        try {
+            Resource resource = resourceHome.find(null);
+            if (resource instanceof ResourcePropertySet) {
+                ResourcePropertySet resourcePropertySet = (ResourcePropertySet) resource;
+                ResourceProperty<?> resourceProperty = resourcePropertySet.get(resourcePropertyQName);
+                if (resourceProperty != null) {
+                    Object resourcePropertyValue = resourceProperty.get(0);
+                    logger.info("getResourceProperty " + resourcePropertyQName + " returning " + resourcePropertyValue);
+                    if (!(resourcePropertyValue instanceof Node) && !(resourcePropertyValue instanceof JAXBElement<?>)) {
+                        resourcePropertyValue = JAXBUtils.wrap(resourcePropertyValue);
+                    }
+                    response = new GetResourcePropertyResponse();
+                    response.getAny().add(resourcePropertyValue);
+                }
+            }
+        } catch (NoSuchResourceException nsre) {
+            e = nsre;
+        } catch (InvalidResourceKeyException irke) {
+            e = irke;
+        } catch (ResourceException re) {
+            e = re;
+        }
+        if ((response == null) || (e != null)) {
+            throw new ResourceUnknownFault("No resource for '" + resourcePropertyQName + "'", e);
+        }
+        return response;
     }
 
     @Override

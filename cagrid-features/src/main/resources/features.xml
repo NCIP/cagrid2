@@ -63,8 +63,9 @@
 		<feature version="${project.version}">cagrid-gts-client</feature>
 		<!-- Install the default config file; it won't overwrite if it already 
 			exists -->
-		<configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config
-		</configfile>
+		<configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config</configfile>
+        <configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-service-metadata</configfile>
+        <configfile finalname="/etc/cagrid-gts/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-security-metadata</configfile>
 		<bundle>mvn:${project.groupId}/cagrid-gts-service/${project.version}
 		</bundle>
 		<bundle>mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}
