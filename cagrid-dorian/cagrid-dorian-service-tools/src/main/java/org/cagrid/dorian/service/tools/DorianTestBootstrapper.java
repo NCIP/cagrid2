@@ -63,9 +63,6 @@ public class DorianTestBootstrapper {
 		File certificateFile = new File(certificatesDir, certificate.getSerialNumber().toString() + ".0");
 		CertUtil.writeCertificate(certificate, certificateFile);
 		
-//		File certificateFile2 = new File("/Users/hastings/.globus/certificates", certificate.getSerialNumber().toString() + ".0");
-//		CertUtil.writeCertificate(certificate, certificateFile2);
-
 		LdapName caDN = new LdapName(certificate.getSubjectX500Principal().getName());
 		List<Rdn> baseRDNs = new LinkedList<Rdn>(caDN.getRdns());
 		for (Iterator<Rdn> rdnIter = baseRDNs.iterator(); rdnIter.hasNext();) {

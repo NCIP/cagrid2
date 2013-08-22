@@ -1,0 +1,16 @@
+
+
+* Two endpoint configuration is missing
+* The non-singleton resource home stuff is not implemented (getDelegatedCredential needs to grab the EPR key to locate the relevant resource)
+  - how does a "new" client get constructed to pass the EPR?
+  - how does the new service-side pull the key out of the EPR context?
+* once the above (epr) is done, the integration test needs to be updated to actually test getting the delegated credential, and test that the proxy-cert is working correctly
+
+
+
+INSTALL:
+features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
+features:install cagrid-cds
+
+
+http://cxf.apache.org/docs/interceptors.html
