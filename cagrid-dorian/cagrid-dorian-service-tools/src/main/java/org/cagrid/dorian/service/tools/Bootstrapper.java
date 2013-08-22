@@ -32,6 +32,8 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String DORIAN_SERVICE_DIR = "cagrid-dorian";
 	private static final String DORIAN_SERVICE_CFG = "cagrid.dorian.service.cfg";
 	private static final String DORIAN_WSRF_CFG = "cagrid.dorian.wsrf.cfg";
+	public static final String TRUST_CA_SHA1_PROMPT = "Please enter a hostname";
+
 	public static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname";
 	public static final String WSRF_HOSTNAME_PROPERTY = "org.cagrid.dorian.wsrf.hostname";
 	public static final String ADMIN_USER_ID_PROMPT = "Please enter the user id of admin";
