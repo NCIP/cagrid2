@@ -29,7 +29,7 @@ import org.cagrid.gts.service.exception.IllegalTrustedAuthorityException;
 import org.cagrid.gts.service.exception.PermissionDeniedException;
 import org.cagrid.gts.service.impl.test.CA;
 import org.cagrid.gts.service.impl.test.Utils;
-import org.cagrid.gts.tools.service.PermissionBootstapper;
+import org.cagrid.gts.tools.service.PermissionBootstrapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -98,7 +98,7 @@ public class GTSImplTest {
 
             }
 
-            PermissionBootstapper pb = new PermissionBootstapper(getConfiguration());
+            PermissionBootstrapper pb = new PermissionBootstrapper(getConfiguration());
             pb.addAdminUser(ADMIN_USER);
             Assert.assertEquals(1, gts.findPermissions(ADMIN_USER, new PermissionFilter()).length);
             int count = 5;
@@ -170,7 +170,7 @@ public class GTSImplTest {
 
             }
 
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             Assert.assertEquals(1, gts.findPermissions(ADMIN_USER, new PermissionFilter()).length);
             addTrustLevels(gts, ADMIN_USER);
@@ -363,7 +363,7 @@ public class GTSImplTest {
             } catch (PermissionDeniedException f) {
             }
 
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             Assert.assertEquals(1, gts.findPermissions(ADMIN_USER, new PermissionFilter()).length);
             addTrustLevels(gts, ADMIN_USER);
@@ -429,7 +429,7 @@ public class GTSImplTest {
 
             // Make sure we start fresh
             clearDatabase();
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             addTrustLevels(gts, ADMIN_USER);
             CA ca = new CA();
@@ -481,7 +481,7 @@ public class GTSImplTest {
             // Make sure we start fresh
             clearDatabase();
             String user = "O=Test Organization,OU=Test Unit,CN=User";
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             addTrustLevels(gts, ADMIN_USER);
             CA ca = new CA();
@@ -608,7 +608,7 @@ public class GTSImplTest {
 
             // Make sure we start fresh
             clearDatabase();
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             TrustLevel l1 = new TrustLevel();
             l1.setName(LEVEL_ONE);
@@ -678,7 +678,7 @@ public class GTSImplTest {
 
         try {
             Configuration conf = Utils.getGTSConfiguration();
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             String user = "O=Test Organization,OU=Test Unit,CN=User";
             int size = 5;
@@ -789,7 +789,7 @@ public class GTSImplTest {
             // Make sure we start fresh
             clearDatabase();
             String user = "O=Test Organization,OU=Test Unit,CN=User";
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             addTrustLevels(gts, ADMIN_USER);
             CA ca = new CA();
@@ -939,7 +939,7 @@ public class GTSImplTest {
             // Make sure we start fresh
             clearDatabase();
             String user = "O=Test Organization,OU=Test Unit,CN=User";
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             addTrustLevels(gts, ADMIN_USER);
             CA ca = new CA();
@@ -1064,7 +1064,7 @@ public class GTSImplTest {
             clearDatabase();
 
             // Add the admin user
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
 
             // Add
@@ -1177,7 +1177,7 @@ public class GTSImplTest {
             clearDatabase();
 
             // Add the admin user
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
             addTrustLevels(gts, ADMIN_USER);
 
@@ -1346,7 +1346,7 @@ public class GTSImplTest {
             clearDatabase();
 
             // Add the admin user
-            PermissionBootstapper pb = new PermissionBootstapper(conf);
+            PermissionBootstrapper pb = new PermissionBootstrapper(conf);
             pb.addAdminUser(ADMIN_USER);
 
             // Create Authorities

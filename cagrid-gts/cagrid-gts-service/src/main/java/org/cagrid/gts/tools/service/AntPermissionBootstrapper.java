@@ -19,12 +19,12 @@ import org.cagrid.gts.service.impl.db.mysql.MySQLManager;
  *          Exp $
  */
 
-public class AntPermissionBootstapper {
+public class AntPermissionBootstrapper {
 
 	private PermissionManager pm;
 
 
-	public AntPermissionBootstapper(Configuration conf) {
+	public AntPermissionBootstrapper(Configuration conf) {
 		pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
 			.getGTSInternalId())));
 	}
@@ -39,9 +39,9 @@ public class AntPermissionBootstapper {
 
 
 	public static void usage() {
-		System.err.println(AntPermissionBootstapper.class.getName() + " Usage:");
+		System.err.println(AntPermissionBootstrapper.class.getName() + " Usage:");
 		System.err.println();
-		System.err.println("java " + AntPermissionBootstapper.class.getName() + " GTS_CONFIGURATION_FILE");
+		System.err.println("java " + AntPermissionBootstrapper.class.getName() + " GTS_CONFIGURATION_FILE");
 	}
 
 
@@ -60,7 +60,7 @@ public class AntPermissionBootstapper {
 			System.exit(1);
 		}
 		try {
-			AntPermissionBootstapper util = new AntPermissionBootstapper(conf);
+			AntPermissionBootstrapper util = new AntPermissionBootstrapper(conf);
 			String gridId = args[1];
 			util.addAdminUser(gridId);
 			System.out.println("The user " + gridId + " was succesfully added as an administrator of the GTS ("
