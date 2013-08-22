@@ -24,6 +24,7 @@ import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.options.SystemPropertyOption;
 import org.ops4j.pax.exam.spi.intern.TestProbeBuilderImpl;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
