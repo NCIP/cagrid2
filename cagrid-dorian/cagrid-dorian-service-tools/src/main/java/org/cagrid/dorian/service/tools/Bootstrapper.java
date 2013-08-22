@@ -32,7 +32,10 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String DORIAN_SERVICE_DIR = "cagrid-dorian";
 	private static final String DORIAN_SERVICE_CFG = "cagrid.dorian.service.cfg";
 	private static final String DORIAN_WSRF_CFG = "cagrid.dorian.wsrf.cfg";
-	public static final String TRUST_CA_SHA1_PROMPT = "Please enter a hostname";
+	public static final String TRUST_CA_SHA1_PROMPT = "Please enter the location of the SHA1 trust fabric CA certificate";
+	public static final String TRUST_CA_SHA1_PROPERTY = "cagrid.dorian.trust.ca.sha1.cert.location";
+	public static final String TRUST_CA_SHA2_PROMPT = "Please enter the location of the SHA2 trust fabric CA certificate";
+	public static final String TRUST_CA_SHA2_PROPERTY = "cagrid.dorian.trust.ca.sha2.cert.location";
 
 	public static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname";
 	public static final String WSRF_HOSTNAME_PROPERTY = "org.cagrid.dorian.wsrf.hostname";
@@ -319,7 +322,13 @@ public class Bootstrapper extends BaseCommandLine {
 			List<CertificateAuthority> list = caManager.getCertificateAuthorities();
 
 			KeyStore keyStore = KeyStore.getInstance("jks");
+
 			keyStore.load(null);
+
+			X509Certificate sha1TrustCA = CertUtil.loadCertificate(new File(getValue(TRUST_CA_SHA1_PROMPT, TRUST_CA_SHA1_PROPERTY)));
+			keyStore.setEntry("trustca1", new KeyStore.TrustedCertificateEntry(sha1TrustCA), null);
+			X509Certificate sha2TrustCA = CertUtil.loadCertificate(new File(getValue(TRUST_CA_SHA2_PROMPT, TRUST_CA_SHA2_PROPERTY)));
+			keyStore.setEntry("trustca2", new KeyStore.TrustedCertificateEntry(sha2TrustCA), null);
 			int count = 1;
 			for (CertificateAuthority ca : list) {
 				X509Certificate cert = ca.getCACertificate();
