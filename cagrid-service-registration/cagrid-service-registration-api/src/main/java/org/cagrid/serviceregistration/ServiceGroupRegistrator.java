@@ -29,7 +29,7 @@ import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 
 public class ServiceGroupRegistrator {
 
-	private int initialDelay = 5000;
+	private int initialDelay = 10000;
 
 	private final static Logger logger = LoggerFactory.getLogger(ServiceGroupRegistrator.class);
 	
@@ -48,6 +48,30 @@ public class ServiceGroupRegistrator {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public ServiceGroupRegistrator(String paramsFile, String registrantURL) {
+		this.isDebug = logger.isDebugEnabled();
+		try {
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.start();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+		
+		this.register(paramsFile, registrantURL);
+	}
+	
+	public ServiceGroupRegistrator(String paramsFile, String registrantURL, long initialDelay) {
+		this.isDebug = logger.isDebugEnabled();
+		try {
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.start();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+		
+		this.register(paramsFile, registrantURL, initialDelay);
 	}
 
 	public void setInitialDelay(int d) {

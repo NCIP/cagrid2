@@ -171,6 +171,11 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-service-registration-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-gaards</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>

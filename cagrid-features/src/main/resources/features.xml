@@ -138,6 +138,7 @@
 
 	<!-- Dorian -->
 	<feature name="cagrid-dorian" version="${project.version}">
+		<feature version="${project.version}">cagrid-service-registration</feature>
 		<feature version="${project.version}">cagrid-dorian-client</feature>
 		<feature version="${project.version}">cagrid-gts-client</feature>
 		<bundle>mvn:${project.groupId}/cagrid-dorian-service/${project.version}

@@ -73,7 +73,6 @@ public class ServiceRegistrationIT extends TestBase {
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
 		options.add(features(featureURL, "cagrid-dorian"));
-		options.add(features(featureURL, "cagrid-service-registration"));
 		options.add(new SystemPropertyOption(
 				"org.ops4j.pax.url.mvn.localRepository")
 				.value("/Users/hastings/.m2/repository"));
@@ -160,10 +159,10 @@ public class ServiceRegistrationIT extends TestBase {
 //		Assert.assertFalse(localUserExists);
 		//
 		
-		ServiceGroupRegistrator client = new ServiceGroupRegistrator();
+//		ServiceGroupRegistrator client = new ServiceGroupRegistrator();
 		try {
-			client.register(karafBase
-					+ "/etc/dorian/Dorian_registration.xml", "https://localhost:8443/wsrf/services/cagrid/Dorian");
+//			client.register(karafBase
+//					+ "/etc/dorian/Dorian_registration.xml", "https://localhost:8443/wsrf/services/cagrid/Dorian");
 			Thread.sleep(30000);
 		} catch (Exception e) {
 			e.printStackTrace();
