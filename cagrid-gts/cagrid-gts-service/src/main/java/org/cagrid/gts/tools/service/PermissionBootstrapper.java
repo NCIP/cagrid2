@@ -25,17 +25,17 @@ import org.cagrid.gts.service.impl.db.mysql.MySQLManager;
  *          Exp $
  */
 
-public class PermissionBootstapper {
+public class PermissionBootstrapper {
 
 	private PermissionManager pm;
 
 
-	public PermissionBootstapper(Configuration conf) {
+	public PermissionBootstrapper(Configuration conf) {
 		pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
 			.getGTSInternalId())));
 	}
 	
-	public PermissionBootstapper(File f) throws FileNotFoundException, Exception {
+	public PermissionBootstrapper(File f) throws FileNotFoundException, Exception {
 	    SimpleResourceManager srm = new SimpleResourceManager(new FileInputStream(f));
 	    Configuration conf = (Configuration) srm.getResource(Configuration.RESOURCE);
 	    pm = new PermissionManager(new MySQLManager(new MySQLDatabase(conf.getConnectionManager(), conf
@@ -53,9 +53,9 @@ public class PermissionBootstapper {
 
 
 	public static void usage() {
-		System.err.println(PermissionBootstapper.class.getName() + " Usage:");
+		System.err.println(PermissionBootstrapper.class.getName() + " Usage:");
 		System.err.println();
-		System.err.println("java " + PermissionBootstapper.class.getName() + " GTS_CONFIGURATION_FILE");
+		System.err.println("java " + PermissionBootstrapper.class.getName() + " GTS_CONFIGURATION_FILE");
 	}
 
 
@@ -74,7 +74,7 @@ public class PermissionBootstapper {
 			System.exit(1);
 		}
 		try {
-			PermissionBootstapper util = new PermissionBootstapper(conf);
+			PermissionBootstrapper util = new PermissionBootstrapper(conf);
 			System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 			System.out.println("*            Grid Trust Service (GTS) Permission Bootstrapper             *");
 			System.out.println("*                                                                         *");

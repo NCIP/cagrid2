@@ -1,5 +1,6 @@
 package org.cagrid.dorian.service.tools.upgrader;
 
+import java.io.File;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -15,6 +16,7 @@ import org.cagrid.dorian.service.ca.CredentialsManager;
 import org.cagrid.dorian.service.federation.AutoApprovalPolicy;
 import org.cagrid.dorian.service.federation.ManualApprovalPolicy;
 import org.cagrid.dorian.service.federation.TrustedIdPManager;
+import org.cagrid.dorian.service.idp.AssertionCredentialsManager;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.tools.database.Database;
@@ -22,6 +24,8 @@ import org.cagrid.tools.database.Database;
 public class Upgrade1_4To2_0 extends Upgrade {
 
 	private boolean upgradeCA = false;
+	private String caCertificateFile;
+	private String caPrivateKeyFile;
 
 	public String getStartingVersion() {
 		return PropertyManager.DORIAN_VERSION_1_4;
@@ -44,6 +48,7 @@ public class Upgrade1_4To2_0 extends Upgrade {
 				System.out.println("The version needs to be upgraded from " + pm.getVersion() + " to " + PropertyManager.DORIAN_VERSION_2_0 + ".");
 			}
 			modifyTrustManagerTable(trialRun);
+			migrateFromHSM(pm, trialRun);
 			upgradeCertificateAuthorities(trialRun);
 		} else {
 			if (!trialRun) {
@@ -108,12 +113,39 @@ public class Upgrade1_4To2_0 extends Upgrade {
 		}
 	}
 
+	private void migrateFromHSM(PropertyManager pm, boolean trialRun) throws Exception {
+		if (pm.getCertificateAuthorityType().equals("org.cagrid.gaards.dorian.ca.EracomCertificateAuthority")) {
+			System.out.println("Certificate authority needs to be migrated from the HSM to the database.....");
+			CertificateAuthority ca = getBeanUtils().getCertificateAuthority();
+			CertificateAuthorityProperties caProperties = getBeanUtils().getCertificateAuthorityProperties();
+			X509Certificate cert = CertUtil.loadCertificate(new File(getCaCertificateFile()));
+			PrivateKey key = KeyUtil.loadPrivateKey(new File(getCaPrivateKeyFile()), null);
+			if (!trialRun) {
+
+				ca.setCACredentials(cert, key, caProperties.getCertificateAuthorityPassword());
+				System.out.println("Successfully imported the CA (" + cert.getSubjectDN().getName() + ") to the dorian database.");
+				getBeanUtils().getDatabase().update("delete FROM " + AssertionCredentialsManager.CREDENTIALS_TABLE);
+				System.out.println("Successfully deleted the assertion manager signing credentials from the dorian database.");
+				AssertionCredentialsManager acm = new AssertionCredentialsManager(getBeanUtils().getIdentityProviderProperties(), ca, getBeanUtils().getDatabase());
+
+				X509Certificate idpcert = acm.getIdPCertificate();
+				System.out.println("Successfully creating new assertion manager signing credentials: (Subject: " + idpcert.getSubjectDN().getName() + " notBefore= " + idpcert.getNotBefore()
+						+ " notAfter= " + idpcert.getNotAfter() + ").");
+				getBeanUtils().getDatabase().update("update trust_manager set IDP_CERTIFICATE='" + CertUtil.writeCertificate(idpcert) + "' where ID = 1");
+				System.out.println("Successfully updated the trust manager certificate for the Dorian IdP.");
+			}
+		}
+
+	}
+
 	private void upgradeCertificateAuthorities(boolean trialRun) throws Exception {
 		if (isUpgradeCA()) {
 			System.out.println("Upgrading certificate authority to SHA2 and archiving legacy CA.....");
+
 			CertificateAuthorityProperties legacyCAProperties = getBeanUtils().getLegacyCertificateAuthorityProperties();
 			CertificateAuthorityProperties caProperties = getBeanUtils().getCertificateAuthorityProperties();
 			CertificateAuthority ca = getBeanUtils().getCertificateAuthority();
+
 			X509Certificate legacyCert = ca.getCACertificate();
 			PrivateKey key = ca.getPrivateKey();
 			if (!trialRun) {
@@ -148,4 +180,21 @@ public class Upgrade1_4To2_0 extends Upgrade {
 			}
 		}
 	}
+
+	public String getCaCertificateFile() {
+		return caCertificateFile;
+	}
+
+	public void setCaCertificateFile(String caCertificateFile) {
+		this.caCertificateFile = caCertificateFile;
+	}
+
+	public String getCaPrivateKeyFile() {
+		return caPrivateKeyFile;
+	}
+
+	public void setCaPrivateKeyFile(String caPrivateKeyFile) {
+		this.caPrivateKeyFile = caPrivateKeyFile;
+	}
+
 }

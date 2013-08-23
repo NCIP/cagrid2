@@ -12,6 +12,7 @@
 		<prop key="cagrid.cds.service.name">cds</prop>
 
         <prop key="cagrid.cds.service.db.host">localhost</prop>
+        <prop key="cagrid.cds.service.db.name">cds</prop>
 		<prop key="cagrid.cds.service.db.port">3306</prop>
 		<prop key="cagrid.cds.service.db.user">root</prop>
 		<prop key="cagrid.cds.service.db.password"></prop>

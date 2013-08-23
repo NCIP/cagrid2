@@ -145,5 +145,6 @@
         <module>cagrid-cds-wsrf</module>
         <module>cagrid-cds-soap-client</module>
         <module>cagrid-cds-inttest</module>
+        <module>cagrid-cds-service-tools</module>
     </modules>
 </project>

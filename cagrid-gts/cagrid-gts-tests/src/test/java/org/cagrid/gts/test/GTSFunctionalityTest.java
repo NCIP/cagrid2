@@ -26,7 +26,7 @@ import org.cagrid.gts.model.TrustLevel;
 import org.cagrid.gts.service.GTS;
 import org.cagrid.gts.service.exception.PermissionDeniedException;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
-import org.cagrid.gts.tools.service.PermissionBootstapper;
+import org.cagrid.gts.tools.service.PermissionBootstrapper;
 import org.cagrid.gts.wsrf.stubs.FindPermissionsRequest;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
 import org.cagrid.gts.wsrf.stubs.GetTrustLevelsRequest;
@@ -96,7 +96,7 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
             } catch (PermissionDeniedException f) { // expected
             }
 
-            PermissionBootstapper pb = new PermissionBootstapper(new File("etc/cagrid-gts/gts-conf.xml"));
+            PermissionBootstrapper pb = new PermissionBootstrapper(new File("etc/cagrid-gts/gts-conf.xml"));
             pb.addAdminUser(ADMIN_USER);
 
             // grab its metadata

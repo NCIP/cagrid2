@@ -1,0 +1,33 @@
+
+implement:
+secure communication between slave/master
+syncgts
+bootstrappers
+
+test:
+legacy support
+trainging dbs
+
+
+
+	To get going please do the following:
+
+	1) Download and Build caGrid 1.4
+	2) Configure it to use the Training target Grid.
+	3) Run the Bootstrapper from eclipse
+		a) Give it the attached truststore when requested.
+		b) Give it the attached public/private key for both the WSRF and Legacy WSRF Endpoints.
+	4) Deploy GTS
+	5) Add GTS to the GAARDS UI Window ==> Preferences
+	    ==> Target Grids (Expand)
+	    ==> Training (Expand)
+	    ==> Trust Fabric (Expand)
+	    ==> Grid Trust Service(s).   
+	    * Specify the name as what ever you want (Localhost)
+	    * Specify the URL as: https://localhost:8443/wsrf/services/cagrid/GTS
+	    * Click "Add" and click "Save"
+	    
+	    
+	    
+can test legacy wsrf RP support like this:
+$GLOBUS_LOCATION/bin/wsrf-get-property -d -a -z none -s https://localhost:7741/wsrf/services/cagrid/GTS \{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata\}ServiceMetadata

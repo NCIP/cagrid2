@@ -11,6 +11,17 @@
 	<name>caGrid GTS</name>
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gts-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gts-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-gaards-api</artifactId>
@@ -70,7 +81,6 @@
 		<module>cagrid-gts-service</module>
 		<module>cagrid-gts-wsrf</module>
 		<module>cagrid-gts-soap-client</module>
-		
 		<module>cagrid-gts-tests</module>
 	</modules>
 </project>

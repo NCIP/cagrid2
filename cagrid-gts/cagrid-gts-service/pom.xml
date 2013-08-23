@@ -94,6 +94,16 @@
                                     <type>xml</type>
                                     <classifier>gts-config</classifier>
                                 </artifact>
+                                <artifact>
+                                    <file>src/main/resources/serviceMetadata.xml</file>
+                                    <type>xml</type>
+                                    <classifier>gts-service-metadata</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>src/main/resources/serviceSecurityMetadata.xml</file>
+                                    <type>xml</type>
+                                    <classifier>gts-security-metadata</classifier>
+                                </artifact>
                             </artifacts>
                         </configuration>
                     </execution>

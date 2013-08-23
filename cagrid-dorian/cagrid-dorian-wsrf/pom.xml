@@ -45,6 +45,10 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>cagrid-service-registration-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-core</artifactId>
 		</dependency>
 		<dependency>

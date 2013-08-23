@@ -43,6 +43,7 @@
 		<prop key="cagrid.dorian.wsrf.legacy-endpoint">dorianLegacyWSRF</prop>
 		<prop key="cagrid.dorian.wsrf.metadata.url">serviceMetadata.xml</prop>
 		<prop key="cagrid.dorian.wsrf.security.metadata.url">serviceSecurityMetadata.xml</prop>
+		<prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/dorian/Dorian_registration.xml</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />

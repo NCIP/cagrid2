@@ -21,6 +21,10 @@
 		class="org.cagrid.dorian.service.tools.upgrader.Upgrade1_3To1_4" />
 	<bean id="Upgrade1_4To2_0"
 		class="org.cagrid.dorian.service.tools.upgrader.Upgrade1_4To2_0">
-		<property name="upgradeCA" value="true"/>
+		<property name="upgradeCA" value="true" />
+		<property name="caCertificateFile"
+			value="/Users/langella/work/caGrid/Training/ca/training-dorian-sha1-ca-cert.pem" />
+		<property name="caPrivateKeyFile"
+			value="/Users/langella/work/caGrid/Training/ca/training-dorian-sha1-ca-key.pem" />
 	</bean>
 </beans>	

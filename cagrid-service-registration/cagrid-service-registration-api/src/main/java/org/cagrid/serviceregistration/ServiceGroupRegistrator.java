@@ -1,22 +1,5 @@
 package org.cagrid.serviceregistration;
 
-/*
- * Portions of this file Copyright 1999-2005 University of Chicago
- * Portions of this file Copyright 1999-2005 The University of Southern California.
- *
- * This file or a portion of this file is licensed under the
- * terms of the Globus Toolkit Public License, found at
- * http://www.globus.org/toolkit/download/license.html.
- * If you redistribute this file, with or without
- * modifications, you must include this notice in the file.
- */
-
-/*
- * ServiceGroupRegistrationClient.java
- *
- * Created on September 13, 2004, 5:52 PM
- */
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -38,28 +21,26 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleTrigger;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.xmlsoap.schemas.ws._2004._03.addressing.AttributedURI;
 import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 
-public class ServiceGroupRegistrationClient {
+public class ServiceGroupRegistrator {
 
-	static final int INITIAL_DELAY_CONTAINER =30000;
-	private int initialDelay = 5000;
+	private int initialDelay = 10000;
 
-	private static ServiceGroupRegistrationClient containerClient = null;
-
-	private List registrations = Collections.synchronizedList(new ArrayList());
-	private EndpointReferenceType defaultServiceGroupEPR = null;
+	private final static Logger logger = LoggerFactory.getLogger(ServiceGroupRegistrator.class);
 	
-	private String defaultSecDescFile = null;
-
+	private List registrations = Collections.synchronizedList(new ArrayList());
+	
 	public boolean isDebug = false;
-	public boolean outputToConsole = false;
 	private static Scheduler scheduler;
 
 	/** Creates a new instance of ServiceGroupRegistrationClient */
-	public ServiceGroupRegistrationClient() {
-//		this.isDebug = logger.isDebugEnabled();
+	public ServiceGroupRegistrator() {
+		this.isDebug = logger.isDebugEnabled();
 		try {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			scheduler.start();
@@ -68,31 +49,58 @@ public class ServiceGroupRegistrationClient {
 		}
 
 	}
-
-	public void setDefaultServiceGroupEPR(EndpointReferenceType epr) {
-		this.defaultServiceGroupEPR = epr;
+	
+	public ServiceGroupRegistrator(String paramsFile, String registrantURL) {
+		this.isDebug = logger.isDebugEnabled();
+		try {
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.start();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+		
+		this.register(paramsFile, registrantURL);
 	}
-
-	/** @since GT3.9.5 */
-	public EndpointReferenceType getDefaultServiceGroupEPR() {
-		return this.defaultServiceGroupEPR;
-	}
-
-
-	/**
-	 * Sets the default security descriptor filename for registrations that have
-	 * a null security descriptor filename.
-	 * 
-	 * @since GT3.9.4
-	 */
-	public void setDefaultSecDescFile(String f) {
-		this.defaultSecDescFile = f;
+	
+	public ServiceGroupRegistrator(String paramsFile, String registrantURL, long initialDelay) {
+		this.isDebug = logger.isDebugEnabled();
+		try {
+			scheduler = StdSchedulerFactory.getDefaultScheduler();
+			scheduler.start();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+		
+		this.register(paramsFile, registrantURL, initialDelay);
 	}
 
 	public void setInitialDelay(int d) {
 		this.initialDelay = d;
 	}
 	
+	
+	public JobDetail register(String paramsFile,String registrantURL,
+			long delayMillis) {
+		ServiceGroupRegistrationParameters params = null;
+		try {
+			params = readParams(paramsFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return register(params, registrantURL, delayMillis);
+	}
+	
+	public JobDetail register(String paramsFile,String registrantURL) {
+		ServiceGroupRegistrationParameters params = null;
+		try {
+			params = readParams(paramsFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return register(params, registrantURL, initialDelay);
+	}
 
 	/**
 	 * Create new managed registration using the supplied registration
@@ -103,8 +111,15 @@ public class ServiceGroupRegistrationClient {
 	 * @param delayMillis
 	 *            the delay in milliseconds before executing the request.
 	 */
-	public JobDetail register(ServiceGroupRegistrationParameters params,
+	public JobDetail register(ServiceGroupRegistrationParameters params,String registrantURL,
 			long delayMillis) {
+		
+		EndpointReferenceType epr = new EndpointReferenceType();
+		AttributedURI uri = new AttributedURI();
+		uri.setValue("https://localhost:8443/wsrf/services/cagrid/Dorian");
+		epr.setAddress(uri);
+		
+		params.setRegistrantEPR(epr);
 		
 		JobDetail detail = new JobDetail(params.getRegistrantEPR() + "Job",
 				"cagrid", RegistrationJob.class);
@@ -135,8 +150,8 @@ public class ServiceGroupRegistrationClient {
 	 * @param params
 	 *            registration parameters
 	 */
-	public JobDetail register(ServiceGroupRegistrationParameters params) {
-		return this.register(params, initialDelay);
+	public JobDetail register(ServiceGroupRegistrationParameters params, String registrantURL) {
+		return this.register(params, registrantURL, initialDelay);
 	}
 
 	/**
@@ -217,25 +232,6 @@ public class ServiceGroupRegistrationClient {
 //		}
 	}
 
-	/** This should only be called when running within a container */
-	public static synchronized ServiceGroupRegistrationClient getContainerClient() {
-		if (containerClient != null) {
-			return containerClient;
-		}
-		// otherwise, initialise and return
-
-		containerClient = new ServiceGroupRegistrationClient();
-		containerClient.setInitialDelay(INITIAL_DELAY_CONTAINER);
-
-		try {
-			// so that we'll generate at runtime
-			containerClient.setDefaultServiceGroupEPR(null);
-		} catch (Exception e) {
-//			logger.error("Exception when setting default index service: " + e);
-		}
-
-		return containerClient;
-	}
 
 	// static public EndpointReferenceType getIndexEPR()
 	// throws java.net.MalformedURLException, java.io.IOException {
@@ -271,7 +267,6 @@ public class ServiceGroupRegistrationClient {
 			Document doc = XMLUtils.parse(inputStream);
 
 			ServiceGroupRegistrationParameters  params = null;
-			// this.status(LOG_D, "Deserializing Registration entry...");
 
 			JAXBContext jc = JAXBContext
 					.newInstance(ServiceGroupRegistrationParameters.class);

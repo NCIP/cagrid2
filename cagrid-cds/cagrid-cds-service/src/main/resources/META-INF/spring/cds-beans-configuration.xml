@@ -15,7 +15,7 @@
 		<constructor-arg value="${cagrid.cds.service.db.port}" />
 		<constructor-arg value="${cagrid.cds.service.db.user}" />
 		<constructor-arg value="${cagrid.cds.service.db.password}" />
-		<constructor-arg value="${cagrid.cds.service.name}" />
+		<constructor-arg value="${cagrid.cds.service.db.name}" />
 	</bean>
 
 	<!-- ADD POLICY HANDLER BEANS HERE -->

@@ -97,7 +97,6 @@ public class RegistrationJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		System.out.println("HERE");
 		this.parameters = (ServiceGroupRegistrationParameters) arg0
 				.getJobDetail().getJobDataMap().get("params");
 		if (this.parameters == null) {
