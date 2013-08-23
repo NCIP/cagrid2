@@ -27,13 +27,25 @@
 		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
 		<property name="keyStorePath" value="${cagrid.cds.wsrf.keystore.path}" />
 		<property name="keyStorePassword" value="${cagrid.cds.wsrf.keystore.password}" />
-		<property name="keyManagerPassword" value="${cagrid.cds.wsrf.keystore.alias-password}" />
+		<property name="keyManagerPassword" value="${cagrid.cds.wsrf.key.password}" />
 		<property name="trustStore" value="${cagrid.cds.wsrf.truststore.path}" />
 		<property name="trustStorePassword" value="${cagrid.cds.wsrf.truststore.password}" />
 		<property name="wantClientAuth" value="true" />
 		<property name="needClientAuth" value="false" />
 		<property name="includeCipherSuites" value="${cagrid.cds.wsrf.cipher-suites}" />
 	</bean>
+
+    <bean id="legacyProxySslContextFactory"
+          class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+        <property name="keyStorePath" value="${cagrid.cds.legacy-wsrf.keystore.path}" />
+        <property name="keyStorePassword" value="${cagrid.cds.legacy-wsrf.keystore.password}" />
+        <property name="keyManagerPassword" value="${cagrid.cds.legacy-wsrf.key.password}" />
+        <property name="trustStore" value="${cagrid.cds.legacy-wsrf.truststore.path}" />
+        <property name="trustStorePassword" value="${cagrid.cds.legacy-wsrf.truststore.password}" />
+        <property name="wantClientAuth" value="true" />
+        <property name="needClientAuth" value="false" />
+        <property name="includeCipherSuites" value="${cagrid.cds.wsrf.cipher-suites}" />
+    </bean>
 
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.cds.wsrf.port}">
@@ -45,6 +57,15 @@
 				</bean>
 			</httpj:connector>
 		</httpj:engine>
+        <httpj:engine port="${cagrid.cds.legacy-wsrf.port}">
+            <httpj:tlsServerParameters />
+            <httpj:connector>
+                <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                    <constructor-arg index="0" ref="legacyProxySslContextFactory" />
+                    <property name="port" value="${cagrid.cds.legacy-wsrf.port}" />
+                </bean>
+            </httpj:connector>
+        </httpj:engine>
 	</httpj:engine-factory>
 
 
@@ -67,6 +88,13 @@
 		serviceName="s:CredentialDelegationService" address="${cagrid.cds.wsrf.url}"
 		wsdlLocation="schema/org/cagrid/cds/CredentialDelegationService_service.wsdl">
 	</jaxws:endpoint>
+
+    <jaxws:endpoint xmlns:e="http://cds.gaards.cagrid.org/CredentialDelegationService/service"
+                    xmlns:s="http://cds.gaards.cagrid.org/CredentialDelegationService/service" id="legacyCdsWSRFEP"
+                    implementor="#cdsWSRF" bus="cxf" endpointName="e:CredentialDelegationServicePortTypePort"
+                    serviceName="s:CredentialDelegationService" address="${cagrid.cds.legacy-wsrf.url}"
+                    wsdlLocation="schema/org/cagrid/cds/CredentialDelegationService_service.wsdl">
+    </jaxws:endpoint>
 
     <!-- Delegated Credential Service -->
 
