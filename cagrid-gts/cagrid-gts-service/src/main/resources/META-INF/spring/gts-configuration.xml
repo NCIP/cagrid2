@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<bean id="defaultPropertiesPlaceholder"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:META-INF/spring/gts.properties"/>
-		<property name="ignoreResourceNotFound" value="true"/>
-		<property name="ignoreUnresolvablePlaceholders" value="true"/>
-	</bean>
-	<bean id="jaxbResourceProperties" class="java.util.HashMap">
-		<constructor-arg>
-			<map>
-				<entry key="serviceMetadata" value="${cagrid.gts.service.metadata.url}"/>
-				<entry key="serviceSecurityMetadata" value="${cagrid.gts.service.security.metadata.url}"/>
-			</map>
-		</constructor-arg>
-	</bean>
-	<bean id="srm" class="org.cagrid.gts.service.impl.SimpleResourceManager">
-		<constructor-arg value="${cagrid.gts.service.config.url}"/>
-	</bean>
-	<bean id="gts" class="org.cagrid.gts.service.impl.GTSImpl"
-		init-method="initialize">
-		<constructor-arg ref="jaxbResourceProperties"/>
-		<constructor-arg ref="srm"/>
-		<constructor-arg value="${cagrid.gts.service.url}"/>
-		<constructor-arg value="${cagrid.gts.sync.authorities}"/>
-	</bean>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="defaultPropertiesPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:META-INF/spring/gts.properties"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+    <bean id="jaxbResourceProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="serviceMetadata" value="${cagrid.gts.service.metadata.url}"/>
+                <entry key="serviceSecurityMetadata" value="${cagrid.gts.service.security.metadata.url}"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean id="srm" class="org.cagrid.gts.service.impl.SimpleResourceManager">
+        <constructor-arg value="${cagrid.gts.service.config.url}"/>
+    </bean>
+    <bean id="gts" class="org.cagrid.gts.service.impl.GTSImpl" init-method="initialize">
+        <constructor-arg ref="jaxbResourceProperties"/>
+        <constructor-arg ref="srm"/>
+        <constructor-arg value="${cagrid.gts.service.url}"/>
+        <constructor-arg value="${cagrid.gts.sync.authorities}"/>
+        <constructor-arg ref="credentialManager"/>
+    </bean>
+
+    <bean id="credentialManager" class="org.cagrid.gts.service.impl.CredentialManager">
+        <property name="keystoreFile" value="${cagrid.gts.service.client.keystore.file}"/>
+        <property name="keystorePassword" value="${cagrid.gts.service.client.keystore.password}"/>
+        <property name="keyAlias" value="${cagrid.gts.service.client.key.alias}"/>
+        <property name="keyPassword" value="${cagrid.gts.service.client.key.password}"/>
+        <property name="truststoreFile" value="${cagrid.gts.service.client.truststore.file}"/>
+        <property name="truststorePassword" value="${cagrid.gts.service.client.truststore.password}"/>
+    </bean>
 </beans>

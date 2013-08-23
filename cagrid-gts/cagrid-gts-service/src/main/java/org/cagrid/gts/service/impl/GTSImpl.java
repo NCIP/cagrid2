@@ -50,13 +50,13 @@ public class GTSImpl implements org.cagrid.gts.service.GTS {
     private final ResourceImpl resource = new ResourceImpl(null);
     private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
 
-    public GTSImpl(Map<String, String> jaxbResourcePropertiesMap, SimpleResourceManager srm, String gtsURI, boolean syncAuthorities)
-            throws GTSInternalException {
+    public GTSImpl(Map<String, String> jaxbResourcePropertiesMap, SimpleResourceManager srm, String gtsURI, boolean syncAuthorities,
+            CredentialManager credmanager) throws GTSInternalException {
         // EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
         // String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(GTS_CONFIG);
         // String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
         Configuration conf = (Configuration) srm.getResource(Configuration.RESOURCE);
-        this.gts = new GTS(conf, gtsURI, syncAuthorities);
+        this.gts = new GTS(conf, gtsURI, syncAuthorities, credmanager);
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
     }
 

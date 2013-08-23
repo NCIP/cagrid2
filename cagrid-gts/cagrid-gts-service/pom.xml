@@ -73,7 +73,7 @@
                             !sun.security.action*,
                             !javax.swing*,
                             *</Import-Package>
-                            
+                        <Require-Bundle>org.apache.cxf.bundle</Require-Bundle>
                     </instructions>
                 </configuration>
             </plugin>
