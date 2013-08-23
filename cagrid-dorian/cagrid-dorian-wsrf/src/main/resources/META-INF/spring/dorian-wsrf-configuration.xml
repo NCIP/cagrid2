@@ -29,6 +29,12 @@
 		<constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
 	</bean>
 	
+	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator">
+		<constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
+		<constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.registrant.legacy.url}"></constructor-arg>
+		<constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
+	</bean>
+	
 	<bean id="proxySslContextFactory"
 		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
 		<property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}" />

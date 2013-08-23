@@ -43,7 +43,8 @@
 		<prop key="cagrid.dorian.wsrf.legacy-endpoint">dorianLegacyWSRF</prop>
 		<prop key="cagrid.dorian.wsrf.metadata.url">serviceMetadata.xml</prop>
 		<prop key="cagrid.dorian.wsrf.security.metadata.url">serviceSecurityMetadata.xml</prop>
-		<prop key="cagrid.dorian.wsrf.registration.registrant.url">${cagrid.dorian.legacy-wsrf.url}</prop>
+		<prop key="cagrid.dorian.wsrf.registration.registrant.url">${cagrid.dorian.wsrf.url}</prop>
+		<prop key="cagrid.dorian.wsrf.registration.registrant.legacy.url">${cagrid.dorian.legacy-wsrf.url}</prop>
 		<prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/dorian/registration.xml</prop>
 		<prop key="cagrid.dorian.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
 	</osgix:cm-properties>
