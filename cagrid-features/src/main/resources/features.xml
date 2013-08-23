@@ -63,9 +63,12 @@
 		<feature version="${project.version}">cagrid-gts-client</feature>
 		<!-- Install the default config file; it won't overwrite if it already 
 			exists -->
-		<configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config</configfile>
-        <configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-service-metadata</configfile>
-        <configfile finalname="/etc/cagrid-gts/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-security-metadata</configfile>
+		<configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config
+		</configfile>
+		<configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-service-metadata
+		</configfile>
+		<configfile finalname="/etc/cagrid-gts/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-security-metadata
+		</configfile>
 		<bundle>mvn:${project.groupId}/cagrid-gts-service/${project.version}
 		</bundle>
 		<bundle>mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}
@@ -82,22 +85,30 @@
 
 	<!-- GridGrouper -->
 	<feature name="cagrid-gridgrouper" version="${project.version}">
-        <feature version="${project.version}">cagrid-gaards</feature>
+		<feature version="${project.version}">cagrid-gaards</feature>
 
-        <!-- client -->
-        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
-        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-soap-client/${project.version}</bundle>
+		<!-- client -->
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}
+		</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-soap-client/${project.version}
+		</bundle>
 
-        <!-- internet2 -->
-        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}</bundle>
-        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
-        <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.discovery/0.4.0</bundle>
-        <bundle>mvn:org.doomdark/com.springsource.org.doomdark.uuid/1.1.2</bundle>
-        <bundle>wrap:mvn:odmg/odmg/3.0</bundle>
+		<!-- internet2 -->
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}
+		</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}
+		</bundle>
+		<bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.discovery/0.4.0
+		</bundle>
+		<bundle>mvn:org.doomdark/com.springsource.org.doomdark.uuid/1.1.2
+		</bundle>
+		<bundle>wrap:mvn:odmg/odmg/3.0</bundle>
 
 		<!-- service -->
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}</bundle>
-		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}
+		</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}
+		</bundle>
 	</feature>
 
 	<feature name="cagrid-gridgrouper-client" version="${project.version}">
@@ -108,17 +119,21 @@
 		</bundle>
 	</feature>
 
-    <feature name="cagrid-gridgrouper-internet2" version="${project.version}">
-        <feature version="${project.version}">cagrid-gaards</feature>
+	<feature name="cagrid-gridgrouper-internet2" version="${project.version}">
+		<feature version="${project.version}">cagrid-gaards</feature>
 
-        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}</bundle>
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-internet2/${project.version}
+		</bundle>
 
-        <!-- internet2 needs the following bundles -->
-        <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
-        <bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.discovery/0.4.0</bundle>
-        <bundle>mvn:org.doomdark/com.springsource.org.doomdark.uuid/1.1.2</bundle>
-        <bundle>wrap:mvn:odmg/odmg/3.0</bundle>
-    </feature>
+		<!-- internet2 needs the following bundles -->
+		<bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}
+		</bundle>
+		<bundle>mvn:org.apache.commons/com.springsource.org.apache.commons.discovery/0.4.0
+		</bundle>
+		<bundle>mvn:org.doomdark/com.springsource.org.doomdark.uuid/1.1.2
+		</bundle>
+		<bundle>wrap:mvn:odmg/odmg/3.0</bundle>
+	</feature>
 
 	<!-- CDS -->
 	<feature name="cagrid-cds" version="${project.version}">
@@ -138,6 +153,9 @@
 
 	<!-- Dorian -->
 	<feature name="cagrid-dorian" version="${project.version}">
+		<configfile finalname="/etc/dorian/serviceMetadata.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/serviceMetadata</configfile>
+		<configfile finalname="/etc/dorian/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/serviceSecurityMetadata</configfile>
+		<configfile finalname="/etc/dorian/registration.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/registration</configfile>
 		<feature version="${project.version}">cagrid-service-registration</feature>
 		<feature version="${project.version}">cagrid-dorian-client</feature>
 		<feature version="${project.version}">cagrid-gts-client</feature>
