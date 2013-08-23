@@ -15,6 +15,13 @@
 			its own "endpoint" to compare against trusted authorities -->
 		<prop key="cagrid.gts.service.url">https://localhost:8443/wsrf/services/cagrid/GTS</prop>
 		<prop key="cagrid.gts.sync.authorities">true</prop>
+        <!-- So the GTS can call other GTSs -->
+        <prop key="cagrid.gts.service.client.keystore.file">${karaf.base}/etc/cagrid-gts/gts-host.jks</prop>
+        <prop key="cagrid.gts.service.client.keystore.password">changeit</prop>
+        <prop key="cagrid.gts.service.client.key.alias">host</prop>
+        <prop key="cagrid.gts.service.client.key.password">changeit</prop>
+        <prop key="cagrid.gts.service.client.truststore.file">${karaf.base}/etc/cagrid-gts/truststore.jks</prop>
+        <prop key="cagrid.gts.service.client.truststore.password">changeit</prop>
 	</osgix:cm-properties>
 	<ctx:property-placeholder properties-ref="preProps"/>
 	<osgi:service ref="gts" interface="org.cagrid.gts.service.GTS"/>

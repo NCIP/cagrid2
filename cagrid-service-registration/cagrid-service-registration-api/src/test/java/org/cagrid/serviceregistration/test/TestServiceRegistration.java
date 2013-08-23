@@ -13,7 +13,7 @@ public class TestServiceRegistration {
 		ServiceGroupRegistrator client = new ServiceGroupRegistrator();
 		try {
 			client.register("./src/test/resources/Dorian_registration.xml",
-					"http://testing123");
+					"http://testing123", "http://localhost:8080/wsrf/services/DefaultIndexService");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

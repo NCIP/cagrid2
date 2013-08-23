@@ -1,6 +1,11 @@
 package org.cagrid.serviceregistration;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,10 +36,11 @@ public class ServiceGroupRegistrator {
 
 	private int initialDelay = 10000;
 
-	private final static Logger logger = LoggerFactory.getLogger(ServiceGroupRegistrator.class);
-	
+	private final static Logger logger = LoggerFactory
+			.getLogger(ServiceGroupRegistrator.class);
+
 	private List registrations = Collections.synchronizedList(new ArrayList());
-	
+
 	public boolean isDebug = false;
 	private static Scheduler scheduler;
 
@@ -49,8 +55,9 @@ public class ServiceGroupRegistrator {
 		}
 
 	}
-	
-	public ServiceGroupRegistrator(String paramsFile, String registrantURL) {
+
+	public ServiceGroupRegistrator(String paramsFile, String registrantURL,
+			String indexServiceURL) {
 		this.isDebug = logger.isDebugEnabled();
 		try {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -58,11 +65,12 @@ public class ServiceGroupRegistrator {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
-		
-		this.register(paramsFile, registrantURL);
+
+		this.register(paramsFile, registrantURL, indexServiceURL);
 	}
-	
-	public ServiceGroupRegistrator(String paramsFile, String registrantURL, long initialDelay) {
+
+	public ServiceGroupRegistrator(String paramsFile, String registrantURL,
+			String indexServiceURL, long initialDelay) {
 		this.isDebug = logger.isDebugEnabled();
 		try {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
@@ -70,17 +78,16 @@ public class ServiceGroupRegistrator {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
-		
-		this.register(paramsFile, registrantURL, initialDelay);
+
+		this.register(paramsFile, registrantURL, indexServiceURL, initialDelay);
 	}
 
 	public void setInitialDelay(int d) {
 		this.initialDelay = d;
 	}
-	
-	
-	public JobDetail register(String paramsFile,String registrantURL,
-			long delayMillis) {
+
+	public JobDetail register(String paramsFile, String registrantURL,
+			String indexServiceURL, long delayMillis) {
 		ServiceGroupRegistrationParameters params = null;
 		try {
 			params = readParams(paramsFile);
@@ -88,10 +95,11 @@ public class ServiceGroupRegistrator {
 			e.printStackTrace();
 			return null;
 		}
-		return register(params, registrantURL, delayMillis);
+		return register(params, registrantURL, indexServiceURL, delayMillis);
 	}
-	
-	public JobDetail register(String paramsFile,String registrantURL) {
+
+	public JobDetail register(String paramsFile, String registrantURL,
+			String indexServiceURL) {
 		ServiceGroupRegistrationParameters params = null;
 		try {
 			params = readParams(paramsFile);
@@ -99,7 +107,7 @@ public class ServiceGroupRegistrator {
 			e.printStackTrace();
 			return null;
 		}
-		return register(params, registrantURL, initialDelay);
+		return register(params, registrantURL, indexServiceURL, initialDelay);
 	}
 
 	/**
@@ -111,16 +119,23 @@ public class ServiceGroupRegistrator {
 	 * @param delayMillis
 	 *            the delay in milliseconds before executing the request.
 	 */
-	public JobDetail register(ServiceGroupRegistrationParameters params,String registrantURL,
-			long delayMillis) {
-		
+	public JobDetail register(ServiceGroupRegistrationParameters params,
+			String registrantURL, String indexServiceURL, long delayMillis) {
+
 		EndpointReferenceType epr = new EndpointReferenceType();
 		AttributedURI uri = new AttributedURI();
-		uri.setValue("https://localhost:8443/wsrf/services/cagrid/Dorian");
+		uri.setValue(registrantURL);
 		epr.setAddress(uri);
-		
+
 		params.setRegistrantEPR(epr);
-		
+
+		EndpointReferenceType epr2 = new EndpointReferenceType();
+		AttributedURI uri2 = new AttributedURI();
+		uri2.setValue(indexServiceURL);
+		epr2.setAddress(uri2);
+
+		params.setServiceGroupEPR(epr2);
+
 		JobDetail detail = new JobDetail(params.getRegistrantEPR() + "Job",
 				"cagrid", RegistrationJob.class);
 		JobDataMap data = new JobDataMap();
@@ -132,7 +147,7 @@ public class ServiceGroupRegistrator {
 				+ "-Trigger", "cagrid", new Date(startTime), null,
 				SimpleTrigger.REPEAT_INDEFINITELY,
 				params.getRefreshIntervalSecs() * 1000);
-		
+
 		try {
 			scheduler.scheduleJob(detail, trigger);
 		} catch (SchedulerException e) {
@@ -150,8 +165,10 @@ public class ServiceGroupRegistrator {
 	 * @param params
 	 *            registration parameters
 	 */
-	public JobDetail register(ServiceGroupRegistrationParameters params, String registrantURL) {
-		return this.register(params, registrantURL, initialDelay);
+	public JobDetail register(ServiceGroupRegistrationParameters params,
+			String registrantURL, String indexServiceURL) {
+		return this.register(params, registrantURL, indexServiceURL,
+				initialDelay);
 	}
 
 	/**
@@ -202,36 +219,35 @@ public class ServiceGroupRegistrator {
 
 	/** Internal method for handling console or log4j based output. */
 	private void status(int msgType, Object obj) {
-//		if (this.outputToConsole) {
-			if ((msgType == LOG_E) || (msgType == LOG_W)) {
-				System.err.println(obj);
-			} else if (msgType == LOG_D) {
-				// skip outputting debug messages to console unless
-				// in debug mode
-				if (this.isDebug)
-					System.out.println(obj);
-			} else {
+		// if (this.outputToConsole) {
+		if ((msgType == LOG_E) || (msgType == LOG_W)) {
+			System.err.println(obj);
+		} else if (msgType == LOG_D) {
+			// skip outputting debug messages to console unless
+			// in debug mode
+			if (this.isDebug)
 				System.out.println(obj);
-			}
-//		} else if (this.outputToLog) {
-//			switch (msgType) {
-//			case LOG_E:
-//				logger.error(obj);
-//				break;
-//			case LOG_W:
-//				logger.warn(obj);
-//				break;
-//			case LOG_D:
-//				logger.debug(obj);
-//				break;
-//			case LOG_I:
-//			default:
-//				logger.info(obj);
-//				break;
-//			}
-//		}
+		} else {
+			System.out.println(obj);
+		}
+		// } else if (this.outputToLog) {
+		// switch (msgType) {
+		// case LOG_E:
+		// logger.error(obj);
+		// break;
+		// case LOG_W:
+		// logger.warn(obj);
+		// break;
+		// case LOG_D:
+		// logger.debug(obj);
+		// break;
+		// case LOG_I:
+		// default:
+		// logger.info(obj);
+		// break;
+		// }
+		// }
 	}
-
 
 	// static public EndpointReferenceType getIndexEPR()
 	// throws java.net.MalformedURLException, java.io.IOException {
@@ -266,7 +282,7 @@ public class ServiceGroupRegistrator {
 			inputStream = new FileInputStream(filename);
 			Document doc = XMLUtils.parse(inputStream);
 
-			ServiceGroupRegistrationParameters  params = null;
+			ServiceGroupRegistrationParameters params = null;
 
 			JAXBContext jc = JAXBContext
 					.newInstance(ServiceGroupRegistrationParameters.class);
