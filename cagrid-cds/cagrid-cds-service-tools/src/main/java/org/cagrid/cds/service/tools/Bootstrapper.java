@@ -102,7 +102,7 @@ public class Bootstrapper extends BaseCommandLine {
 	@Override
 	public void execute() throws Exception {
 		System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
-		System.out.println("*                 CDS Bootstrapper                  *");
+		System.out.println("*                 CDS Bootstrapper                          *");
 		System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 		System.out.println("");
 		cdsEtcDir = new File(getServiceMixEtc().getAbsolutePath() + File.separator + CDS_SERVICE_DIR);
