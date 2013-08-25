@@ -152,6 +152,14 @@ public abstract class BaseCommandLine {
 		return val;
 	}
 
+    public String getValueWithDefault(String property, String defaultValue) {
+        String val = getProperties().getProperty(property);
+        if (val == null) {
+            return defaultValue;
+        }
+        return val;
+    }
+
 	public String getValueWithOptions(String prompt, String property, String[] options) {
 		return getValueWithOptions(prompt, property, null, options);
 	}
