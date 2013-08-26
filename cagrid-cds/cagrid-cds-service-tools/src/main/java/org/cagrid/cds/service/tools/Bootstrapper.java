@@ -68,6 +68,7 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String LEGACY_WSRF_URL_PROPERTY = "cagrid.cds.legacy-wsrf.url";
 	private static final String LEGACY_WSRF_PORT_PROMPT = "Enter a port number for the legacy WSRF service";
 	private static final String LEGACY_WSRF_PORT_PROPERTY = "cagrid.cds.legacy-wsrf.port";
+
 	private static final String DB_HOST_PROMPT = "Please enter the database host";
 	private static final String DB_HOST_PROPERTY = "cagrid.cds.service.db.host";
     private static final String DB_PORT_PROMPT = "Please enter the database port";
@@ -79,6 +80,25 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String DB_PASSWORD_PROMPT = "Please enter the database password";
 	private static final String DB_PASSWORD_PROPERTY = "cagrid.cds.service.db.password";
 
+    // Below properties are for CDS service backend to communicate (soap) with other services in the grid
+    private static final String GROUPER_URL_PROMPT = "Please enter remote grid grouper url";
+    private static final String GROUPER_URL_PROPERTY = "cagrid.cds.service.client.gridgrouper.url";
+
+    private static final String BACKEND_KEYSTORE_PROMPT = "Please enter backend keystore file";
+    private static final String BACKEND_KEYSTORE_PROPERTY = "cagrid.cds.service.client.keystorefile";
+    private static final String BACKEND_KEYSTORE_PASSWORD_PROMPT = "Please enter backend keystore password";
+    private static final String BACKEND_KEYSTORE_PASSWORD_PROPERTY = "cagrid.cds.service.client.keystorepassword";
+    private static final String BACKEND_KEYALIAS_PROMPT = "Please enter backend key alias";
+    private static final String BACKEND_KEYALIAS_PROPERTY = "cagrid.cds.service.client.keyalias";
+    private static final String BACKEND_KEYPASSWORD_PROMPT = "Please enter backend key password";
+    private static final String BACKEND_KEYPASSWORD_PROPERTY = "cagrid.cds.service.client.keypassword";
+    private static final String BACKEND_TRUSTORE_PROMPT = "Please enter backend truststore";
+    private static final String BACKEND_TRUSTORE_PROPERTY = "cagrid.cds.service.client.truststoreLocation";
+    private static final String BACKEND_TRUSTORE_PASSWORD_PROMPT = "Please enter backend trustore password";
+    private static final String BACKEND_TRUSTORE_PASSWORD_PROPERTY = "cagrid.cds.service.client.truststorePassword";
+
+    private String wsrfKeystore;
+    private String wsrfTrustore;
 	private String truststorePassword;
 	private Boolean configureLegacyWSRF;
 	private File cdsEtcDir;
@@ -102,7 +122,7 @@ public class Bootstrapper extends BaseCommandLine {
 	@Override
 	public void execute() throws Exception {
 		System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
-		System.out.println("*                 CDS Bootstrapper                  *");
+		System.out.println("*                 CDS Bootstrapper                          *");
 		System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
 		System.out.println("");
 		cdsEtcDir = new File(getServiceMixEtc().getAbsolutePath() + File.separator + CDS_SERVICE_DIR);
@@ -110,20 +130,37 @@ public class Bootstrapper extends BaseCommandLine {
 		configureTruststore();
 		createWSRFKeystore();
 		configureLegacyWSRFCredentials();
-		configureCDS();
 		configureWSRFService();
+        configureCDS();
 	}
 
 	private void configureCDS() throws Exception {
 		Properties props = new Properties();
-		props.setProperty(DB_HOST_PROPERTY, getValue(DB_HOST_PROMPT, DB_HOST_PROPERTY));
-        props.setProperty(DB_PORT_PROPERTY, getValue(DB_PORT_PROMPT, DB_PORT_PROPERTY));
-        props.setProperty(DB_NAME_PROPERTY, getValue(DB_NAME_PROMPT, DB_NAME_PROPERTY));
-		props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT, DB_USER_PROPERTY));
-		props.setProperty(DB_PASSWORD_PROPERTY, getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
+        setPropertyWithPrompt(props, DB_HOST_PROMPT, DB_HOST_PROPERTY);
+        setPropertyWithPrompt(props, DB_PORT_PROMPT, DB_PORT_PROPERTY);
+        setPropertyWithPrompt(props, DB_NAME_PROMPT, DB_NAME_PROPERTY);
+        setPropertyWithPrompt(props, DB_USER_PROMPT, DB_USER_PROPERTY);
+        setPropertyWithPrompt(props, DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY);
+        setPropertyWithPrompt(props, GROUPER_URL_PROMPT, GROUPER_URL_PROPERTY);
+
+        setPropertyWithDefault(props, BACKEND_KEYSTORE_PROPERTY, wsrfKeystore);
+        setPropertyWithDefault(props, BACKEND_KEYSTORE_PASSWORD_PROPERTY, getKeystorePassword());
+        setPropertyWithDefault(props, BACKEND_KEYALIAS_PROPERTY, getKeystoreAlias());
+        setPropertyWithDefault(props, BACKEND_KEYPASSWORD_PROPERTY, getKeyPassword());
+        setPropertyWithDefault(props, BACKEND_TRUSTORE_PROPERTY, wsrfTrustore);
+        setPropertyWithDefault(props, BACKEND_TRUSTORE_PASSWORD_PROPERTY, getTruststorePassword());
+
 		File config = new File(getServiceMixEtc(), CDS_SERVICE_CFG);
 		props.store(new FileOutputStream(config), "CDS Service Configuration saved by bootstrapper on " + new Date());
 	}
+
+    private void setPropertyWithDefault(Properties props, String property, String defaultValue) {
+        props.setProperty(property, getValueWithDefault(property, defaultValue));
+    }
+
+    private void setPropertyWithPrompt(Properties props, String prompt, String property) {
+        props.setProperty(property, getValue(prompt, property));
+    }
 
 	private void configureWSRFService() throws Exception {
 		Properties props = new Properties();
@@ -203,7 +240,9 @@ public class Bootstrapper extends BaseCommandLine {
 		FileOutputStream out = new FileOutputStream(hostPath);
 		hks.store(out, password.toCharArray());
 		out.close();
-		System.out.println("WSRF keystore created for " + cert.getSubjectDN() + " at " + hostPath.getAbsolutePath());
+        wsrfKeystore = hostPath.getAbsolutePath();
+		System.out.println("WSRF keystore created for " + cert.getSubjectDN() + " at " + wsrfKeystore);
+
 	}
 
 	public String getHostname() {
@@ -265,7 +304,8 @@ public class Bootstrapper extends BaseCommandLine {
 	private void configureTruststore() throws Exception {
 		File f = new File(this.cdsEtcDir.getAbsolutePath() + File.separator + TRUSTSTORE_FILE_NAME);
 		this.copyTrustStore(f.getAbsolutePath(), getTruststorePassword());
-		System.out.println("Truststore created for CDS at " + f.getAbsolutePath());
+        wsrfTrustore = f.getAbsolutePath();
+		System.out.println("Truststore created for CDS at " + wsrfTrustore);
 	}
 
 	public String getTruststorePassword() {
