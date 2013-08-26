@@ -79,6 +79,7 @@
 	<modules>
 		<module>cagrid-gts-api</module>
 		<module>cagrid-gts-service</module>
+		<module>cagrid-gts-service-tools</module>
 		<module>cagrid-gts-wsrf</module>
 		<module>cagrid-gts-soap-client</module>
 		<module>cagrid-gts-tests</module>
