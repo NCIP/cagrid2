@@ -48,10 +48,10 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
     private static final long TIMEOUT = 30000L;
     private final static String ADMIN_USER = "O=Test Organization,OU=Test Unit,CN=GTS Admin";
 
-    private static final String LEGACY_GTS_URL = "https://localhost:7742/gts";
-    private static final String NEW_GTS_URL = "https://localhost:7741/gts";
+    private static final String LEGACY_GTS_URL = "https://localhost:7741/wsrf/services/cagrid/GTS";
+    private static final String NEW_GTS_URL = "https://localhost:7742/gts";
 
-    private static final String HOST = "etc/cagrid-gts/host.jks";
+    private static final String HOST = "etc/cagrid-gts/gts-host.jks";
     private static final String TRUSTSTORE = "etc/cagrid-gts/truststore.jks";
     private static final String TRUSTSTORETYPE = "JKS";
     private static final String KEYALIAS = "tomcat";
@@ -70,7 +70,8 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
 
                 // Get our resource files to the "etc" area
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gts.wsrf.cfg", new File("src/test/resources/cagrid.gts.wsrf.cfg")),
-                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
+                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gts.service.cfg", new File("src/test/resources/cagrid.gts.service.cfg")),
+                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/gts-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks"))
         // TODO: get a client keystore and a sha2 cert for new endpoint
 
