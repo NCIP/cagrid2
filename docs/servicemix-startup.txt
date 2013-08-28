@@ -11,10 +11,9 @@ Execute the following on the console:
 features:addurl mvn:org.cagrid/cagrid-features/2.0.0-SNAPSHOT/xml/features
 features:install cagrid-dorian
 
-The soap endpoint isn't installed by default yet, so
-    install mvn:org.cagrid/cagrid-dorian-wsrf/2.0.0-SNAPSHOT
 
-It may need to be started explicitly.
+You can check that the services are running by executing this command from the console:
+cxf:list-endpoints 
 
 Hit http://localhost:7734/dorian?WSDL and you should get a WSDL.
 
