@@ -349,10 +349,13 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
         try {
             MessageContext msgContext = wsContext.getMessageContext();
             HttpServletRequest request = (HttpServletRequest) msgContext.get("HTTP.REQUEST");
-            StringBuffer transportURL = request.getRequestURL();
-            transportURL.append("/DelegatedCredential");
+            String transportURL = request.getRequestURL().toString();
+            //TODO: fix this to use the property... but deal with handling which endpoint they came in on
+            //this currently assumes the cds and dcs URLs are the same up to the last / (the old code did too)
+            transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
+            transportURL += "DelegatedCredential";
 
-            EndpointReferenceType epr = createEndpointReference(transportURL.toString(), getResourceKey(id));
+            EndpointReferenceType epr = createEndpointReference(transportURL, getResourceKey(id));
             DelegatedCredentialReference response = new DelegatedCredentialReference();
             response.setEndpointReference(epr);
             return response;

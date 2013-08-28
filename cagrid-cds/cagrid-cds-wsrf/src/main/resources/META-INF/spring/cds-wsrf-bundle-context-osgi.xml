@@ -13,7 +13,8 @@
 		<prop key="cagrid.cds.wsrf.host">localhost</prop>
 		<prop key="cagrid.cds.wsrf.port">7736</prop>
 		<prop key="cagrid.cds.wsrf.path">cds</prop>
-        <prop key="cagrid.cds.delegated.wsrf.path">dcs</prop>
+        <!-- NOTE: for now, this must be the same format as the cds.wsrf.path, but end in DelegatedCredential -->
+        <prop key="cagrid.cds.delegated.wsrf.path">DelegatedCredential</prop>
 		<prop key="cagrid.cds.wsrf.url">https://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.wsrf.path}</prop>
         <prop key="cagrid.cds.delegated.wsrf.url">https://${cagrid.cds.wsrf.host}:${cagrid.cds.wsrf.port}/${cagrid.cds.delegated.wsrf.path}</prop>
 		<prop key="cagrid.cds.wsrf.keystore.path">${karaf.base}/etc/cagrid-cds-wsrf/cagrid-cds-wsrf-host.jks</prop>
@@ -33,7 +34,9 @@
         <prop key="cagrid.cds.legacy-wsrf.path">wsrf/services/cagrid/CredentialDelegationService</prop>
         <prop key="cagrid.cds.legacy-wsrf.port">8443</prop>
         <prop key="cagrid.cds.legacy-wsrf.url">https://${cagrid.cds.legacy-wsrf.host}:${cagrid.cds.legacy-wsrf.port}/${cagrid.cds.legacy-wsrf.path}</prop>
-
+        <!-- NOTE: for now, this must be the same format as the cds.wsrf.path, but end in DelegatedCredential -->
+        <prop key="cagrid.cds.delegated.legacy-wsrf.path">wsrf/services/cagrid/DelegatedCredential</prop>
+        <prop key="cagrid.cds.delegated.legacy-wsrf.url">https://${cagrid.cds.legacy-wsrf.host}:${cagrid.cds.legacy-wsrf.port}/${cagrid.cds.delegated.legacy-wsrf.path}</prop>
         <prop key="cagrid.cds.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-cds-wsrf/cagrid-cds-wsrf-host.jks</prop>
         <prop key="cagrid.cds.legacy-wsrf.keystore.password">changeit</prop>
         <prop key="cagrid.cds.legacy-wsrf.keystore.alias">host</prop>
