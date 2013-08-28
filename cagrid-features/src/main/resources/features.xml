@@ -91,6 +91,7 @@
     <!-- CDS -->
     <feature name="cagrid-cds" version="${project.version}">
         <feature version="${project.version}">cagrid-cds-client</feature>
+        <feature version="${project.version}">cagrid-gridgrouper-client</feature>
         <bundle>mvn:${project.groupId}/cagrid-cds-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}</bundle>
     </feature>
