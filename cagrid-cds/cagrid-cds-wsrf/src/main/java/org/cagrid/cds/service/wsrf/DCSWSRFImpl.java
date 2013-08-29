@@ -29,6 +29,8 @@ import org.cagrid.delegatedcredential.wsrf.stubs.GetDelegatedCredentialResponse;
 import org.cagrid.delegatedcredential.wsrf.stubs.PermissionDeniedFaultFaultMessage;
 import org.cagrid.gaards.authentication.WebServiceCallerId;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataResponse;
+import org.cagrid.wsrf.properties.Resource;
+import org.cagrid.wsrf.properties.ResourceException;
 import org.cagrid.wsrf.properties.ResourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,17 +103,24 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
                     logger.debug("Found resource key.");
                     Object o = h.getObject();
                     try {
-                        JAXBContext jaxbContext = JAXBUtils.getJAXBContext(DelegationIdentifier.class);
-                        o = jaxbContext.createUnmarshaller().unmarshal((Node) o);
-                        if (o instanceof DelegationIdentifier) {
-                            did = (DelegationIdentifier) o;
-                            logger.debug("Set resource key to:" + did);
+                        Node node = (Node) o;
+                        if (node.getFirstChild().getLocalName().equals("delegationId")) {
+                            did = new DelegationIdentifier();
+                            did.setDelegationId(Long.parseLong(node.getFirstChild().getTextContent()));
                             break;
-                        } else {
-                            logger.error("Problem deserializing soap header; got unexpected type.");
-                            throw new CDSInternalFaultFaultMessage("Problem deserializing soap header; got unexpected type.");
                         }
-                    } catch (JAXBException e) {
+//                        JAXBContext jaxbContext = JAXBUtils.getJAXBContext(DelegationIdentifier.class);
+//                        o = jaxbContext.createUnmarshaller().unmarshal((Node) o);
+//                        if (o instanceof DelegationIdentifier) {
+//                            did = (DelegationIdentifier) o;
+//                            logger.debug("Set resource key to:" + did);
+//                            break;
+//                        } else {
+//                            logger.error("Problem deserializing soap header; got unexpected type.");
+//                            throw new CDSInternalFaultFaultMessage("Problem deserializing soap header; got unexpected type.");
+//                        }
+//                    } catch (JAXBException e) {
+                    } catch (Exception e) {
                         logger.error("Problem deserializing soap header: " + message, e);
                         throw new CDSInternalFaultFaultMessage("Problem deserializing soap header: " + message);
                     }
@@ -124,36 +133,25 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
             throw new CDSInternalFaultFaultMessage("Unable to locate SOAP headers.");
         }
 
+        if (did == null) {
+            logger.error("Unable to locate delegation identifier");
+            throw new CDSInternalFaultFaultMessage("Unable to locate delegation identifier");
+        }
+
         try {
-            // TODO: look up the resource using the DelegationIdentifier on the resource home, and call DelegatedCredentialResource.getDelegatedCredential
-            //Resource resource = service.getResourceHome().find(getResourceKey(did));
-            //replace this call 
-            boxedResult.setCertificateChain(service.getDelegatedCredential(getCallerId(), parameters.getPublicKey().getPublicKey()));
-            // TODO: fix these to raise the right faults for no such resource
+            boxedResult.setCertificateChain(service.getDelegatedCredential(getCallerId(), did, parameters.getPublicKey().getPublicKey()));
         } catch (DelegationException e) {
             throw new DelegationFaultFaultMessage(message, e.getFault());
         } catch (PermissionDeniedException e) {
             throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
         } catch (CDSInternalException e) {
             throw new CDSInternalFaultFaultMessage(message, e.getFault());
-//        } catch (NoSuchResourceException e) {
-//            throw new CDSInternalFaultFaultMessage("Problem locating resource:" + e.getMessage());
-//        } catch (InvalidResourceKeyException e) {
-//            throw new CDSInternalFaultFaultMessage("Problem locating resource:" + e.getMessage());
-//        } catch (ResourceException e) {
-//            throw new CDSInternalFaultFaultMessage("Problem locating resource:" + e.getMessage());
-        } catch (Exception e) {
-            throw new CDSInternalFaultFaultMessage("Internal problem:" + e.getMessage());
+        } catch (ResourceException e) {
+            throw new CDSInternalFaultFaultMessage("Problem locating resource:" + e.getMessage());
         }
+
         return boxedResult;
     }
-
-//    private ResourceKey getResourceKey(DelegationIdentifier id) throws Exception {
-//        // TODO: move this elsewhere common with service bundle
-//        ResourceKey key = new SimpleResourceKey(new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential",
-//                "DelegatedCredentialKey"), id);
-//        return key;
-//    }
 
     private String getCallerId() {
         return WebServiceCallerId.getCallerId(wsContext);
