@@ -57,14 +57,27 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
     @Override
     public void destroy() throws org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01_wsdl.ResourceUnknownFault,
             org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01_wsdl.ResourceNotDestroyedFault {
-        // TODO: look up the resource using the DelegationIdentifier on the resource home, and remove it
-        super.destroy();
-        // LOG.info("Executing operation destroy");
-        // try {
-        // } catch (Exception ex) {
-        // ex.printStackTrace();
-        // throw new RuntimeException(ex);
-        // }
+        DelegationIdentifier did;
+        try {
+            did = extractDelegationIdentifierFromHeaders();
+        } catch (CDSInternalFaultFaultMessage e) {
+            logger.error("Problem locating delegation identifier:" + e.getMessage(), e);
+            throw new org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01_wsdl.ResourceUnknownFault(
+                    "Problem locating delegation identifier:" + e.getMessage());
+        }
+        if (did == null) {
+            logger.error("Unable to locate delegation identifier");
+            throw new org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01_wsdl.ResourceUnknownFault(
+                    "Unable to locate delegation identifier");
+        } else {
+            try {
+                this.service.suspendDelegatedCredential(getCallerId(), did);
+            } catch (Exception e) {
+                logger.error("Problem destroying resource:" + e.getMessage(), e);
+                throw new org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01_wsdl.ResourceNotDestroyedFault(
+                        "Unable to locate delegation identifier" + e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -92,47 +105,7 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
             PermissionDeniedFaultFaultMessage, CDSInternalFaultFaultMessage {
         String message = "getDelegatedCredential";
         GetDelegatedCredentialResponse boxedResult = new GetDelegatedCredentialResponse();
-
-        DelegationIdentifier did = null;
-
-        List<Header> headers = getHeaders();
-        if (headers != null) {
-            for (Header h : headers) {
-                QName hName = h.getName();
-                if (hName.equals(RESOURCE_KEY)) {
-                    logger.debug("Found resource key.");
-                    Object o = h.getObject();
-                    try {
-                        Node node = (Node) o;
-                        if (node.getFirstChild().getLocalName().equals("delegationId")) {
-                            did = new DelegationIdentifier();
-                            did.setDelegationId(Long.parseLong(node.getFirstChild().getTextContent()));
-                            break;
-                        }
-//                        JAXBContext jaxbContext = JAXBUtils.getJAXBContext(DelegationIdentifier.class);
-//                        o = jaxbContext.createUnmarshaller().unmarshal((Node) o);
-//                        if (o instanceof DelegationIdentifier) {
-//                            did = (DelegationIdentifier) o;
-//                            logger.debug("Set resource key to:" + did);
-//                            break;
-//                        } else {
-//                            logger.error("Problem deserializing soap header; got unexpected type.");
-//                            throw new CDSInternalFaultFaultMessage("Problem deserializing soap header; got unexpected type.");
-//                        }
-//                    } catch (JAXBException e) {
-                    } catch (Exception e) {
-                        logger.error("Problem deserializing soap header: " + message, e);
-                        throw new CDSInternalFaultFaultMessage("Problem deserializing soap header: " + message);
-                    }
-                } else {
-                    logger.debug("Ignoring header:" + hName);
-                }
-            }
-        } else {
-            logger.error("Unable to locate SOAP headers.");
-            throw new CDSInternalFaultFaultMessage("Unable to locate SOAP headers.");
-        }
-
+        DelegationIdentifier did = extractDelegationIdentifierFromHeaders();
         if (did == null) {
             logger.error("Unable to locate delegation identifier");
             throw new CDSInternalFaultFaultMessage("Unable to locate delegation identifier");
@@ -151,6 +124,49 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
         }
 
         return boxedResult;
+    }
+
+    private DelegationIdentifier extractDelegationIdentifierFromHeaders() throws CDSInternalFaultFaultMessage {
+        DelegationIdentifier did = null;
+
+        List<Header> headers = getHeaders();
+        if (headers != null) {
+            for (Header h : headers) {
+                QName hName = h.getName();
+                if (hName.equals(RESOURCE_KEY)) {
+                    logger.debug("Found resource key.");
+                    Object o = h.getObject();
+                    try {
+                        Node node = (Node) o;
+                        if (node.getFirstChild().getLocalName().equals("delegationId")) {
+                            did = new DelegationIdentifier();
+                            did.setDelegationId(Long.parseLong(node.getFirstChild().getTextContent()));
+                            break;
+                        }
+                        // JAXBContext jaxbContext = JAXBUtils.getJAXBContext(DelegationIdentifier.class);
+                        // o = jaxbContext.createUnmarshaller().unmarshal((Node) o);
+                        // if (o instanceof DelegationIdentifier) {
+                        // did = (DelegationIdentifier) o;
+                        // logger.debug("Set resource key to:" + did);
+                        // break;
+                        // } else {
+                        // logger.error("Problem deserializing soap header; got unexpected type.");
+                        // throw new CDSInternalFaultFaultMessage("Problem deserializing soap header; got unexpected type.");
+                        // }
+                        // } catch (JAXBException e) {
+                    } catch (Exception e) {
+                        logger.error("Problem deserializing soap header: " + e.getMessage(), e);
+                        throw new CDSInternalFaultFaultMessage("Problem deserializing soap header: " + e.getMessage());
+                    }
+                } else {
+                    logger.debug("Ignoring header:" + hName);
+                }
+            }
+        } else {
+            logger.error("Unable to locate SOAP headers.");
+            throw new CDSInternalFaultFaultMessage("Unable to locate SOAP headers.");
+        }
+        return did;
     }
 
     private String getCallerId() {

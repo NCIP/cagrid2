@@ -29,12 +29,14 @@ public class DCImpl implements DelegatedCredentialService {
     private final Logger log;
     private final Map<String, String> jaxbResourcePropertiesMap;
     private final ResourceHome delegatedCredentialResourceHome;
+    private final DelegationManager dm;
 
     private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
 
     public DCImpl(DelegationManager cds, Map<String, String> jaxbResourcePropertiesMap) {
         this.log = LoggerFactory.getLogger(this.getClass().getName());
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
+        this.dm = cds;
         this.delegatedCredentialResourceHome = new DelegatedCredentialResourceHome(cds);
     }
 
@@ -45,20 +47,24 @@ public class DCImpl implements DelegatedCredentialService {
 
     @Override
     public ServiceSecurityMetadata getServiceSecurityMetadata() {
-        return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty
-                .get(0) : null;
+        return (serviceSecurityMetadataResourceProperty != null) ? serviceSecurityMetadataResourceProperty.get(0) : null;
     }
 
     @Override
-    public CertificateChain getDelegatedCredential(String callerGridIdentity, DelegationIdentifier did, PublicKey publicKey)
-            throws ResourceException, DelegationException, PermissionDeniedException, CDSInternalException {
+    public CertificateChain getDelegatedCredential(String callerGridIdentity, DelegationIdentifier did, PublicKey publicKey) throws ResourceException,
+            DelegationException, PermissionDeniedException, CDSInternalException {
         Resource resource = getResourceHome().find(getResourceKey(did));
-        return ((DelegatedCredentialResource)resource).getDelegatedCredential(callerGridIdentity, publicKey);
+        return ((DelegatedCredentialResource) resource).getDelegatedCredential(callerGridIdentity, publicKey);
     }
 
-    private ResourceKey getResourceKey(DelegationIdentifier id)  {
-        ResourceKey key = new SimpleResourceKey(
-                new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential",
+    @Override
+    public void suspendDelegatedCredential(String callerGridIdentity, DelegationIdentifier id) throws CDSInternalException, DelegationException,
+            PermissionDeniedException {
+        this.dm.suspendDelegatedCredential(callerGridIdentity, id);
+    }
+
+    private ResourceKey getResourceKey(DelegationIdentifier id) {
+        ResourceKey key = new SimpleResourceKey(new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential",
                 "DelegatedCredentialKey"), id);
         return key;
     }
@@ -70,18 +76,14 @@ public class DCImpl implements DelegatedCredentialService {
                 .analyzeResourcePropertiesHolder(DelegatedCredentialResourceProperties.class);
 
         // Map them by field.
-        Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor
-                .mapByField(resourcePropertyDescriptors);
+        Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor.mapByField(resourcePropertyDescriptors);
 
         // Load the static jaxb resource properties.
-        JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(
-                getClass().getClassLoader(), descriptorsByField,
-                jaxbResourcePropertiesMap);
+        JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(getClass().getClassLoader(), descriptorsByField, jaxbResourcePropertiesMap);
 
         /*
-		 * ServiceSecurityMetadata isn't a resource property, but use that
-		 * framework to handle it.
-		 */
+         * ServiceSecurityMetadata isn't a resource property, but use that framework to handle it.
+         */
         String serviceSecurityMetadataURLString = jaxbResourcePropertiesMap.get("serviceSecurityMetadata");
         if (serviceSecurityMetadataURLString != null) {
             URL url = null;
@@ -90,19 +92,13 @@ public class DCImpl implements DelegatedCredentialService {
             } catch (MalformedURLException ignored) {
             }
             if (url == null) {
-                url = getClass().getClassLoader().getResource(
-                        serviceSecurityMetadataURLString);
+                url = getClass().getClassLoader().getResource(serviceSecurityMetadataURLString);
             }
             if (url != null) {
-                QName serviceSecurityMetadataQName = new QName(
-                        getClass().getName(), "serviceSecurityMetadata");
+                QName serviceSecurityMetadataQName = new QName(getClass().getName(), "serviceSecurityMetadata");
                 ResourcePropertyDescriptor<ServiceSecurityMetadata> serviceSecurityMetadataDescriptor = new ResourcePropertyDescriptor<ServiceSecurityMetadata>(
-                        serviceSecurityMetadataQName,
-                        ServiceSecurityMetadata.class,
-                        "serviceSecurityMetadata");
-                serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport
-                        .createJAXBResourceProperty(
-                                serviceSecurityMetadataDescriptor, url);
+                        serviceSecurityMetadataQName, ServiceSecurityMetadata.class, "serviceSecurityMetadata");
+                serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport.createJAXBResourceProperty(serviceSecurityMetadataDescriptor, url);
             }
         }
     }

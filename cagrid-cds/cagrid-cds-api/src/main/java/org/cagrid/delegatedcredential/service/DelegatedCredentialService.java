@@ -16,5 +16,9 @@ public interface DelegatedCredentialService {
 
     ServiceSecurityMetadata getServiceSecurityMetadata();
 
-    CertificateChain getDelegatedCredential(String callerGridIdentity, DelegationIdentifier did, PublicKey publicKey) throws DelegationException, PermissionDeniedException, CDSInternalException, ResourceException;
+    public void suspendDelegatedCredential(String callerGridIdentity, DelegationIdentifier id) throws CDSInternalException, DelegationException,
+            PermissionDeniedException;
+
+    CertificateChain getDelegatedCredential(String callerGridIdentity, DelegationIdentifier did, PublicKey publicKey) throws DelegationException,
+            PermissionDeniedException, CDSInternalException, ResourceException;
 }
