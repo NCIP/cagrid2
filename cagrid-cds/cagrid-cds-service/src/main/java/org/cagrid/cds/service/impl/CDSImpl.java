@@ -49,7 +49,7 @@ public class CDSImpl implements CredentialDelegationService {
     private Database db;
     private final ResourceImpl resource = new ResourceImpl(null);
     private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
-    private final ResourceHome delegatedCredentialResourceHome = new DelegatedCredentialResourceHome();
+
 
     private ResourceProperty<ServiceMetadata> serviceMetadataResourceProperty;
     private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;

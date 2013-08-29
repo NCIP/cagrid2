@@ -11,7 +11,7 @@
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.gts.wsrf">
 
 		<prop key="cagrid.gts.wsrf.host">localhost</prop>
-		<prop key="cagrid.gts.wsrf.port">7742</prop>
+		<prop key="cagrid.gts.wsrf.port">4443</prop>
 
 		<prop key="cagrid.gts.wsrf.path">gts</prop>
 		<prop key="cagrid.gts.wsrf.url">https://${cagrid.gts.wsrf.host}:${cagrid.gts.wsrf.port}/${cagrid.gts.wsrf.path}
@@ -31,7 +31,7 @@
         <prop key="cagrid.gts.legacy-wsrf.host">localhost</prop>
         <prop key="cagrid.gts.legacy-wsrf.path">wsrf/services/cagrid/GTS</prop>
 		<prop key="cagrid.gts.legacy-wsrf.url">https://${cagrid.gts.legacy-wsrf.host}:${cagrid.gts.legacy-wsrf.port}/${cagrid.gts.legacy-wsrf.path}</prop>
-		<prop key="cagrid.gts.legacy-wsrf.port">7741</prop>
+		<prop key="cagrid.gts.legacy-wsrf.port">8443</prop>
 		<prop key="cagrid.gts.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-gts/legacy-gts-host.jks</prop>
 		<prop key="cagrid.gts.legacy-wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.gts.legacy-wsrf.keystore.alias">host</prop>

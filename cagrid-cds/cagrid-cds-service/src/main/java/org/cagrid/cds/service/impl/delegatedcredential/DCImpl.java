@@ -31,8 +31,7 @@ public class DCImpl implements DelegatedCredentialService {
 
     private final Logger log;
     private final Map<String, String> jaxbResourcePropertiesMap;
-    private final ResourceImpl resource = new ResourceImpl(null);
-    private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
+    private final ResourceHome delegatedCredentialResourceHome = new DelegatedCredentialResourceHome();
 
     private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
 
@@ -43,7 +42,7 @@ public class DCImpl implements DelegatedCredentialService {
 
     @Override
     public ResourceHome getResourceHome() {
-        return resourceHome;
+        return delegatedCredentialResourceHome;
     }
 
     @Override

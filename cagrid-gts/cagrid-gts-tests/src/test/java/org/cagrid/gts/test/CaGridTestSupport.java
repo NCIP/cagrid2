@@ -111,10 +111,12 @@ public abstract class CaGridTestSupport {
                 // servicemix defaults to using the felix osgi kernal which has some bugs when dealing with complex feature/bundle dependencies, so let's use
                 // equinox by default
                 new KarafDistributionConfigurationFilePutOption("etc/config.properties", "karaf.framework", "equinox"),
-                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",spring-jdbc,spring-orm"),
-                // http://fusesource.com/forums/thread.jspa?threadID=4016
-                new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.6", ",javax.xml.soap;version=\"1.3\""),
-                new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.7", ",javax.xml.soap;version=\"1.3\"") };
+                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",spring-jdbc,spring-orm")
+        // // http://fusesource.com/forums/thread.jspa?threadID=4016
+        // Is this still necessary with SMX 4.5.2?
+        // ,new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.6", ",javax.xml.soap;version=\"1.3\""),
+        // new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.7", ",javax.xml.soap;version=\"1.3\"")
+        };
     }
 
     protected Option caGridDistributionConfiguration() {

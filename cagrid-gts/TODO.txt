@@ -1,14 +1,6 @@
 
 implement:
-secure communication between slave/master
 syncgts
-bootstrappers
-
-test:
-legacy support
-trainging dbs
-
-
 
 	To get going please do the following:
 

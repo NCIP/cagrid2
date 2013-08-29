@@ -108,5 +108,12 @@
                     serviceName="s:DelegatedCredentialService" address="${cagrid.cds.delegated.wsrf.url}"
                     wsdlLocation="schema/org/cagrid/cds/DelegatedCredential_service.wsdl">
     </jaxws:endpoint>
+    
+    <jaxws:endpoint xmlns:e="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/service"
+                    xmlns:s="http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential/service" id="legacyDcsWSRFEP"
+                    implementor="#dcsWSRF" bus="cxf" endpointName="e:DelegatedCredentialPortTypePort"
+                    serviceName="s:DelegatedCredentialService" address="${cagrid.cds.delegated.legacy-wsrf.url}"
+                    wsdlLocation="schema/org/cagrid/cds/DelegatedCredential_service.wsdl">
+    </jaxws:endpoint>
 
 </beans>
