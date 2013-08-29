@@ -2,21 +2,18 @@ package org.cagrid.cds.service.impl.delegatedcredential;
 
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import org.cagrid.cds.model.CertificateChain;
+import org.cagrid.cds.model.DelegationIdentifier;
 import org.cagrid.cds.model.PublicKey;
 import org.cagrid.cds.service.exception.CDSInternalException;
 import org.cagrid.cds.service.exception.DelegationException;
 import org.cagrid.cds.service.exception.PermissionDeniedException;
+import org.cagrid.cds.service.impl.manager.DelegationManager;
 import org.cagrid.cds.service.impl.util.Errors;
-import org.cagrid.core.resource.JAXBResourceProperties;
-import org.cagrid.core.resource.JAXBResourcePropertySupport;
-import org.cagrid.core.resource.ResourceImpl;
-import org.cagrid.core.resource.ResourcePropertyDescriptor;
-import org.cagrid.core.resource.SingletonResourceHomeImpl;
+import org.cagrid.core.resource.*;
 import org.cagrid.delegatedcredential.service.DelegatedCredentialService;
 import org.cagrid.delegatedcredential.wsrf.stubs.DelegatedCredentialResourceProperties;
 import org.cagrid.tools.database.DatabaseException;
-import org.cagrid.wsrf.properties.ResourceHome;
-import org.cagrid.wsrf.properties.ResourceProperty;
+import org.cagrid.wsrf.properties.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +28,14 @@ public class DCImpl implements DelegatedCredentialService {
 
     private final Logger log;
     private final Map<String, String> jaxbResourcePropertiesMap;
-    private final ResourceHome delegatedCredentialResourceHome = new DelegatedCredentialResourceHome();
+    private final ResourceHome delegatedCredentialResourceHome;
 
     private ResourceProperty<ServiceSecurityMetadata> serviceSecurityMetadataResourceProperty;
 
-    public DCImpl(Map<String, String> jaxbResourcePropertiesMap) {
+    public DCImpl(DelegationManager cds, Map<String, String> jaxbResourcePropertiesMap) {
         this.log = LoggerFactory.getLogger(this.getClass().getName());
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
+        this.delegatedCredentialResourceHome = new DelegatedCredentialResourceHome(cds);
     }
 
     @Override
@@ -52,11 +50,17 @@ public class DCImpl implements DelegatedCredentialService {
     }
 
     @Override
-    public CertificateChain getDelegatedCredential(String callerGridIdentity, PublicKey publicKey) throws DelegationException, PermissionDeniedException, CDSInternalException {
-        //TODO: what ResourceContext?
-//        DelegatedCredentialResource resource = (DelegatedCredentialResource) ResourceContext.getResourceContext().getResource();
-//        return resource.getDelegatedCredential(callerGridIdentity, publicKey);
-        throw Errors.makeException(CDSInternalException.class, "Operation Not Implemented");
+    public CertificateChain getDelegatedCredential(String callerGridIdentity, DelegationIdentifier did, PublicKey publicKey)
+            throws ResourceException, DelegationException, PermissionDeniedException, CDSInternalException {
+        Resource resource = getResourceHome().find(getResourceKey(did));
+        return ((DelegatedCredentialResource)resource).getDelegatedCredential(callerGridIdentity, publicKey);
+    }
+
+    private ResourceKey getResourceKey(DelegationIdentifier id)  {
+        ResourceKey key = new SimpleResourceKey(
+                new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential",
+                "DelegatedCredentialKey"), id);
+        return key;
     }
 
     private void initialize() throws DatabaseException, JAXBException {

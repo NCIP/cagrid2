@@ -151,6 +151,7 @@
 
 	<bean id="delegatedCredentialService" class="org.cagrid.cds.service.impl.delegatedcredential.DCImpl"
 		init-method="initialize">
+        <constructor-arg ref="delegationManager" />
 		<constructor-arg ref="dcJaxbResourceProperties" />
 	</bean>
 </beans>

@@ -29,9 +29,14 @@ public class DelegatedCredentialResourceHome implements ResourceHome {
 	private DelegationManager cds;
     private final Logger log;
 
-	public DelegatedCredentialResourceHome() {
-		this.log = LoggerFactory.getLogger(this.getClass().getName());
+	public DelegatedCredentialResourceHome(DelegationManager cds) {
+		this();
+        this.cds = cds;
 	}
+
+    public DelegatedCredentialResourceHome() {
+        this.log = LoggerFactory.getLogger(this.getClass().getName());
+    }
 
 	public Resource find(ResourceKey key) throws ResourceException,
 			NoSuchResourceException, InvalidResourceKeyException {
