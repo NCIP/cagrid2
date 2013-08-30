@@ -30,6 +30,8 @@
 
         <xsd:import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" 
                     schemaLocation="../ws/addressing/WS-Addressing.xsd"  />
+        <xsd:import namespace="http://mds.globus.org/bigindex/2008/11/24" 
+                    schemaLocation="../serviceregistration/service_group_entry.xsd"  />
 
        <!-- 
             Parameter type for ServiceGroupRegistrationClient

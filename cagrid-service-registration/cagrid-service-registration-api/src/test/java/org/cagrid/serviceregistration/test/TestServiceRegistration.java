@@ -12,6 +12,7 @@ public class TestServiceRegistration {
 	public void registrationTest() {
 		ServiceGroupRegistrator client = new ServiceGroupRegistrator();
 		try {
+			client.readParams("./src/test/resources/Dorian_registration.xml");
 			client.register("./src/test/resources/Dorian_registration.xml",
 					"http://testing123", "http://localhost:8080/wsrf/services/DefaultIndexService");
 		} catch (Exception e) {

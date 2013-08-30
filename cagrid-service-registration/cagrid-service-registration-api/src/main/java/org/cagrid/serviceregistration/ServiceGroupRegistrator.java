@@ -140,8 +140,8 @@ public class ServiceGroupRegistrator {
 				"cagrid", RegistrationJob.class);
 		JobDataMap data = new JobDataMap();
 		data.put("params", params);
+		data.put("epr", null);
 		detail.setJobDataMap(data);
-		detail.setVolatility(true);
 		long startTime = System.currentTimeMillis() + (delayMillis);
 		SimpleTrigger trigger = new SimpleTrigger(params.getRegistrantEPR()
 				+ "-Trigger", "cagrid", new Date(startTime), null,
