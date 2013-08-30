@@ -277,7 +277,7 @@ public class CDSIT extends TestBase {
             Assert.fail("Should not have been able to obtain a credential for a bad EPR.");
         } catch (Exception e) {
             // expected
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
