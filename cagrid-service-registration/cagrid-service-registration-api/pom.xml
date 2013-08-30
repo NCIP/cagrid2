@@ -46,7 +46,11 @@
 												<extraarg>-impl</extraarg>
 												<extraarg>-client</extraarg>
 												<extraarg>-p</extraarg>
-												<extraarg>http://mds.globus.org/servicegroup/client=org.cagrid.serviceregistration.client</extraarg>
+												<extraarg>http://mds.globus.org/servicegroup/client=org.cagrid.serviceregistration.model</extraarg>
+												<extraarg>-p</extraarg>
+												<extraarg>http://mds.globus.org/bigindex/2008/11/24=org.cagrid.serviceregistration.model.mds</extraarg>
+												<extraarg>-p</extraarg>
+												<extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd=org.cagrid.serviceregistration.model.rl</extraarg>
 												<extraarg>-xjc-XtoString</extraarg>
 												<extraarg>-xjc-XhashCode</extraarg>
 												<extraarg>-xjc-Xequals</extraarg>
@@ -178,12 +182,14 @@
 						<Export-Package>
 							schema.org.cagrid.serviceregistration,
 							org.cagrid.serviceregistration,
-							org.cagrid.serviceregistration.model
+							org.cagrid.serviceregistration.model,
+							org.cagrid.serviceregistration.model.mds
 						</Export-Package>
 						<Import-Package>
 							schema.org.cagrid.serviceregistration,
 							org.cagrid.serviceregistration,
 							org.cagrid.serviceregistration.model,
+							org.cagrid.serviceregistration.model.mds,
 							*
 						</Import-Package>
 					</instructions>
@@ -216,6 +222,10 @@
 		<dependency>
 			<groupId>${wsrf.group}</groupId>
 			<artifactId>wsrf-servicegroup-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${wsrf.group}</groupId>
+			<artifactId>wsrf-lifetime-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

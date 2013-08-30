@@ -1,22 +1,33 @@
 package org.cagrid.serviceregistration;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Holder;
 
+import org.apache.cxf.headers.Header;
 import org.cagrid.serviceregistration.model.ServiceGroupRegistrationParameters;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01.SetTerminationTime;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourcelifetime_1_2_draft_01_wsdl.ScheduledResourceTermination;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_servicegroup_1_2_draft_01.Add;
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_servicegroup_1_2_draft_01_wsdl.ServiceGroupRegistration;
-import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
+import org.xmlsoap.schemas.ws._2004._03.addressing.ReferencePropertiesType;
 
-public class RegistrationJob implements Job {
-	
+public class RegistrationJob implements StatefulJob {
+
+	private final static Logger logger = LoggerFactory
+			.getLogger(RegistrationJob.class);
+
 	static final private int LIFETIMECONST = 2;
 
 	/**
@@ -36,7 +47,10 @@ public class RegistrationJob implements Job {
 	 * lifetime rather than adding a new entry.
 	 */
 	private EndpointReferenceType entryEPR = null;
-
+	
+	public RegistrationJob() {
+		super();
+	}
 
 	public ServiceGroupRegistrationParameters getParameters() {
 		return this.parameters;
@@ -47,50 +61,67 @@ public class RegistrationJob implements Job {
 	 * failing that from local system.
 	 */
 	private Calendar getCurrentTimePreferringRemote(EndpointReferenceType epr) {
-		System.out.println(
-				"Attempting to get current time, preferring remote.");
+		logger.info("Attempting to get current time, preferring remote.");
 
-		Calendar now = null;
+		Calendar now = new GregorianCalendar();
 
-		if (epr != null && maybeHasLifetime) {
+//		if (epr != null && maybeHasLifetime) {
+//
+//			try {
+//				GetResourceProperty getRPPort = ServiceGroupClientFactory.createGetResourcePropertySoapClient(epr.getAddress().getValue());
+//				
+//				Object sge = entryEPR.getReferenceProperties().getAny()
+//						.get(0);
+//
+//				List<Header> headersList = (List<Header>) ((BindingProvider) getRPPort)
+//						.getRequestContext().get(Header.HEADER_LIST);
+//				if (headersList == null) {
+//					headersList = new ArrayList<Header>();
+//				}
+//
+//				ReferencePropertiesType rp = new ReferencePropertiesType();
+//
+//				Header testSoapHeader1 = new Header(new QName(
+//						"http://mds.globus.org/bigindex/2008/11/24",
+//						"ServiceGroupEntryKey"), sge);
+//				headersList.add(testSoapHeader1);
+//
+//				// Add SOAP headers to the web service request
+//				((BindingProvider) getRPPort).getRequestContext().put(
+//						Header.HEADER_LIST, headersList);
+//
+//				((BindingProvider) getRPPort).getRequestContext().put(
+//						BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+//						entryEPR.getAddress().getValue());
+//				
+//				
+//				GetResourcePropertyResponse resp = getRPPort
+//						.getResourceProperty(WSRFConstants.CURRENT_TIME);
+//				
+//				JAXBElement<Calendar> cal = (JAXBElement<Calendar>)resp.getAny().get(0);
+//				System.out.println(cal.getValue());
+//				//Calendar date = (String)resp.getAny().get(0).toString()
+//				System.out.println("Service returned time of " + resp.getAny().get(0).toString());
+//				//return null;
+//
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				/*
+//				 * some other exception occurred. return null, but don't change
+//				 * maybeHasLifetime
+//				 */
+//				;
+//			}
 
-			// try {
-			// GetResourceProperty getRPPort = rpLocator
-			// .getGetResourcePropertyPort(epr);
-			// setSecurity((Stub) getRPPort);
-			//
-			// GetResourcePropertyResponse resp = getRPPort
-			// .getResourceProperty(WSRFConstants.CURRENT_TIME);
-			//
-			// MessageElement[] any = resp.get_any();
-			// return (Calendar) ObjectDeserializer.toObject(any[0],
-			// Calendar.class);
-			//
-			// } catch (InvalidResourcePropertyQNameFaultType e) {
-			// /*
-			// * this fault means that we can talk to the resource but it
-			// * does not have current time, which implies that it does
-			// * not support WS-ResourceLifetime mechanisms
-			// */
-			// maybeHasLifetime = false;
-			// /* now fall through */
-			// } catch (Exception e) {
-			// /*
-			// * some other exception occurred. return null, but don't
-			// * change maybeHasLifetime
-			// */
-			// ;
-			// }
-
-		}
-
-		// if the above hasn't produced a time, then pull time from
-		// local clock
-		if (now == null) {
-			System.out.println(
-							"No remote current time available. Getting from local clock instead.");
-			now = Calendar.getInstance();
-		}
+//		}
+//
+//		// if the above hasn't produced a time, then pull time from
+//		// local clock
+//		if (now == null) {
+//			System.out
+//					.println("No remote current time available. Getting from local clock instead.");
+//			now = Calendar.getInstance();
+//		}
 
 		return now;
 	}
@@ -99,9 +130,11 @@ public class RegistrationJob implements Job {
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		this.parameters = (ServiceGroupRegistrationParameters) arg0
 				.getJobDetail().getJobDataMap().get("params");
+		this.entryEPR = (EndpointReferenceType) arg0.getJobDetail()
+				.getJobDataMap().get("epr");
 		if (this.parameters == null) {
 			String msg = "Error: Registration event got null parameters (Registration event will be canceled)";
-			System.out.println(msg);
+			logger.error(msg);
 			return;
 		}
 
@@ -113,40 +146,16 @@ public class RegistrationJob implements Job {
 		 * used) OR set on this object programatically as a global default.
 		 */
 		EndpointReferenceType epr = (parameters.getServiceGroupEPR() != null) ? parameters
-				.getServiceGroupEPR()
-				:null;
-
-		// // if we have no servicegroup EPR specified, generate the
-		// // local index EPR, but do *not* cache
-		// if (epr == null) {
-		// try {
-		// epr = getIndexEPR();
-		// } catch (Exception e) {
-		// logger.error("When forming local target index EPR: " + e);
-		// }
-		// }
+				.getServiceGroupEPR() : null;
 
 		EndpointReferenceType registrantEPR = (parameters.getRegistrantEPR() != null) ? parameters
-				.getRegistrantEPR()
-				:null;
-
-		// // if have no registratant EPR, generate the local index EPR
-		// // but do *not* cache
-		// if (registrantEPR == null) {
-		// try {
-		// registrantEPR = getIndexEPR();
-		// } catch (Exception e) {
-		// logger.error("When forming local registrant index EPR: "
-		// + e);
-		// }
-		// }
-
+				.getRegistrantEPR() : null;
 		try {
 			ServiceGroupRegistration port = ServiceGroupClientFactory
 					.createServiceGroupRegistrationSoapClient(epr.getAddress()
 							.getValue());
-				System.out.println(
-						"Renewing/Adding: " + parameters.getRegistrantEPR());
+			logger.info("Renewing/Adding: "
+					+ parameters.getRegistrantEPR());
 
 			/*
 			 * Get current time (preferably from resource, but local otherwise)
@@ -185,60 +194,59 @@ public class RegistrationJob implements Job {
 
 				try {
 					// TODO: append hostname of EPR here?
-					System.out.println(
-							"Attempting lifetime extension of entry");
+					logger.info("Attempting lifetime extension of entry");
 
 					ScheduledResourceTermination lifetimePort = ServiceGroupClientFactory
 							.createLifetimeSoapClient(entryEPR.getAddress()
 									.getValue());
-					// setSecurity((Stub) lifetimePort);
+					Object sge = entryEPR.getReferenceProperties().getAny()
+							.get(0);
+
+					List<Header> headersList = (List<Header>) ((BindingProvider) lifetimePort)
+							.getRequestContext().get(Header.HEADER_LIST);
+					if (headersList == null) {
+						headersList = new ArrayList<Header>();
+					}
+
+					ReferencePropertiesType rp = new ReferencePropertiesType();
+
+					Header testSoapHeader1 = new Header(new QName(
+							"http://mds.globus.org/bigindex/2008/11/24",
+							"ServiceGroupEntryKey"), sge);
+					headersList.add(testSoapHeader1);
+
+					// Add SOAP headers to the web service request
+					((BindingProvider) lifetimePort).getRequestContext().put(
+							Header.HEADER_LIST, headersList);
+
+					((BindingProvider) lifetimePort).getRequestContext().put(
+							BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+							entryEPR.getAddress().getValue());
+
+
+					logger.debug("SETTING TERM TIME to address: "
+							+ entryEPR.getAddress().getValue() + " to "
+							+ term.getTime());
 					SetTerminationTime setTermTimeReq = new SetTerminationTime();
 					setTermTimeReq.setRequestedTerminationTime(parameters
 							.getInitialTerminationTime());
-					lifetimePort.setTerminationTime(
-							setTermTimeReq.getRequestedTerminationTime(),
-							new Holder<Calendar>(setTermTimeReq
-									.getRequestedTerminationTime()),
-							new Holder<Calendar>(new GregorianCalendar()));
+					lifetimePort.setTerminationTime(setTermTimeReq
+							.getRequestedTerminationTime(),
+							new Holder<Calendar>(term), new Holder<Calendar>(
+									new GregorianCalendar()));
 
+					logger.info("Successfully Renewed registration " + registrantEPR.getAddress()
+							+ " to servicegroup at " + epr.getAddress() + " until: " + term.getTime());
 					/*
 					 * if we get this far without exception, then we have
 					 * successfully renewed lifetime.
 					 */
 					successfullyRenewed = true;
 
-					// if (callback != null) {
-					// if (!callback.setRegistrationStatus(parameters,
-					// true, true, null)) {
-					// this.cancel(timer);
-					// if (ServiceGroupRegistrationClient.this.isDebug) {
-					// ServiceGroupRegistrationClient.this.status(
-					// LOG_D,
-					// "Canceled registration event for: "
-					// + entryEPR.getAddress());
-					// }
-					// return;
-					// }
-					// }
+
 				} catch (Exception e) {
-					System.out.println(
-							"Exception renewing entry lifetime of a registration for "
+					logger.warn("Exception renewing entry lifetime of a registration for "
 									+ entryEPR.getAddress() + " - " + e);
-					//
-					// if (callback != null) {
-					// if (!callback.setRegistrationStatus(parameters,
-					// false, true, e)) {
-					// this.cancel(timer);
-					// if (ServiceGroupRegistrationClient.this.isDebug) {
-					// ServiceGroupRegistrationClient.this.status(
-					// LOG_D,
-					// "Canceled registration event for: "
-					// + entryEPR.getAddress());
-					// }
-					// return;
-					// }
-					// }
-					/* so now we will continue into the add code */
 				}
 			}
 
@@ -254,23 +262,22 @@ public class RegistrationJob implements Job {
 				 * 
 				 * (TODO: we should perhaps perform some kind of backoff?)
 				 */
-				System.out.println(
-						"Attempting add");
+				logger.info("Attempting to add new registration for " + registrantEPR.getAddress()
+							+ " to servicegroup at " + epr.getAddress());
 
 				Add request = new Add();
 				request.setMemberEPR(registrantEPR);
 				request.setContent(parameters.getContent());
 
 				if (parameters.getInitialTerminationTime() == null) {
-					System.out.println(
-									"No termination time computed for new registation.");
+					logger.info("No termination time computed for new registation.");
 				}
 				request.setInitialTerminationTime(parameters
 						.getInitialTerminationTime());
 
 				entryEPR = port.add(request);
-				System.out.println(
-							"Add response: " + entryEPR + entryEPR.getAddress().getValue());
+				arg0.getJobDetail().getJobDataMap().remove("epr");
+				arg0.getJobDetail().getJobDataMap().put("epr", entryEPR);
 				// if (callback != null) {
 				// if (!callback.setRegistrationStatus(parameters, true,
 				// false, null)) {
@@ -284,12 +291,11 @@ public class RegistrationJob implements Job {
 				// return;
 				// }
 				// }
-					String msg;
+				String msg;
 
-					msg = "Successfully registered "
-							+ registrantEPR.getAddress()
-							+ " to servicegroup at " + epr.getAddress();
-					System.out.println(msg);
+				msg = "Successfully registered " + registrantEPR.getAddress()
+						+ " to servicegroup at " + epr.getAddress();
+				logger.info(msg);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -299,7 +305,7 @@ public class RegistrationJob implements Job {
 					+ " to servicegroup at " + epr.getAddress()
 					+ " -- check the URL and that the remote service is up. "
 					+ " Remote exception was " + e.getMessage();
-			System.out.println( msg);
+			logger.warn(msg);
 
 			// if (callback != null) {
 			// if (!callback.setRegistrationStatus(parameters, false,

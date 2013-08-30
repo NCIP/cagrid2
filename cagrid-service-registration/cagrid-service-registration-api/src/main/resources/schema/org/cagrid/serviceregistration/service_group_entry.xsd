@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://mds.globus.org/bigindex/2008/11/24" xmlns:ns1="http://mds.globus.org/bigindex/2008/11/24" xmlns:ns2="http://mds.globus.org/aggregator/types">
+  <xs:import namespace="http://mds.globus.org/aggregator/types" schemaLocation="./mds_aggregator.xsd"/>
+  <xs:element name="ServiceGroupEntryKey">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns2:GroupKey"/>
+        <xs:element ref="ns2:EntryKey"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
