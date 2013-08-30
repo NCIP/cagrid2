@@ -84,6 +84,7 @@ import org.oasis.names.tc.saml.assertion.AssertionType;
 import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
 import org.osgi.framework.Bundle;
+import org.w3c.dom.Node;
 import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 
 public class CDSIT extends TestBase {
@@ -214,7 +215,7 @@ public class CDSIT extends TestBase {
         Assert.assertNotNull(delegatedCredentialReference);
 
         EndpointReferenceType dcEPR = delegatedCredentialReference.getEndpointReference();
-        System.out.println(JAXBUtils.marshal(dcEPR));
+        //System.out.println(JAXBUtils.marshal(dcEPR));
 
         /**
          * Delegatee using the dcEPR should pass
@@ -231,22 +232,22 @@ public class CDSIT extends TestBase {
         Assert.assertNotNull(cred.getCertificateChain());
         List<org.cagrid.cds.model.X509Certificate> certChain = cred.getCertificateChain().getX509Certificate();
         Assert.assertNotNull(certChain);
-        Assert.assertEquals(3,certChain.size());
-        //last cert should be the delegator
+        Assert.assertEquals(3, certChain.size());
+        // last cert should be the delegator
         X509Certificate x509Certificate = CertUtil.loadCertificate(certChain.get(2).getCertificateAsString());
-        Assert.assertEquals(endUserInfoDelegator.x509Certificate.getIssuerDN(),x509Certificate.getIssuerDN());
-        Assert.assertEquals(endUserInfoDelegator.x509Certificate.getSubjectDN().getName(),x509Certificate.getSubjectDN().getName());
-        //second cert should be the proxy cert sent to CDS
+        Assert.assertEquals(endUserInfoDelegator.x509Certificate.getIssuerDN(), x509Certificate.getIssuerDN());
+        Assert.assertEquals(endUserInfoDelegator.x509Certificate.getSubjectDN().getName(), x509Certificate.getSubjectDN().getName());
+        // second cert should be the proxy cert sent to CDS
         x509Certificate = CertUtil.loadCertificate(certChain.get(1).getCertificateAsString());
-        Assert.assertEquals(cdsX509Certificates[0].getIssuerDN().getName(),x509Certificate.getIssuerDN().getName());
-        Assert.assertEquals(cdsX509Certificates[0].getSubjectDN().getName(),x509Certificate.getSubjectDN().getName());
-        //first cert should be the delegated proxy
+        Assert.assertEquals(cdsX509Certificates[0].getIssuerDN().getName(), x509Certificate.getIssuerDN().getName());
+        Assert.assertEquals(cdsX509Certificates[0].getSubjectDN().getName(), x509Certificate.getSubjectDN().getName());
+        // first cert should be the delegated proxy
         x509Certificate = CertUtil.loadCertificate(certChain.get(0).getCertificateAsString());
-        //the subject of the proxy should be the issuer of the delgated proxy
-        Assert.assertEquals(cdsX509Certificates[0].getSubjectDN().getName(),x509Certificate.getIssuerDN().getName());
-        //we don't really know what the final subject will be, but it should be a superstring of the delegated proxy DN
-        Assert.assertEquals(0,x509Certificate.getSubjectDN().getName().indexOf(cdsX509Certificates[0].getSubjectDN().getName()));
-        
+        // the subject of the proxy should be the issuer of the delgated proxy
+        Assert.assertEquals(cdsX509Certificates[0].getSubjectDN().getName(), x509Certificate.getIssuerDN().getName());
+        // we don't really know what the final subject will be, but it should be a superstring of the delegated proxy DN
+        Assert.assertEquals(0, x509Certificate.getSubjectDN().getName().indexOf(cdsX509Certificates[0].getSubjectDN().getName()));
+
         /**
          * Bad user using the dcEPR should fail
          */
@@ -258,7 +259,25 @@ public class CDSIT extends TestBase {
             Assert.fail("Should not be able to get delegated credential");
         } catch (PermissionDeniedFaultFaultMessage e) {
             // expected
-            System.out.println("Expected " + e.toString());
+           // System.out.println("Expected " + e.toString());
+        }
+
+        /**
+         * good user with bad EPR should fail; not inadvertantly return the wrong cred
+         */
+        //change the EPR
+        Object o=((org.xmlsoap.schemas.ws._2004._03.addressing.ReferencePropertiesType) dcEPR.getReferenceProperties()).getAny().get(0);
+        ((Node) o).getChildNodes().item(0).getChildNodes().item(0).setNodeValue("10000000");
+        //System.out.println(JAXBUtils.marshal(dcEPR));
+        
+        List<Header> badHeader = makeDelegationIdHeader(dcEPR);
+        ((BindingProvider) dcs).getRequestContext().put(Header.HEADER_LIST, badHeader);
+        try {
+            cred = dcs.getDelegatedCredential(dcr);
+            Assert.fail("Should not have been able to obtain a credential for a bad EPR.");
+        } catch (Exception e) {
+            // expected
+            e.printStackTrace();
         }
     }
 
