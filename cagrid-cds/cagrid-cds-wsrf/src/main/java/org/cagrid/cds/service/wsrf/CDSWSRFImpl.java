@@ -62,17 +62,20 @@ import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_0
 import org.oasis_open.docs.wsrf._2004._06.wsrf_ws_resourceproperties_1_2_draft_01_wsdl.UnknownQueryExpressionDialectFault;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
 import org.xmlsoap.schemas.ws._2004._03.addressing.AttributedURI;
 import org.xmlsoap.schemas.ws._2004._03.addressing.EndpointReferenceType;
 import org.xmlsoap.schemas.ws._2004._03.addressing.ReferencePropertiesType;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
 import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
@@ -332,12 +335,36 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
     @Override
     public GetMultipleResourcePropertiesResponse getMultipleResourceProperties(GetMultipleResourceProperties getMultipleResourcePropertiesRequest)
             throws ResourceUnknownFault, InvalidResourcePropertyQNameFault {
+        logger.info("getMultipleResourceProperty " + getMultipleResourcePropertiesRequest);
+        System.out.println(getMultipleResourcePropertiesRequest);
+        GetMultipleResourcePropertiesResponse response = new GetMultipleResourcePropertiesResponse();
+        for (Iterator iterator = getMultipleResourcePropertiesRequest.getResourceProperty().iterator(); iterator.hasNext();) {
+            QName qname = (QName) iterator.next();
+            Exception e;
+            try {
+                Resource resource = resourceHome.find(null);
+                if (resource instanceof ResourcePropertySet) {
+                    ResourcePropertySet resourcePropertySet = (ResourcePropertySet) resource;
+                    ResourceProperty<?> resourceProperty = resourcePropertySet.get(qname);
+                    if (resourceProperty != null) {
+                        Object resourcePropertyValue = resourceProperty.get(0);
+                        logger.info("getResourceProperty " + qname + " returning " + resourcePropertyValue);
+                        if (!(resourcePropertyValue instanceof Node) && !(resourcePropertyValue instanceof JAXBElement<?>)) {
+                            resourcePropertyValue = JAXBUtils.wrap(resourcePropertyValue);
+                        }
+                        response.getAny().add(resourcePropertyValue);
+                    }
+                }
+            } catch (NoSuchResourceException nsre) {
+                e = nsre;
+            } catch (InvalidResourceKeyException irke) {
+                e = irke;
+            } catch (ResourceException re) {
+                e = re;
+            }
+        }
 
-        String message = "getMultipleResourceProperties";
-        logger.debug(message);
-
-        // TODO
-        return super.getMultipleResourceProperties(getMultipleResourcePropertiesRequest);
+        return response;
     }
 
     private String getCallerId() {
@@ -350,8 +377,8 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             MessageContext msgContext = wsContext.getMessageContext();
             HttpServletRequest request = (HttpServletRequest) msgContext.get("HTTP.REQUEST");
             String transportURL = request.getRequestURL().toString();
-            //TODO: fix this to use the property... but deal with handling which endpoint they came in on
-            //this currently assumes the cds and dcs URLs are the same up to the last / (the old code did too)
+            // TODO: fix this to use the property... but deal with handling which endpoint they came in on
+            // this currently assumes the cds and dcs URLs are the same up to the last / (the old code did too)
             transportURL = transportURL.substring(0, transportURL.lastIndexOf('/') + 1);
             transportURL += "DelegatedCredential";
 

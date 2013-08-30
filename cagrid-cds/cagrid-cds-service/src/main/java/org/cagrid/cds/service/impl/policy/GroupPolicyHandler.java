@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.cagrid.cds.model.DelegationIdentifier;
 import org.cagrid.cds.model.DelegationPolicy;
 import org.cagrid.cds.model.GroupDelegationPolicy;
+import org.cagrid.cds.model.IdentityDelegationPolicy;
 import org.cagrid.cds.service.exception.CDSInternalException;
 import org.cagrid.cds.service.exception.InvalidPolicyException;
 import org.cagrid.cds.service.impl.util.Errors;
@@ -87,14 +88,17 @@ public class GroupPolicyHandler implements PolicyHandler {
 			throw Errors.makeException(CDSInternalException.class, "Unexpected Error.", e);
 		}
 	}
-
-	public boolean isSupported(String policyClassName) {
-		if (policyClassName.equals(GroupDelegationPolicy.class.getName())) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+	
+    public boolean isSupported(String policyClassName) {
+        if (policyClassName.equals(GroupDelegationPolicy.class.getName())) {
+            return true;
+        } else if (policyClassName.equals("org.cagrid.gaards.cds.common.GroupDelegationPolicy")) {
+            //LEGACY SUPPORT
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	public void removeAllStoredPolicies() throws CDSInternalException {
 		buildDatabase();

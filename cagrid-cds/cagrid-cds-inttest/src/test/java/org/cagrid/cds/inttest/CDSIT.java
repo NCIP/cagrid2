@@ -10,8 +10,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.net.ssl.KeyManager;
+import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.apache.cxf.headers.Header;
+import org.apache.cxf.jaxb.JAXBDataBinding;
 import org.cagrid.cds.model.AllowedParties;
 import org.cagrid.cds.model.CertificateChain;
 import org.cagrid.cds.model.DelegationIdentifier;
@@ -21,7 +26,9 @@ import org.cagrid.cds.model.DelegationSigningResponse;
 import org.cagrid.cds.model.IdentityDelegationPolicy;
 import org.cagrid.cds.model.ProxyLifetime;
 import org.cagrid.cds.service.CredentialDelegationService;
+import org.cagrid.cds.service.wsrf.DCSWSRFImpl;
 import org.cagrid.cds.soapclient.CDSSoapClientFactory;
+import org.cagrid.cds.soapclient.DCSSoapClientFactory;
 import org.cagrid.cds.util.Utils;
 import org.cagrid.cds.wsrf.stubs.ApproveDelegationRequest;
 import org.cagrid.cds.wsrf.stubs.ApproveDelegationResponse;
@@ -32,6 +39,10 @@ import org.cagrid.cds.wsrf.stubs.InitiateDelegationResponse;
 import org.cagrid.core.common.JAXBUtils;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.delegatedcredential.types.DelegatedCredentialReference;
+import org.cagrid.delegatedcredential.wsrf.stubs.DelegatedCredentialPortType;
+import org.cagrid.delegatedcredential.wsrf.stubs.DelegatedCredentialPortTypeImpl;
+import org.cagrid.delegatedcredential.wsrf.stubs.GetDelegatedCredentialRequest;
+import org.cagrid.delegatedcredential.wsrf.stubs.PermissionDeniedFaultFaultMessage;
 import org.cagrid.dorian.DorianPortType;
 import org.cagrid.dorian.FindGridUsersRequest;
 import org.cagrid.dorian.FindGridUsersRequest.Filter;
@@ -68,6 +79,7 @@ import org.cagrid.gaards.pki.KeyUtil;
 import org.cagrid.gaards.pki.ProxyCreator;
 import org.cagrid.systest.ContextLoader;
 import org.cagrid.systest.TestBase;
+import org.codehaus.plexus.util.ExceptionUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.oasis.names.tc.saml.assertion.AssertionType;
@@ -127,6 +139,7 @@ public class CDSIT extends TestBase {
 
     @Test
     public void testCDS() throws Exception {
+
         Assert.assertNotNull(bundleContext);
 
         for (Bundle bundle : bundleContext.getBundles()) {
@@ -141,6 +154,7 @@ public class CDSIT extends TestBase {
 
         final String dorianURL = "https://localhost:7734/dorian";
         final String cdsURL = "https://localhost:7736/cds";
+        final String dcsURL = "https://localhost:7736/DelegatedCredential";
 
         Assert.assertNotNull(dorian);
         Assert.assertNotNull(cds);
@@ -199,14 +213,47 @@ public class CDSIT extends TestBase {
         DelegatedCredentialReference delegatedCredentialReference = approveDelegationResponse.getDelegatedCredentialReference();
         Assert.assertNotNull(delegatedCredentialReference);
 
-        // TODO: use the DelegatedCredential client to get the delegatedCredential
-        // DelegatedCredentialPortType.getDelegatedCredential(epr)
         EndpointReferenceType dcEPR = delegatedCredentialReference.getEndpointReference();
         System.out.println(JAXBUtils.marshal(dcEPR));
-        
-        //BadUser using the dcEPR should fail
-        //delegatee using the dcEPR should pass
 
+        /**
+         * Delegatee using the dcEPR should pass
+         */
+        KeyManager delegateeKeyManager = new SingleEntityKeyManager("client", new X509Certificate[] {
+                proxyUserInfo.x509Certificate }, proxyUserInfo.privateKey);
+        DelegatedCredentialPortType dcs = DCSSoapClientFactory.createSoapClient(dcsURL, truststore, delegateeKeyManager);
+        GetDelegatedCredentialRequest dcr = new GetDelegatedCredentialRequest();
+        dcr.setPublicKey(new GetDelegatedCredentialRequest.PublicKey());
+        dcr.getPublicKey().setPublicKey(cdsPublicKey);
+
+        ((BindingProvider)dcs).getRequestContext().put(Header.HEADER_LIST, makeDelegationIdHeader(dcEPR));
+        Assert.assertNotNull(dcs.getDelegatedCredential(dcr));
+
+        /**
+         * Bad user using the dcEPR should fail
+         */
+        KeyManager badUserKeyManager = new SingleEntityKeyManager("client", new X509Certificate[] {
+                endUserInfoBad.x509Certificate }, endUserInfoBad.privateKey);
+        dcs = DCSSoapClientFactory.createSoapClient(dcsURL, truststore, badUserKeyManager);
+        ((BindingProvider)dcs).getRequestContext().put(Header.HEADER_LIST, makeDelegationIdHeader(dcEPR));
+        try {
+            dcs.getDelegatedCredential(dcr);
+            Assert.fail("Should not be able to get delegated credential");
+        } catch(PermissionDeniedFaultFaultMessage e) {
+            // expected
+            System.out.println("Expected " + e.toString());
+        }
+    }
+
+    private List<Header> makeDelegationIdHeader(EndpointReferenceType epr) throws JAXBException {
+        List<Header> headers = new ArrayList<Header>();
+        Header delegationIdHeader = new Header(
+                new QName("http://cds.gaards.cagrid.org/CredentialDelegationService/DelegatedCredential",
+                        "DelegatedCredentialKey"),
+                epr,
+                new JAXBDataBinding(EndpointReferenceType.class));
+        headers.add(delegationIdHeader);
+        return headers;
     }
 
     private InitiateDelegationRequest createDelegationPolicy(UserInfo proxyUserInfo) {

@@ -22,7 +22,9 @@ public class WebServiceCallerId {
 		if ((certs == null) || (certs.length == 0)) {
 			return callerId;
 		}
-		String dn = certs[0].getSubjectDN().getName();
+		
+		//TODO: seem to need to grab last cert when a proxy cert is used.  Is there a better way to find the "right" one?
+		String dn = certs[certs.length-1].getSubjectDN().getName();
 		StringBuffer sb = new StringBuffer();
 		int index = dn.lastIndexOf(",");
 		while (index != -1) {
