@@ -1,15 +1,6 @@
 package org.cagrid.cds.service.wsrf;
 
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
-
-import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.namespace.QName;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
-
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxws.context.WrappedMessageContext;
@@ -18,23 +9,20 @@ import org.cagrid.cds.model.DelegationIdentifier;
 import org.cagrid.cds.service.exception.CDSInternalException;
 import org.cagrid.cds.service.exception.DelegationException;
 import org.cagrid.cds.service.exception.PermissionDeniedException;
-import org.cagrid.core.common.JAXBUtils;
-import org.cagrid.core.resource.SimpleResourceKey;
 import org.cagrid.delegatedcredential.service.DelegatedCredentialService;
-import org.cagrid.delegatedcredential.wsrf.stubs.CDSInternalFaultFaultMessage;
-import org.cagrid.delegatedcredential.wsrf.stubs.DelegatedCredentialPortTypeImpl;
-import org.cagrid.delegatedcredential.wsrf.stubs.DelegationFaultFaultMessage;
-import org.cagrid.delegatedcredential.wsrf.stubs.GetDelegatedCredentialRequest;
-import org.cagrid.delegatedcredential.wsrf.stubs.GetDelegatedCredentialResponse;
-import org.cagrid.delegatedcredential.wsrf.stubs.PermissionDeniedFaultFaultMessage;
+import org.cagrid.delegatedcredential.wsrf.stubs.*;
 import org.cagrid.gaards.authentication.WebServiceCallerId;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataResponse;
-import org.cagrid.wsrf.properties.Resource;
 import org.cagrid.wsrf.properties.ResourceException;
-import org.cagrid.wsrf.properties.ResourceKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.namespace.QName;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+import java.util.List;
 
 public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
 
@@ -126,6 +114,31 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
         return boxedResult;
     }
 
+    private DelegationIdentifier getDelegationId(Node parent) {
+        if (parent == null) {
+            return null;
+        }
+
+        if (parent.getLocalName() != null && parent.getLocalName().equals("delegationId")) {
+            DelegationIdentifier did = new DelegationIdentifier();
+            did.setDelegationId(Long.parseLong(parent.getTextContent()));
+            logger.debug("Found delegation id: " + did.getDelegationId());
+            return did;
+        }
+
+        if (parent.hasChildNodes()) {
+            NodeList nl = parent.getChildNodes();
+            for (int i=0; i < nl.getLength(); i++) {
+                DelegationIdentifier did = getDelegationId(nl.item(i));
+                if (did != null) {
+                    return did;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private DelegationIdentifier extractDelegationIdentifierFromHeaders() throws CDSInternalFaultFaultMessage {
         DelegationIdentifier did = null;
 
@@ -137,10 +150,8 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
                     logger.debug("Found resource key.");
                     Object o = h.getObject();
                     try {
-                        Node node = (Node) o;
-                        if (node.getFirstChild().getLocalName().equals("delegationId")) {
-                            did = new DelegationIdentifier();
-                            did.setDelegationId(Long.parseLong(node.getFirstChild().getTextContent()));
+                        did = getDelegationId((Node) o);
+                        if (did != null) {
                             break;
                         }
                         // JAXBContext jaxbContext = JAXBUtils.getJAXBContext(DelegationIdentifier.class);
@@ -155,7 +166,7 @@ public class DCSWSRFImpl extends DelegatedCredentialPortTypeImpl {
                         // }
                         // } catch (JAXBException e) {
                     } catch (Exception e) {
-                        logger.error("Problem deserializing soap header: " + e.getMessage(), e);
+                        logger.error("Problem deserializing soap header: " + e.toString(), e);
                         throw new CDSInternalFaultFaultMessage("Problem deserializing soap header: " + e.getMessage());
                     }
                 } else {
