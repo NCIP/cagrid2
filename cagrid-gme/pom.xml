@@ -133,6 +133,7 @@
         <module>cagrid-gme-service</module>
         <module>cagrid-gme-wsrf</module>
         <module>cagrid-gme-soap-client</module>
-	    <module>cagrid-gme-systest</module>
+        <module>cagrid-gme-systest</module>
+	<module>cagrid-gme-service-tools</module>
     </modules>
 </project>

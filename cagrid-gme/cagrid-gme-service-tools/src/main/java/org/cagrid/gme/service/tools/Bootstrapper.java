@@ -9,7 +9,20 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.net.ssl.KeyManager;
+
+import org.apache.cxf.configuration.security.KeyStoreType;
 import org.cagrid.core.commandline.BaseCommandLine;
+import org.cagrid.core.soapclient.SingleEntityKeyManager;
+import org.cagrid.dorian.DorianPortType;
+import org.cagrid.dorian.RequestHostCertificateRequest;
+import org.cagrid.dorian.RequestHostCertificateResponse;
+import org.cagrid.dorian.RequestUserCertificateRequest;
+import org.cagrid.dorian.RequestUserCertificateRequest.Key;
+import org.cagrid.dorian.RequestUserCertificateRequest.Lifetime;
+import org.cagrid.dorian.RequestUserCertificateRequest.Saml;
+import org.cagrid.dorian.RequestUserCertificateResponse;
+import org.cagrid.dorian.model.federation.CertificateLifetime;
 import org.cagrid.dorian.model.federation.HostCertificateRecord;
 import org.cagrid.dorian.model.federation.HostCertificateRequest;
 import org.cagrid.dorian.model.federation.PublicKey;
@@ -17,9 +30,14 @@ import org.cagrid.dorian.service.CertificateSignatureAlgorithm;
 import org.cagrid.dorian.service.ca.CertificateAuthorityProperties;
 import org.cagrid.dorian.service.core.BeanUtils;
 import org.cagrid.dorian.service.federation.IdentityAssignmentPolicy;
-import org.cagrid.dorian.service.tools.BootstrapperSpringUtils;
+import org.cagrid.dorian.soapclient.DorianSoapClientFactory;
+import org.cagrid.gaards.authentication.AuthenticateUserRequest;
+import org.cagrid.gaards.authentication.AuthenticateUserRequest.Credential;
+import org.cagrid.gaards.authentication.AuthenticateUserResponse;
+import org.cagrid.gaards.authentication.BasicAuthentication;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.oasis.names.tc.saml.assertion.AssertionType;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 
@@ -212,7 +230,7 @@ public class Bootstrapper extends BaseCommandLine {
 	}
 
 	public void createWSRFKeystore() throws Exception {
-		String certSource = getValueWithOptions("Obtain certificates from (f) filesystem, (r) remote dorian, (l) local dorian", WSRF_CERTIFICATE_SOURCE, new String[] {"f", "r", "l"});
+		String certSource = getValueWithOptions("Obtain certificates from (f) filesystem, (r) remote dorian, (l) local database", WSRF_CERTIFICATE_SOURCE, new String[] {"f", "r", "l"});
 		X509Certificate cert = null;
 		PrivateKey pkey = null;
 		String hostPath = this.gmeEtcDir.getAbsolutePath() + File.separator + WSRF_KEYSTORE_FILE_NAME;
@@ -235,11 +253,82 @@ public class Bootstrapper extends BaseCommandLine {
 			out.close();
 			System.out.println("WSRF keystore created for " + cert.getSubjectDN() + " at " + hostFile.getAbsolutePath());
 		} else if ("r".equals(certSource)) {
+			DorianPortType authDorian = getAuthenticatedDorianSoapClient();
+			
+			KeyPair pair = KeyUtil.generateRSAKeyPair(1024);
+
+			RequestHostCertificateRequest.Req rhcrr = new RequestHostCertificateRequest.Req(); //HostCertificateRequest();
+			HostCertificateRequest req = new HostCertificateRequest();
+			
+			req.setHostname(getHostname());
+			PublicKey publicKey = new PublicKey();
+			publicKey.setKeyAsString(KeyUtil.writePublicKey(pair.getPublic()));
+			req.setPublicKey(publicKey);
+			RequestHostCertificateRequest rhcr = new RequestHostCertificateRequest();
+			rhcrr.setHostCertificateRequest(req);
+			
+			rhcr.setReq(rhcrr);
+			System.out.println(rhcr);
+			RequestHostCertificateResponse resp = authDorian.requestHostCertificate(rhcr);
+			System.out.println(resp);
 		} else if ("l".equals(certSource)) {
 			writeHostCertificate(getHostname(), getKeystoreAlias(), hostPath, getKeystorePassword(), getKeyPassword());
 		}
 	}
 
+	private DorianPortType getAuthenticatedDorianSoapClient() throws Exception {
+		KeyStoreType truststore = new KeyStoreType();
+		truststore.setFile(getDefaultTruststoreLocation());
+		truststore.setType("JKS");
+		truststore.setPassword("changeit");
+
+		DorianPortType dorianSoapAnon = DorianSoapClientFactory
+				.createSoapClient("https://localhost:4443/dorian", truststore,
+						(KeyManager) null);
+
+		BasicAuthentication basicAuthentication = new BasicAuthentication();
+		basicAuthentication.setUserId("dorian");
+		basicAuthentication.setPassword("DorianAdmin$1");
+		Credential credential = new Credential();
+		credential.setCredential(basicAuthentication);
+		AuthenticateUserRequest authenticateUserRequest = new AuthenticateUserRequest();
+		authenticateUserRequest.setCredential(credential);
+		AuthenticateUserResponse authenticateUserResponse = dorianSoapAnon
+				.authenticateUser(authenticateUserRequest);
+		AssertionType assertion = authenticateUserResponse.getAssertion();
+		//Assert.assertNotNull(assertion);
+
+		KeyPair keyPair = KeyUtil.generateRSAKeyPair(2048);
+		Saml saml = new Saml();
+		saml.setAssertion(assertion);
+		PublicKey caPublicKey = new PublicKey();
+		caPublicKey.setKeyAsString(KeyUtil.writePublicKey(keyPair.getPublic()));
+		RequestUserCertificateRequest userCertificateRequest = new RequestUserCertificateRequest();
+		userCertificateRequest.setSaml(saml);
+		Key caKey = new Key();
+		caKey.setPublicKey(caPublicKey);
+		userCertificateRequest.setKey(caKey);
+		CertificateLifetime certificateLifetime = new CertificateLifetime();
+		certificateLifetime.setHours(6);
+		Lifetime lifetime = new Lifetime();
+		lifetime.setCertificateLifetime(certificateLifetime);
+		userCertificateRequest.setLifetime(lifetime);
+		RequestUserCertificateResponse requestUserCertificateResponse = dorianSoapAnon
+				.requestUserCertificate(userCertificateRequest);
+		String certificateString = requestUserCertificateResponse
+				.getX509Certificate().getCertificateAsString();
+		X509Certificate certificate = CertUtil
+				.loadCertificate(certificateString);
+		//Assert.assertNotNull(certificate);
+
+		KeyManager keyManager = new SingleEntityKeyManager("client",
+				new X509Certificate[] { certificate }, keyPair.getPrivate());
+		DorianPortType dorianSoapAuth = DorianSoapClientFactory
+				.createSoapClient("https://localhost:7734/dorian", truststore,
+						keyManager);
+		return dorianSoapAuth;
+	}
+	
 	private BeanUtils getDorianUtils() throws Exception {
 		if (dorianUtils == null) {
 			dorianUtils = new BeanUtils(new ClassPathResource(getValue(DORIAN_CONFIG_PROMPT, DORIAN_CONFIG_PROPERTY)), 
