@@ -56,7 +56,7 @@ public class ServiceGroupRegistrator {
 
 	}
 
-	public ServiceGroupRegistrator(String paramsFile, String registrantURL,
+	public ServiceGroupRegistrator(String performRegistration, String paramsFile, String registrantURL,
 			String indexServiceURL) {
 		this.isDebug = logger.isDebugEnabled();
 		try {
@@ -66,7 +66,9 @@ public class ServiceGroupRegistrator {
 			e.printStackTrace();
 		}
 
-		this.register(paramsFile, registrantURL, indexServiceURL);
+		boolean perform = new Boolean(performRegistration).booleanValue();
+		if(perform)
+			this.register(paramsFile, registrantURL, indexServiceURL);
 	}
 
 	public ServiceGroupRegistrator(String paramsFile, String registrantURL,
