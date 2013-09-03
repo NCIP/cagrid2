@@ -37,6 +37,12 @@
         <prop key="cagrid.gme.legacy-wsrf.key.password">changeit</prop>
         <prop key="cagrid.gme.legacy-wsrf.truststore.path">${karaf.base}/etc/cagrid-gme/truststore.jks</prop>
         <prop key="cagrid.gme.legacy-wsrf.truststore.password">changeit</prop>
+        <prop key="cagrid.gme.wsrf.registration.on">true</prop>
+		<prop key="cagrid.gme.wsrf.registration.registrant.url">${cagrid.gme.wsrf.url}</prop>
+		<prop key="cagrid.gme.wsrf.registration.registrant.legacy.url">${cagrid.gme.legacy-wsrf.url}</prop>
+		<prop key="cagrid.gme.wsrf.registration.xml">${karaf.base}/etc/cagrid-gme/registration.xml</prop>
+		<prop key="cagrid.gme.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
+	
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />

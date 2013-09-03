@@ -132,6 +132,9 @@
 
     <!-- GME -->
     <feature name="cagrid-gme" version="${project.version}">
+    	<configfile finalname="/etc/cagrid-gme/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gme/registration.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/registration</configfile>
+        <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-gaards</feature>
         <bundle>mvn:${project.groupId}/cagrid-gme-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-service/${project.version}</bundle>
