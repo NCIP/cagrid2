@@ -82,6 +82,7 @@ import java.rmi.RemoteException;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class GMEWSRFImpl implements GlobalModelExchangePortType {
@@ -147,9 +148,42 @@ public class GMEWSRFImpl implements GlobalModelExchangePortType {
 
     @Override
     public GetMultipleResourcePropertiesResponse getMultipleResourceProperties(GetMultipleResourceProperties getMultipleResourcePropertiesRequest) throws ResourceUnknownFault, InvalidResourcePropertyQNameFault    {
-        LOG.debug("Executing operation getMultipleResourceProperties");
-        //TODO
-        return null;
+    	LOG.info("getMultipleResourceProperty "
+				+ getMultipleResourcePropertiesRequest);
+		System.out.println(getMultipleResourcePropertiesRequest);
+		GetMultipleResourcePropertiesResponse response = new GetMultipleResourcePropertiesResponse();
+		for (Iterator iterator = getMultipleResourcePropertiesRequest
+				.getResourceProperty().iterator(); iterator.hasNext();) {
+			QName qname = (QName) iterator.next();
+			Exception e;
+			try {
+				Resource resource = resourceHome.find(null);
+				if (resource instanceof ResourcePropertySet) {
+					ResourcePropertySet resourcePropertySet = (ResourcePropertySet) resource;
+					ResourceProperty<?> resourceProperty = resourcePropertySet
+							.get(qname);
+					if (resourceProperty != null) {
+						Object resourcePropertyValue = resourceProperty.get(0);
+						LOG.info("getResourceProperty " + qname
+								+ " returning " + resourcePropertyValue);
+						if (!(resourcePropertyValue instanceof Node)
+								&& !(resourcePropertyValue instanceof JAXBElement<?>)) {
+							resourcePropertyValue = JAXBUtils
+									.wrap(resourcePropertyValue);
+						}
+						response.getAny().add(resourcePropertyValue);
+					}
+				}
+			} catch (NoSuchResourceException nsre) {
+				e = nsre;
+			} catch (InvalidResourceKeyException irke) {
+				e = irke;
+			} catch (ResourceException re) {
+				e = re;
+			}
+		}
+
+		return response;
     }
 
     @Override
