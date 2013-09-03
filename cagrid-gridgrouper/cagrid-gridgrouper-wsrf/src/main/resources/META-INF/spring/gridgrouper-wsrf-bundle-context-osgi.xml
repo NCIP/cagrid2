@@ -37,6 +37,12 @@
         <prop key="cagrid.gridgrouper.legacy-wsrf.key.password">changeit</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.truststore.path">${karaf.base}/etc/gridgrouper/truststore.jks</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.truststore.password">changeit</prop>
+        <prop key="cagrid.gridgrouper.wsrf.registration.on">true</prop>
+		<prop key="cagrid.gridgrouper.wsrf.registration.registrant.url">${cagrid.gridgrouper.wsrf.url}</prop>
+		<prop key="cagrid.gridgrouper.wsrf.registration.registrant.legacy.url">${cagrid.gridgrouper.legacy-wsrf.url}</prop>
+		<prop key="cagrid.gridgrouper.wsrf.registration.xml">${karaf.base}/etc/cagrid-grid-grouper/registration.xml</prop>
+		<prop key="cagrid.gridgrouper.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
+	
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
