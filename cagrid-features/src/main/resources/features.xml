@@ -40,6 +40,10 @@
 
     <!-- GTS -->
     <feature name="cagrid-gts" version="${project.version}">
+   		<configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gts/registration.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/registration</configfile>
+        <feature version="${project.version}">cagrid-service-registration</feature>
+    
         <feature version="${project.version}">cagrid-gts-client</feature>
         <!-- Install the default config file; it won't overwrite if it already exists -->
         <configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config</configfile>

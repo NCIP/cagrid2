@@ -45,6 +45,7 @@ public class GTSInstallTest extends CaGridTestSupport {
         assertBundleActive("cagrid-gts-service");
         GTS gts = getOsgiService(GTS.class, TIMEOUT);
         Assert.assertNotNull(gts);
+        Thread.sleep(300000);
     }
 
 }
