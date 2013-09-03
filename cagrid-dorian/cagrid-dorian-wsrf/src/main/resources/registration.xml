@@ -5,7 +5,7 @@
   xmlns:agg="http://mds.globus.org/aggregator/types"
   xmlns="http://mds.globus.org/servicegroup/client">
   <!-- Specifies that the registration will be renewed every 10 minutes -->
-  <RefreshIntervalSecs>30</RefreshIntervalSecs>
+  <RefreshIntervalSecs>600</RefreshIntervalSecs>
   <Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
     <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
       <agg:GetMultipleResourcePropertiesPollType
