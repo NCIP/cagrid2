@@ -40,6 +40,7 @@
 		<prop key="cagrid.gts.legacy-wsrf.truststore.password">changeit</prop>
 		<prop key="cagrid.gts.wsrf.legacy-endpoint">gtsLegacyWSRF</prop>
 		<prop key="cagrid.gts.wsrf.registration.on">true</prop>
+		<prop key="cagrid.gts.wsrf.registration.legacy.on">true</prop>
 		<prop key="cagrid.gts.wsrf.registration.registrant.url">${cagrid.gts.wsrf.url}</prop>
 		<prop key="cagrid.gts.wsrf.registration.registrant.legacy.url">${cagrid.gts.legacy-wsrf.url}</prop>
 		<prop key="cagrid.gts.wsrf.registration.xml">${karaf.base}/etc/cagrid-gts/registration.xml</prop>
