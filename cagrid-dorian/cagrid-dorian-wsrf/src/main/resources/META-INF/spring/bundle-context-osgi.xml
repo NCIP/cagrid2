@@ -44,6 +44,7 @@
 		<prop key="cagrid.dorian.wsrf.metadata.url">serviceMetadata.xml</prop>
 		<prop key="cagrid.dorian.wsrf.security.metadata.url">serviceSecurityMetadata.xml</prop>
 		<prop key="cagrid.dorian.wsrf.registration.on">true</prop>
+		<prop key="cagrid.dorian.wsrf.registration.legacy.on">true</prop>
 		<prop key="cagrid.dorian.wsrf.registration.registrant.url">${cagrid.dorian.wsrf.url}</prop>
 		<prop key="cagrid.dorian.wsrf.registration.registrant.legacy.url">${cagrid.dorian.legacy-wsrf.url}</prop>
 		<prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/dorian/registration.xml</prop>

@@ -31,7 +31,7 @@
 	</bean>
 	
 	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator">
-		<constructor-arg index="0" value="${cagrid.gts.wsrf.registration.on}"></constructor-arg>
+		<constructor-arg index="0" value="${cagrid.gts.wsrf.registration.legacy.on}"></constructor-arg>
 		<constructor-arg index="1" value="${cagrid.gts.wsrf.registration.xml}"></constructor-arg>
 		<constructor-arg index="2" value="${cagrid.gts.wsrf.registration.registrant.legacy.url}"></constructor-arg>
 		<constructor-arg index="3" value="${cagrid.gts.wsrf.registration.index.url}"></constructor-arg>
