@@ -22,7 +22,7 @@
 		<constructor-arg index="4" value="${cagrid.dorian.service.name}" />
 	</bean>
 
-	<bean id="registrationPolicy" class="org.cagrid.dorian.service.idp.AutomaticRegistrationPolicy" />
+	<bean id="registrationPolicy" class="org.cagrid.dorian.service.idp.ManualRegistrationPolicy" />
 
 	<bean id="passwordSecurityPolicy" class="org.cagrid.dorian.service.idp.PasswordSecurityPolicy">
 		<property name="lockout">
