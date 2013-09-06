@@ -102,9 +102,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             cds.addAdmin(getCallerId(), parameters.getGridIdentity());
             return new AddAdminResponse();
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -117,9 +117,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             cds.deleteDelegatedCredential(getCallerId(), parameters.getId().getDelegationIdentifier());
             return new DeleteDelegatedCredentialResponse();
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -135,13 +135,13 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             return response;
         } catch (DelegationException e) {
             logger.debug(message, e);
-            throw new DelegationFaultFaultMessage(message, e.getFault());
+            throw new DelegationFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (PermissionDeniedException e) {
             logger.debug(message, e);
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
             logger.debug(message, e);
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -156,9 +156,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             response.getDelegationRecord().addAll(records);
             return response;
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -174,16 +174,16 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             return response;
         } catch (DelegationException e) {
             logger.debug(message, e);
-            throw new DelegationFaultFaultMessage(message, e.getFault());
+            throw new DelegationFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (PermissionDeniedException e) {
             logger.debug(message, e);
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
             logger.debug(message, e);
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (InvalidPolicyException e) {
             logger.debug(message, e);
-            throw new InvalidPolicyFaultFaultMessage(message, e.getFault());
+            throw new InvalidPolicyFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -210,9 +210,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             }
             return response;
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -225,11 +225,11 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             cds.updateDelegatedCredentialStatus(getCallerId(), parameters.getId().getDelegationIdentifier(), parameters.getStatus().getDelegationStatus());
             return new UpdateDelegatedCredentialStatusResponse();
         } catch (DelegationException e) {
-            throw new DelegationFaultFaultMessage(message, e.getFault());
+            throw new DelegationFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -245,11 +245,11 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             response.getDelegatedCredentialAuditRecord().addAll(records);
             return response;
         } catch (DelegationException e) {
-            throw new DelegationFaultFaultMessage(message, e.getFault());
+            throw new DelegationFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -261,9 +261,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             cds.removeAdmin(getCallerId(), parameters.getGridIdentity());
             return new RemoveAdminResponse();
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
@@ -277,9 +277,9 @@ public class CDSWSRFImpl extends CredentialDelegationServicePortTypeImpl {
             response.getResponse().addAll(cds.getAdmins(getCallerId()));
             return response;
         } catch (PermissionDeniedException e) {
-            throw new PermissionDeniedFaultFaultMessage(message, e.getFault());
+            throw new PermissionDeniedFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         } catch (CDSInternalException e) {
-            throw new CDSInternalFaultFaultMessage(message, e.getFault());
+            throw new CDSInternalFaultFaultMessage(message + ":" + e.getMessage(), e.getFault());
         }
     }
 
