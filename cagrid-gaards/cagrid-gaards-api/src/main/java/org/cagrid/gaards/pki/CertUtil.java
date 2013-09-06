@@ -75,6 +75,12 @@ public class CertUtil {
 		}
 		return hexString.toString();
 	}
+	
+	public static void main(String ...arg) throws Exception{
+	    X509Certificate x509Certificate = CertUtil.loadCertificate(new File(arg[0]));
+	    System.out.println(x509Certificate.toString());
+	    System.out.println(CertUtil.getHashCode(x509Certificate));
+	}
 
 	public static void writeSigningPolicy(X509Certificate cert, File f) throws Exception {
 		PrintWriter out = new PrintWriter(f);
