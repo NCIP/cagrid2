@@ -8,7 +8,7 @@
 	<name>caGrid OSGi Parent</name>
 	<properties>
 		<wsrf.group>org.cagrid.wsrf</wsrf.group>
-		<wsrf.version>2.0.3-SNAPSHOT</wsrf.version>
+		<wsrf.version>2.0.3</wsrf.version>
 		<jaxb2.version>0.8.3</jaxb2.version>
 		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 		<cxf.version>2.6.3</cxf.version>
