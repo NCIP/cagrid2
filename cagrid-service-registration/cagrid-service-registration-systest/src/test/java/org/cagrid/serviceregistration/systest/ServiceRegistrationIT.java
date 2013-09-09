@@ -163,7 +163,7 @@ public class ServiceRegistrationIT extends TestBase {
 		try {
 //			client.register(karafBase
 //					+ "/etc/dorian/Dorian_registration.xml", "https://localhost:8443/wsrf/services/cagrid/Dorian");
-			Thread.sleep(3000000);
+			//Thread.sleep(3000000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
