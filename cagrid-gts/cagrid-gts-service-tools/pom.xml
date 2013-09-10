@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.cagrid</groupId>
 		<artifactId>cagrid-gts</artifactId>
-		<version>2.0.1</version>
+		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>cagrid-gts-service-tools</artifactId>
 	<name>GTS Service Tools</name>
