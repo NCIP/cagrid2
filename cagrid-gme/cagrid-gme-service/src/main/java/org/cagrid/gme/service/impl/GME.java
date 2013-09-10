@@ -261,7 +261,7 @@ public class GME {
             // REVISIT: is there a better way to figure out the
             // included/redefined documents?
             StringList documentLocations = schemaGrammar.getDocumentLocations();
-            for (XMLSchemaDocument schemaDocument : submittedSchema.getAdditionalSchemaDocuments()) {
+            for (XMLSchemaDocument schemaDocument : submittedSchema.getAdditionalDocuments()) {
                 URI expandedURI;
                 try {
                     // REVISIT: is this the right way to construct this.
@@ -289,10 +289,10 @@ public class GME {
             }
             // we must have a document for the root and each additional
             // schema document
-            if (documentLocations.getLength() != submittedSchema.getAdditionalSchemaDocuments().size() + 1) {
+            if (documentLocations.getLength() != submittedSchema.getAdditionalDocuments().size() + 1) {
                 String message = "Problem processing schema submissions; the schema ["
                     + submittedSchema.getTargetNamespace() + "] contained ["
-                    + submittedSchema.getAdditionalSchemaDocuments().size()
+                    + submittedSchema.getAdditionalDocuments().size()
                     + "] SchemaDocuments but the parsed grammar contained [" + documentLocations.getLength()
                     + "].  All SchemaDocuments must be used by the Schema.";
                 LOG.error(message);
@@ -593,11 +593,11 @@ public class GME {
     private void collectSchemasForBundle(XMLSchemaBundle bundle, XMLSchemaInformation info) {
         // make sure we haven't already processed these schema, such as from
         // another schemas's import
-        Set<XMLSchema> schemas = bundle.getXMLSchemas();
-        if (schemas.contains(info.getSchema())) {
-            // we've already processed this, so return
-            return;
-        }
+		Set<XMLSchema> schemas = bundle.getXmlSchemaCollection().getXMLSchema();
+		if (schemas.contains(info.getSchema())) {
+			// we've already processed this, so return
+			return;
+		}
 
         // add this to the bucket and make sure it is populated
         this.schemaDao.materializeXMLSchemaInformation(info);
@@ -605,19 +605,21 @@ public class GME {
 
         // create importinfo for each imported schema (if any)
         if (info.getImports().size() > 0) {
-            Set<XMLSchemaImportInformation> importInfoSet = bundle.getImportInformation();
+            Set<XMLSchemaImportInformation> importInfoSet = bundle.getImportInformationCollection().getXMLSchemaImportInformation();
+            
             // make a new importinfo for this schema
             XMLSchemaImportInformation importInfo = new XMLSchemaImportInformation();
-            importInfo.setTargetNamespace(new XMLSchemaNamespace(info.getSchema().getTargetNamespace()));
+            importInfo.setXMLSchemaNamespace(new XMLSchemaNamespace(info.getSchema().getTargetNamespace()));
             assert !importInfoSet.contains(importInfo) : "The bundle should not contain import information about XMLSchema ("
                 + info.getSchema().getTargetNamespace() + ") as it did not contain the schema itself.";
 
             // add the collected import set
             importInfoSet.add(importInfo);
+            
 
             // recursively process each of the schemas this schema imports
             for (XMLSchemaInformation importedInfo : info.getImports()) {
-                importInfo.getImports().add(new XMLSchemaNamespace(importedInfo.getSchema().getTargetNamespace()));
+                importInfo.getImports().getXMLSchemaNamespace().add(new XMLSchemaNamespace(importedInfo.getSchema().getTargetNamespace()));
                 collectSchemasForBundle(bundle, importedInfo);
             }
         }

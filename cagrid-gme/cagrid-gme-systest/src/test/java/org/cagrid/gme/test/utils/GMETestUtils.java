@@ -35,7 +35,7 @@ public class GMETestUtils {
         XMLSchema schema = new XMLSchema();
         schema.setTargetNamespace(namespace);
         schema.setRootDocument(root);
-        schema.setAdditionalSchemaDocuments(docs);
+        schema.getAdditionalDocuments().addAll(docs);
 
         return schema;
     }
@@ -50,7 +50,10 @@ public class GMETestUtils {
         fileInputStream.close();
         String systemID = schemaFile.getName();
 
-        return new XMLSchemaDocument(fileContents, systemID);
+        XMLSchemaDocument sd = new XMLSchemaDocument();
+        sd.setSchemaText(fileContents);
+        sd.setSystemID(systemID);
+        return sd;
     }
 
 }

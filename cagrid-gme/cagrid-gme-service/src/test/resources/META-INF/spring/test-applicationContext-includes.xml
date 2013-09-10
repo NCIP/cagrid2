@@ -32,7 +32,7 @@
 		<property name="rootDocument">
 			<ref bean="testDocumentIncluder"/>
 		</property>
-		<property name="additionalSchemaDocuments">
+		<property name="additionalDocuments">
 			<set>
 				<ref bean="testDocumentIncluded"/>
 			</set>
@@ -64,7 +64,7 @@
 		<property name="rootDocument">
 			<ref bean="testDocumentIncluderCycle"/>
 		</property>
-		<property name="additionalSchemaDocuments">
+		<property name="additionalDocuments">
 			<set>
 				<ref bean="testDocumentIncludedCycle"/>
 			</set>
@@ -97,7 +97,7 @@
 		<property name="rootDocument">
 			<ref bean="testDocumentIncluderNoNamespace"/>
 		</property>
-		<property name="additionalSchemaDocuments">
+		<property name="additionalDocuments">
 			<set>
 				<ref bean="testDocumentIncludedNoNamespace"/>
 			</set>

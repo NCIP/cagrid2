@@ -1,103 +1,216 @@
+
 package org.cagrid.gme.model;
 
-
-import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.annotations.Type;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.Type;
+import org.w3._2001.xmlschema.Adapter1;
 
 
+/**
+ * <p>Java class for XMLSchema complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType name="XMLSchema">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="rootDocument">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element ref="{gme://gme.cagrid.org/2.0/GlobalModelExchange/domain}XMLSchemaDocument"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="additionalDocuments" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element ref="{gme://gme.cagrid.org/2.0/GlobalModelExchange/domain}XMLSchemaDocument" maxOccurs="unbounded"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *       &lt;/sequence>
+ *       &lt;attribute name="targetNamespace" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "XMLSchema", propOrder = {
+    "rootDocument",
+    "additionalDocuments"
+})
 @Embeddable
-public class XMLSchema {
+public class XMLSchema
+    implements Serializable
+{
 
     @Column(nullable = false)
-    private XMLSchemaDocument rootDocument;
-
+    @XmlElement(required = true)
+    protected XMLSchema.RootDocument rootDocument;
     @CollectionOfElements
     @JoinTable(name = "xmlschema_additionaldocuments", joinColumns = {@JoinColumn(name = "referencing_xmlschema_id")})
-    private Set<XMLSchemaDocument> additionalSchemaDocuments = new HashSet<XMLSchemaDocument>();
-
+    @XmlElementWrapper
+    protected Set<XMLSchemaDocument> additionalDocuments;
+    @XmlAttribute(name = "targetNamespace")
+    @XmlJavaTypeAdapter(Adapter1 .class)
+    @XmlSchemaType(name = "anyURI")
     @Column(nullable = false, unique = true)
     @Type(type = "org.cagrid.gme.model.URIUserType")
-    private URI targetNamespace;
-
-
-    public XMLSchema() {
-    }
-
+    protected URI targetNamespace;
 
     /**
-     * @return the rootDocument
+     * Gets the value of the rootDocument property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLSchema.RootDocument }
+     *     
      */
     public XMLSchemaDocument getRootDocument() {
-        return rootDocument;
+        return rootDocument.getXMLSchemaDocument();
     }
-
 
     /**
-     * @param rootDocument
-     *            the rootDocument to set
+     * Sets the value of the rootDocument property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XMLSchema.RootDocument }
+     *     
      */
-    public void setRootDocument(XMLSchemaDocument rootDocument) {
-        this.rootDocument = rootDocument;
+    public void setRootDocument(XMLSchemaDocument value) {
+        this.rootDocument = new XMLSchema.RootDocument();
+        rootDocument.setXMLSchemaDocument(value);
     }
 
-
-    public Set<XMLSchemaDocument> getAdditionalSchemaDocuments() {
-        return additionalSchemaDocuments;
+    /**
+     * Gets the value of the additionalDocuments property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLSchema.AdditionalDocuments }
+     *     
+     */
+    public Set<XMLSchemaDocument> getAdditionalDocuments() {
+    	if (additionalDocuments == null) {
+    		additionalDocuments = new HashSet<XMLSchemaDocument>();
+    	}
+        return additionalDocuments;
     }
 
+    public void setAdditionalDocuments(Set<XMLSchemaDocument> additionalDocuments) {
+		this.additionalDocuments = additionalDocuments;
+	}
 
-    public void setAdditionalSchemaDocuments(Set<XMLSchemaDocument> schemaDocuments) {
-        this.additionalSchemaDocuments = schemaDocuments;
-    }
-
-
+	/**
+     * Gets the value of the targetNamespace property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
     public URI getTargetNamespace() {
         return targetNamespace;
     }
 
-
-    public void setTargetNamespace(URI targetNamespace) {
-        this.targetNamespace = targetNamespace;
+    /**
+     * Sets the value of the targetNamespace property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTargetNamespace(URI value) {
+        this.targetNamespace = value;
     }
+    
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element ref="{gme://gme.cagrid.org/2.0/GlobalModelExchange/domain}XMLSchemaDocument"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "xmlSchemaDocument"
+    })
+    @Embeddable
+    public static class RootDocument 
+        implements Serializable
+    {
 
+        @XmlElement(name = "XMLSchemaDocument", required = true)
+        protected XMLSchemaDocument xmlSchemaDocument;
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((targetNamespace == null) ? 0 : targetNamespace.hashCode());
-        return result;
-    }
+        /**
+         * Gets the value of the xmlSchemaDocument property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link XMLSchemaDocument }
+         *     
+         */
+        public XMLSchemaDocument getXMLSchemaDocument() {
+            return xmlSchemaDocument;
+        }
 
+        /**
+         * Sets the value of the xmlSchemaDocument property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link XMLSchemaDocument }
+         *     
+         */
+        public void setXMLSchemaDocument(XMLSchemaDocument value) {
+            this.xmlSchemaDocument = value;
+        }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final XMLSchema other = (XMLSchema) obj;
-        if (targetNamespace == null) {
-            if (other.targetNamespace != null)
-                return false;
-        } else if (!targetNamespace.equals(other.getTargetNamespace()))
-            return false;
-        return true;
-    }
-
-
-    @Override
-    public String toString() {
-        return this.targetNamespace.toString();
     }
 }

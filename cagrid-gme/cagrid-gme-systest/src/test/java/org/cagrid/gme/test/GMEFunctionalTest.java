@@ -1,7 +1,26 @@
 package org.cagrid.gme.test;
 
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.ops4j.pax.exam.CoreOptions.maven;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.KeyManager;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.interceptor.LoggingInInterceptor;
+import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
 import org.cagrid.core.common.security.CredentialFactory;
@@ -14,8 +33,12 @@ import org.cagrid.gme.soapclient.GMESoapClientFactory;
 import org.cagrid.gme.test.utils.GMETestUtils;
 import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesRequest;
 import org.cagrid.gme.wsrf.stubs.GetXMLSchemaNamespacesResponse;
+import org.cagrid.gme.wsrf.stubs.GetXMLSchemaRequest;
+import org.cagrid.gme.wsrf.stubs.GetXMLSchemaRequest.TargetNamespace;
+import org.cagrid.gme.wsrf.stubs.GetXMLSchemaResponse;
 import org.cagrid.gme.wsrf.stubs.GlobalModelExchangePortType;
 import org.cagrid.gme.wsrf.stubs.InvalidSchemaSubmissionFaultFaultMessage;
+import org.cagrid.gme.wsrf.stubs.NoSuchNamespaceExistsFaultFaultMessage;
 import org.cagrid.gme.wsrf.stubs.PublishXMLSchemasRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,20 +47,6 @@ import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.ExamReactorStrategy;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
-
-import javax.net.ssl.KeyManager;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.ops4j.pax.exam.CoreOptions.maven;
 
 @RunWith(JUnit4TestRunner.class)
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
@@ -55,6 +64,7 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
     private static final String SCHEMA_A = "etc/cagrid-gme/A.xsd";
     private static final String SCHEMA_B = "etc/cagrid-gme/B.xsd";
+    private static final String SCHEMA_XML = "etc/cagrid-gme/xml.xsd";
 
     @Override
     @Configuration
@@ -69,7 +79,8 @@ public class GMEFunctionalTest extends CaGridTestSupport {
                 new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_A, new File("src/test/resources/A.xsd")),
-                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/B.xsd"))
+                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/B.xsd")),
+                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_XML, new File("src/test/resources/xml.xsd"))
 
                 // seeing once in a while an spurious linkage error:
                 // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"
@@ -104,10 +115,13 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
             // get schemas
             List<XMLSchemaNamespace> schemas = getXMLSchemaNamespaces(gme);
-            assertEquals(2, schemas.size());
+            assertEquals(3, schemas.size());
 
             // publish bad schemas test
             publishBadXMLSchemas(gme);
+            
+            getXMLSchema(gme);
+            
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));
         }
@@ -127,7 +141,12 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
         KeyManager keyManager = new SingleEntityKeyManager(KEYALIAS, credential);
 
-        return GMESoapClientFactory.createSoapClient(GME_URL, truststore, keyManager);
+        GlobalModelExchangePortType gmePort = GMESoapClientFactory.createSoapClient(GME_URL, truststore, keyManager);
+        Client client = ClientProxy.getClient(gmePort);
+        client.getInInterceptors().add(new LoggingInInterceptor());
+        client.getOutInterceptors().add(new LoggingOutInterceptor()); 
+ 
+        return gmePort;
     }
 
     private List<XMLSchemaNamespace> getXMLSchemaNamespaces(GlobalModelExchangePortType gme) {
@@ -139,6 +158,7 @@ public class GMEFunctionalTest extends CaGridTestSupport {
         List<XMLSchema> schemas = new ArrayList<XMLSchema>();
         schemas.add(GMETestUtils.createSchema(new URI("gme://a"), new File(SCHEMA_A)));
         schemas.add(GMETestUtils.createSchema(new URI("gme://b"), new File(SCHEMA_B)));
+        schemas.add(GMETestUtils.createSchema(new URI("http://www.w3.org/XML/1998/namespace"), new File(SCHEMA_XML)));
 
         PublishXMLSchemasRequest req = new PublishXMLSchemasRequest();
         PublishXMLSchemasRequest.Schemas reqschemas = new PublishXMLSchemasRequest.Schemas();
@@ -166,5 +186,17 @@ public class GMEFunctionalTest extends CaGridTestSupport {
         }
 
         fail("Should have thrown fault");
+    }
+    
+    private void getXMLSchema(GlobalModelExchangePortType gme) throws URISyntaxException, NoSuchNamespaceExistsFaultFaultMessage {
+    	GetXMLSchemaRequest request = new GetXMLSchemaRequest();
+    	TargetNamespace tn = new TargetNamespace();
+    	XMLSchemaNamespace xmlsn = new XMLSchemaNamespace();
+    	xmlsn.setUri(new URI("http://www.w3.org/XML/1998/namespace"));
+    	tn.setXMLSchemaNamespace(xmlsn);
+    	request.setTargetNamespace(tn);
+    	GetXMLSchemaResponse response = gme.getXMLSchema(request);
+    	assertNotNull(response);
+    	assertNotNull(response.getXMLSchema());
     }
 }

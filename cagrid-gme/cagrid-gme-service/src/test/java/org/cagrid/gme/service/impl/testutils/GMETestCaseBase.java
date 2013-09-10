@@ -79,7 +79,7 @@ public abstract class GMETestCaseBase extends AbstractTransactionalJUnit4SpringC
         XMLSchemaBundle schemaBundle = this.gme.getSchemBundle(importer.getTargetNamespace());
         XMLSchemaImportInformation ii = schemaBundle.getImportInformationForTargetNamespace(new XMLSchemaNamespace(
             importer.getTargetNamespace()));
-        assertTrue(ii.getImports().contains(new XMLSchemaNamespace(imported.getTargetNamespace())));
+        assertTrue(ii.getImports().getXMLSchemaNamespace().contains(new XMLSchemaNamespace(imported.getTargetNamespace())));
     }
 
 

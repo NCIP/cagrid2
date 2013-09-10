@@ -94,7 +94,7 @@ public class XMLSchemaInformationDao extends AbstractDao<XMLSchemaInformation> {
                 session.lock(s, LockMode.READ);
                 Hibernate.initialize(s.getSchema());
                 Hibernate.initialize(s.getImports());
-                Hibernate.initialize(s.getSchema().getAdditionalSchemaDocuments());
+                Hibernate.initialize(s.getSchema().getAdditionalDocuments());
                 return null;
             }
         });

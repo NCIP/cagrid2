@@ -1,16 +1,19 @@
 package org.cagrid.gme.service.impl;
 
-import junit.framework.TestCase;
-import org.cagrid.gme.model.XMLSchema;
-import org.cagrid.gme.model.XMLSchemaBundle;
-import org.cagrid.gme.model.XMLSchemaDocument;
-import org.cagrid.gme.model.XMLSchemaImportInformation;
-import org.cagrid.gme.model.XMLSchemaNamespace;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.Set;
+
+import junit.framework.TestCase;
+
+import org.cagrid.gme.model.XMLSchema;
+import org.cagrid.gme.model.XMLSchemaBundle;
+import org.cagrid.gme.model.XMLSchemaBundle.ImportInformationCollection;
+import org.cagrid.gme.model.XMLSchemaBundle.XmlSchemaCollection;
+import org.cagrid.gme.model.XMLSchemaDocument;
+import org.cagrid.gme.model.XMLSchemaImportInformation;
+import org.cagrid.gme.model.XMLSchemaNamespace;
 
 
 /**
@@ -42,8 +45,8 @@ public class XMLSchemaBundleTestCase extends TestCase {
         XMLSchemaBundle bundle = new XMLSchemaBundle();
         validateEmptyBundle(bundle);
 
-        bundle.setImportInformation(null);
-        bundle.setXMLSchemas(null);
+        bundle.setImportInformationCollection(null);
+        bundle.setXmlSchemaCollection(null);
         validateEmptyBundle(bundle);
     }
 
@@ -53,7 +56,9 @@ public class XMLSchemaBundleTestCase extends TestCase {
 
         Set<XMLSchema> xmlSchemaCollection = new HashSet<XMLSchema>();
         xmlSchemaCollection.add(this.s1);
-        bundle.setXMLSchemas(xmlSchemaCollection);
+        XmlSchemaCollection schemaCollection = new XmlSchemaCollection();
+        schemaCollection.getXMLSchema().addAll(xmlSchemaCollection);
+        bundle.setXmlSchemaCollection(schemaCollection);
 
         assertNull(bundle.getImportedXMLSchemasForTargetNamespace(this.nonExistantNamespace));
         assertNull(bundle.getXMLSchemaForTargetNamespace(this.nonExistantNamespace));
@@ -65,7 +70,9 @@ public class XMLSchemaBundleTestCase extends TestCase {
 
         Set<XMLSchema> xmlSchemaCollection = new HashSet<XMLSchema>();
         xmlSchemaCollection.add(this.s1);
-        bundle.setXMLSchemas(xmlSchemaCollection);
+        XmlSchemaCollection schemaCollection = new XmlSchemaCollection();
+        schemaCollection.getXMLSchema().addAll(xmlSchemaCollection);
+        bundle.setXmlSchemaCollection(schemaCollection);
 
         assertNull(bundle.getImportedXMLSchemasForTargetNamespace(this.s1_ns));
         assertNull(bundle.getImportInformationForTargetNamespace(this.s1_ns));
@@ -85,17 +92,22 @@ public class XMLSchemaBundleTestCase extends TestCase {
         Set<XMLSchema> xmlSchemaCollection = new HashSet<XMLSchema>();
         xmlSchemaCollection.add(this.s1);
         xmlSchemaCollection.add(this.s2);
-        bundle.setXMLSchemas(xmlSchemaCollection);
+        XmlSchemaCollection schemaCollection = new XmlSchemaCollection();
+        schemaCollection.getXMLSchema().addAll(xmlSchemaCollection);
+        bundle.setXmlSchemaCollection(schemaCollection);
 
         // s1 imports s2
         Set<XMLSchemaImportInformation> iiSet = new HashSet<XMLSchemaImportInformation>();
         XMLSchemaImportInformation ii = new XMLSchemaImportInformation();
-        ii.setTargetNamespace(this.s1_ns);
-        Set<XMLSchemaNamespace> imports = new HashSet<XMLSchemaNamespace>();
-        imports.add(this.s2_ns);
+        ii.setXMLSchemaNamespace(this.s1_ns);
+        XMLSchemaImportInformation.Imports imports = new XMLSchemaImportInformation.Imports();
+        
+        imports.getXMLSchemaNamespace().add(this.s2_ns);
         ii.setImports(imports);
         iiSet.add(ii);
-        bundle.setImportInformation(iiSet);
+        ImportInformationCollection iic = new ImportInformationCollection();
+        iic.getXMLSchemaImportInformation().addAll(iiSet);
+        bundle.setImportInformationCollection(iic);
 
         // should be able to retrieve s1's imports
         assertNotNull(bundle.getImportInformationForTargetNamespace(this.s1_ns));
@@ -132,11 +144,11 @@ public class XMLSchemaBundleTestCase extends TestCase {
         assertNull(bundle.getImportInformationForTargetNamespace(this.nonExistantNamespace));
         assertNull(bundle.getXMLSchemaForTargetNamespace(this.nonExistantNamespace));
 
-        assertNotNull(bundle.getImportInformation());
-        assertEquals(0, bundle.getImportInformation().size());
+        assertNotNull(bundle.getImportInformationCollection());
+        assertEquals(0, bundle.getImportInformationCollection().getXMLSchemaImportInformation().size());
 
-        assertNotNull(bundle.getXMLSchemas());
-        assertEquals(0, bundle.getXMLSchemas().size());
+        assertNotNull(bundle.getXmlSchemaCollection());
+        assertEquals(0, bundle.getXmlSchemaCollection().getXMLSchema().size());
 
         assertNotNull(bundle.getXMLSchemaTargetNamespaces());
         assertEquals(0, bundle.getXMLSchemaTargetNamespaces().size());
@@ -170,7 +182,7 @@ public class XMLSchemaBundleTestCase extends TestCase {
             this.s1.setRootDocument(this.s1_d1);
             this.s1.setTargetNamespace(this.s1_uri);
             Set<XMLSchemaDocument> s1_docs = new HashSet<XMLSchemaDocument>();
-            this.s1.setAdditionalSchemaDocuments(s1_docs);
+            this.s1.getAdditionalDocuments().addAll(s1_docs);
 
             // SCHEMA 2 (root = s2_d1, docs=())
             this.s2_uri = new URI("http://s2");

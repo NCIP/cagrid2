@@ -73,7 +73,7 @@ public class XSDUtil {
         XMLSchema schema = new XMLSchema();
         schema.setTargetNamespace(namespace);
         schema.setRootDocument(root);
-        schema.setAdditionalSchemaDocuments(docs);
+        schema.getAdditionalDocuments().addAll(docs);
 
         return schema;
     }
@@ -102,7 +102,10 @@ public class XSDUtil {
         fileInputStream.close();
         String systemID = schemaFile.getName();
 
-        return new XMLSchemaDocument(fileContents, systemID);
+        XMLSchemaDocument sd = new XMLSchemaDocument();
+        sd.setSchemaText(fileContents);
+        sd.setSystemID(systemID);
+        return sd;
     }
 
 
@@ -125,7 +128,7 @@ public class XSDUtil {
         if (schema.getRootDocument().getSystemID().equals(systemId)) {
             return schema.getRootDocument();
         } else {
-            for (XMLSchemaDocument sd : schema.getAdditionalSchemaDocuments()) {
+            for (XMLSchemaDocument sd : schema.getAdditionalDocuments()) {
                 if (sd.getSystemID().equals(systemId)) {
                     return sd;
                 }

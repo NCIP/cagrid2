@@ -39,7 +39,7 @@
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefiner"/>
 		</property>
-		<property name="additionalSchemaDocuments">
+		<property name="additionalDocuments">
 			<set>
 				<ref bean="testDocumentRedefined"/>
 			</set>
@@ -70,7 +70,7 @@
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefinerNoNamespace"/>
 		</property>
-		<property name="additionalSchemaDocuments">
+		<property name="additionalDocuments">
 			<set>
 				<ref bean="testDocumentRedefinedNoNamespace"/>
 			</set>
@@ -102,7 +102,7 @@
 		<property name="rootDocument">
 			<ref bean="testDocumentRedefinerWrongNamespace"/>
 		</property>
-		<property name="additionalSchemaDocuments">
+		<property name="additionalDocuments">
 			<set>
 				<ref bean="testDocumentRedefinedWrongNamespace"/>
 			</set>

@@ -89,8 +89,8 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         // A: contains(A,B,C) imports(A->B->C)
         {
             XMLSchemaBundle aSchemaBundle = this.gme.getSchemBundle(this.testSchemaSimpleA.getTargetNamespace());
-            assertEquals(2, aSchemaBundle.getImportInformation().size());
-            assertEquals(3, aSchemaBundle.getXMLSchemas().size());
+            assertEquals(2, aSchemaBundle.getImportInformationCollection().getXMLSchemaImportInformation().size());
+            assertEquals(3, aSchemaBundle.getXmlSchemaCollection().getXMLSchema().size());
 
             XMLSchemaNamespace aTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleA.getTargetNamespace());
             XMLSchemaNamespace bTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleB.getTargetNamespace());
@@ -104,14 +104,14 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
             assertEquals(this.testSchemaSimpleC, cFromBundle);
 
             XMLSchemaImportInformation aII = aSchemaBundle.getImportInformationForTargetNamespace(aTargetNamespace);
-            aII.getTargetNamespace().equals(aTargetNamespace);
-            assertEquals(1, aII.getImports().size());
-            assertTrue(aII.getImports().contains(bTargetNamespace));
+            aII.getXMLSchemaNamespace().equals(aTargetNamespace);
+            assertEquals(1, aII.getImports().getXMLSchemaNamespace().size());
+            assertTrue(aII.getImports().getXMLSchemaNamespace().contains(bTargetNamespace));
 
             XMLSchemaImportInformation bII = aSchemaBundle.getImportInformationForTargetNamespace(bTargetNamespace);
-            bII.getTargetNamespace().equals(bTargetNamespace);
-            assertEquals(1, bII.getImports().size());
-            assertTrue(bII.getImports().contains(cTargetNamespace));
+            bII.getXMLSchemaNamespace().equals(bTargetNamespace);
+            assertEquals(1, bII.getImports().getXMLSchemaNamespace().size());
+            assertTrue(bII.getImports().getXMLSchemaNamespace().contains(cTargetNamespace));
 
             XMLSchemaImportInformation cII = aSchemaBundle.getImportInformationForTargetNamespace(cTargetNamespace);
             assertNull(cII);
@@ -120,8 +120,8 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         // B: contains(B,C) imports(B->C)
         {
             XMLSchemaBundle bSchemaBundle = this.gme.getSchemBundle(this.testSchemaSimpleB.getTargetNamespace());
-            assertEquals(1, bSchemaBundle.getImportInformation().size());
-            assertEquals(2, bSchemaBundle.getXMLSchemas().size());
+            assertEquals(1, bSchemaBundle.getImportInformationCollection().getXMLSchemaImportInformation().size());
+            assertEquals(2, bSchemaBundle.getXmlSchemaCollection().getXMLSchema().size());
 
             XMLSchemaNamespace bTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleB.getTargetNamespace());
             XMLSchemaNamespace cTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleC.getTargetNamespace());
@@ -132,9 +132,9 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
             assertEquals(this.testSchemaSimpleC, cFromBundle);
 
             XMLSchemaImportInformation bII = bSchemaBundle.getImportInformationForTargetNamespace(bTargetNamespace);
-            bII.getTargetNamespace().equals(bTargetNamespace);
-            assertEquals(1, bII.getImports().size());
-            assertTrue(bII.getImports().contains(cTargetNamespace));
+            bII.getXMLSchemaNamespace().equals(bTargetNamespace);
+            assertEquals(1, bII.getImports().getXMLSchemaNamespace().size());
+            assertTrue(bII.getImports().getXMLSchemaNamespace().contains(cTargetNamespace));
 
             XMLSchemaImportInformation cII = bSchemaBundle.getImportInformationForTargetNamespace(cTargetNamespace);
             assertNull(cII);
@@ -143,8 +143,8 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         // C: contains(C) imports()
         {
             XMLSchemaBundle cSchemaBundle = this.gme.getSchemBundle(this.testSchemaSimpleC.getTargetNamespace());
-            assertEquals(0, cSchemaBundle.getImportInformation().size());
-            assertEquals(1, cSchemaBundle.getXMLSchemas().size());
+            assertEquals(0, cSchemaBundle.getImportInformationCollection().getXMLSchemaImportInformation().size());
+            assertEquals(1, cSchemaBundle.getXmlSchemaCollection().getXMLSchema().size());
 
             XMLSchemaNamespace cTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleC.getTargetNamespace());
 
@@ -158,8 +158,8 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         // D: contains(B,C,D,E) imports(D->((B->C),E))
         {
             XMLSchemaBundle dSchemaBundle = this.gme.getSchemBundle(this.testSchemaSimpleD.getTargetNamespace());
-            assertEquals(2, dSchemaBundle.getImportInformation().size());
-            assertEquals(4, dSchemaBundle.getXMLSchemas().size());
+            assertEquals(2, dSchemaBundle.getImportInformationCollection().getXMLSchemaImportInformation().size());
+            assertEquals(4, dSchemaBundle.getXmlSchemaCollection().getXMLSchema().size());
 
             XMLSchemaNamespace bTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleB.getTargetNamespace());
             XMLSchemaNamespace cTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleC.getTargetNamespace());
@@ -176,15 +176,15 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
             assertEquals(this.testSchemaSimpleE, eFromBundle);
 
             XMLSchemaImportInformation dII = dSchemaBundle.getImportInformationForTargetNamespace(dTargetNamespace);
-            dII.getTargetNamespace().equals(dTargetNamespace);
-            assertEquals(2, dII.getImports().size());
-            assertTrue(dII.getImports().contains(bTargetNamespace));
-            assertTrue(dII.getImports().contains(eTargetNamespace));
+            dII.getXMLSchemaNamespace().equals(dTargetNamespace);
+            assertEquals(2, dII.getImports().getXMLSchemaNamespace().size());
+            assertTrue(dII.getImports().getXMLSchemaNamespace().contains(bTargetNamespace));
+            assertTrue(dII.getImports().getXMLSchemaNamespace().contains(eTargetNamespace));
 
             XMLSchemaImportInformation bII = dSchemaBundle.getImportInformationForTargetNamespace(bTargetNamespace);
-            bII.getTargetNamespace().equals(bTargetNamespace);
-            assertEquals(1, bII.getImports().size());
-            assertTrue(bII.getImports().contains(cTargetNamespace));
+            bII.getXMLSchemaNamespace().equals(bTargetNamespace);
+            assertEquals(1, bII.getImports().getXMLSchemaNamespace().size());
+            assertTrue(bII.getImports().getXMLSchemaNamespace().contains(cTargetNamespace));
 
             XMLSchemaImportInformation cII = dSchemaBundle.getImportInformationForTargetNamespace(cTargetNamespace);
             assertNull(cII);
@@ -196,8 +196,8 @@ public class GMEGetDependenciesSimpleTestCase extends GMETestCaseWithSimpleModel
         // E: contains(E) imports()
         {
             XMLSchemaBundle eSchemaBundle = this.gme.getSchemBundle(this.testSchemaSimpleE.getTargetNamespace());
-            assertEquals(0, eSchemaBundle.getImportInformation().size());
-            assertEquals(1, eSchemaBundle.getXMLSchemas().size());
+            assertEquals(0, eSchemaBundle.getImportInformationCollection().getXMLSchemaImportInformation().size());
+            assertEquals(1, eSchemaBundle.getXmlSchemaCollection().getXMLSchema().size());
 
             XMLSchemaNamespace eTargetNamespace = new XMLSchemaNamespace(this.testSchemaSimpleE.getTargetNamespace());
 

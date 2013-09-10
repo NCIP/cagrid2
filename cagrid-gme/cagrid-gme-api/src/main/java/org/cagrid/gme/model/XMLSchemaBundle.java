@@ -1,7 +1,18 @@
+
 package org.cagrid.gme.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.cagrid.gme.model.XMLSchemaImportInformation.Imports;
 
 
 /**
@@ -12,26 +23,29 @@ import java.util.Set;
  * relationships to each other. It could be processed by a library like JUNG
  * (http://jung.sourceforge.net/).
  */
-public class XMLSchemaBundle {
-    // Castor supports the use of Maps, but would force an awkward and
-    // inefficient XML representation as the information that is used as the
-    // "key" is also contained within the value (i.e the namespace).
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "XMLSchemaBundle", propOrder = {
+    "xmlSchemaCollection",
+    "importInformationCollection"
+})
+public class XMLSchemaBundle
+    implements Serializable
+{
 
-    // I also tried to use Sets in the interface, and Maps in the
-    // implementation, but Castor assumes it can directly modify the Sets
-    // returned by the getters (which doesn't work when I return a new Set as a
-    // view of the Map)
-    private Set<XMLSchema> xmlSchemaCollection = new HashSet<XMLSchema>();
-    private Set<XMLSchemaImportInformation> importInformation = new HashSet<XMLSchemaImportInformation>();;
-
+    protected XMLSchemaBundle.XmlSchemaCollection xmlSchemaCollection = new XmlSchemaCollection();
+    protected XMLSchemaBundle.ImportInformationCollection importInformationCollection = new ImportInformationCollection();
 
     /**
-     * @return the Set of XMLSchemas
+     * Gets the value of the xmlSchemaCollection property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLSchemaBundle.XmlSchemaCollection }
+     *     
      */
-    public Set<XMLSchema> getXMLSchemas() {
-        return this.xmlSchemaCollection;
+    public XMLSchemaBundle.XmlSchemaCollection getXmlSchemaCollection() {
+        return xmlSchemaCollection;
     }
-
 
     /**
      * Sets the new Set of XMLSchemas in the bundle. NOTE: this Set must be
@@ -42,23 +56,26 @@ public class XMLSchemaBundle {
      * @param xmlSchemaCollection
      *            the new Set of schemas
      */
-    public void setXMLSchemas(Set<XMLSchema> xmlSchemaCollection) {
-        // disallow null
-        if (xmlSchemaCollection == null) {
-            this.xmlSchemaCollection = new HashSet<XMLSchema>();
-        } else {
-            this.xmlSchemaCollection = xmlSchemaCollection;
-        }
+    public void setXmlSchemaCollection(XMLSchemaBundle.XmlSchemaCollection xmlSchemaCollection) {
+    	if (xmlSchemaCollection == null) {
+    		this.xmlSchemaCollection = new XmlSchemaCollection();
+    	}
+    	else {
+    		this.xmlSchemaCollection = xmlSchemaCollection;
+    	}
     }
-
 
     /**
-     * @return the Set of ImportInformation
+     * Gets the value of the importInformationCollection property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XMLSchemaBundle.ImportInformationCollection }
+     *     
      */
-    public Set<XMLSchemaImportInformation> getImportInformation() {
-        return this.importInformation;
+    public XMLSchemaBundle.ImportInformationCollection getImportInformationCollection() {
+        return importInformationCollection;
     }
-
 
     /**
      * Sets the new Set of XMLSchemaImportInformation in the bundle. NOTE: this
@@ -69,15 +86,193 @@ public class XMLSchemaBundle {
      * @param importInformation
      *            the new Set of XMLSchemaImportInformation
      */
-    public void setImportInformation(Set<XMLSchemaImportInformation> importInformation) {
-        // disallow null
-        if (importInformation == null) {
-            this.importInformation = new HashSet<XMLSchemaImportInformation>();
-        } else {
-            this.importInformation = importInformation;
-        }
+    public void setImportInformationCollection(XMLSchemaBundle.ImportInformationCollection importInformation) {
+    	if (importInformation == null) {
+    		this.importInformationCollection = new ImportInformationCollection();
+    	}
+    	else {
+    		this.importInformationCollection = importInformation;
+    	}
     }
 
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element ref="{gme://gme.cagrid.org/2.0/GlobalModelExchange/domain}XMLSchemaImportInformation" maxOccurs="unbounded"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "xmlSchemaImportInformation"
+    })
+    public static class ImportInformationCollection
+        implements Serializable
+    {
+
+        @XmlElement(name = "XMLSchemaImportInformation", required = true)
+        protected Set<XMLSchemaImportInformation> xmlSchemaImportInformation;;
+
+        /**
+         * Gets the value of the xmlSchemaImportInformation property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the xmlSchemaImportInformation property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getXMLSchemaImportInformation().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link XMLSchemaImportInformation }
+         * 
+         * 
+         */
+        public Set<XMLSchemaImportInformation> getXMLSchemaImportInformation() {
+            if (xmlSchemaImportInformation == null) {
+                xmlSchemaImportInformation = new HashSet<XMLSchemaImportInformation>();
+            }
+            return this.xmlSchemaImportInformation;
+        }
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime
+					* result
+					+ ((xmlSchemaImportInformation == null) ? 0
+							: xmlSchemaImportInformation.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ImportInformationCollection other = (ImportInformationCollection) obj;
+			if (xmlSchemaImportInformation == null) {
+				if (other.xmlSchemaImportInformation != null)
+					return false;
+			} else if (!xmlSchemaImportInformation
+					.equals(other.xmlSchemaImportInformation))
+				return false;
+			return true;
+		}
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element ref="{gme://gme.cagrid.org/2.0/GlobalModelExchange/domain}XMLSchema" maxOccurs="unbounded"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "xmlSchema"
+    })
+    public static class XmlSchemaCollection
+        implements Serializable
+    {
+
+        @XmlElement(name = "XMLSchema", required = true)
+        protected Set<XMLSchema> xmlSchema;
+
+        /**
+         * Gets the value of the xmlSchema property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the xmlSchema property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getXMLSchema().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link XMLSchema }
+         * 
+         * 
+         */
+        public Set<XMLSchema> getXMLSchema() {
+            if (xmlSchema == null) {
+                xmlSchema = new HashSet<XMLSchema>();
+            }
+            return this.xmlSchema;
+        }
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result
+					+ ((xmlSchema == null) ? 0 : xmlSchema.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			XmlSchemaCollection other = (XmlSchemaCollection) obj;
+			if (xmlSchema == null) {
+				if (other.xmlSchema != null)
+					return false;
+			} else if (!xmlSchema.equals(other.xmlSchema))
+				return false;
+			return true;
+		}
+
+    }
 
     /**
      * @return a Set of all of the targetNamespaces (represented as
@@ -86,13 +281,12 @@ public class XMLSchemaBundle {
     public Set<XMLSchemaNamespace> getXMLSchemaTargetNamespaces() {
         assert this.xmlSchemaCollection != null;
 
-        Set<XMLSchemaNamespace> result = new HashSet<XMLSchemaNamespace>(this.xmlSchemaCollection.size());
-        for (XMLSchema s : this.xmlSchemaCollection) {
+        Set<XMLSchemaNamespace> result = new HashSet<XMLSchemaNamespace>(this.xmlSchemaCollection.getXMLSchema().size());
+        for (XMLSchema s : this.xmlSchemaCollection.getXMLSchema()) {
             result.add(new XMLSchemaNamespace(s.getTargetNamespace()));
         }
         return result;
     }
-
 
     /**
      * Utility accessor for retrieving an XMLSchema by its targetNamespace
@@ -105,8 +299,8 @@ public class XMLSchemaBundle {
     public XMLSchema getXMLSchemaForTargetNamespace(XMLSchemaNamespace targetNamespace) {
         assert this.xmlSchemaCollection != null;
 
-        for (XMLSchema s : this.xmlSchemaCollection) {
-            if (s.getTargetNamespace().equals(targetNamespace.getURI())) {
+        for (XMLSchema s : this.xmlSchemaCollection.getXMLSchema()) {
+            if (s.getTargetNamespace().equals(targetNamespace.uri)) {
                 return s;
             }
         }
@@ -125,10 +319,10 @@ public class XMLSchemaBundle {
      *         for it)
      */
     public XMLSchemaImportInformation getImportInformationForTargetNamespace(XMLSchemaNamespace targetNamespace) {
-        assert this.importInformation != null;
+        assert this.importInformationCollection != null;
 
-        for (XMLSchemaImportInformation ii : this.importInformation) {
-            if (ii.getTargetNamespace().equals(targetNamespace)) {
+        for (XMLSchemaImportInformation ii : this.importInformationCollection.getXMLSchemaImportInformation()) {
+            if (ii.getXMLSchemaNamespace().equals(targetNamespace)) {
                 return ii;
             }
         }
@@ -147,7 +341,7 @@ public class XMLSchemaBundle {
      *         given targetNamespace, or null, if no such Schema exists
      */
     public Set<XMLSchema> getImportedXMLSchemasForTargetNamespace(XMLSchemaNamespace targetNamespace) {
-        assert this.importInformation != null;
+        assert this.importInformationCollection != null;
         assert this.xmlSchemaCollection != null;
 
         XMLSchemaImportInformation schemaImportInformation = getImportInformationForTargetNamespace(targetNamespace);
@@ -158,7 +352,7 @@ public class XMLSchemaBundle {
         Set<XMLSchema> results = new HashSet<XMLSchema>();
         // walk the imported Schemas, and build up a Set containing the actual
         // XMLSchema instances
-        for (XMLSchemaNamespace namespace : schemaImportInformation.getImports()) {
+        for (XMLSchemaNamespace namespace : schemaImportInformation.getImports().getXMLSchemaNamespace()) {
             XMLSchema schema = getXMLSchemaForTargetNamespace(namespace);
             assert schema != null;
             results.add(schema);
@@ -169,43 +363,42 @@ public class XMLSchemaBundle {
     }
 
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((this.importInformation == null) ? 0 : this.importInformation.hashCode());
-        result = prime * result + ((this.xmlSchemaCollection == null) ? 0 : this.xmlSchemaCollection.hashCode());
-        return result;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((importInformationCollection == null) ? 0
+						: importInformationCollection.hashCode());
+		result = prime
+				* result
+				+ ((xmlSchemaCollection == null) ? 0 : xmlSchemaCollection
+						.hashCode());
+		return result;
+	}
 
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        XMLSchemaBundle other = (XMLSchemaBundle) obj;
-        if (this.importInformation == null) {
-            if (other.importInformation != null) {
-                return false;
-            }
-        } else if (!this.importInformation.equals(other.importInformation)) {
-            return false;
-        }
-        if (this.xmlSchemaCollection == null) {
-            if (other.xmlSchemaCollection != null) {
-                return false;
-            }
-        } else if (!this.xmlSchemaCollection.equals(other.xmlSchemaCollection)) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		XMLSchemaBundle other = (XMLSchemaBundle) obj;
+		if (importInformationCollection == null) {
+			if (other.importInformationCollection != null)
+				return false;
+		} else if (!importInformationCollection
+				.equals(other.importInformationCollection))
+			return false;
+		if (xmlSchemaCollection == null) {
+			if (other.xmlSchemaCollection != null)
+				return false;
+		} else if (!xmlSchemaCollection.equals(other.xmlSchemaCollection))
+			return false;
+		return true;
+	}
 
 }

@@ -44,7 +44,7 @@ public class XMLSchemaInformationDaoTestCase extends GMETestCaseBase {
         schema.setRootDocument(doc);
         Set<XMLSchemaDocument> docSet = new HashSet<XMLSchemaDocument>();
         docSet.add(doc2);
-        schema.setAdditionalSchemaDocuments(docSet);
+        schema.getAdditionalDocuments().addAll(docSet);
 
         this.xmlSchemaInformationDao.save(schemaInfo);
 
