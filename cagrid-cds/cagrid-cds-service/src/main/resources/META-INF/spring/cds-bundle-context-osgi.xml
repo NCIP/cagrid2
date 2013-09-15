@@ -19,9 +19,9 @@
 
         <prop key="cagrid.cds.service.max.delegation.path.length">0</prop>
         <prop key="cagrid.cds.service.dbkeymanager.key.encyption.password">password</prop>
-		<prop key="cagrid.cds.service.metadata.url">serviceMetadata.xml</prop>
-        <prop key="cagrid.cds.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
-        <prop key="cagrid.cds.service.security.delegated.metadata.url">delegated-serviceSecurityMetadata.xml</prop>
+		<prop key="cagrid.cds.service.metadata.url">file://${karaf.base}/etc/cagrid-cds/serviceMetadata.xml</prop>
+        <prop key="cagrid.cds.service.security.metadata.url">file://${karaf.base}/etc/cagrid-cds/CredentialDelegationService-security-metadata.xml</prop>
+        <prop key="cagrid.cds.service.security.delegated.metadata.url">file://${karaf.base}/etc/cagrid-cds/DelegatedCredential-security-metadata.xml</prop>
 
         <prop key="cagrid.cds.service.client.gridgrouper.url">https://localhost:7738/gridgrouper</prop>
         <prop key="cagrid.cds.service.client.keystorefile"></prop>

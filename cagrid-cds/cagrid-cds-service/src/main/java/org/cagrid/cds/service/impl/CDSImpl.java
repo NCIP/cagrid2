@@ -62,39 +62,10 @@ public class CDSImpl implements CredentialDelegationService {
     }
 
     private void initialize() throws DatabaseException, JAXBException {
-            /*
-    	public CredentialDelegationServiceImpl() throws RemoteException {
-		super();
-		try {
-			this.log = LogFactory.getLog(this.getClass().getName());
-			String conf = this.getConfiguration().getCdsConfiguration();
-			String properties = this.getConfiguration().getCdsProperties();
-			FileSystemResource fsr = new FileSystemResource(conf);
-			XmlBeanFactory factory = new XmlBeanFactory(fsr);
-			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
-			cfg.setLocation(new FileSystemResource(properties));
-			cfg.postProcessBeanFactory(factory);
-			Database db = (Database) factory
-					.getBean(ConfigurationConstants.DATABASE_CONFIGURATION_BEAN);
-			db.createDatabaseIfNeeded();
-			cds = (DelegationManager) factory
-					.getBean(ConfigurationConstants.CDS_BEAN);
-
-			home = (DelegatedCredentialResourceHome) getDelegatedCredentialResourceHome();
-			home.setCDS(cds);
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-			throw Errors.getInternalFault(
-					"Error initializing the Credential Delegation Service.", e);
-		}
-	}
-     */
 
         db = cdsProperties.getDatabase();
         db.createDatabaseIfNeeded();
         cds = cdsProperties.getDelegationManager();
-
-        //TODO: do we need to add "cds" to resource?
 
         // What resource properties should we know about?
         Collection<ResourcePropertyDescriptor<?>> resourcePropertyDescriptors = ResourcePropertyDescriptor
