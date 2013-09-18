@@ -37,6 +37,8 @@ public class Bootstrapper extends BaseCommandLine {
 	public static final String TRUST_CA_SHA2_PROMPT = "Please enter the location of the SHA2 trust fabric CA certificate";
 	public static final String TRUST_CA_SHA2_PROPERTY = "cagrid.dorian.trust.ca.sha2.cert.location";
 
+    public static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
+    public static final String WSRF_INDEXSVC_PROPERTY = "cagrid.dorian.wsrf.registration.index.url";
 	public static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname";
 	public static final String WSRF_HOSTNAME_PROPERTY = "org.cagrid.dorian.wsrf.hostname";
 	public static final String ADMIN_USER_ID_PROMPT = "Please enter the user id of admin";
@@ -292,6 +294,7 @@ public class Bootstrapper extends BaseCommandLine {
 		String url = "https://" + getHostname() + ":" + port + "/dorian";
 		dorianWSRFProperties.setProperty(WSRF_URL_PROPERTY, url);
 		dorianWSRFProperties.setProperty(WSRF_TRUSTED_IDP_MAPPING_PROPERTY, "Dorian," + url + "," + CertUtil.subjectToIdentity(this.hostCertificate.getSubjectDN().getName()));
+        dorianWSRFProperties.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
 
 		if (this.configureLegacyWSRF()) {
 			dorianWSRFProperties.setProperty(LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY, WSRF_TRUSTSTORE_PATH);

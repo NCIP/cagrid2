@@ -24,6 +24,8 @@ public class Bootstrapper extends BaseCommandLine {
 
 	private static final String TRUSTSTORE_FILE_NAME = "truststore.jks";
 
+    private static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
+    private static final String WSRF_INDEXSVC_PROPERTY = "cagrid.gts.wsrf.registration.index.url";
 	private static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname for the WSRF endpoint";
 	private static final String WSRF_HOSTNAME_PROPERTY = "cagrid.gts.wsrf.host";
 	private static final String WSRF_CERTIFICATE_PROMPT = "Please enter the location of the WSRF endpoint host certificate";
@@ -135,6 +137,7 @@ public class Bootstrapper extends BaseCommandLine {
 		String url = "https://" + getHostname() + ":" + port + "/gts";
 		this.gtsURL = url;
 		props.setProperty(WSRF_URL_PROPERTY, url);
+        props.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
 
 		if (this.configureLegacyWSRF()) {
 			props.setProperty(LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY, LEGACY_WSRF_TRUSTSTORE_PATH);

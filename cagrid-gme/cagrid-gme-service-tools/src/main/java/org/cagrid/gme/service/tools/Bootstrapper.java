@@ -62,7 +62,9 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String DORIAN_CONFIG_PROPERTY = "cagrid.gme.dorian.config";
 	private static final String DORIAN_PROPERTIES_PROMPT = "Please enter location of Dorian property file";
 	private static final String DORIAN_PROPERTIES_PROPERTY = "cagrid.gme.dorian.properties";
-	
+
+    private static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
+    private static final String WSRF_INDEXSVC_PROPERTY = "cagrid.gme.wsrf.registration.index.url";
 	private static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname for the WSRF endpoint";
 	private static final String WSRF_HOSTNAME_PROPERTY = "cagrid.gme.wsrf.host";
 	public static final String WSRF_PORT_PROMPT = "Enter a port number for the WSRF service";
@@ -180,7 +182,7 @@ public class Bootstrapper extends BaseCommandLine {
 		props.setProperty(WSRF_KEYSTORE_PASSWORD_PROPERTY, getKeystorePassword());
 		props.setProperty(WSRF_KEYSTORE_ALIAS_PROPERTY, getKeystoreAlias());
 		props.setProperty(WSRF_KEY_PASSWORD_PROPERTY, getKeyPassword());
-		
+        props.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
 
 		if (this.configureLegacyWSRF()) {
 			props.setProperty(LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY, LEGACY_WSRF_TRUSTSTORE_PATH);
