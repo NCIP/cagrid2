@@ -45,6 +45,8 @@ public class GridGrouperTest extends CaGridTestSupport {
 
     private static final String GRIDGROUPER_URL = "https://localhost:7738/gridgrouper";
 
+    private static final String SERVICEMETADATA = "etc/cagrid-gridgrouper/serviceMetadata.xml";
+    private static final String SERVICESECURITYMETADATA = "etc/cagrid-gridgrouper/serviceSecurityMetadata.xml";
     private static final String HOST = "etc/cagrid-grid-grouper/grid-grouper-host.jks";
     private static final String TRUSTSTORE = "etc/cagrid-grid-grouper/truststore.jks";
     private static final String TRUSTSTORETYPE = "JKS";
@@ -69,6 +71,8 @@ public class GridGrouperTest extends CaGridTestSupport {
                 new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/grid-grouper-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid-grid-grouper/legacy-grid-grouper-host.jks", new File("src/test/resources/legacy-grid-grouper-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
+                new KarafDistributionConfigurationFileReplacementOption(SERVICEMETADATA, new File("src/test/resources/serviceMetadata.xml")),
+                new KarafDistributionConfigurationFileReplacementOption(SERVICESECURITYMETADATA, new File("src/test/resources/serviceSecurityMetadata.xml")),
 
                 // work around smx vs jre soap conflict
                 new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.6", ",javax.xml.soap;version=\"1.3\""),
