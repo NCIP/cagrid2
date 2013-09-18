@@ -16,8 +16,8 @@
         <prop key="cagrid.gme.service.db.driver">com.mysql.jdbc.Driver</prop>
         <prop key="cagrid.gme.service.db.hibernate.hbm2ddl.auto">update</prop>
 
-		<prop key="cagrid.gme.service.metadata.url">serviceMetadata.xml</prop>
-        <prop key="cagrid.gme.service.security.metadata.url">serviceSecurityMetadata.xml</prop>
+		<prop key="cagrid.gme.service.metadata.url">file://${karaf.base}/etc/cagrid-gme/serviceMetadata.xml</prop>
+        <prop key="cagrid.gme.service.security.metadata.url">file://${karaf.base}/etc/cagrid-gme/serviceSecurityMetadata.xml</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />

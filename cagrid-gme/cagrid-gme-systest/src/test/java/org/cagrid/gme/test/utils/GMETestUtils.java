@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 public class GMETestUtils {
+    public static final String SERVICEMETADATA = "etc/cagrid-gme/serviceMetadata.xml";
+    public static final String SERVICESECURITYMETADATA = "etc/cagrid-gme/serviceSecurityMetadata.xml";
+
     public static XMLSchema createSchema(URI namespace, File schemaFile) throws IOException {
         List<File> list = new ArrayList<File>();
         list.add(schemaFile);

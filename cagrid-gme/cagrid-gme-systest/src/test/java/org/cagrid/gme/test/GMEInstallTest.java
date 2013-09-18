@@ -3,7 +3,9 @@ package org.cagrid.gme.test;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
+import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
 import org.cagrid.gme.service.GlobalModelExchangeService;
+import org.cagrid.gme.test.utils.GMETestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +14,8 @@ import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.ExamReactorStrategy;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
+
+import java.io.File;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -25,6 +29,9 @@ public class GMEInstallTest extends CaGridTestSupport {
     @Configuration
     public Option[] config() {
         Option[] options = new Option[] {
+                new KarafDistributionConfigurationFileReplacementOption(GMETestUtils.SERVICEMETADATA, new File("src/test/resources/serviceMetadata.xml")),
+                new KarafDistributionConfigurationFileReplacementOption(GMETestUtils.SERVICESECURITYMETADATA, new File("src/test/resources/serviceSecurityMetadata.xml")),
+
                 // Had to install the hibernate stuff at boot
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresRepositories", "," + maven().groupId("org.cagrid").artifactId("cagrid-features").versionAsInProject().classifier("features").type("xml").getURL()),
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",cagrid-third-party"),

@@ -80,7 +80,9 @@ public class GMEFunctionalTest extends CaGridTestSupport {
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_A, new File("src/test/resources/A.xsd")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/B.xsd")),
-                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_XML, new File("src/test/resources/xml.xsd"))
+                new KarafDistributionConfigurationFileReplacementOption(SCHEMA_XML, new File("src/test/resources/xml.xsd")),
+                new KarafDistributionConfigurationFileReplacementOption(GMETestUtils.SERVICEMETADATA, new File("src/test/resources/serviceMetadata.xml")),
+                new KarafDistributionConfigurationFileReplacementOption(GMETestUtils.SERVICESECURITYMETADATA, new File("src/test/resources/serviceSecurityMetadata.xml"))
 
                 // seeing once in a while an spurious linkage error:
                 // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"
