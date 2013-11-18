@@ -147,7 +147,7 @@ public class SAMLUtils {
 		// whitespace
 		if (!Boolean.valueOf(System.getProperty(XMLSEC_IGNORE_LINE_BREAK)))
 			addWhitespace(signedInfoElement, _WHITESPACE_EXCLUSIONS);
-
+	
 		// Force the digital signature namespace prefix to 'ds'.
 		String currentPrefix = signatureElement.getPrefix();
 		boolean replacePrefix = !XMLSIG_NS_PREFIX.equals(currentPrefix);

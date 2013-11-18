@@ -18,6 +18,10 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Embed-Dependency>
+							xmlsec
+						</Embed-Dependency>
+						
 						<Export-Package>
 							gov.nih.nci.cagrid.opensaml,
 							gov.nih.nci.cagrid.opensaml.artifact,

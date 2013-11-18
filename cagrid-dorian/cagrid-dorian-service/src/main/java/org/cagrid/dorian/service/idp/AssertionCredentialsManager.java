@@ -67,8 +67,12 @@ public class AssertionCredentialsManager {
 			this.conf = conf;
 			this.db = db;
 
-			if (System.getProperty(SAMLUtils.XMLSEC_IGNORE_LINE_BREAK) == null)
-				System.setProperty(SAMLUtils.XMLSEC_IGNORE_LINE_BREAK, Boolean.TRUE.toString());
+			System.setProperty(SAMLUtils.XMLSEC_IGNORE_LINE_BREAK, Boolean.FALSE.toString());
+
+			// if (System.getProperty(SAMLUtils.XMLSEC_IGNORE_LINE_BREAK) ==
+			// null)
+			// System.setProperty(SAMLUtils.XMLSEC_IGNORE_LINE_BREAK,
+			// Boolean.TRUE.toString());
 			org.apache.xml.security.Init.init();
 
 			if (!hasAssertingCredentials()) {
@@ -262,8 +266,12 @@ public class AssertionCredentialsManager {
 			l.add(attState);
 
 			SAMLAssertion saml = new SAMLAssertion(issuer, start, end, null, null, l);
+			saml = SAMLUtils.canonicalizeSAMLAssertion(saml);
 			List<X509Certificate> a = new ArrayList<X509Certificate>();
 			a.add(cert);
+
+			
+
 			saml.sign(XMLSignature.ALGO_ID_SIGNATURE_RSA_SHA1, key, a);
 
 			return saml;

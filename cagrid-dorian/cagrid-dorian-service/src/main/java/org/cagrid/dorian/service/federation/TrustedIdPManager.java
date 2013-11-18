@@ -364,13 +364,16 @@ public class TrustedIdPManager {
 			try {
 				X509Certificate cert = CertUtil.loadCertificate(idps[i].getIdPCertificate());
 				saml.verify(cert);
+				if (logger.isDebugEnabled()) {
+					logger.debug("The idp " + idps[i].getName() + " signed SAML Assertion " + saml.getId() + ".");
+				}
 				return idps[i];
 			} catch (SAMLException se) {
-				logger.error(se.getMessage(), se);
-				se.printStackTrace();
+				if (logger.isDebugEnabled()) {
+					logger.debug("The idp " + idps[i].getName() + " did not sign the SAML Assertion " + saml.getId() + ".");
+				}
 			} catch (Exception e) {
 				logger.error(e.getMessage(), e);
-				e.printStackTrace();
 			}
 		}
 		InvalidAssertionException fault = FaultHelper.createFaultException(InvalidAssertionException.class, "The assertion specified, is not signed by a trusted IdP and therefore is not trusted.");

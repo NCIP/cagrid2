@@ -80,15 +80,9 @@ import org.cagrid.dorian.service.ca.CertificateAuthorityManager;
 import org.cagrid.dorian.service.util.AddressValidator;
 import org.cagrid.gaards.pki.CRLEntry;
 import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.gts.model.Status;
-import org.cagrid.gts.model.TrustedAuthority;
-import org.cagrid.gts.model.TrustedAuthorityFilter;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
-import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
-import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesResponse;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
 import org.cagrid.gts.wsrf.stubs.UpdateCRLRequest;
-import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest.Filter;
 import org.cagrid.tools.database.Database;
 import org.cagrid.tools.events.Event;
 import org.cagrid.tools.events.EventAuditor;
@@ -649,6 +643,7 @@ public class IdentityFederationManager implements Publisher {
 
 	public X509Certificate requestUserCertificate(SAMLAssertion saml, PublicKey publicKey, CertificateLifetime lifetime, CertificateSignatureAlgorithm sa) throws DorianInternalException,
 			InvalidAssertionException, UserPolicyException, PermissionDeniedException {
+
 		TrustedIdP idp = null;
 		try {
 			idp = tm.getTrustedIdP(saml);
@@ -678,10 +673,19 @@ public class IdentityFederationManager implements Publisher {
 			throw fault;
 		}
 
-		// Determine whether or not the assertion is expired
-		Calendar cal = new GregorianCalendar();
-		Date now = cal.getTime();
-		if ((now.before(saml.getNotBefore())) || (now.after(saml.getNotOnOrAfter()))) {
+		// Add a two minute buffer to each
+		Date now = new Date();
+		Calendar cal1 = new GregorianCalendar();
+		cal1.setTime(saml.getNotBefore());
+		cal1.add(Calendar.MINUTE, -2);
+		Date notBefore = cal1.getTime();
+
+		Calendar cal2 = new GregorianCalendar();
+		cal2.setTime(saml.getNotOnOrAfter());
+		cal2.add(Calendar.MINUTE, 2);
+		Date notAfter = cal2.getTime();
+
+		if ((now.before(notBefore)) || (now.after(notAfter))) {
 			String msg = "The Assertion is not valid at " + now + ", the assertion is valid from " + saml.getNotBefore() + " to " + saml.getNotOnOrAfter() + ".";
 			this.eventManager.logEvent(gid, AuditConstants.SYSTEM_ID, FederationAudit.INVALID_USER_CERTIFICATE_REQUEST.value(), msg);
 			InvalidAssertionException fault = FaultHelper.createFaultException(InvalidAssertionException.class, msg);
