@@ -34,20 +34,20 @@
 		<prop key="cagrid.dorian.legacy-wsrf.url">https://${cagrid.dorian.legacy-wsrf.host}:${cagrid.dorian.legacy-wsrf.port}/${cagrid.dorian.legacy-wsrf.path}</prop>
 		<prop key="cagrid.dorian.legacy-wsrf.trusted.idp.mapping">Dorian,${cagrid.dorian.legacy-wsrf.url},/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian1.sha1.bazinga.cagrid.org;</prop>
 	
-		<prop key="cagrid.dorian.legacy-wsrf.keystore.path">${karaf.base}/etc/dorian/dorian-host.jks</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-dorian/dorian-host.jks</prop>
 		<prop key="cagrid.dorian.legacy-wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.dorian.legacy-wsrf.keystore.alias">host</prop>
 		<prop key="cagrid.dorian.legacy-wsrf.key.password">changeit</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.truststore.path">${karaf.base}/etc/dorian/truststore.jks</prop>
+		<prop key="cagrid.dorian.legacy-wsrf.truststore.path">${karaf.base}/etc/cagrid-dorian/truststore.jks</prop>
 		<prop key="cagrid.dorian.legacy-wsrf.truststore.password">changeit</prop>
 		<prop key="cagrid.dorian.wsrf.legacy-endpoint">dorianLegacyWSRF</prop>
-		<prop key="cagrid.dorian.wsrf.metadata.url">serviceMetadata.xml</prop>
-		<prop key="cagrid.dorian.wsrf.security.metadata.url">serviceSecurityMetadata.xml</prop>
-		<prop key="cagrid.dorian.wsrf.registration.on">true</prop>
-		<prop key="cagrid.dorian.wsrf.registration.legacy.on">true</prop>
+		<prop key="cagrid.dorian.wsrf.metadata.url">file://${karaf.base}/etc/cagrid-dorian/serviceMetadata.xml</prop>
+		<prop key="cagrid.dorian.wsrf.security.metadata.url">file://${karaf.base}/etc/cagrid-dorian/serviceSecurityMetadata.xml</prop>
+		<prop key="cagrid.dorian.wsrf.registration.on">false</prop>
+		<prop key="cagrid.dorian.wsrf.registration.legacy.on">false</prop>
 		<prop key="cagrid.dorian.wsrf.registration.registrant.url">${cagrid.dorian.wsrf.url}</prop>
 		<prop key="cagrid.dorian.wsrf.registration.registrant.legacy.url">${cagrid.dorian.legacy-wsrf.url}</prop>
-		<prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/dorian/registration.xml</prop>
+		<prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/cagrid-dorian/registration.xml</prop>
 		<prop key="cagrid.dorian.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
 	</osgix:cm-properties>
 

@@ -36,9 +36,10 @@ public class Bootstrapper extends BaseCommandLine {
 	public static final String TRUST_CA_SHA1_PROPERTY = "cagrid.dorian.trust.ca.sha1.cert.location";
 	public static final String TRUST_CA_SHA2_PROMPT = "Please enter the location of the SHA2 trust fabric CA certificate";
 	public static final String TRUST_CA_SHA2_PROPERTY = "cagrid.dorian.trust.ca.sha2.cert.location";
+	
+	public static final String DORIAN_CA_PASSWORD_PROPERTY = "cagrid.dorian.service.ca.password";
+	public static final String DORIAN_LEGACY_CA_PASSWORD_PROPERTY = "cagrid.dorian.service.legacy-ca.password";
 
-    public static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
-    public static final String WSRF_INDEXSVC_PROPERTY = "cagrid.dorian.wsrf.registration.index.url";
 	public static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname";
 	public static final String WSRF_HOSTNAME_PROPERTY = "org.cagrid.dorian.wsrf.hostname";
 	public static final String ADMIN_USER_ID_PROMPT = "Please enter the user id of admin";
@@ -119,6 +120,13 @@ public class Bootstrapper extends BaseCommandLine {
 	public static final String DORIAN_CA_SUBJECT_PROPERTY = "cagrid.dorian.service.ca.auto.create.subject";
 	public static final String LEGACY_DORIAN_CA_SUBJECT_PROPERTY = "cagrid.dorian.service.legacy-ca.auto.create.subject";
 
+	public static final String WSRF_REGISTRATION_ENABLED_PROMPT = "Please specify whether or not to enable index service registration of the WSRF endpoint";
+	public static final String WSRF_REGISTRATION_ENABLED_PROPERTY = "cagrid.dorian.wsrf.registration.on";
+	public static final String LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY = "cagrid.dorian.wsrf.registration.legacy.on";
+	public static final String LEGACY_WSRF_REGISTRATION_ENABLED_PROMPT = "Please specify whether or not to enable index service registration of the legacy WSRF endpoint";
+	public static final String WSRF_REGISTRATION_URL_PROMPT = "Please specify the URL of the index service";
+	public static final String WSRF_REGISTRATION_URL_PROPERTY = "cagrid.dorian.wsrf.registration.index.url";
+
 	private String adminIdentity;
 	private String keystorePassword;
 	private String hostname;
@@ -166,7 +174,9 @@ public class Bootstrapper extends BaseCommandLine {
 		dorianProperties.setProperty(DORIAN_CLIENT_KEY_PASSWORD_PROPERTY, getKeyPassword());
 		dorianProperties.setProperty(DORIAN_CRL_PUBLISH_PROPERTY, getValue(DORIAN_CRL_PUBLISH_PROMPT, DORIAN_CRL_PUBLISH_PROPERTY));
 		dorianProperties.setProperty(DORIAN_CA_SUBJECT_PROPERTY, caProperties.getCreationPolicy().getSubject());
+		dorianProperties.setProperty(DORIAN_CA_PASSWORD_PROPERTY, caProperties.getCertificateAuthorityPassword());
 		dorianProperties.setProperty(LEGACY_DORIAN_CA_SUBJECT_PROPERTY, legacyCAProperties.getCreationPolicy().getSubject());
+		dorianProperties.setProperty(DORIAN_LEGACY_CA_PASSWORD_PROPERTY, legacyCAProperties.getCertificateAuthorityPassword());
 		File config = new File(getServiceMixEtc(), DORIAN_SERVICE_CFG);
 		dorianProperties.store(new FileOutputStream(config), "Dorian Service Configuration saved by bootstrapper on " + new Date());
 	}
@@ -258,6 +268,14 @@ public class Bootstrapper extends BaseCommandLine {
 		return truststorePassword;
 	}
 
+	private boolean getBooleanValue(String prompt, String property) {
+		String val = getValue(prompt, property);
+		while ((val == null) || ((!val.equalsIgnoreCase("true")) && (!val.equalsIgnoreCase("false")))) {
+			val = getValue(prompt, property);
+		}
+		return Boolean.valueOf(val).booleanValue();
+	}
+
 	@Override
 	public void execute() throws Exception {
 		System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
@@ -294,7 +312,10 @@ public class Bootstrapper extends BaseCommandLine {
 		String url = "https://" + getHostname() + ":" + port + "/dorian";
 		dorianWSRFProperties.setProperty(WSRF_URL_PROPERTY, url);
 		dorianWSRFProperties.setProperty(WSRF_TRUSTED_IDP_MAPPING_PROPERTY, "Dorian," + url + "," + CertUtil.subjectToIdentity(this.hostCertificate.getSubjectDN().getName()));
-        dorianWSRFProperties.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
+
+		boolean enableRegistration = getBooleanValue(WSRF_REGISTRATION_ENABLED_PROMPT, WSRF_REGISTRATION_ENABLED_PROPERTY);
+		dorianWSRFProperties.setProperty(WSRF_REGISTRATION_ENABLED_PROPERTY, Boolean.valueOf(enableRegistration).toString());
+		boolean enableLegacyRegistration = false;
 
 		if (this.configureLegacyWSRF()) {
 			dorianWSRFProperties.setProperty(LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY, WSRF_TRUSTSTORE_PATH);
@@ -308,8 +329,15 @@ public class Bootstrapper extends BaseCommandLine {
 			dorianWSRFProperties.setProperty(LEGACY_WSRF_PORT_PROPERTY, legacyPort);
 			String legacyURL = "https://" + getLegacyHostname() + ":" + legacyPort + "/wsrf/services/cagrid/Dorian";
 			dorianWSRFProperties.setProperty(LEGACY_WSRF_URL_PROPERTY, legacyURL);
-
 			dorianWSRFProperties.setProperty(LEGACY_WSRF_TRUSTED_IDP_MAPPING_PROPERTY, "Dorian," + legacyURL + "," + CertUtil.subjectToIdentity(this.legacyHostCertificate.getSubjectDN().getName()));
+			enableLegacyRegistration = getBooleanValue(LEGACY_WSRF_REGISTRATION_ENABLED_PROMPT, LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY);
+			dorianWSRFProperties.setProperty(LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY, Boolean.valueOf(enableLegacyRegistration).toString());
+		} else {
+			dorianWSRFProperties.setProperty(LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY, "false");
+		}
+		
+		if(enableRegistration || enableLegacyRegistration){
+			dorianWSRFProperties.setProperty(WSRF_REGISTRATION_URL_PROPERTY, getValue(WSRF_REGISTRATION_URL_PROMPT, WSRF_REGISTRATION_URL_PROPERTY));
 		}
 
 		File wsrfConfig = new File(getServiceMixEtc(), DORIAN_WSRF_CFG);

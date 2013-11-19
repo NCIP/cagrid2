@@ -115,9 +115,9 @@
 
     <!-- Dorian -->
     <feature name="cagrid-dorian" version="${project.version}">
-        <configfile finalname="/etc/dorian/serviceMetadata.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/serviceMetadata</configfile>
-        <configfile finalname="/etc/dorian/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/serviceSecurityMetadata</configfile>
-        <configfile finalname="/etc/dorian/registration.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/registration</configfile>
+        <configfile finalname="/etc/cagrid-dorian/serviceMetadata.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-dorian/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/serviceSecurityMetadata</configfile>
+        <configfile finalname="/etc/cagrid-dorian/registration.xml">mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-dorian-client</feature>
         <feature version="${project.version}">cagrid-gts-client</feature>
