@@ -23,14 +23,14 @@
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 
-	<bean id="registrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator">
+	<bean id="registrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
 		<constructor-arg index="0" value="${cagrid.gme.wsrf.registration.on}"></constructor-arg>
 		<constructor-arg index="1" value="${cagrid.gme.wsrf.registration.xml}"></constructor-arg>
 		<constructor-arg index="2" value="${cagrid.gme.wsrf.registration.registrant.url}"></constructor-arg>
 		<constructor-arg index="3" value="${cagrid.gme.wsrf.registration.index.url}"></constructor-arg>
 	</bean>
 	
-	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator">
+	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
 		<constructor-arg index="0" value="${cagrid.gme.wsrf.registration.legacy.on}"></constructor-arg>
 		<constructor-arg index="1" value="${cagrid.gme.wsrf.registration.xml}"></constructor-arg>
 		<constructor-arg index="2" value="${cagrid.gme.wsrf.registration.registrant.legacy.url}"></constructor-arg>

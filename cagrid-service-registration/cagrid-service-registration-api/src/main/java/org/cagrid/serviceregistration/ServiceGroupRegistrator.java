@@ -39,10 +39,9 @@ public class ServiceGroupRegistrator {
 	private final static Logger logger = LoggerFactory
 			.getLogger(ServiceGroupRegistrator.class);
 
-	private List registrations = Collections.synchronizedList(new ArrayList());
 
 	public boolean isDebug = false;
-	private static Scheduler scheduler;
+	private Scheduler scheduler;
 
 	/** Creates a new instance of ServiceGroupRegistrationClient */
 	public ServiceGroupRegistrator() {
@@ -155,7 +154,6 @@ public class ServiceGroupRegistrator {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
-		this.registrations.add(detail);
 		return detail;
 	}
 
@@ -191,21 +189,12 @@ public class ServiceGroupRegistrator {
 	 */
 	private void reset() {
 
-		this.status(LOG_D, "Reset registrant list");
-
-		int i = 0;
-		while (!this.registrations.isEmpty()) {
-			Timer timer = (Timer) this.registrations.remove(0);
-
-			if (timer == null) {
-				this.status(LOG_W, "Null Timer found during reset");
-			} else {
-				timer.cancel();
-				i++;
-			}
+		try {
+			System.out.println("Shutting down the scheduler");
+			this.scheduler.shutdown();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
 		}
-
-		this.status(i + " registration event(s) cancelled");
 
 	}
 
