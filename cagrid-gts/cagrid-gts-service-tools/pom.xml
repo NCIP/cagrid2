@@ -150,5 +150,33 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>createCertificateAuthority</id>
+			<activation>
+				<property>
+					<name>createCertificateAuthority</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<mainClass>org.cagrid.gts.service.tools.CreateCertificateAuthority</mainClass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
