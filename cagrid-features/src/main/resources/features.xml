@@ -61,7 +61,8 @@
 
     <!-- GridGrouper -->
     <feature name="cagrid-gridgrouper" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}/xml/serviceMetadata</configfile>
+    	<configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-grid-grouper/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/registration.xml">mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
     
