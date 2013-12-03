@@ -25,8 +25,6 @@ public class Bootstrapper extends BaseCommandLine {
 
 	private static final String TRUSTSTORE_FILE_NAME = "truststore.jks";
 
-    private static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
-    private static final String WSRF_INDEXSVC_PROPERTY = "cagrid.gridgrouper.wsrf.registration.index.url";
 	private static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname for the WSRF endpoint";
 	private static final String WSRF_HOSTNAME_PROPERTY = "cagrid.gridgrouper.wsrf.host";
 	private static final String WSRF_CERTIFICATE_PROMPT = "Please enter the location of the WSRF endpoint host certificate";
@@ -76,7 +74,14 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String DB_USER_PROMPT = "Please enter the database username";
 	private static final String DB_USER_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.username";
 	private static final String DB_PASSWORD_PROMPT = "Please enter the database password";
-	private static final String DB_PASSWORD_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.password";;
+	private static final String DB_PASSWORD_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.password";
+
+	public static final String WSRF_REGISTRATION_ENABLED_PROMPT = "Please specify whether or not to enable index service registration of the WSRF endpoint";
+	public static final String WSRF_REGISTRATION_ENABLED_PROPERTY = "cagrid.gridgrouper.wsrf.registration.on";
+	public static final String LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY = "cagrid.gridgrouper.wsrf.registration.legacy.on";
+	public static final String LEGACY_WSRF_REGISTRATION_ENABLED_PROMPT = "Please specify whether or not to enable index service registration of the legacy WSRF endpoint";
+	public static final String WSRF_REGISTRATION_URL_PROMPT = "Please specify the URL of the index service";
+	public static final String WSRF_REGISTRATION_URL_PROPERTY = "cagrid.gridgrouper.wsrf.registration.index.url";
 
 	private String truststorePassword;
 	private Boolean configureLegacyWSRF;
@@ -124,18 +129,22 @@ public class Bootstrapper extends BaseCommandLine {
 		File config = new File(getServiceMixEtc(), GROUPER_CFG);
 		props.store(new FileOutputStream(config), "Grouper Service Configuration saved by bootstrapper on " + new Date());
 	}
-/*
-	private void configureGridGrouper() throws Exception {
-		Properties props = new Properties();
-		props.setProperty(DB_URL_PROPERTY, getValue(DB_URL_PROMPT, DB_URL_PROPERTY));
-		props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT, DB_USER_PROPERTY));
-		props.setProperty(DB_PASSWORD_PROPERTY, getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
-		props.setProperty(DB_HOST_PROPERTY, getValue(DB_HOST_PROMPT, DB_HOST_PROPERTY));
-		props.setProperty(DB_PORT_PROPERTY, getValue(DB_PORT_PROMPT, DB_PORT_PROPERTY));
-		File config = new File(getServiceMixEtc(), GROUPER_SERVICE_CFG);
-		props.store(new FileOutputStream(config), "Grouper Service Configuration saved by bootstrapper on " + new Date());
-	}
-	*/
+
+	/*
+	 * private void configureGridGrouper() throws Exception { Properties props =
+	 * new Properties(); props.setProperty(DB_URL_PROPERTY,
+	 * getValue(DB_URL_PROMPT, DB_URL_PROPERTY));
+	 * props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT,
+	 * DB_USER_PROPERTY)); props.setProperty(DB_PASSWORD_PROPERTY,
+	 * getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
+	 * props.setProperty(DB_HOST_PROPERTY, getValue(DB_HOST_PROMPT,
+	 * DB_HOST_PROPERTY)); props.setProperty(DB_PORT_PROPERTY,
+	 * getValue(DB_PORT_PROMPT, DB_PORT_PROPERTY)); File config = new
+	 * File(getServiceMixEtc(), GROUPER_SERVICE_CFG); props.store(new
+	 * FileOutputStream(config),
+	 * "Grouper Service Configuration saved by bootstrapper on " + new Date());
+	 * }
+	 */
 
 	private void configureWSRFService() throws Exception {
 		Properties props = new Properties();
@@ -150,7 +159,9 @@ public class Bootstrapper extends BaseCommandLine {
 		props.setProperty(WSRF_PORT_PROPERTY, port);
 		String url = "https://" + getHostname() + ":" + port + "/gridgrouper";
 		props.setProperty(WSRF_URL_PROPERTY, url);
-        props.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
+		boolean enableRegistration = getBooleanValue(WSRF_REGISTRATION_ENABLED_PROMPT, WSRF_REGISTRATION_ENABLED_PROPERTY);
+		props.setProperty(WSRF_REGISTRATION_ENABLED_PROPERTY, Boolean.valueOf(enableRegistration).toString());
+		boolean enableLegacyRegistration = false;
 
 		if (this.configureLegacyWSRF()) {
 			props.setProperty(LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY, LEGACY_WSRF_TRUSTSTORE_PATH);
@@ -164,10 +175,26 @@ public class Bootstrapper extends BaseCommandLine {
 			props.setProperty(LEGACY_WSRF_PORT_PROPERTY, legacyPort);
 			String legacyURL = "https://" + getLegacyHostname() + ":" + legacyPort + "/wsrf/services/cagrid/GridGrouper";
 			props.setProperty(LEGACY_WSRF_URL_PROPERTY, legacyURL);
+			enableLegacyRegistration = getBooleanValue(LEGACY_WSRF_REGISTRATION_ENABLED_PROMPT, LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY);
+			props.setProperty(LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY, Boolean.valueOf(enableLegacyRegistration).toString());
+		} else {
+			props.setProperty(LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY, "false");
+		}
+
+		if (enableRegistration || enableLegacyRegistration) {
+			props.setProperty(WSRF_REGISTRATION_URL_PROPERTY, getValue(WSRF_REGISTRATION_URL_PROMPT, WSRF_REGISTRATION_URL_PROPERTY));
 		}
 
 		File wsrfConfig = new File(getServiceMixEtc(), GROUPER_WSRF_CFG);
 		props.store(new FileOutputStream(wsrfConfig), "GridGrouper WSRF Service Configuration saved by bootstrapper on " + new Date());
+	}
+
+	private boolean getBooleanValue(String prompt, String property) {
+		String val = getValue(prompt, property);
+		while ((val == null) || ((!val.equalsIgnoreCase("true")) && (!val.equalsIgnoreCase("false")))) {
+			val = getValue(prompt, property);
+		}
+		return Boolean.valueOf(val).booleanValue();
 	}
 
 	public void configureLegacyWSRFCredentials() throws Exception {
