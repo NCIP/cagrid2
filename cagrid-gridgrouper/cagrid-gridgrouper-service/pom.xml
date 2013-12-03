@@ -99,7 +99,7 @@
 								<artifact>
 									<file>src/main/resources/serviceSecurityMetadata.xml</file>
 									<type>xml</type>
-									<classifier>serviceMetadata</classifier>
+									<classifier>serviceSecurityMetadata</classifier>
 								</artifact>
 							</artifacts>
 						</configuration>
