@@ -78,6 +78,34 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			
+				<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-artifacts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>src/main/resources/serviceMetadata.xml</file>
+									<type>xml</type>
+									<classifier>serviceMetadata</classifier>
+								</artifact>
+								<artifact>
+									<file>src/main/resources/serviceSecurityMetadata.xml</file>
+									<type>xml</type>
+									<classifier>serviceMetadata</classifier>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
