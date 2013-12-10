@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.cagrid</groupId>
+    <artifactId>cagrid-osgi</artifactId>
+    <version>2.0.2-SNAPSHOT</version>
+  </parent>
+  <artifactId>cagrid-trust</artifactId>
+  <packaging>pom</packaging>
+  <name>caGrid Trust</name>
+  
+    <properties>
+        <slf4j.version>1.6.1</slf4j.version>
+        <spring.version>3.0.5.RELEASE</spring.version>
+        <junit.version>4.7</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <log4j.version>1.2.16</log4j.version>
+        <commons.logging.version>1.1.1</commons.logging.version>
+          <ant.log4j.version>1.6.5</ant.log4j.version>
+        <jaxb2.runtime.version>0.5.2</jaxb2.runtime.version>
+        <jaxb2.basics.version>0.5.2</jaxb2.basics.version>
+        <commons.lang.version>2.6</commons.lang.version>
+        <camel.version>2.8.0</camel.version>
+		<maven.bundle.plugin.version>2.3.4</maven.bundle.plugin.version>
+    </properties>
+  
+  
+  <dependencyManagement>
+		<dependencies>
+		    <dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gaards-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>${commons.logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>com.springsource.slf4j.log4j</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ant</groupId>
+                <artifactId>ant-apache-log4j</artifactId>
+                <version>${ant.log4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+  <modules>
+  	<module>cagrid-trust-api</module>
+  </modules>
+</project>

@@ -450,5 +450,6 @@
 		<!-- TODO: MOVE THIS <module>puretls</module> -->
 		<module>cagrid-service-registration</module>
 		<module>cagrid-systest</module>
+		<module>cagrid-trust</module>
 	</modules>
 </project>
