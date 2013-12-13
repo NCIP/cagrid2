@@ -122,6 +122,7 @@
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-dorian-client</feature>
         <feature version="${project.version}">cagrid-gts-client</feature>
+         <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-dorian-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}</bundle>
     </feature>

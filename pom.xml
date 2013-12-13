@@ -153,6 +153,13 @@
 				<artifactId>cagrid-proxy-trust</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-trust-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-metadata-model</artifactId>
