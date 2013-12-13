@@ -40,7 +40,6 @@ import org.cagrid.gaards.authentication.faults.CredentialNotSupportedException;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialException;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
-import org.cagrid.gaards.saml.encoding.SAMLUtils;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataRequest;
 import org.cagrid.gaards.security.servicesecurity.GetServiceSecurityMetadataResponse;
 import org.cagrid.gme.wsrf.stubs.InvalidSchemaSubmissionFaultFaultMessage;
