@@ -137,9 +137,9 @@ public class SAMLUtils {
 				signatureElement.getAttributes(), XML.XMLSIG_NS,
 				XMLSIG_NS_PREFIX);
 
-		// Add whitespace in the signature's signed-info element.
+		// Add whitespace in the signature element.
 		Element signedInfoElement = findElement(signatureElement,
-				SIGNED_INFO_QNAME);
+				SIGNATURE_QNAME);
 		if (signedInfoElement == null)
 			return;
 

@@ -1,11 +1,14 @@
 
 package org.oasis.names.tc.saml.assertion;
 
+import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -13,9 +16,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import org.jvnet.jaxb2_commons.lang.Equals;
 import org.jvnet.jaxb2_commons.lang.EqualsStrategy;
 import org.jvnet.jaxb2_commons.lang.HashCode;
@@ -65,6 +70,7 @@ import org.w3._2001.xmlschema.Adapter1;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlJavaTypeAdapter(AssertionTypeAdapter.class)
 @XmlType(name = "AssertionType", propOrder = {
     "conditions",
     "advice",
@@ -103,6 +109,18 @@ public class AssertionType implements Serializable, Equals, HashCode, ToString
     @XmlJavaTypeAdapter(Adapter1 .class)
     @XmlSchemaType(name = "dateTime")
     protected Calendar issueInstant;
+    
+    @XmlTransient
+    protected SAMLAssertion samlAssertion =null;
+    
+
+    public SAMLAssertion getSamlAssertion() {
+        return samlAssertion;
+    }
+
+    public void setSamlAssertion(SAMLAssertion samlAssertion) {
+        this.samlAssertion = samlAssertion;
+    }
 
     /**
      * Gets the value of the conditions property.

@@ -1,151 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core"
-	xmlns:wsa="http://cxf.apache.org/ws/addressing" xmlns:jaxws="http://cxf.apache.org/jaxws"
-	xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration"
-	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core" xmlns:wsa="http://cxf.apache.org/ws/addressing"
+    xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration" xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
                         http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
 	                    http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
 	                    http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
 	                    http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
-                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
+>
 
-	<bean id="defaultPropertiesPlaceholder"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location"
-			value="classpath:META-INF/spring/dorian-wsrf.properties" />
-		<property name="ignoreResourceNotFound" value="true" />
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
-	</bean>
+    <bean id="defaultPropertiesPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:META-INF/spring/dorian-wsrf.properties"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
 
-	<import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
 
-	<bean id="registrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
-		<constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.on}"></constructor-arg>
-		<constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
-		<constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.registrant.url}"></constructor-arg>
-		<constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
-	</bean>
-	
-	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
-		<constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.legacy.on}"></constructor-arg>
-		<constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
-		<constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.registrant.legacy.url}"></constructor-arg>
-		<constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
-	</bean>
-	
-	<bean id="proxySslContextFactory"
-		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
-		<property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}" />
-		<property name="keyStorePassword" value="${cagrid.dorian.wsrf.keystore.password}" />
-		<property name="keyManagerPassword" value="${cagrid.dorian.wsrf.key.password}" />
-		<property name="trustStore" value="${cagrid.dorian.wsrf.truststore.path}" />
-		<property name="trustStorePassword" value="${cagrid.dorian.wsrf.truststore.password}" />
-		<property name="wantClientAuth" value="true" />
-		<property name="needClientAuth" value="false" />
-		<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
-	</bean>
+    <bean id="registrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
+        <constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.on}"></constructor-arg>
+        <constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
+        <constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.registrant.url}"></constructor-arg>
+        <constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
+    </bean>
 
-	<bean id="legacyProxySslContextFactory"
-		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
-		<property name="keyStorePath" value="${cagrid.dorian.legacy-wsrf.keystore.path}" />
-		<property name="keyStorePassword"
-			value="${cagrid.dorian.legacy-wsrf.keystore.password}" />
-		<property name="keyManagerPassword" value="${cagrid.dorian.legacy-wsrf.key.password}" />
-		<property name="trustStore" value="${cagrid.dorian.legacy-wsrf.truststore.path}" />
-		<property name="trustStorePassword"
-			value="${cagrid.dorian.legacy-wsrf.truststore.password}" />
-		<property name="wantClientAuth" value="true" />
-		<property name="needClientAuth" value="false" />
-		<property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}" />
-	</bean>
+    <bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
+        <constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.legacy.on}"></constructor-arg>
+        <constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
+        <constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.registrant.legacy.url}"></constructor-arg>
+        <constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
+    </bean>
 
-	<bean id="jaxbResourceProperties" class="java.util.HashMap">
-		<constructor-arg>
-			<map>
-				<entry key="serviceMetadata" value="${cagrid.dorian.wsrf.metadata.url}" />
-				<entry key="serviceSecurityMetadata" value="${cagrid.dorian.wsrf.security.metadata.url}" />
-			</map>
-		</constructor-arg>
-	</bean>
+    <bean id="proxySslContextFactory" class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+        <property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.dorian.wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.dorian.wsrf.key.password}"/>
+        <property name="trustStore" value="${cagrid.dorian.wsrf.truststore.path}"/>
+        <property name="trustStorePassword" value="${cagrid.dorian.wsrf.truststore.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}"/>
+    </bean>
 
-	<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
-	<httpj:engine-factory bus="cxf">
-		<httpj:engine port="${cagrid.dorian.wsrf.port}">
-			<httpj:tlsServerParameters />
-			<httpj:connector>
-				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="proxySslContextFactory" />
-					<property name="port" value="${cagrid.dorian.wsrf.port}" />
-				</bean>
-			</httpj:connector>
-		</httpj:engine>
+    <bean id="legacyProxySslContextFactory" class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+        <property name="keyStorePath" value="${cagrid.dorian.legacy-wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.dorian.legacy-wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.dorian.legacy-wsrf.key.password}"/>
+        <property name="trustStore" value="${cagrid.dorian.legacy-wsrf.truststore.path}"/>
+        <property name="trustStorePassword" value="${cagrid.dorian.legacy-wsrf.truststore.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}"/>
+    </bean>
 
-		<httpj:engine port="${cagrid.dorian.legacy-wsrf.port}">
-			<httpj:tlsServerParameters />
-			<httpj:connector>
-				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0"
-						ref="legacyProxySslContextFactory" />
-					<property name="port" value="${cagrid.dorian.legacy-wsrf.port}" />
-				</bean>
-			</httpj:connector>
-		</httpj:engine>
-	</httpj:engine-factory>
+    <bean id="jaxbResourceProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="serviceMetadata" value="${cagrid.dorian.wsrf.metadata.url}"/>
+                <entry key="serviceSecurityMetadata" value="${cagrid.dorian.wsrf.security.metadata.url}"/>
+            </map>
+        </constructor-arg>
+    </bean>
 
-	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
-		<property name="marshallerProperties" ref="propertiesMap" />
-	</bean>
-	<util:map id="propertiesMap">
-		<entry key="jaxb.formatted.output">
-			<value type="java.lang.Boolean">true</value>
-		</entry>
-	</util:map>
+    <!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
+    <httpj:engine-factory bus="cxf">
+        <httpj:engine port="${cagrid.dorian.wsrf.port}">
+            <httpj:tlsServerParameters/>
+            <httpj:connector>
+                <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                    <constructor-arg index="0" ref="proxySslContextFactory"/>
+                    <property name="port" value="${cagrid.dorian.wsrf.port}"/>
+                </bean>
+            </httpj:connector>
+        </httpj:engine>
 
-	<bean id="dorianOverloader"
-		class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
-		<constructor-arg index="0"
-			value="${cagrid.dorian.wsrf.trusted.idp.mapping}" />
-	</bean>
+        <httpj:engine port="${cagrid.dorian.legacy-wsrf.port}">
+            <httpj:tlsServerParameters/>
+            <httpj:connector>
+                <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                    <constructor-arg index="0" ref="legacyProxySslContextFactory"/>
+                    <property name="port" value="${cagrid.dorian.legacy-wsrf.port}"/>
+                </bean>
+            </httpj:connector>
+        </httpj:engine>
+    </httpj:engine-factory>
 
-	<bean id="dorianLegacyOverloader"
-		class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
-		<constructor-arg index="0"
-			value="${cagrid.dorian.legacy-wsrf.trusted.idp.mapping}" />
-	</bean>
+    <bean id="dorianOverloader" class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
+        <constructor-arg index="0" value="${cagrid.dorian.wsrf.trusted.idp.mapping}"/>
+    </bean>
+
+    <bean id="dorianLegacyOverloader" class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
+        <constructor-arg index="0" value="${cagrid.dorian.legacy-wsrf.trusted.idp.mapping}"/>
+    </bean>
 
 
-	<bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
-		<constructor-arg index="0" ref="dorianService" />
-		<constructor-arg index="1" value="SHA2" />
-		<constructor-arg index="2" ref="jaxbResourceProperties" />
-		<constructor-arg index="3" ref="dorianOverloader" />
-	</bean>
+    <bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
+        <constructor-arg index="0" ref="dorianService"/>
+        <constructor-arg index="1" value="SHA2"/>
+        <constructor-arg index="2" ref="jaxbResourceProperties"/>
+        <constructor-arg index="3" ref="dorianOverloader"/>
+    </bean>
 
-	<bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
-		<constructor-arg index="0" ref="dorianService" />
-		<constructor-arg index="1" value="SHA1" />
-		<constructor-arg index="2" ref="jaxbResourceProperties" />
-		<constructor-arg index="3" ref="dorianLegacyOverloader" />
-	</bean>
+    <bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
+        <constructor-arg index="0" ref="dorianService"/>
+        <constructor-arg index="1" value="SHA1"/>
+        <constructor-arg index="2" ref="jaxbResourceProperties"/>
+        <constructor-arg index="3" ref="dorianLegacyOverloader"/>
+    </bean>
 
-	<bean id="dummyLegacyDorianWSRF" class="org.cagrid.dorian.DorianPortTypeImpl">
-	</bean>
+    <bean id="dummyLegacyDorianWSRF" class="org.cagrid.dorian.DorianPortTypeImpl">
+    </bean>
 
-	<jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service"
-		xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="dorianWSRFEP"
-		implementor="#dorianWSRF" bus="cxf" endpointName="e:DorianPortTypePort"
-		serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}"
-		wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
-	</jaxws:endpoint>
 
-	<jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service"
-		xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="legacyDorianWSRFEP"
-		implementor="#legacyDorianWSRF" bus="cxf" endpointName="e:DorianPortTypePort"
-		serviceName="s:DorianService" address="${cagrid.dorian.legacy-wsrf.url}"
-		wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
-	</jaxws:endpoint>
+    <bean id="inboundSamlCanonicalizerInterceptor" class="org.cagrid.dorian.service.wsrf.InboundSamlCanonicalizerInterceptor"/>
+    <bean id="outboundSamlCanonicalizerInterceptor" class="org.cagrid.dorian.service.wsrf.OutboundSamlCanonicalizerInterceptor"/>
+
+
+    <bean id="logIn" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+    <bean id="logOut" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
+
+    <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="dorianWSRFEP" implementor="#dorianWSRF" bus="cxf"
+        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
+    >
+        <jaxws:inInterceptors>
+<!--             <ref bean="logIn"/> -->
+            <!-- <ref bean="inboundSamlCanonicalizerInterceptor"/> -->
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+<!--             <ref bean="logOut"/> -->
+            <ref bean="outboundSamlCanonicalizerInterceptor"/>
+        </jaxws:outInterceptors>
+    </jaxws:endpoint>
+
+    <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="legacyDorianWSRFEP" implementor="#legacyDorianWSRF" bus="cxf"
+        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.legacy-wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
+    >
+        <jaxws:inInterceptors>
+<!--             <ref bean="logIn"/> -->
+            <!-- <ref bean="inboundSamlCanonicalizerInterceptor"/> -->
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+<!--             <ref bean="logOut"/> -->
+            <ref bean="outboundSamlCanonicalizerInterceptor"/>
+        </jaxws:outInterceptors>
+    </jaxws:endpoint>
 </beans>
