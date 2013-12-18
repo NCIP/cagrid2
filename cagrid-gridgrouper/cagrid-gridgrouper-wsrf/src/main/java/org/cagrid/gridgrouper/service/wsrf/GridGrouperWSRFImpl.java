@@ -836,7 +836,7 @@ public class GridGrouperWSRFImpl implements GridGrouperPortType {
     private String getCallerId() {
         String callerId = WebServiceCallerId.getCallerId(wsContext);
         if (callerId == null)
-            callerId = "anonymous";
+            callerId = "<anonymous>";
         logger.info("CallerId = " + callerId);
         return callerId;
     }
