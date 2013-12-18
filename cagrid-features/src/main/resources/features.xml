@@ -99,8 +99,10 @@
 
     <!-- CDS -->
     <feature name="cagrid-cds" version="${project.version}">
-     	<configfile finalname="/etc/cds/serviceMetadata.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/serviceMetadata</configfile>
-        <configfile finalname="/etc/cds/registration.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/registration</configfile>
+     	<configfile finalname="/etc/cagrid-cds/serviceMetadata.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-cds/registration.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/registration</configfile>
+        <configfile finalname="/etc/cagrid-cds/CredentialDelegationService-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/CredentialDelegationService-security-metadata</configfile>
+		<configfile finalname="/etc/cagrid-cds/DelegatedCredential-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/DelegatedCredential-security-metadata</configfile>       
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-cds-client</feature>
         <feature version="${project.version}">cagrid-gridgrouper-client</feature>

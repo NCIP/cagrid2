@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.cagrid</groupId>
@@ -73,14 +74,42 @@
 							org.cagrid.cds.service.impl.delegatedcredential,
 							org.cagrid.cds.service.impl.manager,
 							org.cagrid.cds.service.impl.policy,
-							org.cagrid.cds.service.impl.util 
+							org.cagrid.cds.service.impl.util
 						</Private-Package>
 						<Import-Package>
-                            !org.apache.commons.cli,
-                            org.apache.cxf.jaxws.spi, *
+							!org.apache.commons.cli,
+							org.apache.cxf.jaxws.spi, *
 						</Import-Package>
 					</instructions>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-artifacts</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attach-artifact</goal>
+						</goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>src/main/resources/CredentialDelegationService-security-metadata.xml</file>
+									<type>xml</type>
+									<classifier>CredentialDelegationService-security-metadata</classifier>
+								</artifact>
+								<artifact>
+									<file>src/main/resources/DelegatedCredential-security-metadata.xml</file>
+									<type>xml</type>
+									<classifier>DelegatedCredential-security-metadata</classifier>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -171,13 +200,13 @@
 			<artifactId>spring-test</artifactId>
 		</dependency>
 
-        <dependency>
-            <groupId>com.mysql.jdbc</groupId>
-            <artifactId>com.springsource.com.mysql.jdbc</artifactId>
-            <version>5.1.6</version>
-            <!-- need compile scope because AddAdmin tool needs it -->
-            <scope>compile</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.mysql.jdbc</groupId>
+			<artifactId>com.springsource.com.mysql.jdbc</artifactId>
+			<version>5.1.6</version>
+			<!-- need compile scope because AddAdmin tool needs it -->
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -185,68 +214,69 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-    <profiles>
-        <profile>
-            <id>AddAdmin</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <defaultGoal>validate</defaultGoal>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.7</version>
-                        <executions>
-                            <execution>
-                                <id>enter-grid-identity</id>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <target>
-                                        <input message="Please enter the grid identity:" addproperty="gridId.input" />
-                                    </target>
-                                    <exportAntProperties>true</exportAntProperties>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.ant</groupId>
-                                <artifactId>ant</artifactId>
-                                <version>1.8.4</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.1.1</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>java</goal>
-                                </goals>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <mainClass>org.cagrid.cds.service.impl.util.AddAdmin</mainClass>
-                                    <arguments>
-                                        <argument>-conf</argument>
-                                        <argument>src/main/resources/META-INF/spring/cds-beans-configuration.xml</argument>
-                                        <argument>-properties</argument>
-                                        <argument>src/main/resources/tools/cds.properties</argument>
-                                        <argument>-admin</argument>
-                                        <argument>${gridId.input}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+	<profiles>
+		<profile>
+			<id>AddAdmin</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<defaultGoal>validate</defaultGoal>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<id>enter-grid-identity</id>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<target>
+										<input message="Please enter the grid identity:"
+											addproperty="gridId.input" />
+									</target>
+									<exportAntProperties>true</exportAntProperties>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant</artifactId>
+								<version>1.8.4</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.1.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>validate</phase>
+								<configuration>
+									<mainClass>org.cagrid.cds.service.impl.util.AddAdmin</mainClass>
+									<arguments>
+										<argument>-conf</argument>
+										<argument>src/main/resources/META-INF/spring/cds-beans-configuration.xml</argument>
+										<argument>-properties</argument>
+										<argument>src/main/resources/tools/cds.properties</argument>
+										<argument>-admin</argument>
+										<argument>${gridId.input}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

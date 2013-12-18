@@ -53,7 +53,7 @@
 		<prop key="cagrid.dorian.service.ca.db.alias">dorianca</prop>
 		<prop key="cagrid.dorian.service.ca.password">admin</prop>
 		<prop key="cagrid.dorian.service.ca.policy.oid"></prop>
-		<prop key="cagrid.dorian.service.ca.issued.cert.key.size">1024</prop>
+		<prop key="cagrid.dorian.service.ca.issued.cert.key.size">2048</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create">true</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.subject">C=US,O=abc,OU=xyz,OU=caGrid,CN=caGrid Dorian CA</prop>
 		<prop key="cagrid.dorian.service.ca.auto.create.key.size">2048</prop>
@@ -73,7 +73,7 @@
 		<prop key="cagrid.dorian.service.legacy-ca.db.alias">legacyca</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.password">admin</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.policy.oid"></prop>
-		<prop key="cagrid.dorian.service.legacy-ca.issued.cert.key.size">1024</prop>
+		<prop key="cagrid.dorian.service.legacy-ca.issued.cert.key.size">2048</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.auto.create">true</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.auto.create.subject">C=US,O=abc,OU=xyz,OU=caGrid,CN=caGrid Dorian Legacy CA</prop>
 		<prop key="cagrid.dorian.service.legacy-ca.auto.create.key.size">2048</prop>
