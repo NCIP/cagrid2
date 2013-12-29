@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="http://cagrid.nci.nih.gov/12/SyncGTS"
+<xsd:schema targetNamespace="http://www.cagrid.org/2.0/SyncGTS"
 	attributeFormDefault="qualified"
 	elementFormDefault="qualified"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-	xmlns:sync="http://cagrid.nci.nih.gov/12/SyncGTS"
+	xmlns:sync="http://www.cagrid.org/2.0/SyncGTS"
 	xmlns:gts="http://cagrid.nci.nih.gov/8/gts">    
 	<xsd:import namespace="http://cagrid.nci.nih.gov/8/gts" schemaLocation="./gts.xsd"/>
 	   <xsd:element name="SyncDescription" type="sync:SyncDescription"/>
