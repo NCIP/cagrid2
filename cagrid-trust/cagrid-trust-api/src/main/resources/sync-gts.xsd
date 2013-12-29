@@ -33,7 +33,7 @@
 		
 		<xsd:complexType name="SyncReport">
 			<xsd:sequence>
-				<xsd:element name="Timestamp" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="Timestamp" minOccurs="1" maxOccurs="1" type="xsd:long"/>
 			    <xsd:element ref="sync:SyncDescription" minOccurs="1" maxOccurs="1"/>
 			    <xsd:element name="AddedTrustedCAs" minOccurs="0" maxOccurs="1" type="sync:AddedTrustedCAs"/> 
 			    <xsd:element name="RemovedTrustedCAs" minOccurs="0" maxOccurs="1" type="sync:RemovedTrustedCAs"/> 
@@ -53,7 +53,6 @@
 				<xsd:element name="MetadataFile" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="CertificateFile" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			    <xsd:element name="CRLFile" minOccurs="0" maxOccurs="1" type="xsd:string"/>
-			    <xsd:element name="SigningPolicyFile" minOccurs="0" maxOccurs="1" type="xsd:string"/>    
 			</xsd:sequence>
 		</xsd:complexType>
 		
