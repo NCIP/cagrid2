@@ -1,4 +1,4 @@
-package org.cagrid.trust.service.core;
+package org.cagrid.core.xml;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

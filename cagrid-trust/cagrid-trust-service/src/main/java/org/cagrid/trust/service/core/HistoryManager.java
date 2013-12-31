@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.cagrid.core.xml.XMLUtils;
 import org.cagrid.trust.model.DateFilter;
 import org.cagrid.trust.model.SyncReport;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class HistoryManager {
 	}
 
 	public File addReport(SyncReport report) throws Exception {
-		File r = getFile(report.getTimestamp());
+		File r = getFile(report.getTimeOfSync());
 		XMLUtils.toXMLFile(report, r);
 		return r;
 	}
@@ -73,40 +74,6 @@ public class HistoryManager {
 		return null;
 	}
 
-	private File getEarliestDayDir() {
-		return getEarliestDir(getEarliestMonthDir());
-	}
-
-	private File getEarliestMonthDir() {
-		return getEarliestDir(getEarliestYearDir());
-	}
-
-	private File getEarliestYearDir() {
-		return getEarliestDir(getHistoryDirectory());
-	}
-
-	/**
-	 * Gets the earliest named sub-directory
-	 * 
-	 * @param dir
-	 * @return
-	 */
-	private File getEarliestDir(File dir) {
-		File earliest = null;
-		if (dir != null && dir.exists()) {
-			File[] dirs = dir.listFiles(new FileFilter() {
-				public boolean accept(File pathname) {
-					return pathname.isDirectory();
-				}
-			});
-			if (dirs != null) {
-				sortByFilename(dirs);
-				earliest = dirs[0];
-			}
-		}
-		return earliest;
-	}
-
 	private File getLastDayDir() {
 		return getLastDir(getLastMonthDir());
 	}
@@ -135,38 +102,6 @@ public class HistoryManager {
 		return last;
 	}
 
-	private DateFilter getEarliestDateFilter() throws Exception {
-		File day = getEarliestDayDir();
-		File month = day.getParentFile();
-		File year = month.getParentFile();
-
-		if ((day == null) || (month == null) || (year == null)) {
-			return null;
-		} else {
-			DateFilter d = new DateFilter();
-			d.setDay(Integer.valueOf(day.getName()).intValue());
-			d.setMonth(Integer.valueOf(month.getName()).intValue());
-			d.setYear(Integer.valueOf(year.getName()).intValue());
-			return d;
-		}
-	}
-
-	private boolean isAfter(DateFilter start, DateFilter end) {
-		if (start.getYear() <= end.getYear()) {
-			if (start.getMonth() <= end.getMonth()) {
-				if (start.getDay() <= end.getDay()) {
-					return false;
-				} else {
-					return true;
-				}
-			} else {
-				return true;
-			}
-		} else {
-			return true;
-		}
-	}
-
 	public SyncReport[] search(DateFilter startDate, DateFilter end) throws Exception {
 		DateFilter start = new DateFilter();
 		start.setDay(startDate.getDay());
@@ -190,8 +125,10 @@ public class HistoryManager {
 						if (in.read() != -1) {
 							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
 							iterator++;
-						} else
+						} else {
+							in.close();
 							throw new Exception();
+						}
 						in.close();
 					}
 				}
@@ -228,6 +165,7 @@ public class HistoryManager {
 							reports[iterator] = this.getReport(startDir.getAbsolutePath() + File.separator + fileList[i]);
 							iterator++;
 						} else {
+							in.close();
 							throw new Exception();
 						}
 						in.close();
@@ -242,9 +180,9 @@ public class HistoryManager {
 		return returnReports;
 	}
 
-	private File getFile(long timestamp) {
+	private File getFile(Date timestamp) {
 		File dir = getDirectory(timestamp);
-		return new File(dir.getAbsolutePath() + File.separator + timestamp + ".xml");
+		return new File(dir.getAbsolutePath() + File.separator + timestamp.getTime() + ".xml");
 	}
 
 	protected File getHistoryDirectory() {
@@ -275,10 +213,9 @@ public class HistoryManager {
 		return dir;
 	}
 
-	private File getDirectory(long timestamp) {
-		Date d = new Date(timestamp);
+	private File getDirectory(Date timestamp) {
 		Calendar c = new GregorianCalendar();
-		c.setTime(d);
+		c.setTime(timestamp);
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH) + 1;
 		String strMonth = "";
@@ -330,41 +267,25 @@ public class HistoryManager {
 	}
 
 	public void prune(DateFilter filter) throws Exception {
-		// filter tells us how old of a history file we can keep
-		// create a calendar of the current date
-		Calendar startCal = Calendar.getInstance();
-		startCal.setLenient(true);
-		// roll it BACK by the amount in the filter
-		startCal.set(Calendar.YEAR, startCal.get(Calendar.YEAR) - filter.getYear());
-		startCal.set(Calendar.MONDAY, startCal.get(Calendar.MONTH) - filter.getMonth());
-		startCal.set(Calendar.DAY_OF_MONTH, startCal.get(Calendar.DAY_OF_MONTH) - filter.getDay());
-		/*
-		 * startCal.roll(Calendar.YEAR, -filter.getYear());
-		 * startCal.roll(Calendar.MONTH, -filter.getMonth());
-		 * startCal.roll(Calendar.DAY_OF_MONTH, -filter.getDay());
-		 */
-		// create the cuttoff date
-		DateFilter cuttoff = new DateFilter();
-		cuttoff.setDay(startCal.get(Calendar.DAY_OF_MONTH));
-		cuttoff.setMonth(startCal.get(Calendar.MONTH) + 1);
-		cuttoff.setYear(startCal.get(Calendar.YEAR));
+
+		Calendar c = new GregorianCalendar();
+		c.add(Calendar.YEAR, filter.getYear());
+		c.add(Calendar.MONTH, filter.getMonth());
+		c.add(Calendar.DAY_OF_MONTH, filter.getDay());
 		// list all the history files and dirs in date order
 		List<File> historyFiles = listHistoryFilesByDate();
 		for (File f : historyFiles) {
 			if (f.isFile() && f.getName().endsWith(".xml")) {
-				// if a history file, figure its creation date
-				File dayDir = f.getParentFile();
-				File monthDir = dayDir.getParentFile();
-				File yearDir = monthDir.getParentFile();
-				DateFilter current = new DateFilter();
-				current.setDay(Integer.parseInt(dayDir.getName()));
-				current.setMonth(Integer.parseInt(monthDir.getName()));
-				current.setYear(Integer.parseInt(yearDir.getName()));
-
-				if (!isAfter(current, cuttoff)) {
-					// file is from before the cuttoff date and can be deleted
+				String fileName = f.getName();
+				int index = fileName.indexOf(".xml");
+				String timestamp = fileName.substring(0, index);
+				Date fileDate = new Date(Long.valueOf(timestamp));
+				if (fileDate.after(c.getTime())) {
+					log.debug("Pruning the report " + f.getAbsolutePath() + " the report was created on " + fileDate.toString() + " which is after the cache allowed date of " + c.getTime().toString()
+							+ ".");
+					File parent = f.getParentFile();
 					f.delete();
-					log.info("Pruned old sync report " + f.getAbsolutePath());
+					deleteIfEmpty(parent);
 				}
 			}
 		}
@@ -414,33 +335,16 @@ public class HistoryManager {
 		return historyFiles;
 	}
 
-	private int countXmlDocs(List<File> files) {
-		int count = 0;
-		for (File f : files) {
-			if (f.isFile() && f.getName().endsWith(".xml")) {
-				count++;
-			}
-		}
-		return count;
-	}
-
 	private void deleteIfEmpty(File dir) {
 		if (dir.isDirectory()) {
 			File files[] = dir.listFiles();
 			if ((files == null) || (files.length == 0)) {
+				File parent = dir.getParentFile();
+				log.debug("Deleting the directory " + dir.getAbsolutePath() + " no more reports exist in the directory.");
 				dir.delete();
+				deleteIfEmpty(parent);
 			}
 		}
 	}
 
-	private static int getMaxReports() {
-		int max = DEFAULT_MAX_REPORTS;
-		String val = System.getProperty(MAX_REPORTS_PROPERTY);
-		try {
-			max = Integer.valueOf(val).intValue();
-		} catch (Exception ex) {
-			// whatever
-		}
-		return max;
-	}
 }

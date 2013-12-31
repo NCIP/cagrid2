@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.cxf.configuration.security.KeyManagersType;
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.cagrid.core.xml.XMLUtils;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gts.model.Status;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
@@ -57,9 +58,11 @@ public class SyncGTS {
 	private List<Message> messages;
 	private HistoryManager history;
 	private File trustedCertificatesDirectory;
+	private KeyStoreType truststore;
 
-	public SyncGTS(File trustedCertificatesDirectory, File historyDirectory) {
+	public SyncGTS(KeyStoreType truststore, File trustedCertificatesDirectory, File historyDirectory) {
 		this.trustedCertificatesDirectory = trustedCertificatesDirectory;
+		this.truststore = truststore;
 		this.history = new HistoryManager(historyDirectory);
 		log = LoggerFactory.getLogger(this.getClass().getName());
 	}
@@ -78,14 +81,14 @@ public class SyncGTS {
 			report.setSyncDescription(description);
 
 			Date now = new Date();
-			report.setTimestamp(now.getTime());
+			report.setTimeOfSync(now);
 
 			Map<String, TrustedCAListing> master = new HashMap<String, TrustedCAListing>();
 			String error = null;
 			List<SyncDescriptor> list = description.getSyncDescriptors();
 
 			for (SyncDescriptor des : list) {
-				String uri = des.getGtsServiceURI();
+				String uri = des.getGTS();
 				this.log.info("Syncing with the GTS " + uri);
 				Set<org.cagrid.gts.model.TrustedAuthority> taSet = new HashSet<org.cagrid.gts.model.TrustedAuthority>();
 				List<TrustedAuthorityFilter> filters = des.getTrustedAuthorityFilters();
@@ -93,11 +96,9 @@ public class SyncGTS {
 				for (TrustedAuthorityFilter f : filters) {
 					filterCount = filterCount + 1;
 					try {
-						// TODO: FIX TRUSTSTORE
-						KeyStoreType ts = new KeyStoreType();
-						ts.setFile("/Users/langella/Documents/caGrid/environments/keys/training-truststore.jks");
-						ts.setPassword("changeit");
-						GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, ts, (KeyManagersType) null);
+	
+						
+						GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, this.truststore, (KeyManagersType) null);
 
 						// TODO: Perform authorization
 						// if (des[i].isPerformAuthorization()) {
@@ -221,14 +222,13 @@ public class SyncGTS {
 				if (fl.getMetadata() != null) {
 					try {
 						TrustedCA tca = (TrustedCA) XMLUtils.fromXMLFile(TrustedCA.class, fl.getMetadata());
-						ca.setDiscovered(tca.getDiscovered());
-						ca.setExpiration(tca.getExpiration());
-						if ((unableToSync.contains(tca.getGts())) && (!master.containsKey(tca.getName()))) {
-							Calendar c = new GregorianCalendar();
-							if (c.getTimeInMillis() < tca.getExpiration()) {
+						ca.setDiscoveredOn(tca.getDiscoveredOn());
+						ca.setExpiresOn(tca.getExpiresOn());
+						if ((unableToSync.contains(tca.getGTS())) && (!master.containsKey(tca.getName()))) {
+							if (now.before(tca.getExpiresOn())) {
 								Message m = new Message();
 								m.setType(MessageType.WARNING);
-								m.setValue("Unable to communicate with the GTS " + tca.getGts() + " did not remove the the CA " + tca.getName() + " because it was not expired.");
+								m.setValue("Unable to communicate with the GTS " + tca.getGTS() + " did not remove the the CA " + tca.getName() + " because it was not expired.");
 								this.messages.add(m);
 								log.warn(m.getValue());
 								completeCASetByName.add(cert.getSubjectDN().getName());
@@ -311,25 +311,25 @@ public class SyncGTS {
 					TrustedCA ca = new TrustedCA();
 					subject = cert.getSubjectDN().getName();
 					ca.setName(subject);
-					ca.setGts(listing.getService());
+					ca.setGTS(listing.getService());
 
 					if ((completeCASetByName.contains(cert.getSubjectDN())) && (excluded.contains(cert.getSubjectDN()))) {
 						Message m = new Message();
 						m.setType(MessageType.WARNING);
-						m.setValue("Ignoring the CA " + ca.getName() + " obtained from the GTS " + ca.getGts() + " because the CA is in the excludes list.");
+						m.setValue("Ignoring the CA " + ca.getName() + " obtained from the GTS " + ca.getGTS() + " because the CA is in the excludes list.");
 						this.messages.add(m);
 						log.warn(m.getValue());
 
 					} else if ((completeCASetByName.contains(cert.getSubjectDN())) && (!excluded.contains(cert.getSubjectDN()))) {
 						Message m = new Message();
 						m.setType(MessageType.WARNING);
-						m.setValue("Ignoring the CA " + ca.getName() + " obtained from the GTS " + ca.getGts() + " because the CA is already trusted.");
+						m.setValue("Ignoring the CA " + ca.getName() + " obtained from the GTS " + ca.getGTS() + " because the CA is already trusted.");
 						this.messages.add(m);
 						log.warn(m.getValue());
 					} else if (completeCASetByHash.contains(caHash)) {
 						Message m = new Message();
 						m.setType(MessageType.WARNING);
-						m.setValue("Ignoring the CA " + ca.getName() + " obtained from the GTS " + ca.getGts() + " because a CA with the hash " + caHash + " already exists.");
+						m.setValue("Ignoring the CA " + ca.getName() + " obtained from the GTS " + ca.getGTS() + " because a CA with the hash " + caHash + " already exists.");
 						this.messages.add(m);
 						log.warn(m.getValue());
 
@@ -352,14 +352,14 @@ public class SyncGTS {
 							}
 						}
 						Calendar cal = new GregorianCalendar();
-						ca.setDiscovered(cal.getTimeInMillis());
+						ca.setDiscoveredOn(cal.getTime());
 						if (listing.getDescriptor().getExpiration() != null) {
 							cal.add(Calendar.HOUR_OF_DAY, listing.getDescriptor().getExpiration().getHours());
 							cal.add(Calendar.MINUTE, listing.getDescriptor().getExpiration().getMinutes());
 							cal.add(Calendar.SECOND, listing.getDescriptor().getExpiration().getSeconds());
-							ca.setExpiration(cal.getTimeInMillis());
+							ca.setExpiresOn(cal.getTime());
 						} else {
-							ca.setExpiration(cal.getTimeInMillis());
+							ca.setExpiresOn(cal.getTime());
 						}
 						XMLUtils.toXMLFile(ca, metadataFile);
 						log.debug("Wrote out the metadata for the Trusted Authority " + ta.getName() + " to the file " + metadataFile.getAbsolutePath());
@@ -389,7 +389,7 @@ public class SyncGTS {
 			}
 			Message mess = new Message();
 			mess.setType(MessageType.INFO);
-			mess.setValue("Successfully wrote out " + taCount + " Trusted Authority(s) to " + CoGProperties.getDefault().getCaCertLocations());
+			mess.setValue("Successfully wrote out " + taCount + " Trusted Authority(s) to " + this.trustedCertificatesDirectory.getAbsolutePath());
 			messages.add(mess);
 			log.info(mess.getValue());
 

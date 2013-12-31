@@ -26,6 +26,7 @@
 							org.cagrid.core.cache,
 							org.cagrid.core.common,
                             org.cagrid.core.common.security,
+                            org.cagrid.core.xml,
 							org.cagrid.core.metadata,
 							org.cagrid.core.resource,
 							org.cagrid.core.soapclient,

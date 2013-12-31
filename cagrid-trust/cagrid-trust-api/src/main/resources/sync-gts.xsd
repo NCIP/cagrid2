@@ -21,7 +21,7 @@
 		
 		<xsd:complexType name="SyncDescriptor">
 			<xsd:sequence>
-			    <xsd:element name="gtsServiceURI" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+			    <xsd:element name="GTS" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			    <xsd:element name="Expiration" minOccurs="1" maxOccurs="1" type="sync:Expiration"/>
 			    <xsd:element name="TrustedAuthorityFilter" minOccurs="0" maxOccurs="unbounded" type="gts:TrustedAuthorityFilter"/>
 				<xsd:element name="PerformAuthorization" minOccurs="1" maxOccurs="1" type="xsd:boolean"/>
@@ -33,7 +33,7 @@
 		
 		<xsd:complexType name="SyncReport">
 			<xsd:sequence>
-				<xsd:element name="Timestamp" minOccurs="1" maxOccurs="1" type="xsd:long"/>
+				<xsd:element name="TimeOfSync" minOccurs="1" maxOccurs="1" type="xsd:dateTime"/>
 			    <xsd:element ref="sync:SyncDescription" minOccurs="1" maxOccurs="1"/>
 			    <xsd:element name="AddedTrustedCAs" minOccurs="0" maxOccurs="1" type="sync:AddedTrustedCAs"/> 
 			    <xsd:element name="RemovedTrustedCAs" minOccurs="0" maxOccurs="1" type="sync:RemovedTrustedCAs"/> 
@@ -46,10 +46,10 @@
 		
 		<xsd:complexType name="TrustedCA">
 			<xsd:sequence>
-				<xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
-				<xsd:element name="gts" minOccurs="0" maxOccurs="1" type="xsd:string"/>
-				<xsd:element name="discovered" minOccurs="1" maxOccurs="1" type="xsd:long"/>
-				<xsd:element name="expiration" minOccurs="1" maxOccurs="1" type="xsd:long"/>
+				<xsd:element name="Name" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="GTS" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="DiscoveredOn" minOccurs="1" maxOccurs="1" type="xsd:dateTime"/>
+				<xsd:element name="ExpiresOn" minOccurs="1" maxOccurs="1" type="xsd:dateTime"/>
 				<xsd:element name="MetadataFile" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 				<xsd:element name="CertificateFile" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			    <xsd:element name="CRLFile" minOccurs="0" maxOccurs="1" type="xsd:string"/>
@@ -76,8 +76,8 @@
 		
 		<xsd:complexType name="Message">
 			<xsd:sequence>
-				<xsd:element name="type" minOccurs="1" maxOccurs="1" type="sync:MessageType"/>
-				<xsd:element name="value" minOccurs="1" maxOccurs="1" type="xsd:string"/>
+				<xsd:element name="Type" minOccurs="1" maxOccurs="1" type="sync:MessageType"/>
+				<xsd:element name="Value" minOccurs="1" maxOccurs="1" type="xsd:string"/>
 			</xsd:sequence>
 		</xsd:complexType>
 		
@@ -94,9 +94,9 @@
  		 
  		<xsd:complexType name="DateFilter">
 			<xsd:sequence>
-			    <xsd:element name="year" type="xsd:int"/>
-			    <xsd:element name="month" type="xsd:int"/>
-			    <xsd:element name="day" type="xsd:int"/>
+			    <xsd:element name="Year" type="xsd:int"/>
+			    <xsd:element name="Month" type="xsd:int"/>
+			    <xsd:element name="Day" type="xsd:int"/>
 			</xsd:sequence>
 	    </xsd:complexType>
 	    
@@ -108,8 +108,8 @@
 	    
 	    
 	<xsd:complexType name="Expiration">
-		<xsd:attribute name="hours" type="xsd:int"/>
-		<xsd:attribute name="minutes" type="xsd:int"/>
-		<xsd:attribute name="seconds" type="xsd:int"/>
+		<xsd:attribute name="Hours" type="xsd:int"/>
+		<xsd:attribute name="Minutes" type="xsd:int"/>
+		<xsd:attribute name="Seconds" type="xsd:int"/>
 	</xsd:complexType>	
 </xsd:schema>
