@@ -20,8 +20,7 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Export-Package>org.cagrid.trust.manager,org.cagrid.trust.service
-						</Export-Package>
+						<Export-Package>org.cagrid.trust.manager,org.cagrid.trust.service,org.cagrid.trust.model</Export-Package>
 						<Import-Package>*</Import-Package>
 					</instructions>
 				</configuration>

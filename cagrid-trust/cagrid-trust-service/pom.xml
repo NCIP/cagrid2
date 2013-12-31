@@ -6,8 +6,28 @@
 		<artifactId>cagrid-trust</artifactId>
 		<version>2.0.3-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>cagrid-trust-service</artifactId>
 	<name>caGrid Trust Service</name>
+	<packaging>bundle</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						<Export-Package />
+						<Private-Package>org.cagrid.trust.service.core</Private-Package>
+						<Import-Package>*</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 
@@ -15,12 +35,12 @@
 			<groupId>org.cagrid</groupId>
 			<artifactId>cagrid-trust-api</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.cagrid</groupId>
 			<artifactId>cagrid-gts-soap-client</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
 			<artifactId>jaxb2-basics-runtime</artifactId>
@@ -56,4 +76,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
 </project>

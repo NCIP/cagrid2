@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * @version $Id: ArgumentManagerTable.java,v 1.2 2004/10/15 16:35:16 langella
  *          Exp $
  */
-public class SyncGTS {
+public class SyncGTS implements Synchronizer {
 	private final static String CERTIFICATE_EXTENSION = "cert";
 	private final static String CRL_EXTENSION = "crl";
 	private final static String METADATA_EXTENSION = "xml";
@@ -56,15 +56,33 @@ public class SyncGTS {
 
 	private Logger log;
 	private List<Message> messages;
-	private HistoryManager history;
+	private HistoryManager historyManager;
 	private File trustedCertificatesDirectory;
 	private KeyStoreType truststore;
 
-	public SyncGTS(KeyStoreType truststore, File trustedCertificatesDirectory, File historyDirectory) {
-		this.trustedCertificatesDirectory = trustedCertificatesDirectory;
-		this.truststore = truststore;
-		this.history = new HistoryManager(historyDirectory);
+	public SyncGTS() {
+		this.trustedCertificatesDirectory = new File(".");
 		log = LoggerFactory.getLogger(this.getClass().getName());
+	}
+
+	public HistoryManager getHistoryManager() {
+		return historyManager;
+	}
+
+	public void setTrustedCertificatesDirectory(String dir) {
+		this.trustedCertificatesDirectory = new File(dir);
+	}
+
+	public void setHistoryManager(HistoryManager historyManager) {
+		this.historyManager = historyManager;
+	}
+
+	public KeyStoreType getTruststore() {
+		return truststore;
+	}
+
+	public void setTruststore(KeyStoreType truststore) {
+		this.truststore = truststore;
 	}
 
 	private void reset() {
@@ -96,9 +114,8 @@ public class SyncGTS {
 				for (TrustedAuthorityFilter f : filters) {
 					filterCount = filterCount + 1;
 					try {
-	
-						
-						GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, this.truststore, (KeyManagersType) null);
+
+						GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, getTruststore(), (KeyManagersType) null);
 
 						// TODO: Perform authorization
 						// if (des[i].isPerformAuthorization()) {
@@ -410,14 +427,18 @@ public class SyncGTS {
 		report.setMessages(reportMessages);
 
 		// Log Report;
-		try {
-			history.addReport(report);
-			if (description.getCacheSize() != null) {
-				history.prune(description.getCacheSize());
-			}
+		if (getHistoryManager() != null) {
+			try {
+				getHistoryManager().addReport(report);
+				if (description.getCacheSize() != null) {
+					getHistoryManager().prune(description.getCacheSize());
+				}
 
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
+		} else {
+			log.warn("A sync report was not logged, no history manager was configured.");
 		}
 		return report;
 	}
