@@ -9,7 +9,7 @@
 	<artifactId>cagrid-trust</artifactId>
 	<packaging>pom</packaging>
 	<name>caGrid Trust</name>
-
+<!--
 	<properties>
 		<slf4j.version>1.6.1</slf4j.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
@@ -25,7 +25,7 @@
 		<maven.bundle.plugin.version>2.3.4</maven.bundle.plugin.version>
 	</properties>
 
-
+  
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -104,6 +104,8 @@
 
 		</dependencies>
 	</dependencyManagement>
+	
+	-->
 	<modules>
 		<module>cagrid-trust-api</module>
 		<module>cagrid-trust-service</module>

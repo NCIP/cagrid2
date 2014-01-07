@@ -22,7 +22,7 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package />
 						<Private-Package>org.cagrid.trust.service.core</Private-Package>
-						<Import-Package>*</Import-Package>
+						<Import-Package>org.quartz.simpl,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -53,28 +53,15 @@
 		<!-- Logging -->
 
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>com.springsource.slf4j.log4j</artifactId>
-			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>ant</groupId>
-			<artifactId>ant-apache-log4j</artifactId>
-
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
-	
+
 </project>

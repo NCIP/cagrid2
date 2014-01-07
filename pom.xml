@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cagrid</groupId>
 	<artifactId>cagrid-osgi</artifactId>
@@ -12,7 +13,7 @@
 		<jaxb2.basics.version>0.6.4</jaxb2.basics.version>
 		<cxf.version>2.6.3</cxf.version>
 		<spring.version>3.0.7.RELEASE</spring.version>
-		<slf4j.version>1.6.6</slf4j.version>
+		<slf4j.version>1.6.1</slf4j.version>
 		<junit.version>4.10</junit.version>
 		<karaf.version>2.2.10</karaf.version>
 		<smx.version>4.5.2</smx.version>
@@ -153,13 +154,31 @@
 				<artifactId>cagrid-proxy-trust</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-trust-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-trust-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gts-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>cagrid-gts-soap-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>cagrid-metadata-model</artifactId>
@@ -315,63 +334,74 @@
 				<version>${jaxb2.basics.version}</version>
 			</dependency>
 
-            <!-- Hibernate libraries start here
-                Be careful with changing versions here, you need to know what you are doing, Hibernate has tight
-                dependencies on specific third party versions
-            -->
-            <dependency>
-                <groupId>javax.persistence</groupId>
-                <artifactId>com.springsource.javax.persistence</artifactId>
-                <version>1.99.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>com.springsource.org.hibernate</artifactId>
-                <version>3.3.1.GA</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>com.springsource.slf4j.api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>com.springsource.org.hibernate.annotations</artifactId>
-                <version>3.4.0.GA</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>com.springsource.slf4j.api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>com.springsource.org.hibernate.annotations.common</artifactId>
-                <version>3.3.0.ga</version>
-            </dependency>
-            <dependency>
-                <groupId>org.antlr</groupId>
-                <artifactId>com.springsource.antlr</artifactId>
-                <version>2.7.6</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.javassist</groupId>
-                <artifactId>com.springsource.javassist</artifactId>
-                <version>3.3.0.ga</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jgroups</groupId>
-                <artifactId>com.springsource.org.jgroups</artifactId>
-                <version>2.5.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>org.springframework.orm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <!-- end of hibernate libraries -->
+			<dependency>
+				<groupId>org.jvnet.jaxb2_commons</groupId>
+				<artifactId>jaxb2-basics</artifactId>
+				<version>${jaxb2.basics.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.jvnet.jaxb2_commons</groupId>
+				<artifactId>annotate</artifactId>
+				<version>0.4.1.5</version>
+			</dependency>
+
+			<!-- Hibernate libraries start here Be careful with changing versions 
+				here, you need to know what you are doing, Hibernate has tight dependencies 
+				on specific third party versions -->
+			<dependency>
+				<groupId>javax.persistence</groupId>
+				<artifactId>com.springsource.javax.persistence</artifactId>
+				<version>1.99.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>com.springsource.org.hibernate</artifactId>
+				<version>3.3.1.GA</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>com.springsource.slf4j.api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>com.springsource.org.hibernate.annotations</artifactId>
+				<version>3.4.0.GA</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>com.springsource.slf4j.api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>com.springsource.org.hibernate.annotations.common</artifactId>
+				<version>3.3.0.ga</version>
+			</dependency>
+			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>com.springsource.antlr</artifactId>
+				<version>2.7.6</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.javassist</groupId>
+				<artifactId>com.springsource.javassist</artifactId>
+				<version>3.3.0.ga</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jgroups</groupId>
+				<artifactId>com.springsource.org.jgroups</artifactId>
+				<version>2.5.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>org.springframework.orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<!-- end of hibernate libraries -->
 
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -379,6 +409,14 @@
 				<version>${slf4j.version}</version>
 				<scope>test</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>com.springsource.slf4j.log4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -453,7 +491,7 @@
 		<module>cagrid-cds</module>
 		<module>cagrid-gts</module>
 		<module>cagrid-gridgrouper</module>
-        <module>cagrid-gme</module>
+		<module>cagrid-gme</module>
 		<!-- TODO: MOVE THIS <module>puretls</module> -->
 		<module>cagrid-service-registration</module>
 		<module>cagrid-systest</module>

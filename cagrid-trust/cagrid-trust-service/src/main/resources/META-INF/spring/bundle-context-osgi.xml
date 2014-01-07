@@ -13,10 +13,35 @@
 		<prop key="cagrid.trust.service.certificates.directory">${karaf.base}/etc/cagrid-trust/certificates</prop>
 		<prop key="cagrid.trust.service.truststore.file">${karaf.base}/etc/cagrid-trust/truststore.jks</prop>
 		<prop key="cagrid.trust.service.truststore.password">changeit</prop>
+		<prop key="cagrid.trust.service.sync.start.delay">30000</prop>
+		<prop key="cagrid.trust.service.sync.repeat.interval">300000</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
 	<osgi:service ref="trustService" interface="org.cagrid.trust.service.TrustService" />
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="scheduledSync" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="scheduledSync" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="startDelay" value="${cagrid.trust.service.sync.start.delay}" />
+		<property name="repeatInterval" value="${cagrid.trust.service.sync.repeat.interval}" />
+		<property name="jobDetail" ref="timedSync" />
+	</bean>
+
+	<bean id="timedSync"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="trustService" />
+		<property name="targetMethod" value="syncWithTrustFabric" />
+		<property name="concurrent" value="false" />
+		<property name="name" value="SyncWithTrustFabric" />
+	</bean>
 
 </beans>

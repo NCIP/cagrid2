@@ -7,6 +7,8 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 
 	private Synchronizer synchronizer;
 
+	private Object syncMutex = new Object();
+
 	private Logger log;
 
 	public TrustService() {
@@ -21,4 +23,10 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 		this.synchronizer = synchronizer;
 	}
 
+	public void syncWithTrustFabric() {
+		synchronized (syncMutex) {
+			long start = System.currentTimeMillis();
+
+		}
+	}
 }
