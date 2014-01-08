@@ -1,8 +1,6 @@
 package org.cagrid.mms.servicemetadata;
 
-import gov.nih.nci.cagrid.core.SchemaValidationTestCase;
 
-import java.io.File;
 
 
 /**
