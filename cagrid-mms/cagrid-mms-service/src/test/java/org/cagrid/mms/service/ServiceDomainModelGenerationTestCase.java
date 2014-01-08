@@ -1,18 +1,14 @@
 package org.cagrid.mms.service;
 
-import gov.nih.nci.cagrid.metadata.MetadataConstants;
-import gov.nih.nci.cagrid.metadata.MetadataUtils;
 import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
-import gov.nih.nci.cagrid.metadata.common.UmlAttributeCollection;
+import gov.nih.nci.cagrid.metadata.common.UMLClass.UmlAttributeCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-import gov.nih.nci.cagrid.metadata.dataservice.ExposedUMLClassCollection;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel.ExposedUMLClassCollection;
 import gov.nih.nci.cagrid.metadata.dataservice.ObjectFactory;
 import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
