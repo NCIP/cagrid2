@@ -27,12 +27,7 @@
 						<Export-Package />
 						<Private-Package>
 							org.cagrid.mms.service.impl,
-							org.cagrid.mms.service.impl.common,
-							org.cagrid.mms.service.impl.common.exceptions,
-							org.cagrid.mms.service.impl.dao,
-							org.cagrid.mms.service.impl.domain,
-							org.cagrid.mms.service.impl.persistence,
-							org.cagrid.mms.service.impl.sax
+							org.cagrid.mms.service.impl.cadsr
 						</Private-Package>
 						<Import-Package>
 							<!-- org.apache.cxf.jaxws.spi, * -->

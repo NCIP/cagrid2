@@ -1,4 +1,4 @@
-package org.cagrid.gme.test.utils;
+package org.cagrid.mms.test.utils;
 
 import org.apache.commons.io.IOUtils;
 import org.cagrid.gme.model.XMLSchema;
@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GMETestUtils {
+public class MMSTestUtils {
     public static final String SERVICEMETADATA = "etc/cagrid-gme/serviceMetadata.xml";
     public static final String SERVICESECURITYMETADATA = "etc/cagrid-gme/serviceSecurityMetadata.xml";
 

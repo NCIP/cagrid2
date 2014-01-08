@@ -127,5 +127,7 @@
 		<module>cagrid-mms-api</module>
 		<module>cagrid-mms-service</module>
 		<module>cagrid-mms-wsrf</module>
+	<!--	<module>cagrid-mms-systest</module> -->
+		<module>cagrid-mms-soap-client</module>
 	</modules>
 </project>

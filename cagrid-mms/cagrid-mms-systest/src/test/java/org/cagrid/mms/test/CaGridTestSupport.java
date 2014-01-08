@@ -1,4 +1,4 @@
-package org.cagrid.gme.test;
+package org.cagrid.mms.test;
 
 import org.apache.felix.service.command.CommandProcessor;
 import org.apache.felix.service.command.CommandSession;

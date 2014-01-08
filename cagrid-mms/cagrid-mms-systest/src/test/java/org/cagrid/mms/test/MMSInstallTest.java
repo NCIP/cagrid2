@@ -1,11 +1,17 @@
-package org.cagrid.gme.test;
+package org.cagrid.mms.test;
 
+import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.ops4j.pax.exam.CoreOptions.maven;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
+
+import java.io.File;
+
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
-import org.cagrid.gme.service.GlobalModelExchangeService;
-import org.cagrid.gme.test.utils.GMETestUtils;
+import org.cagrid.mms.service.MetadataModelService;
+import org.cagrid.mms.test.utils.MMSTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,22 +21,16 @@ import org.ops4j.pax.exam.junit.ExamReactorStrategy;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
 
-import java.io.File;
-
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.ops4j.pax.exam.CoreOptions.maven;
-
 @RunWith(JUnit4TestRunner.class)
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
-public class GMEInstallTest extends CaGridTestSupport {
+public class MMSInstallTest extends CaGridTestSupport {
 
     @Override
     @Configuration
     public Option[] config() {
         Option[] options = new Option[] {
-                new KarafDistributionConfigurationFileReplacementOption(GMETestUtils.SERVICEMETADATA, new File("src/test/resources/serviceMetadata.xml")),
-                new KarafDistributionConfigurationFileReplacementOption(GMETestUtils.SERVICESECURITYMETADATA, new File("src/test/resources/serviceSecurityMetadata.xml")),
+                new KarafDistributionConfigurationFileReplacementOption(MMSTestUtils.SERVICEMETADATA, new File("src/test/resources/serviceMetadata.xml")),
+                new KarafDistributionConfigurationFileReplacementOption(MMSTestUtils.SERVICESECURITYMETADATA, new File("src/test/resources/serviceSecurityMetadata.xml")),
 
                 // Had to install the hibernate stuff at boot
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresRepositories", "," + maven().groupId("org.cagrid").artifactId("cagrid-features").versionAsInProject().classifier("features").type("xml").getURL()),
@@ -40,22 +40,21 @@ public class GMEInstallTest extends CaGridTestSupport {
     }
 
     @Test
-    public void testInstallGME() throws Exception {
-        // Install GME feature here
-        installAndAssertFeature("cagrid-gme", 30000L);
+    public void testInstallMMS() throws Exception {
+        installAndAssertFeature("cagrid-mms", 30000L);
         System.err.println(executeCommand("features:list"));
-        assertBundleInstalled("cagrid-gme-api");
-        assertBundleInstalled("cagrid-gme-service");
-        assertBundleInstalled("cagrid-gme-wsrf");
+        assertBundleInstalled("cagrid-mms-api");
+        assertBundleInstalled("cagrid-mms-service");
+        assertBundleInstalled("cagrid-mms-wsrf");
 
-        GlobalModelExchangeService gmeService = getOsgiService(GlobalModelExchangeService.class, 30000L);
-        assertNotNull(gmeService);
+        MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
+        assertNotNull(mmsService);
 
         // grab its metadata
-        ServiceMetadata metadata = gmeService.getServiceMetadata();
+        ServiceMetadata metadata = mmsService.getServiceMetadata();
         Assert.assertNotNull(metadata);
-        assertEquals("Service metadata name was not as expected.", "GlobalModelExchange", metadata.getServiceDescription().getService().getName());
-        ServiceSecurityMetadata securityMetadata = gmeService.getServiceSecurityMetadata();
+        assertEquals("Service metadata name was not as expected.", "MetadataModelService", metadata.getServiceDescription().getService().getName());
+        ServiceSecurityMetadata securityMetadata = mmsService.getServiceSecurityMetadata();
         Assert.assertNotNull(securityMetadata);
     }
 }

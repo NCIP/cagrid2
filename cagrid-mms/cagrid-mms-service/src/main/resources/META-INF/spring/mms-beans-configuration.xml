@@ -16,8 +16,8 @@
 	<bean id="jaxbResourceProperties" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
-				<entry key="serviceMetadata" value="${cagrid.gme.service.metadata.url}" />
-				<entry key="serviceSecurityMetadata" value="${cagrid.gme.service.security.metadata.url}" />
+				<entry key="serviceMetadata" value="${cagrid.mms.service.metadata.url}" />
+				<entry key="serviceSecurityMetadata" value="${cagrid.mms.service.security.metadata.url}" />
 			</map>
 		</constructor-arg>
 	</bean>
