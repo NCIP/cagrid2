@@ -67,12 +67,6 @@
 			<classifier>features</classifier>
 			<type>xml</type>
 		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>cagrid-trust-api</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cagrid-proxy-trust</artifactId>

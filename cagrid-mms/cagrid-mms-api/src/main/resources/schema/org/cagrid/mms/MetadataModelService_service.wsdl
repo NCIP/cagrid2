@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="MetadataModelService" targetNamespace="http://mms.cagrid.org/MetadataModelService/service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:binding="http://mms.cagrid.org/MetadataModelService/bindings" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
-  <wsdl:import namespace="http://mms.cagrid.org/MetadataModelService/bindings" location="MetadataModelService_bindings.wsdl"/>
-  <wsdl:service name="MetadataModelService">
-    <wsdl:port name="MetadataModelServicePortTypePort" binding="binding:MetadataModelServicePortTypeSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>
