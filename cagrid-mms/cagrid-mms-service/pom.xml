@@ -29,10 +29,9 @@
                             org.cagrid.mms.service.impl.cadsr
                         </Private-Package>
                         <Import-Package>
-                            <!-- org.apache.cxf.jaxws.spi, * -->
+                            net.sf.cglib.proxy
                         </Import-Package>
                         <Embed-Dependency>
-                            sdk-client-framework
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

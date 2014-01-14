@@ -52,7 +52,7 @@ public class MMSFunctionalTest extends CaGridTestSupport {
     @Configuration
     public Option[] config() {
         Option[] options = new Option[] {
-                // Install GME feature
+                // Install MMS feature
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresRepositories", "," + maven().groupId("org.cagrid").artifactId("cagrid-features").versionAsInProject().classifier("features").type("xml").getURL()),
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",cagrid-mms"),
 
