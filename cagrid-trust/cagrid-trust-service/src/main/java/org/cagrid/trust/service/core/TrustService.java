@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.cagrid.core.xml.XMLUtils;
 import org.cagrid.trust.model.SyncDescription;
-import org.cagrid.trust.model.SyncReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,8 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 	private Synchronizer synchronizer;
 
 	private String syncDescription;
+
+	private TrustServiceTrustManager trustManager;
 
 	private Object syncMutex = new Object();
 
@@ -38,6 +39,14 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 		this.syncDescription = syncDescription;
 	}
 
+	public TrustServiceTrustManager getTrustManager() {
+		return trustManager;
+	}
+
+	public void setTrustManager(TrustServiceTrustManager trustManager) {
+		this.trustManager = trustManager;
+	}
+
 	public void syncWithTrustFabric() {
 		long start = System.currentTimeMillis();
 		log.info("Syncing with the trust fabric.....");
@@ -47,11 +56,16 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 				if (getSyncDescription() != null) {
 					syncDescriptionFile = new File(getSyncDescription());
 					SyncDescription des = (SyncDescription) XMLUtils.fromXMLFile(SyncDescription.class, syncDescriptionFile);
-					SyncReport report = getSynchronizer().sync(des);
+					getSynchronizer().sync(des);
 				} else {
 					log.warn("Cannot sync with the trust fabric, no sync description file configured");
 				}
 
+				if (getTrustManager() != null) {
+					getTrustManager().reloadTrustManager();
+				} else {
+					log.warn("No trust manager configured for the trust service");
+				}
 			}
 		} else {
 			log.warn("No synchronizer configured for the trust service.");

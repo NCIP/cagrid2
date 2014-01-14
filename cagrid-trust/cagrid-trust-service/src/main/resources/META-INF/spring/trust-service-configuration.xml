@@ -6,6 +6,7 @@
 	<bean id="trustService" class="org.cagrid.trust.service.core.TrustService">
 		<property name="synchronizer" ref="synchronizer" />
 		<property name="syncDescription" value="${cagrid.trust.service.sync.description.file}" />
+		<property name="trustManager" ref="trustManager" />
 	</bean>
 
 	<bean id="synchronizer" class="org.cagrid.trust.service.core.SyncGTS">
@@ -13,6 +14,11 @@
 		<property name="truststore" ref="truststore" />
 		<property name="trustedCertificatesDirectory"
 			value="${cagrid.trust.service.certificates.directory}" />
+	</bean>
+	
+	
+	<bean id="trustManager" class="org.cagrid.trust.service.core.TrustServiceTrustManager">
+		<constructor-arg index="0" value="${cagrid.trust.service.certificates.directory}"/>
 	</bean>
 
 	<bean id="historyManager" class="org.cagrid.trust.service.core.DefaultHistoryManager">
