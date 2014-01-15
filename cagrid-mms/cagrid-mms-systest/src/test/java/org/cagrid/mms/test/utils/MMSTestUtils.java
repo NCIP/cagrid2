@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Set;
 
 public class MMSTestUtils {
-    public static final String SERVICEMETADATA = "etc/cagrid-gme/serviceMetadata.xml";
-    public static final String SERVICESECURITYMETADATA = "etc/cagrid-gme/serviceSecurityMetadata.xml";
+    public static final String SERVICEMETADATA = "etc/cagrid-mms/serviceMetadata.xml";
+    public static final String SERVICESECURITYMETADATA = "etc/cagrid-mms/serviceSecurityMetadata.xml";
 
     public static XMLSchema createSchema(URI namespace, File schemaFile) throws IOException {
         List<File> list = new ArrayList<File>();

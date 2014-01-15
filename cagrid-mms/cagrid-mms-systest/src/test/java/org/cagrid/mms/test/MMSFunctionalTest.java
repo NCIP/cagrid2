@@ -77,7 +77,7 @@ public class MMSFunctionalTest extends CaGridTestSupport {
     }
 
     @Test
-    public void testFunctionalGME() {
+    public void testFunctionalMMS() {
         try {
             System.err.println(executeCommand("features:list"));
             assertBundleInstalled("cagrid-mms-api");
@@ -87,21 +87,12 @@ public class MMSFunctionalTest extends CaGridTestSupport {
             MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
             assertNotNull(mmsService);
 
-            // get gme soap client
+            // get mms soap client
             MetadataModelServicePortType mms = getMMSSoapClient();
             assertNotNull(mms);
-//
-//            // publish schemas
-//            //publishXMLSchemas(gme);
-//
-//            // get schemas
-//            List<XMLSchemaNamespace> schemas = getXMLSchemaNamespaces(gme);
-//            assertEquals(3, schemas.size());
-//
-//            // publish bad schemas test
-//            publishBadXMLSchemas(gme);
-//            
-//            getXMLSchema(gme);
+            
+            //make sure we can generate domain models and annotate metadata
+
             
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));

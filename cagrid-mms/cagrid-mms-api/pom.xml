@@ -217,9 +217,7 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>
 							schema.org.cagrid.mms,
-							org.cagrid.mms,
                             org.cagrid.mms.service,
-                            org.cagrid.mms.service.exception,
                             org.cagrid.mms.model,
                             org.cagrid.mms.types,
                             org.cagrid.mms.wsrf.service,
