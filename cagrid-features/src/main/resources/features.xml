@@ -177,8 +177,9 @@
         <configfile finalname="/etc/cagrid-mms/registration.xml">mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-gaards</feature>
+       <!--  <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.1_3_7</bundle>
+        <bundle>wrap:mvn:gov.nih.nci.caintegrator2/caDSR-beans/4.0</bundle> -->
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.1_3_7</bundle>
-        <bundle>wrap:mvn:gov.nih.nci.caintegrator2/caDSR-beans/4.0</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}</bundle>

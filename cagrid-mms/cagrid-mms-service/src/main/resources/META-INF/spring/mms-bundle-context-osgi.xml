@@ -15,6 +15,6 @@
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
-	<osgi:service ref="mmsService" interface="org.cagrid.mms.service.MetadataModelService" context-class-loader="service-provider"/>
+	<osgi:service ref="mmsService" interface="org.cagrid.mms.service.MetadataModelService"/>
 
 </beans>

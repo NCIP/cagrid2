@@ -2,7 +2,6 @@ package org.cagrid.mms.servicemetadata;
 
 
 
-
 /**
  * @author oster
  */
