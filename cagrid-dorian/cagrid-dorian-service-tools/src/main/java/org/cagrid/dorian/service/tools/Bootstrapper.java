@@ -1,7 +1,10 @@
 package org.cagrid.dorian.service.tools;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.KeyStore;
 import java.security.PrivateKey;
@@ -10,8 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.swing.plaf.basic.BasicScrollPaneUI.HSBChangeListener;
-
+import org.apache.commons.lang.StringUtils;
 import org.cagrid.core.commandline.BaseCommandLine;
 import org.cagrid.dorian.model.federation.HostCertificateRecord;
 import org.cagrid.dorian.model.federation.HostCertificateRequest;
@@ -28,6 +30,7 @@ import org.cagrid.gaards.pki.KeyUtil;
 
 public class Bootstrapper extends BaseCommandLine {
 
+	public static final String DORIAN_PROPERTIES_FILE = "src/main/resources/dorian.properties";
 	public static final String PROPERTIES_FILE = "src/main/resources/bootstrapper.properties";
 	private static final String DORIAN_SERVICE_DIR = "cagrid-dorian";
 	private static final String DORIAN_SERVICE_CFG = "cagrid.dorian.service.cfg";
@@ -36,7 +39,7 @@ public class Bootstrapper extends BaseCommandLine {
 	public static final String TRUST_CA_SHA1_PROPERTY = "cagrid.dorian.trust.ca.sha1.cert.location";
 	public static final String TRUST_CA_SHA2_PROMPT = "Please enter the location of the SHA2 trust fabric CA certificate";
 	public static final String TRUST_CA_SHA2_PROPERTY = "cagrid.dorian.trust.ca.sha2.cert.location";
-	
+
 	public static final String DORIAN_CA_PASSWORD_PROPERTY = "cagrid.dorian.service.ca.password";
 	public static final String DORIAN_LEGACY_CA_PASSWORD_PROPERTY = "cagrid.dorian.service.legacy-ca.password";
 
@@ -127,6 +130,8 @@ public class Bootstrapper extends BaseCommandLine {
 	public static final String WSRF_REGISTRATION_URL_PROMPT = "Please specify the URL of the index service";
 	public static final String WSRF_REGISTRATION_URL_PROPERTY = "cagrid.dorian.wsrf.registration.index.url";
 
+	private Properties serviceProperties;
+
 	private String adminIdentity;
 	private String keystorePassword;
 	private String hostname;
@@ -161,18 +166,28 @@ public class Bootstrapper extends BaseCommandLine {
 		CertificateAuthorityProperties caProperties = utils.getCertificateAuthorityProperties();
 		// TODO: If the database properties get injected correctly we can reuse
 		// them instead of prompting for them.
-		dorianProperties.setProperty(DORIAN_DB_NAME_PROPERTY, getValue(DORIAN_DB_NAME_PROMPT, DORIAN_DB_NAME_PROPERTY));
-		dorianProperties.setProperty(DORIAN_DB_USER_PROPERTY, getValue(DORIAN_DB_USER_PROMPT, DORIAN_DB_USER_PROPERTY));
-		dorianProperties.setProperty(DORIAN_DB_PASSWORD_PROPERTY, getValue(DORIAN_DB_PASSWORD_PROMPT, DORIAN_DB_PASSWORD_PROPERTY));
-		dorianProperties.setProperty(DORIAN_DB_HOST_PROPERTY, getValue(DORIAN_DB_HOST_PROMPT, DORIAN_DB_HOST_PROPERTY));
-		dorianProperties.setProperty(DORIAN_DB_PORT_PROPERTY, getValue(DORIAN_DB_PORT_PROMPT, DORIAN_DB_PORT_PROPERTY));
+		dorianProperties.setProperty(DORIAN_DB_NAME_PROPERTY, getServicePropertyValue(DORIAN_DB_NAME_PROMPT, DORIAN_DB_NAME_PROPERTY));
+		dorianProperties.setProperty(DORIAN_DB_USER_PROPERTY, getServicePropertyValue(DORIAN_DB_USER_PROMPT, DORIAN_DB_USER_PROPERTY));
+
+		String pass = getServicePropertyValue(DORIAN_DB_PASSWORD_PROMPT, DORIAN_DB_PASSWORD_PROPERTY);
+		if (pass == null) {
+			pass = "";
+		}
+
+		dorianProperties.setProperty(DORIAN_DB_PASSWORD_PROPERTY, pass);
+		dorianProperties.setProperty(DORIAN_DB_HOST_PROPERTY, getServicePropertyValue(DORIAN_DB_HOST_PROMPT, DORIAN_DB_HOST_PROPERTY));
+		dorianProperties.setProperty(DORIAN_DB_PORT_PROPERTY, getServicePropertyValue(DORIAN_DB_PORT_PROMPT, DORIAN_DB_PORT_PROPERTY));
 		dorianProperties.setProperty(DORIAN_CLIENT_TRUSTSTORE_FILE_PROPERTY, WSRF_TRUSTSTORE_PATH);
 		dorianProperties.setProperty(DORIAN_CLIENT_TRUSTSTORE_PASSWORD_PROPERTY, getTruststorePassword());
 		dorianProperties.setProperty(DORIAN_CLIENT_KEYSTORE_FILE_PROPERTY, WSRF_KEYSTORE_PATH);
 		dorianProperties.setProperty(DORIAN_CLIENT_KEYSTORE_PASSWORD_PROPERTY, getKeystorePassword());
 		dorianProperties.setProperty(DORIAN_CLIENT_KEY_ALIAS_PROPERTY, getKeystoreAlias());
 		dorianProperties.setProperty(DORIAN_CLIENT_KEY_PASSWORD_PROPERTY, getKeyPassword());
-		dorianProperties.setProperty(DORIAN_CRL_PUBLISH_PROPERTY, getValue(DORIAN_CRL_PUBLISH_PROMPT, DORIAN_CRL_PUBLISH_PROPERTY));
+		String crl = getValue(DORIAN_CRL_PUBLISH_PROMPT, DORIAN_CRL_PUBLISH_PROPERTY);
+		if(crl==null){
+			crl="";
+		}
+		dorianProperties.setProperty(DORIAN_CRL_PUBLISH_PROPERTY, crl);
 		dorianProperties.setProperty(DORIAN_CA_SUBJECT_PROPERTY, caProperties.getCreationPolicy().getSubject());
 		dorianProperties.setProperty(DORIAN_CA_PASSWORD_PROPERTY, caProperties.getCertificateAuthorityPassword());
 		dorianProperties.setProperty(LEGACY_DORIAN_CA_SUBJECT_PROPERTY, legacyCAProperties.getCreationPolicy().getSubject());
@@ -335,8 +350,8 @@ public class Bootstrapper extends BaseCommandLine {
 		} else {
 			dorianWSRFProperties.setProperty(LEGACY_WSRF_REGISTRATION_ENABLED_PROPERTY, "false");
 		}
-		
-		if(enableRegistration || enableLegacyRegistration){
+
+		if (enableRegistration || enableLegacyRegistration) {
 			dorianWSRFProperties.setProperty(WSRF_REGISTRATION_URL_PROPERTY, getValue(WSRF_REGISTRATION_URL_PROMPT, WSRF_REGISTRATION_URL_PROPERTY));
 		}
 
@@ -356,10 +371,17 @@ public class Bootstrapper extends BaseCommandLine {
 
 			keyStore.load(null);
 
-			X509Certificate sha1TrustCA = CertUtil.loadCertificate(new File(getValue(TRUST_CA_SHA1_PROMPT, TRUST_CA_SHA1_PROPERTY)));
-			keyStore.setEntry("trustca1", new KeyStore.TrustedCertificateEntry(sha1TrustCA), null);
-			X509Certificate sha2TrustCA = CertUtil.loadCertificate(new File(getValue(TRUST_CA_SHA2_PROMPT, TRUST_CA_SHA2_PROPERTY)));
-			keyStore.setEntry("trustca2", new KeyStore.TrustedCertificateEntry(sha2TrustCA), null);
+			String sha1 = getValue(TRUST_CA_SHA1_PROMPT, TRUST_CA_SHA1_PROPERTY);
+			if (!StringUtils.isBlank(sha1)) {
+				X509Certificate sha1TrustCA = CertUtil.loadCertificate(new File(sha1));
+				keyStore.setEntry("trustca1", new KeyStore.TrustedCertificateEntry(sha1TrustCA), null);
+			}
+
+			String sha2 = getValue(TRUST_CA_SHA2_PROMPT, TRUST_CA_SHA2_PROPERTY);
+			if (!StringUtils.isBlank(sha2)) {
+				X509Certificate sha2TrustCA = CertUtil.loadCertificate(new File(sha2));
+				keyStore.setEntry("trustca2", new KeyStore.TrustedCertificateEntry(sha2TrustCA), null);
+			}
 			int count = 1;
 			for (CertificateAuthority ca : list) {
 				X509Certificate cert = ca.getCACertificate();
@@ -423,6 +445,42 @@ public class Bootstrapper extends BaseCommandLine {
 		hks.store(out, keystorePassword.toCharArray());
 		out.close();
 		System.out.println("Keystore created for " + hostCertificate.getSubjectDN() + " at " + hostPath);
+	}
+
+	public String getServicePropertyValue(String prompt, String property) {
+		String val = getSeviceProperties().getProperty(property);
+		if (val == null) {
+			val = getValue(prompt, property);
+		}
+		return val;
+	}
+
+	public Properties getSeviceProperties() {
+		if (serviceProperties == null) {
+			serviceProperties = new Properties();
+			InputStream input = null;
+
+			try {
+
+				input = new FileInputStream(DORIAN_PROPERTIES_FILE);
+
+				// load a properties file
+				serviceProperties.load(input);
+
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			} finally {
+				if (input != null) {
+					try {
+						input.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+		return serviceProperties;
 	}
 
 	/**
