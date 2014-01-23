@@ -40,7 +40,8 @@ public class CreateHostCertificate {
 			String cert = org.cagrid.core.commandline.IOUtils.readLine("Please enter the location of the CA's certificate", true);
 			String key = org.cagrid.core.commandline.IOUtils.readLine("Please enter the location of the CA's private key", true);
 			String cn = org.cagrid.core.commandline.IOUtils.readLine("Please enter the hostname of the host you are requesting a certificate for", true);
-
+			String syears = org.cagrid.core.commandline.IOUtils.readLine("Please enter the number of years the host certificate will be valid for", true);
+			int years = Integer.valueOf(syears);
 			PrivateKey cakey = KeyUtil.loadPrivateKey(new File(key), null);
 			X509Certificate cacert = CertUtil.loadCertificate("BC", new File(cert));
 
@@ -49,11 +50,9 @@ public class CreateHostCertificate {
 			int index = rootSub.lastIndexOf(",");
 			String subject = rootSub.substring(0, index) + ",CN=" + cn;
 			GregorianCalendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-			/* Allow for a five minute clock skew here. */
-			date.add(Calendar.MINUTE, -5);
 			Date start = new Date(date.getTimeInMillis());
 			Date end = null;
-			date.add(Calendar.YEAR, 10);
+			date.add(Calendar.YEAR, years);
 			Date d = new Date(date.getTimeInMillis());
 			if (cacert.getNotAfter().before(d)) {
 				throw new GeneralSecurityException("Cannot create a certificate that expires after issuing certificate.");
