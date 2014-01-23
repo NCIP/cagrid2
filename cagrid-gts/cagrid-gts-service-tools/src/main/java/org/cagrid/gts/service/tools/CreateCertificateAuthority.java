@@ -1,28 +1,18 @@
 package org.cagrid.gts.service.tools;
 
 import java.io.File;
-import java.security.GeneralSecurityException;
+import java.io.FileOutputStream;
 import java.security.KeyPair;
-import java.security.PrivateKey;
+import java.security.KeyStore;
 import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
 import org.bouncycastle.asn1.x509.X509Name;
-import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
-
-import com.ibm.wsdl.util.IOUtils;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -63,6 +53,20 @@ public class CreateCertificateAuthority {
 			CertUtil.writeCertificate(caCert, new File(certOut));
 			System.out.println("CA certificate written to:");
 			System.out.println(certOut);
+			String truststorePath = org.cagrid.core.commandline.IOUtils.readLine("Please enter a location/filename to write the truststore to", true);
+			String truststorePassword = org.cagrid.core.commandline.IOUtils.readLine("Please enter a password for the truststore", true);
+			File f = new File(truststorePath);
+
+			KeyStore keyStore = KeyStore.getInstance("jks");
+
+			keyStore.load(null);
+			keyStore.setEntry("trustedca", new KeyStore.TrustedCertificateEntry(caCert), null);
+
+			FileOutputStream fos = new FileOutputStream(f);
+			keyStore.store(fos, truststorePassword.toCharArray());
+			fos.close();
+
+			System.out.println("Truststore created for the CA " + caCert.getSubjectDN().getName() + " at " + f.getAbsolutePath());
 
 		} catch (Exception e) {
 			e.printStackTrace();
