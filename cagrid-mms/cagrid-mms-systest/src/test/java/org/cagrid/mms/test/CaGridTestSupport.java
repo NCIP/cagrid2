@@ -204,8 +204,7 @@ public abstract class CaGridTestSupport {
             tracker.open(true);
             // Note that the tracker is not closed to keep the reference
             // This is buggy, as the service reference may change i think
-            Object tsvc = tracker.waitForService(timeout);
-            Object svc = type.cast(tsvc);
+            Object svc = type.cast(tracker.waitForService(timeout));
             if (svc == null) {
                 Dictionary dic = bundleContext.getBundle().getHeaders();
                 System.err.println("Test bundle headers: " + explode(dic));

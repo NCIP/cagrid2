@@ -46,6 +46,8 @@ public class MMSInstallTest extends CaGridTestSupport {
         assertBundleInstalled("cagrid-mms-api");
         assertBundleInstalled("cagrid-mms-service");
         assertBundleInstalled("cagrid-mms-wsrf");
+        //System.out.println(executeCommand("log:display"));
+        //System.out.println(executeCommand("package:export | grep com.nanthealth.mms"));
 
         MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
         assertNotNull(mmsService);

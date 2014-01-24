@@ -50,11 +50,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cagrid-mms-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.cagrid.wsrf</groupId>
             <artifactId>wsrf-draft-features</artifactId>
             <classifier>features</classifier>
