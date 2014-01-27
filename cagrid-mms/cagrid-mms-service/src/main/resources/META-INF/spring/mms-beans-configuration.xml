@@ -36,6 +36,9 @@
 				<entry key="caDSR Production" value="http://cadsrapi.nci.nih.gov/cadsrapi40/" />
 			</map>
 		</constructor-arg>
+		<constructor-arg>
+			<value>${cagrid.mms.service.application.config.client.url}</value>
+		</constructor-arg>
 	</bean>
 
 
@@ -44,7 +47,7 @@
 	<bean id="metadata" class="org.cagrid.mms.service.impl.cadsr.CaDSRModelSourceMetadata">
 	</bean>
 
-	<bean id="mmsService" class="org.cagrid.mms.service.impl.MetadataModelServiceImpl">
+	<bean id="mmsService" class="org.cagrid.mms.service.impl.MetadataModelServiceImpl" init-method="initialize">
 		<constructor-arg ref="mms" />
 		<constructor-arg ref="jaxbResourceProperties" />
 	</bean>

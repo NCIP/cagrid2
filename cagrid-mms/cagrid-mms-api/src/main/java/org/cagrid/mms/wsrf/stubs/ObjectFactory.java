@@ -30,67 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AnnotateServiceMetadataRequest.NamespaceToProjectMappings }
+     * Create an instance of {@link AnnotateServiceMetadataRequest }
      * 
      */
-    public AnnotateServiceMetadataRequest.NamespaceToProjectMappings createAnnotateServiceMetadataRequestNamespaceToProjectMappings() {
-        return new AnnotateServiceMetadataRequest.NamespaceToProjectMappings();
-    }
-
-    /**
-     * Create an instance of {@link AnnotateServiceMetadataRequest.ServiceMetadata }
-     * 
-     */
-    public AnnotateServiceMetadataRequest.ServiceMetadata createAnnotateServiceMetadataRequestServiceMetadata() {
-        return new AnnotateServiceMetadataRequest.ServiceMetadata();
-    }
-
-    /**
-     * Create an instance of {@link GenerateDomainModelForClassesWithExcludesRequest.UmlAssociationExclude }
-     * 
-     */
-    public GenerateDomainModelForClassesWithExcludesRequest.UmlAssociationExclude createGenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude() {
-        return new GenerateDomainModelForClassesWithExcludesRequest.UmlAssociationExclude();
-    }
-
-    /**
-     * Create an instance of {@link GetModelSourceMetadataRequest }
-     * 
-     */
-    public GetModelSourceMetadataRequest createGetModelSourceMetadataRequest() {
-        return new GetModelSourceMetadataRequest();
-    }
-
-    /**
-     * Create an instance of {@link GenerateDomainModelForClassesWithExcludesRequest }
-     * 
-     */
-    public GenerateDomainModelForClassesWithExcludesRequest createGenerateDomainModelForClassesWithExcludesRequest() {
-        return new GenerateDomainModelForClassesWithExcludesRequest();
-    }
-
-    /**
-     * Create an instance of {@link GenerateDomainModelForProjectRequest }
-     * 
-     */
-    public GenerateDomainModelForProjectRequest createGenerateDomainModelForProjectRequest() {
-        return new GenerateDomainModelForProjectRequest();
-    }
-
-    /**
-     * Create an instance of {@link AnnotateServiceMetadataResponse }
-     * 
-     */
-    public AnnotateServiceMetadataResponse createAnnotateServiceMetadataResponse() {
-        return new AnnotateServiceMetadataResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetModelSourceMetadataResponse }
-     * 
-     */
-    public GetModelSourceMetadataResponse createGetModelSourceMetadataResponse() {
-        return new GetModelSourceMetadataResponse();
+    public AnnotateServiceMetadataRequest createAnnotateServiceMetadataRequest() {
+        return new AnnotateServiceMetadataRequest();
     }
 
     /**
@@ -102,6 +46,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GenerateDomainModelForProjectRequest }
+     * 
+     */
+    public GenerateDomainModelForProjectRequest createGenerateDomainModelForProjectRequest() {
+        return new GenerateDomainModelForProjectRequest();
+    }
+
+    /**
      * Create an instance of {@link GenerateDomainModelForPackagesRequest }
      * 
      */
@@ -110,11 +62,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AnnotateServiceMetadataRequest }
+     * Create an instance of {@link GenerateDomainModelForClassesWithExcludesRequest }
      * 
      */
-    public AnnotateServiceMetadataRequest createAnnotateServiceMetadataRequest() {
-        return new AnnotateServiceMetadataRequest();
+    public GenerateDomainModelForClassesWithExcludesRequest createGenerateDomainModelForClassesWithExcludesRequest() {
+        return new GenerateDomainModelForClassesWithExcludesRequest();
+    }
+
+    /**
+     * Create an instance of {@link AnnotateServiceMetadataRequest.ServiceMetadata }
+     * 
+     */
+    public AnnotateServiceMetadataRequest.ServiceMetadata createAnnotateServiceMetadataRequestServiceMetadata() {
+        return new AnnotateServiceMetadataRequest.ServiceMetadata();
+    }
+
+    /**
+     * Create an instance of {@link AnnotateServiceMetadataRequest.NamespaceToProjectMappings }
+     * 
+     */
+    public AnnotateServiceMetadataRequest.NamespaceToProjectMappings createAnnotateServiceMetadataRequestNamespaceToProjectMappings() {
+        return new AnnotateServiceMetadataRequest.NamespaceToProjectMappings();
     }
 
     /**
@@ -123,22 +91,6 @@ public class ObjectFactory {
      */
     public GenerateDomainModelForClassesRequest.UmlProjectIdentifer createGenerateDomainModelForClassesRequestUmlProjectIdentifer() {
         return new GenerateDomainModelForClassesRequest.UmlProjectIdentifer();
-    }
-
-    /**
-     * Create an instance of {@link GenerateDomainModelForPackagesResponse }
-     * 
-     */
-    public GenerateDomainModelForPackagesResponse createGenerateDomainModelForPackagesResponse() {
-        return new GenerateDomainModelForPackagesResponse();
-    }
-
-    /**
-     * Create an instance of {@link GenerateDomainModelForClassesWithExcludesResponse }
-     * 
-     */
-    public GenerateDomainModelForClassesWithExcludesResponse createGenerateDomainModelForClassesWithExcludesResponse() {
-        return new GenerateDomainModelForClassesWithExcludesResponse();
     }
 
     /**
@@ -158,11 +110,43 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GenerateDomainModelForPackagesRequest.UmlProjectIdentifer }
+     * 
+     */
+    public GenerateDomainModelForPackagesRequest.UmlProjectIdentifer createGenerateDomainModelForPackagesRequestUmlProjectIdentifer() {
+        return new GenerateDomainModelForPackagesRequest.UmlProjectIdentifer();
+    }
+
+    /**
+     * Create an instance of {@link GetModelSourceMetadataResponse }
+     * 
+     */
+    public GetModelSourceMetadataResponse createGetModelSourceMetadataResponse() {
+        return new GetModelSourceMetadataResponse();
+    }
+
+    /**
+     * Create an instance of {@link GenerateDomainModelForClassesResponse }
+     * 
+     */
+    public GenerateDomainModelForClassesResponse createGenerateDomainModelForClassesResponse() {
+        return new GenerateDomainModelForClassesResponse();
+    }
+
+    /**
      * Create an instance of {@link MetadataModelServiceResourceProperties }
      * 
      */
     public MetadataModelServiceResourceProperties createMetadataModelServiceResourceProperties() {
         return new MetadataModelServiceResourceProperties();
+    }
+
+    /**
+     * Create an instance of {@link AnnotateServiceMetadataResponse }
+     * 
+     */
+    public AnnotateServiceMetadataResponse createAnnotateServiceMetadataResponse() {
+        return new AnnotateServiceMetadataResponse();
     }
 
     /**
@@ -174,19 +158,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GenerateDomainModelForPackagesRequest.UmlProjectIdentifer }
+     * Create an instance of {@link GenerateDomainModelForClassesWithExcludesRequest.UmlAssociationExclude }
      * 
      */
-    public GenerateDomainModelForPackagesRequest.UmlProjectIdentifer createGenerateDomainModelForPackagesRequestUmlProjectIdentifer() {
-        return new GenerateDomainModelForPackagesRequest.UmlProjectIdentifer();
+    public GenerateDomainModelForClassesWithExcludesRequest.UmlAssociationExclude createGenerateDomainModelForClassesWithExcludesRequestUmlAssociationExclude() {
+        return new GenerateDomainModelForClassesWithExcludesRequest.UmlAssociationExclude();
     }
 
     /**
-     * Create an instance of {@link GenerateDomainModelForClassesResponse }
+     * Create an instance of {@link GenerateDomainModelForClassesWithExcludesResponse }
      * 
      */
-    public GenerateDomainModelForClassesResponse createGenerateDomainModelForClassesResponse() {
-        return new GenerateDomainModelForClassesResponse();
+    public GenerateDomainModelForClassesWithExcludesResponse createGenerateDomainModelForClassesWithExcludesResponse() {
+        return new GenerateDomainModelForClassesWithExcludesResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetModelSourceMetadataRequest }
+     * 
+     */
+    public GetModelSourceMetadataRequest createGetModelSourceMetadataRequest() {
+        return new GetModelSourceMetadataRequest();
+    }
+
+    /**
+     * Create an instance of {@link GenerateDomainModelForPackagesResponse }
+     * 
+     */
+    public GenerateDomainModelForPackagesResponse createGenerateDomainModelForPackagesResponse() {
+        return new GenerateDomainModelForPackagesResponse();
     }
 
 }

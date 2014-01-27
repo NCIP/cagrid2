@@ -173,10 +173,15 @@
     
      <!-- mms -->
     <feature name="cagrid-mms" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-mms/serviceMetadata.xml">mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}/xml/serviceMetadata</configfile>
+    	<configfile finalname="/etc/cagrid-mms/application-config-client.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/applicationConfigClient</configfile>
+    	<configfile finalname="/etc/cagrid-mms/serviceMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceMetadata</configfile>
+    	<configfile finalname="/etc/cagrid-mms/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-mms/registration.xml">mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-gaards</feature>
+      	<bundle>mvn:org.springframework/spring-aspects/3.0.7.RELEASE</bundle>
+      	<bundle>mvn:org.springframework/spring-web/3.0.7.RELEASE</bundle>
+      	<!-- <bundle>wrap:mvn:log4j/log4j/1.2.5</bundle> -->
        <!--  <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.1_3_7</bundle>
         <bundle>wrap:mvn:gov.nih.nci.caintegrator2/caDSR-beans/4.0</bundle> -->
         <!-- <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.1_3_7</bundle> -->

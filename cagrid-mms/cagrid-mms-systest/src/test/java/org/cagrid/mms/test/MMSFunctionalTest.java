@@ -3,10 +3,13 @@ package org.cagrid.mms.test;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.maven;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.net.ssl.KeyManager;
 
@@ -21,9 +24,12 @@ import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileR
 import org.cagrid.core.common.security.CredentialFactory;
 import org.cagrid.core.common.security.X509Credential;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
+import org.cagrid.mms.model.UMLProjectIdentifer;
+import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
 import org.cagrid.mms.service.MetadataModelService;
 import org.cagrid.mms.soapclient.MMSSoapClientFactory;
 import org.cagrid.mms.test.utils.MMSTestUtils;
+import org.cagrid.mms.wsrf.stubs.GenerateDomainModelForClassesRequest;
 import org.cagrid.mms.wsrf.stubs.MetadataModelServicePortType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,11 +94,22 @@ public class MMSFunctionalTest extends CaGridTestSupport {
             assertNotNull(mmsService);
 
             // get mms soap client
-            MetadataModelServicePortType mms = getMMSSoapClient();
-            assertNotNull(mms);
+//            MetadataModelServicePortType mms = getMMSSoapClient();
+//            assertNotNull(mms);
             
             //make sure we can generate domain models and annotate metadata
-
+            UMLProjectIdentifer project = new UMLProjectIdentifer();
+			project.setIdentifier("caCORE 3.2");
+			project.setVersion("3.2");
+			try {
+				DomainModel model = mmsService.generateDomainModelForPackages(
+						project,
+						new String[] { "gov.nih.nci.cabio.domain" });
+				System.out.println(model.getProjectLongName());
+			} catch (InvalidUMLProjectIndentifier e) {
+				e.printStackTrace();
+				 fail(ExceptionUtils.getFullStackTrace(e));
+			}
             
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));

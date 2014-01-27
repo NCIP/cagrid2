@@ -3,18 +3,26 @@ package org.cagrid.mms.service.impl;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
 
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.namespace.QName;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
+import org.cagrid.core.resource.JAXBResourceProperties;
+import org.cagrid.core.resource.JAXBResourcePropertySupport;
 import org.cagrid.core.resource.ResourceImpl;
+import org.cagrid.core.resource.ResourcePropertyDescriptor;
 import org.cagrid.core.resource.SingletonResourceHomeImpl;
 import org.cagrid.mms.model.ModelSourceMetadata;
 import org.cagrid.mms.model.NamespaceToProjectMapping;
@@ -22,6 +30,7 @@ import org.cagrid.mms.model.UMLAssociationExclude;
 import org.cagrid.mms.model.UMLProjectIdentifer;
 import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
 import org.cagrid.mms.service.MetadataModelService;
+import org.cagrid.mms.wsrf.stubs.MetadataModelServiceResourceProperties;
 import org.cagrid.wsrf.properties.ResourceHome;
 import org.cagrid.wsrf.properties.ResourceProperty;
 
@@ -218,5 +227,51 @@ public class MetadataModelServiceImpl implements MetadataModelService {
 			throw new RemoteException(e.getMessage(), e);
 		}
 	}
+	
+	 private void initialize() throws JAXBException {
+
+	        // What resource properties should we know about?
+	        Collection<ResourcePropertyDescriptor<?>> resourcePropertyDescriptors = ResourcePropertyDescriptor.analyzeResourcePropertiesHolder(MetadataModelServiceResourceProperties.class);
+
+	        // Map them by field.
+	        Map<String, ResourcePropertyDescriptor<?>> descriptorsByField = ResourcePropertyDescriptor.mapByField(resourcePropertyDescriptors);
+
+	        // Load the static jaxb resource properties.
+	        if (jaxbResourcePropertiesMap != null) {
+	            JAXBResourceProperties jaxbResourceProperties = new JAXBResourceProperties(getClass().getClassLoader(), descriptorsByField, jaxbResourcePropertiesMap);
+
+	            // The serviceMetadata property is static.
+	            @SuppressWarnings("unchecked")
+	            ResourcePropertyDescriptor<ServiceMetadata> serviceMetadataDescriptor = (ResourcePropertyDescriptor<ServiceMetadata>) descriptorsByField.get("serviceMetadata");
+	            if (serviceMetadataDescriptor != null) {
+	                @SuppressWarnings("unchecked")
+	                ResourceProperty<ServiceMetadata> resourceProperty = (ResourceProperty<ServiceMetadata>) jaxbResourceProperties.getResourceProperties().get(serviceMetadataDescriptor);
+	                serviceMetadataResourceProperty = resourceProperty;
+	                resource.add(serviceMetadataResourceProperty);
+	            }
+
+				/*
+				 * ServiceSecurityMetadata isn't a resource property, but use that
+				 * framework to handle it.
+				 */
+	            String serviceSecurityMetadataURLString = jaxbResourcePropertiesMap.get("serviceSecurityMetadata");
+	            if (serviceSecurityMetadataURLString != null) {
+	                URL url = null;
+	                try {
+	                    url = new URL(serviceSecurityMetadataURLString);
+	                } catch (MalformedURLException ignored) {
+	                }
+	                if (url == null) {
+	                    url = getClass().getClassLoader().getResource(serviceSecurityMetadataURLString);
+	                }
+	                if (url != null) {
+	                    QName serviceSecurityMetadataQName = new QName(MetadataModelServiceImpl.class.getName(), "serviceSecurityMetadata");
+	                    ResourcePropertyDescriptor<ServiceSecurityMetadata> serviceSecurityMetadataDescriptor = new ResourcePropertyDescriptor<ServiceSecurityMetadata>(serviceSecurityMetadataQName,
+	                            ServiceSecurityMetadata.class, "serviceSecurityMetadata");
+	                    serviceSecurityMetadataResourceProperty = JAXBResourcePropertySupport.createJAXBResourceProperty(serviceSecurityMetadataDescriptor, url);
+	                }
+	            }
+	        }
+	    }
 
 }

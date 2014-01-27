@@ -216,12 +216,12 @@
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>
-							schema.org.cagrid.mms,
                             org.cagrid.mms.service,
                             org.cagrid.mms.model,
                             org.cagrid.mms.types,
                             org.cagrid.mms.wsrf.service,
-                            org.cagrid.mms.wsrf.stubs
+                            org.cagrid.mms.wsrf.stubs,
+                            schema.org.cagrid.mms
 						</Export-Package>
 						<Import-Package>
                             *

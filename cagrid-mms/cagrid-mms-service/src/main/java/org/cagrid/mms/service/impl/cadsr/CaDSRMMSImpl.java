@@ -4,7 +4,6 @@ import gov.nih.nci.cadsr.umlproject.domain.Project;
 import gov.nih.nci.cagrid.metadata.ServiceMetadata;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
 import gov.nih.nci.system.applicationservice.ApplicationService;
-import gov.nih.nci.system.client.ApplicationServiceProvider;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -22,6 +21,8 @@ import org.cagrid.mms.model.UMLProjectIdentifer;
 import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
 import org.cagrid.mms.service.impl.MMS;
 import org.cagrid.mms.service.impl.MMSGeneralException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 
 public class CaDSRMMSImpl implements MMS {
@@ -30,13 +31,15 @@ public class CaDSRMMSImpl implements MMS {
     public static final String SOURCE_PROPERTY_LONG_NAME = "longName";
     public static final String SOURCE_PROPERTY_GME_NAMESPACE = "gmeNamespace";
 
+    private ApplicationContext ctx = null;
     private ModelSourceMetadata metadata;
     private final Map<String, String> sourceToURLMap;
 
 
-    public CaDSRMMSImpl(ModelSourceMetadata metadata, Map<String, String> sourceToURLMap) {
+    public CaDSRMMSImpl(ModelSourceMetadata metadata, Map<String, String> sourceToURLMap, String applicationContextFile) {
         this.sourceToURLMap = sourceToURLMap;
         this.metadata = metadata;
+        ctx = new FileSystemXmlApplicationContext(applicationContextFile);
         // go through the supplied sources and add the properties we support
         for (SourceDescriptor source : this.metadata.getSupportedModelSources().getSource()) {
            SupportedProjectProperties supportedProjectProperties = new SupportedProjectProperties();
@@ -203,7 +206,9 @@ public class CaDSRMMSImpl implements MMS {
                 + sourceID + ")");
         }
         try {
-            appService = ApplicationServiceProvider.getApplicationServiceFromUrl(url);
+        	System.out.println("GETTING APPLICATION SERVICE FOR: " + url);
+            appService = ApplicationServiceProvider.getApplicationServiceFromUrl(this.ctx,url);
+            System.out.println(" FOUND APPLICATION SERVICE");
         } catch (Exception e) {
             throw new MMSGeneralException("Problem loading caDSR ApplicationService", e);
         }

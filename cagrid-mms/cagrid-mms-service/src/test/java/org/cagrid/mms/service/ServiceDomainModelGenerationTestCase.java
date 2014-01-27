@@ -1,7 +1,6 @@
 package org.cagrid.mms.service;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import gov.nih.nci.cagrid.metadata.common.SemanticMetadata;
 import gov.nih.nci.cagrid.metadata.common.UMLAttribute;
 import gov.nih.nci.cagrid.metadata.common.UMLClass.UmlAttributeCollection;
@@ -19,12 +18,30 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
 
 import org.cagrid.mms.model.UMLProjectIdentifer;
-import org.cagrid.mms.test.MMSAbstractBaseTestCaseBase;
-import org.junit.After;
+import org.cagrid.mms.service.impl.MMS;
+import org.cagrid.mms.test.SpringTestApplicationContextConstants;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-public class ServiceDomainModelGenerationTestCase extends
-		MMSAbstractBaseTestCaseBase {
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+        locations={
+                SpringTestApplicationContextConstants.MMS_BASE_LOCATION
+        })
+public class ServiceDomainModelGenerationTestCase{
+
+	@Autowired
+    public MMS mms;
+
+    @Before
+    public void onSetup() {
+        assertNotNull(this.mms);
+    }
 
 	@Test
 	public void test() {

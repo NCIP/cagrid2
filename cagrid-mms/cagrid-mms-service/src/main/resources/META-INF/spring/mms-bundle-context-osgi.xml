@@ -11,6 +11,7 @@
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.mms.service">
 		<prop key="cagrid.mms.service.metadata.url">file://${karaf.base}/etc/cagrid-mms/serviceMetadata.xml</prop>
         <prop key="cagrid.mms.service.security.metadata.url">file://${karaf.base}/etc/cagrid-mms/serviceSecurityMetadata.xml</prop>
+	<prop key="cagrid.mms.service.application.config.client.url">file://${karaf.base}/etc/cagrid-mms/application-config-client.xml</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />

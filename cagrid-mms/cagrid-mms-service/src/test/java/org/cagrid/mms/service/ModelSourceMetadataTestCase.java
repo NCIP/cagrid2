@@ -1,19 +1,44 @@
 package org.cagrid.mms.service;
 
+import static org.junit.Assert.assertNotNull;
+import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
-import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 import junit.framework.Assert;
 
 import org.cagrid.mms.model.UMLProjectIdentifer;
+import org.cagrid.mms.service.impl.MMS;
 import org.cagrid.mms.service.impl.MMSGeneralException;
-import org.cagrid.mms.test.MMSAbstractBaseTestCaseBase;
+import org.cagrid.mms.test.SpringTestApplicationContextConstants;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-public class ModelSourceMetadataTestCase extends MMSAbstractBaseTestCaseBase {
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+        locations={
+                SpringTestApplicationContextConstants.MMS_BASE_LOCATION
+        })
+public class ModelSourceMetadataTestCase{
+
+	
+	@Autowired
+    public MMS mms;
+
+    @Before
+    public void onSetup() {
+        assertNotNull(this.mms);
+    }
+    
+    @Test
 	public void testGenerateDomainModel() {
 
 		UMLProjectIdentifer project = new UMLProjectIdentifer();
@@ -38,6 +63,7 @@ public class ModelSourceMetadataTestCase extends MMSAbstractBaseTestCaseBase {
 		}
 	}
 
+    @Test
 	public void testGenerateDomainModelForSubPackages() {
 
 		UMLProjectIdentifer project = new UMLProjectIdentifer();

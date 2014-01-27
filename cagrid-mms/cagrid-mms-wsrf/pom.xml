@@ -46,11 +46,6 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>src/main/resources/serviceMetadata.xml</file>
-									<type>xml</type>
-									<classifier>serviceMetadata</classifier>
-								</artifact>
-								<artifact>
 									<file>src/main/resources/registration.xml</file>
 									<type>xml</type>
 									<classifier>registration</classifier>

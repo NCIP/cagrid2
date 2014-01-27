@@ -38,16 +38,19 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-mms-soap-client</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-core</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-mms-api</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.cagrid.wsrf</groupId>
@@ -64,6 +67,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <scope>test</scope>
         </dependency>
         <!-- Karaf Test Framework Version -->
         <dependency>
