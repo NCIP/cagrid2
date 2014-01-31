@@ -200,4 +200,38 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
+    
+    <profiles>
+		<profile>
+			<id>addAdmin</id>
+			<activation>
+				<property>
+					<name>addAdmin</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+                            <mainClass>org.cagrid.gts.tools.service.PermissionBootstrapper</mainClass>
+                            <arguments>
+                                <argument>src/main/resources/gts-conf.xml</argument>
+                            </arguments>
+                            <classpathScope>test</classpathScope>
+                        </configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
