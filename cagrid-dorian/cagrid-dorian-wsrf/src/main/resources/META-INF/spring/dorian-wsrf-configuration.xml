@@ -18,6 +18,22 @@
     </bean>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    
+     <bean id="jaxbResourceProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="serviceMetadata" value="${cagrid.dorian.wsrf.metadata.url}"/>
+                <entry key="serviceSecurityMetadata" value="${cagrid.dorian.wsrf.security.metadata.url}"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    
+     <bean id="inboundSamlCanonicalizerInterceptor" class="org.cagrid.dorian.service.wsrf.InboundSamlCanonicalizerInterceptor"/>
+    <bean id="outboundSamlCanonicalizerInterceptor" class="org.cagrid.dorian.service.wsrf.OutboundSamlCanonicalizerInterceptor"/>
+
+
+    <bean id="logIn" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
+    <bean id="logOut" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
 
     <bean id="registrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
         <constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.on}"></constructor-arg>
@@ -26,12 +42,7 @@
         <constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
     </bean>
 
-    <bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
-        <constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.legacy.on}"></constructor-arg>
-        <constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
-        <constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.registrant.legacy.url}"></constructor-arg>
-        <constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
-    </bean>
+    
 
     <bean id="proxySslContextFactory" class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
         <property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}"/>
@@ -42,6 +53,40 @@
         <property name="wantClientAuth" value="true"/>
         <property name="needClientAuth" value="false"/>
         <property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}"/>
+    </bean>
+    
+    <bean id="dorianOverloader" class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
+        <constructor-arg index="0" value="${cagrid.dorian.wsrf.trusted.idp.mapping}"/>
+    </bean>
+    
+        <bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
+        <constructor-arg index="0" ref="dorianService"/>
+        <constructor-arg index="1" value="SHA2"/>
+        <constructor-arg index="2" ref="jaxbResourceProperties"/>
+        <constructor-arg index="3" ref="dorianOverloader"/>
+    </bean>
+    
+    <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="dorianWSRFEP" implementor="#dorianWSRF" bus="cxf"
+        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
+    >
+        <jaxws:inInterceptors>
+        <!--  <ref bean="logIn"/> -->     
+            <!-- <ref bean="inboundSamlCanonicalizerInterceptor"/> -->
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <!--  <ref bean="logOut"/> -->
+            <ref bean="outboundSamlCanonicalizerInterceptor"/>
+        </jaxws:outInterceptors>
+    </jaxws:endpoint>
+
+  <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
+<!-- 
+    
+    <bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
+        <constructor-arg index="0" value="${cagrid.dorian.wsrf.registration.legacy.on}"></constructor-arg>
+        <constructor-arg index="1" value="${cagrid.dorian.wsrf.registration.xml}"></constructor-arg>
+        <constructor-arg index="2" value="${cagrid.dorian.wsrf.registration.registrant.legacy.url}"></constructor-arg>
+        <constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
     </bean>
 
     <bean id="legacyProxySslContextFactory" class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
@@ -54,15 +99,31 @@
         <property name="needClientAuth" value="false"/>
         <property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}"/>
     </bean>
-
-    <bean id="jaxbResourceProperties" class="java.util.HashMap">
-        <constructor-arg>
-            <map>
-                <entry key="serviceMetadata" value="${cagrid.dorian.wsrf.metadata.url}"/>
-                <entry key="serviceSecurityMetadata" value="${cagrid.dorian.wsrf.security.metadata.url}"/>
-            </map>
-        </constructor-arg>
+    
+      <bean id="dorianLegacyOverloader" class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
+        <constructor-arg index="0" value="${cagrid.dorian.legacy-wsrf.trusted.idp.mapping}"/>
     </bean>
+    
+     <bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
+        <constructor-arg index="0" ref="dorianService"/>
+        <constructor-arg index="1" value="SHA1"/>
+        <constructor-arg index="2" ref="jaxbResourceProperties"/>
+        <constructor-arg index="3" ref="dorianLegacyOverloader"/>
+    </bean>
+    
+     <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="legacyDorianWSRFEP" implementor="#legacyDorianWSRF" bus="cxf"
+        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.legacy-wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
+    >
+        <jaxws:inInterceptors>
+          
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+   
+            <ref bean="outboundSamlCanonicalizerInterceptor"/>
+        </jaxws:outInterceptors>
+    </jaxws:endpoint>
+
+   -->
 
     <!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
     <httpj:engine-factory bus="cxf">
@@ -75,7 +136,8 @@
                 </bean>
             </httpj:connector>
         </httpj:engine>
-
+<!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
+<!--  
         <httpj:engine port="${cagrid.dorian.legacy-wsrf.port}">
             <httpj:tlsServerParameters/>
             <httpj:connector>
@@ -85,65 +147,11 @@
                 </bean>
             </httpj:connector>
         </httpj:engine>
+        -->
     </httpj:engine-factory>
 
-    <bean id="dorianOverloader" class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
-        <constructor-arg index="0" value="${cagrid.dorian.wsrf.trusted.idp.mapping}"/>
-    </bean>
-
-    <bean id="dorianLegacyOverloader" class="org.cagrid.dorian.service.wsrf.TrustedIdPMetadataOverloader">
-        <constructor-arg index="0" value="${cagrid.dorian.legacy-wsrf.trusted.idp.mapping}"/>
-    </bean>
-
-
-    <bean id="dorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
-        <constructor-arg index="0" ref="dorianService"/>
-        <constructor-arg index="1" value="SHA2"/>
-        <constructor-arg index="2" ref="jaxbResourceProperties"/>
-        <constructor-arg index="3" ref="dorianOverloader"/>
-    </bean>
-
-    <bean id="legacyDorianWSRF" class="org.cagrid.dorian.service.wsrf.DorianServiceWSRFImpl">
-        <constructor-arg index="0" ref="dorianService"/>
-        <constructor-arg index="1" value="SHA1"/>
-        <constructor-arg index="2" ref="jaxbResourceProperties"/>
-        <constructor-arg index="3" ref="dorianLegacyOverloader"/>
-    </bean>
-
+ 
     <bean id="dummyLegacyDorianWSRF" class="org.cagrid.dorian.DorianPortTypeImpl">
     </bean>
-
-
-    <bean id="inboundSamlCanonicalizerInterceptor" class="org.cagrid.dorian.service.wsrf.InboundSamlCanonicalizerInterceptor"/>
-    <bean id="outboundSamlCanonicalizerInterceptor" class="org.cagrid.dorian.service.wsrf.OutboundSamlCanonicalizerInterceptor"/>
-
-
-    <bean id="logIn" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
-    <bean id="logOut" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
-
-    <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="dorianWSRFEP" implementor="#dorianWSRF" bus="cxf"
-        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
-    >
-        <jaxws:inInterceptors>
-<!--             <ref bean="logIn"/> -->
-            <!-- <ref bean="inboundSamlCanonicalizerInterceptor"/> -->
-        </jaxws:inInterceptors>
-        <jaxws:outInterceptors>
-<!--             <ref bean="logOut"/> -->
-            <ref bean="outboundSamlCanonicalizerInterceptor"/>
-        </jaxws:outInterceptors>
-    </jaxws:endpoint>
-
-    <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="legacyDorianWSRFEP" implementor="#legacyDorianWSRF" bus="cxf"
-        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.legacy-wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
-    >
-        <jaxws:inInterceptors>
-<!--             <ref bean="logIn"/> -->
-            <!-- <ref bean="inboundSamlCanonicalizerInterceptor"/> -->
-        </jaxws:inInterceptors>
-        <jaxws:outInterceptors>
-<!--             <ref bean="logOut"/> -->
-            <ref bean="outboundSamlCanonicalizerInterceptor"/>
-        </jaxws:outInterceptors>
-    </jaxws:endpoint>
+   
 </beans>

@@ -8,6 +8,7 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.cagrid.core.commandline.BaseCommandLine;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
@@ -24,8 +25,8 @@ public class Bootstrapper extends BaseCommandLine {
 
 	private static final String TRUSTSTORE_FILE_NAME = "truststore.jks";
 
-    private static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
-    private static final String WSRF_INDEXSVC_PROPERTY = "cagrid.gts.wsrf.registration.index.url";
+	private static final String WSRF_INDEXSVC_PROMPT = "Please enter index service endpoint";
+	private static final String WSRF_INDEXSVC_PROPERTY = "cagrid.gts.wsrf.registration.index.url";
 	private static final String WSRF_HOSTNAME_PROMPT = "Please enter a hostname for the WSRF endpoint";
 	private static final String WSRF_HOSTNAME_PROPERTY = "cagrid.gts.wsrf.host";
 	private static final String WSRF_CERTIFICATE_PROMPT = "Please enter the location of the WSRF endpoint host certificate";
@@ -108,6 +109,9 @@ public class Bootstrapper extends BaseCommandLine {
 		configureLegacyWSRFCredentials();
 		configureWSRFService();
 		configureGTS();
+		File srcGTSConf = new File(".." + File.separator + "cagrid-gts-service" + File.separator + "src" + File.separator + "main" + File.separator + "resources" + File.separator + "gts-conf.xml");
+		File destGTSConf = new File(gtsEtcDir + File.separator + "gts-conf.xml");
+		FileUtils.copyFile(srcGTSConf, destGTSConf);
 	}
 
 	private void configureGTS() throws Exception {
@@ -137,7 +141,7 @@ public class Bootstrapper extends BaseCommandLine {
 		String url = "https://" + getHostname() + ":" + port + "/gts";
 		this.gtsURL = url;
 		props.setProperty(WSRF_URL_PROPERTY, url);
-        props.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
+		props.setProperty(WSRF_INDEXSVC_PROPERTY, getValue(WSRF_INDEXSVC_PROMPT, WSRF_INDEXSVC_PROPERTY));
 
 		if (this.configureLegacyWSRF()) {
 			props.setProperty(LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY, LEGACY_WSRF_TRUSTSTORE_PATH);

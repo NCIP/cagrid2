@@ -30,12 +30,7 @@
 		<constructor-arg index="3" value="${cagrid.gts.wsrf.registration.index.url}"></constructor-arg>
 	</bean>
 	
-	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
-		<constructor-arg index="0" value="${cagrid.gts.wsrf.registration.legacy.on}"></constructor-arg>
-		<constructor-arg index="1" value="${cagrid.gts.wsrf.registration.xml}"></constructor-arg>
-		<constructor-arg index="2" value="${cagrid.gts.wsrf.registration.registrant.legacy.url}"></constructor-arg>
-		<constructor-arg index="3" value="${cagrid.gts.wsrf.registration.index.url}"></constructor-arg>
-	</bean>
+	
 	
 	<bean id="proxySslContextFactory"
 		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
@@ -49,40 +44,8 @@
 		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
 	</bean>
 
-	<bean id="legacyProxySslContextFactory"
-		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
-		<property name="keyStorePath" value="${cagrid.gts.legacy-wsrf.keystore.path}" />
-		<property name="keyStorePassword" value="${cagrid.gts.legacy-wsrf.keystore.password}" />
-		<property name="keyManagerPassword" value="${cagrid.gts.legacy-wsrf.key.password}" />
-		<property name="trustStore" value="${cagrid.gts.legacy-wsrf.truststore.path}" />
-		<property name="trustStorePassword" value="${cagrid.gts.legacy-wsrf.truststore.password}" />
-		<property name="wantClientAuth" value="true" />
-		<property name="needClientAuth" value="false" />
-		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
-	</bean>
+	
 
-<!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
-	<httpj:engine-factory bus="cxf">
-		<httpj:engine port="${cagrid.gts.wsrf.port}">
-			<httpj:tlsServerParameters />
-			<httpj:connector>
-				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="proxySslContextFactory" />
-					<property name="port" value="${cagrid.gts.wsrf.port}" />
-				</bean>
-			</httpj:connector>
-		</httpj:engine>
-
-		<httpj:engine port="${cagrid.gts.legacy-wsrf.port}">
-			<httpj:tlsServerParameters />
-			<httpj:connector>
-				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="legacyProxySslContextFactory" />
-					<property name="port" value="${cagrid.gts.legacy-wsrf.port}" />
-				</bean>
-			</httpj:connector>
-		</httpj:engine>
-	</httpj:engine-factory>
 
 	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
 		<property name="marshallerProperties" ref="propertiesMap" />
@@ -97,9 +60,7 @@
 		<constructor-arg index="0" ref="gtsService" />
 	</bean>
 
-	<bean id="legacyGTSWSRF" class="org.cagrid.gts.service.wsrf.GTSWSRFImpl">
-		<constructor-arg index="0" ref="gtsService" />
-	</bean>
+	
 
 	<bean id="dummyGTSWSRF" class="org.cagrid.gts.wsrf.stubs.GTSPortTypeImpl">
 	</bean>
@@ -111,10 +72,63 @@
 		wsdlLocation="schema/org/cagrid/gts/GTS_service.wsdl">
 	</jaxws:endpoint>
 
+	
+	  <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
+	  <!--  
+	
+	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
+		<constructor-arg index="0" value="${cagrid.gts.wsrf.registration.legacy.on}"></constructor-arg>
+		<constructor-arg index="1" value="${cagrid.gts.wsrf.registration.xml}"></constructor-arg>
+		<constructor-arg index="2" value="${cagrid.gts.wsrf.registration.registrant.legacy.url}"></constructor-arg>
+		<constructor-arg index="3" value="${cagrid.gts.wsrf.registration.index.url}"></constructor-arg>
+	</bean>
+	
+	<bean id="legacyProxySslContextFactory"
+		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
+		<property name="keyStorePath" value="${cagrid.gts.legacy-wsrf.keystore.path}" />
+		<property name="keyStorePassword" value="${cagrid.gts.legacy-wsrf.keystore.password}" />
+		<property name="keyManagerPassword" value="${cagrid.gts.legacy-wsrf.key.password}" />
+		<property name="trustStore" value="${cagrid.gts.legacy-wsrf.truststore.path}" />
+		<property name="trustStorePassword" value="${cagrid.gts.legacy-wsrf.truststore.password}" />
+		<property name="wantClientAuth" value="true" />
+		<property name="needClientAuth" value="false" />
+		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
+	</bean>
+	
+	<bean id="legacyGTSWSRF" class="org.cagrid.gts.service.wsrf.GTSWSRFImpl">
+		<constructor-arg index="0" ref="gtsService" />
+	</bean>
+	
 	<jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GTS/service"
 		xmlns:s="http://cagrid.nci.nih.gov/GTS/service" id="legacyGTSWSRFEP"
 		implementor="#legacyGTSWSRF" bus="cxf" endpointName="e:GTSPortTypePort"
 		serviceName="s:GTSService" address="${cagrid.gts.legacy-wsrf.url}"
 		wsdlLocation="schema/org/cagrid/gts/GTS_service.wsdl">
 	</jaxws:endpoint>
+	
+	-->
+		<httpj:engine-factory bus="cxf">
+		<httpj:engine port="${cagrid.gts.wsrf.port}">
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<property name="port" value="${cagrid.gts.wsrf.port}" />
+				</bean>
+			</httpj:connector>
+		</httpj:engine>
+      <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
+	  <!--
+		<httpj:engine port="${cagrid.gts.legacy-wsrf.port}">
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="legacyProxySslContextFactory" />
+					<property name="port" value="${cagrid.gts.legacy-wsrf.port}" />
+				</bean>
+			</httpj:connector>
+		</httpj:engine>		
+		-->
+	</httpj:engine-factory>
+	
 </beans>
