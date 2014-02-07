@@ -82,7 +82,7 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String WSRF_KEYSTORE_PASSWORD_PROPERTY = "cagrid.gme.wsrf.keystore.password";
 	private static final String WSRF_KEY_PASSWORD_PROMPT = "Please enter a password for the WSRF private key";
 	private static final String WSRF_KEY_PASSWORD_PROPERTY = "cagrid.gme.wsrf.key.password";
-	private static final String WSRF_KEYSTORE_FILE_NAME = "grid-gme-host.jks";
+	private static final String WSRF_KEYSTORE_FILE_NAME = "gme-host.jks";
 	private static final String WSRF_KEYSTORE_PATH_PROPERTY = "cagrid.gme.wsrf.keystore.path";
 	private static final String WSRF_KEYSTORE_PATH = "${karaf.base}/etc/" + GME_SERVICE_DIR + "/" + WSRF_KEYSTORE_FILE_NAME;
 	private static final String WSRF_TRUSTSTORE_PATH_PROPERTY = "cagrid.gme.wsrf.truststore.path";
@@ -93,7 +93,7 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String LEGACY_WSRF_HOSTNAME_PROMPT = "Please enter a legacy hostname";
 	private static final String LEGACY_WSRF_HOSTNAME_PROPERTY = "cagrid.gme.legacy-wsrf.host";
 	private static final String LEGACY_WSRF_URL_PATH_PROMPT = "Please enter the url path of the legacy WSRF endpoint";
-	private static final String LEGACY_WSRF_URL_PATH_PROPERTY = "cagrid.gme.legacy-wsrf.url.path";
+	private static final String LEGACY_WSRF_URL_PATH_PROPERTY = "cagrid.gme.legacy-wsrf.path";
 	private static final String LEGACY_WSRF_CERTIFICATE_PROMPT = "Please enter the location of the legacy host certificate";
 	private static final String LEGACY_WSRF_CERTIFICATE_PROPERTY = "cagrid.gme.legacy-certificate.location";
 	private static final String LEGACY_WSRF_KEY_PROMPT = "Please enter the location of the legacy private key";
@@ -104,7 +104,7 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String LEGACY_WSRF_KEYSTORE_PASSWORD_PROPERTY = "cagrid.gme.legacy-wsrf.keystore.password";
 	private static final String LEGACY_WSRF_KEY_PASSWORD_PROMPT = "Please enter a password for the legacy private key";
 	private static final String LEGACY_WSRF_KEY_PASSWORD_PROPERTY = "cagrid.gme.legacy-wsrf.key.password";
-	private static final String LEGACY_WSRF_KEYSTORE_FILE_NAME = "legacy-grid-gme-host.jks";
+	private static final String LEGACY_WSRF_KEYSTORE_FILE_NAME = "legacy-gme-host.jks";
 	private static final String LEGACY_WSRF_KEYSTORE_PATH_PROPERTY = "cagrid.gme.legacy-wsrf.keystore.path";
 	private static final String LEGACY_WSRF_KEYSTORE_PATH = "${karaf.base}/etc/" + GME_SERVICE_DIR + "/" + LEGACY_WSRF_KEYSTORE_FILE_NAME;
 	private static final String LEGACY_WSRF_TRUSTSTORE_PATH_PROPERTY = "cagrid.gme.legacy-wsrf.truststore.path";
@@ -425,7 +425,7 @@ public class Bootstrapper extends BaseCommandLine {
 	private void configureTruststore() throws Exception {
 		File f = new File(this.gmeEtcDir.getAbsolutePath() + File.separator + TRUSTSTORE_FILE_NAME);
 		this.copyTrustStore(f.getAbsolutePath(), getTruststorePassword());
-		System.out.println("Truststore created for Global Model Excchange at " + f.getAbsolutePath());
+		System.out.println("Truststore created for Global Model Exchange at " + f.getAbsolutePath());
 	}
 
 	public String getTruststorePassword() {

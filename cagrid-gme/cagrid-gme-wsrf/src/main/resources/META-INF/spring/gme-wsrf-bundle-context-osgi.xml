@@ -16,7 +16,7 @@
 		<prop key="cagrid.gme.wsrf.path">gme</prop>
 		<prop key="cagrid.gme.wsrf.url">https://${cagrid.gme.wsrf.host}:${cagrid.gme.wsrf.port}/${cagrid.gme.wsrf.path}
 		</prop>
-		<prop key="cagrid.gme.wsrf.keystore.path">${karaf.base}/etc/cagrid-gme/host.jks</prop>
+		<prop key="cagrid.gme.wsrf.keystore.path">${karaf.base}/etc/cagrid-gme/gme-host.jks</prop>
 		<prop key="cagrid.gme.wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.gme.wsrf.keystore.alias">host</prop>
 		<prop key="cagrid.gme.wsrf.key.password">changeit</prop>
@@ -29,9 +29,10 @@
 			SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA,TLS_EMPTY_RENEGOTIATION_INFO_SCSV,SSL_RSA_WITH_NULL_MD5
 		</prop>
 
-        <prop key="cagrid.gme.legacy-wsrf.url">https://${cagrid.gme.wsrf.host}:${cagrid.gme.legacy-wsrf.port}/${cagrid.gme.wsrf.path}</prop>
+        <prop key="cagrid.gme.legacy-wsrf.path">wsrf/services/cagrid/GlobalModelExchange</prop>
+        <prop key="cagrid.gme.legacy-wsrf.url">https://${cagrid.gme.wsrf.host}:${cagrid.gme.legacy-wsrf.port}/${cagrid.gme.legacy-wsrf.path}</prop>
         <prop key="cagrid.gme.legacy-wsrf.port">7743</prop>
-        <prop key="cagrid.gme.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-gme/host.jks</prop>
+        <prop key="cagrid.gme.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-gme/gme-host.jks</prop>
         <prop key="cagrid.gme.legacy-wsrf.keystore.password">changeit</prop>
         <prop key="cagrid.gme.legacy-wsrf.keystore.alias">host</prop>
         <prop key="cagrid.gme.legacy-wsrf.key.password">changeit</prop>

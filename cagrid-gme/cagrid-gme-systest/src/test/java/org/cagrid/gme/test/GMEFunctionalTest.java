@@ -54,7 +54,7 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
     private static final String GME_URL = "https://localhost:7742/gme";
 
-    private static final String HOST = "etc/cagrid-gme/host.jks";
+    private static final String HOST = "etc/cagrid-gme/gme-host.jks";
     private static final String TRUSTSTORE = "etc/cagrid-gme/truststore.jks";
     private static final String TRUSTSTORETYPE = "JKS";
     private static final String KEYALIAS = "tomcat";
@@ -76,7 +76,7 @@ public class GMEFunctionalTest extends CaGridTestSupport {
 
                 // Get our resource files to the "etc" area
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gme.wsrf.cfg", new File("src/test/resources/cagrid.gme.wsrf.cfg")),
-                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
+                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/gme-host.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_A, new File("src/test/resources/A.xsd")),
                 new KarafDistributionConfigurationFileReplacementOption(SCHEMA_B, new File("src/test/resources/B.xsd")),
