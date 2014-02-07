@@ -36,14 +36,14 @@
         <feature version="${project.version}">cagrid-base</feature>
         <bundle>mvn:${project.groupId}/cagrid-gaards-api/${project.version}</bundle>
     </feature>
-    
+
 
     <!-- GTS -->
     <feature name="cagrid-gts" version="${project.version}">
-   		<configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-gts/registration.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
-    
+
         <feature version="${project.version}">cagrid-gts-client</feature>
         <!-- Install the default config file; it won't overwrite if it already exists -->
         <configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config</configfile>
@@ -52,22 +52,22 @@
         <bundle>mvn:${project.groupId}/cagrid-gts-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}</bundle>
     </feature>
-    
-    
-    
+
+
+
     <feature name="cagrid-gts-client" version="${project.version}">
         <feature version="${project.version}">cagrid-gaards</feature>
         <bundle>mvn:${project.groupId}/cagrid-gts-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gts-soap-client/${project.version}</bundle>
     </feature>
-    
+
     <!-- GridGrouper -->
     <feature name="cagrid-gridgrouper" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/registration.xml">mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
-    
+
         <feature version="${project.version}">cagrid-gaards</feature>
         <!-- client -->
         <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>
@@ -101,10 +101,10 @@
 
     <!-- CDS -->
     <feature name="cagrid-cds" version="${project.version}">
-     	<configfile finalname="/etc/cagrid-cds/serviceMetadata.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-cds/serviceMetadata.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-cds/registration.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/registration</configfile>
         <configfile finalname="/etc/cagrid-cds/CredentialDelegationService-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/CredentialDelegationService-security-metadata</configfile>
-		<configfile finalname="/etc/cagrid-cds/DelegatedCredential-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/DelegatedCredential-security-metadata</configfile>       
+        <configfile finalname="/etc/cagrid-cds/DelegatedCredential-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/DelegatedCredential-security-metadata</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-cds-client</feature>
         <feature version="${project.version}">cagrid-gridgrouper-client</feature>
@@ -145,7 +145,8 @@
 
     <!-- GME -->
     <feature name="cagrid-gme" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-gme/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gme/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gme/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-gme/registration.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-gaards</feature>
