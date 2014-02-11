@@ -31,7 +31,12 @@
 						org.acegisecurity.context.httpinvoker,
 						gov.nih.nci.system.query.cql,
 						gov.nih.nci.system.query.hibernate,
-						org.acegisecurity.providers.rcp
+						org.acegisecurity.providers.rcp,
+						org.hibernate.criterion,
+						gov.nih.nci.cadsr.umlproject.domain,
+						org.hibernate.collection,
+						org.hibernate.proxy.pojo.cglib,
+						gov.nih.nci.cadsr.domain
 						</Export-Package>
 						<Private-Package>
 							org.cagrid.mms.service.impl,

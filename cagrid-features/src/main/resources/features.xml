@@ -12,14 +12,15 @@
         <bundle>mvn:com.mysql.jdbc/com.springsource.com.mysql.jdbc/${com.mysql.jdbc/com.springsource.com.mysql.jdbc/version}</bundle>
         <bundle>mvn:org.jvnet.jaxb2_commons/jaxb2-basics-runtime/${org.jvnet.jaxb2_commons/jaxb2-basics-runtime/version}</bundle>
         <!-- hibernate -->
-        <bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
+       <!--  <bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate/${org.hibernate/com.springsource.org.hibernate/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations/${org.hibernate/com.springsource.org.hibernate.annotations/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/${org.hibernate/com.springsource.org.hibernate.annotations.common/version}</bundle>
         <bundle>mvn:org.antlr/com.springsource.antlr/${org.antlr/com.springsource.antlr/version}</bundle>
         <bundle>mvn:org.jboss.javassist/com.springsource.javassist/${org.jboss.javassist/com.springsource.javassist/version}</bundle>
         <bundle>mvn:org.jgroups/com.springsource.org.jgroups/${org.jgroups/com.springsource.org.jgroups/version}</bundle>
-    </feature>
+ -->    
+ 	</feature>
 
 
     <!-- Common caGrid Modules -->
@@ -148,6 +149,7 @@
 
     <!-- ServiceRegistrationAPI -->
     <feature name="cagrid-service-registration" version="${project.version}">
+    	<feature version="${project.version}">cagrid-base</feature>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.quartz/1.8.5_1</bundle>
         <bundle>mvn:${project.groupId}/cagrid-service-registration-api/${project.version}</bundle>
     </feature>
