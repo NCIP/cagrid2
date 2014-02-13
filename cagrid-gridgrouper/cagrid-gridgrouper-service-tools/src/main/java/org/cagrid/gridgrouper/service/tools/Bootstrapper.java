@@ -8,9 +8,17 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.cagrid.core.commandline.BaseCommandLine;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gaards.pki.KeyUtil;
+import org.cagrid.gridgrouper.service.impl.GridGrouper;
+
+import edu.internet2.middleware.grouper.GrouperConfigHelper;
+import edu.internet2.middleware.grouper.RegistryInstall;
+import edu.internet2.middleware.grouper.RegistryReset;
+import edu.internet2.middleware.subject.GridSourceAdapter;
+import edu.internet2.middleware.subject.Subject;
 
 public class Bootstrapper extends BaseCommandLine {
 
@@ -75,6 +83,8 @@ public class Bootstrapper extends BaseCommandLine {
 	private static final String DB_USER_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.username";
 	private static final String DB_PASSWORD_PROMPT = "Please enter the database password";
 	private static final String DB_PASSWORD_PROPERTY = "cagrid.gridgrouper.internet2.hibernate.connection.password";
+	private static final String DB_INIT_PROMPT = "Do you want to initialize the Grid Grouper database (true|false)";
+	private static final String DB_INIT_PROPERTY = "cagrid.gridgrouper.database.init";
 
 	public static final String WSRF_REGISTRATION_ENABLED_PROMPT = "Please specify whether or not to enable index service registration of the WSRF endpoint";
 	public static final String WSRF_REGISTRATION_ENABLED_PROPERTY = "cagrid.gridgrouper.wsrf.registration.on";
@@ -94,6 +104,10 @@ public class Bootstrapper extends BaseCommandLine {
 	private String legacyKeystorePassword;
 	private String legacyKeystoreAlias;
 	private String legacyKeyPassword;
+	private String databaseURL;
+	private String databaseUser;
+	private String databasePassword;
+	private GrouperConfigHelper helper = null;
 
 	public Bootstrapper(File propertiesFile) throws Exception {
 		super(propertiesFile);
@@ -113,38 +127,82 @@ public class Bootstrapper extends BaseCommandLine {
 		System.out.println("");
 		grouperEtcDir = new File(getServiceMixEtc().getAbsolutePath() + File.separator + GROUPER_SERVICE_DIR);
 		grouperEtcDir.mkdirs();
+		initDatabase();
 		configureTruststore();
 		createWSRFKeystore();
 		configureLegacyWSRFCredentials();
 		configureGrouper();
 		configureWSRFService();
+		addAdmins();
+
+	}
+
+	private void addAdmins() throws Exception {
+		getHelper();
+		boolean addAdmin = getBooleanValue("Would you like to add an administrator to Grid Grouper (true|false)", "no.property");
+		GridSourceAdapter guss = new GridSourceAdapter("grid", "Grid Grouper: Grid Source Adapter");
+		GridGrouper gg = new GridGrouper();
+		while (addAdmin) {
+			String adminIdentity = getValue("Enter the identity of the admin you with to add to Grid Grouper", "no.property");
+			Subject admin = guss.getSubject(adminIdentity);
+			gg.getAdminGroup().addMember(admin);
+			addAdmin = getBooleanValue("Would you like to add another administrator to Grid Grouper (true|false)", "no.property");
+		}
+	}
+
+	private GrouperConfigHelper getHelper() {
+		if (this.helper == null) {
+			GrouperConfigHelper helper = new GrouperConfigHelper();
+			helper.setHibernateConnectionUrl(getDatabaseURL());
+			helper.setHibernateConnectionUsername(getDatabaseUser());
+			helper.setHibernateConnectionPassword(getDatabasePassword());
+		}
+		return this.helper;
+	}
+
+	private void initDatabase() {
+		String val = getValue(DB_INIT_PROMPT, DB_INIT_PROPERTY);
+		if (val.equalsIgnoreCase("true")) {
+			getHelper();
+			RegistryInstall.main(new String[0]);
+			RegistryReset.reset();
+			// jdbc:mysql://localhost:3306/langella_grouper
+		}
 
 	}
 
 	private void configureGrouper() throws Exception {
 		Properties props = new Properties();
-		props.setProperty(DB_URL_PROPERTY, getValue(DB_URL_PROMPT, DB_URL_PROPERTY));
-		props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT, DB_USER_PROPERTY));
-		props.setProperty(DB_PASSWORD_PROPERTY, getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
+		props.setProperty(DB_URL_PROPERTY, getDatabaseURL());
+		props.setProperty(DB_USER_PROPERTY, getDatabaseUser());
+		props.setProperty(DB_PASSWORD_PROPERTY, getDatabasePassword());
 		File config = new File(getServiceMixEtc(), GROUPER_CFG);
 		props.store(new FileOutputStream(config), "Grouper Service Configuration saved by bootstrapper on " + new Date());
 	}
 
-	/*
-	 * private void configureGridGrouper() throws Exception { Properties props =
-	 * new Properties(); props.setProperty(DB_URL_PROPERTY,
-	 * getValue(DB_URL_PROMPT, DB_URL_PROPERTY));
-	 * props.setProperty(DB_USER_PROPERTY, getValue(DB_USER_PROMPT,
-	 * DB_USER_PROPERTY)); props.setProperty(DB_PASSWORD_PROPERTY,
-	 * getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY));
-	 * props.setProperty(DB_HOST_PROPERTY, getValue(DB_HOST_PROMPT,
-	 * DB_HOST_PROPERTY)); props.setProperty(DB_PORT_PROPERTY,
-	 * getValue(DB_PORT_PROMPT, DB_PORT_PROPERTY)); File config = new
-	 * File(getServiceMixEtc(), GROUPER_SERVICE_CFG); props.store(new
-	 * FileOutputStream(config),
-	 * "Grouper Service Configuration saved by bootstrapper on " + new Date());
-	 * }
-	 */
+	public String getDatabaseURL() {
+		if (databaseURL == null) {
+			this.databaseURL = getValue(DB_URL_PROMPT, DB_URL_PROPERTY);
+		}
+		return databaseURL;
+	}
+
+	public String getDatabaseUser() {
+		if (databaseUser == null) {
+			this.databaseUser = getValue(DB_USER_PROMPT, DB_USER_PROPERTY);
+		}
+		return databaseUser;
+	}
+
+	public String getDatabasePassword() {
+		if (this.databasePassword == null) {
+			this.databasePassword = getValue(DB_PASSWORD_PROMPT, DB_PASSWORD_PROPERTY);
+			if (StringUtils.isBlank(this.databasePassword)) {
+				databasePassword = "";
+			}
+		}
+		return databasePassword;
+	}
 
 	private void configureWSRFService() throws Exception {
 		Properties props = new Properties();

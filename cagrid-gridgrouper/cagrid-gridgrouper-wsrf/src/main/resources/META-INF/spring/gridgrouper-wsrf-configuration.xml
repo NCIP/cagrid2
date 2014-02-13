@@ -22,6 +22,43 @@
 	</bean>
 
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	
+	<httpj:engine-factory bus="cxf">
+		<httpj:engine port="${cagrid.gridgrouper.wsrf.port}">
+			<httpj:tlsServerParameters />
+			<httpj:connector>
+				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<property name="port" value="${cagrid.gridgrouper.wsrf.port}" />
+				</bean>
+			</httpj:connector>
+		</httpj:engine>
+		 <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
+<!-- 
+        <httpj:engine port="${cagrid.gridgrouper.legacy-wsrf.port}">
+            <httpj:tlsServerParameters />
+            <httpj:connector>
+                <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                    <constructor-arg index="0" ref="legacyProxySslContextFactory" />
+                    <property name="port" value="${cagrid.gridgrouper.legacy-wsrf.port}" />
+                </bean>
+            </httpj:connector>
+        </httpj:engine>
+ -->
+	</httpj:engine-factory>
+	
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+		<property name="marshallerProperties" ref="propertiesMap" />
+	</bean>
+	<util:map id="propertiesMap">
+		<entry key="jaxb.formatted.output">
+			<value type="java.lang.Boolean">true</value>
+		</entry>
+	</util:map>
+
+	<bean id="gridgrouperWSRF" class="org.cagrid.gridgrouper.service.wsrf.GridGrouperWSRFImpl">
+		<constructor-arg ref="gridGrouperService" />
+	</bean>
 
 	<bean id="registrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
 		<constructor-arg index="0" value="${cagrid.gridgrouper.wsrf.registration.on}"></constructor-arg>
@@ -30,12 +67,7 @@
 		<constructor-arg index="3" value="${cagrid.gridgrouper.wsrf.registration.index.url}"></constructor-arg>
 	</bean>
 	
-	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
-		<constructor-arg index="0" value="${cagrid.gridgrouper.wsrf.registration.legacy.on}"></constructor-arg>
-		<constructor-arg index="1" value="${cagrid.gridgrouper.wsrf.registration.xml}"></constructor-arg>
-		<constructor-arg index="2" value="${cagrid.gridgrouper.wsrf.registration.registrant.legacy.url}"></constructor-arg>
-		<constructor-arg index="3" value="${cagrid.gridgrouper.wsrf.registration.index.url}"></constructor-arg>
-	</bean>
+	
 	<bean id="proxySslContextFactory"
 		class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
 		<property name="keyStorePath" value="${cagrid.gridgrouper.wsrf.keystore.path}" />
@@ -46,6 +78,23 @@
 		<property name="wantClientAuth" value="true" />
 		<property name="needClientAuth" value="false" />
 		<property name="includeCipherSuites" value="${cagrid.gridgrouper.wsrf.cipher-suites}" />
+	</bean>
+	
+	<jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GridGrouper/service"
+		xmlns:s="http://cagrid.nci.nih.gov/GridGrouper/service" id="gridgrouperWSRFEP"
+		implementor="#gridgrouperWSRF" bus="cxf" endpointName="e:GridGrouperPortTypePort"
+		serviceName="s:GridGrouperService" address="${cagrid.gridgrouper.wsrf.url}"
+		wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl">
+	</jaxws:endpoint>
+	
+	 <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
+	
+	<!--  
+	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
+		<constructor-arg index="0" value="${cagrid.gridgrouper.wsrf.registration.legacy.on}"></constructor-arg>
+		<constructor-arg index="1" value="${cagrid.gridgrouper.wsrf.registration.xml}"></constructor-arg>
+		<constructor-arg index="2" value="${cagrid.gridgrouper.wsrf.registration.registrant.legacy.url}"></constructor-arg>
+		<constructor-arg index="3" value="${cagrid.gridgrouper.wsrf.registration.index.url}"></constructor-arg>
 	</bean>
 
     <bean id="legacyProxySslContextFactory"
@@ -60,53 +109,11 @@
         <property name="includeCipherSuites" value="${cagrid.gridgrouper.wsrf.cipher-suites}" />
     </bean>
 
-	<httpj:engine-factory bus="cxf">
-		<httpj:engine port="${cagrid.gridgrouper.wsrf.port}">
-			<httpj:tlsServerParameters />
-			<httpj:connector>
-				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="proxySslContextFactory" />
-					<property name="port" value="${cagrid.gridgrouper.wsrf.port}" />
-				</bean>
-			</httpj:connector>
-		</httpj:engine>
-
-        <httpj:engine port="${cagrid.gridgrouper.legacy-wsrf.port}">
-            <httpj:tlsServerParameters />
-            <httpj:connector>
-                <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-                    <constructor-arg index="0" ref="legacyProxySslContextFactory" />
-                    <property name="port" value="${cagrid.gridgrouper.legacy-wsrf.port}" />
-                </bean>
-            </httpj:connector>
-        </httpj:engine>
-
-	</httpj:engine-factory>
-
-	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
-		<property name="marshallerProperties" ref="propertiesMap" />
-	</bean>
-	<util:map id="propertiesMap">
-		<entry key="jaxb.formatted.output">
-			<value type="java.lang.Boolean">true</value>
-		</entry>
-	</util:map>
-
-	<bean id="gridgrouperWSRF" class="org.cagrid.gridgrouper.service.wsrf.GridGrouperWSRFImpl">
-		<constructor-arg ref="gridGrouperService" />
-	</bean>
-
-	<jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GridGrouper/service"
-		xmlns:s="http://cagrid.nci.nih.gov/GridGrouper/service" id="gridgrouperWSRFEP"
-		implementor="#gridgrouperWSRF" bus="cxf" endpointName="e:GridGrouperPortTypePort"
-		serviceName="s:GridGrouperService" address="${cagrid.gridgrouper.wsrf.url}"
-		wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl">
-	</jaxws:endpoint>
-
     <jaxws:endpoint xmlns:e="http://cagrid.nci.nih.gov/GridGrouper/service"
                     xmlns:s="http://cagrid.nci.nih.gov/GridGrouper/service" id="legacyGridgrouperWSRFEP"
                     implementor="#gridgrouperWSRF" bus="cxf" endpointName="e:GridGrouperPortTypePort"
                     serviceName="s:GridGrouperService" address="${cagrid.gridgrouper.legacy-wsrf.url}"
                     wsdlLocation="schema/org/cagrid/gridgrouper/GridGrouper_service.wsdl">
     </jaxws:endpoint>
+    -->
 </beans>
