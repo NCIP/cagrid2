@@ -975,7 +975,7 @@ public class IdentityFederationManager implements Publisher {
 		}
 	}
 
-	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
+	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId, CertificateSignatureAlgorithm algorithm) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
 		try {
 			GridUser caller = getUser(callerGridId);
 			if (conf.getHostCertificateRenewalPolicy().equals(HostCertificateRenewalPolicy.ADMIN.value())) {
@@ -994,7 +994,7 @@ public class IdentityFederationManager implements Publisher {
 				PermissionDeniedException fault = FaultHelper.createFaultException(PermissionDeniedException.class, "Could not determine if you have permission to renew host certificates.");
 				throw fault;
 			}
-			HostCertificateRecord record = hostManager.renewHostCertificate(recordId);
+			HostCertificateRecord record = hostManager.renewHostCertificate(recordId, algorithm);
 			this.eventManager.logEvent(String.valueOf(recordId), callerGridId, FederationAudit.HOST_CERTIFICATE_RENEWED.value(), "The host certificate for the host " + record.getHost()
 					+ " was renewed by " + callerGridId + ".");
 			return record;

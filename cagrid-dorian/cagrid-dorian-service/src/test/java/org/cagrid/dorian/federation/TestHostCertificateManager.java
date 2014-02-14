@@ -67,7 +67,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			validateAfterCertificateRequest(hcm, req, id);
 			HostCertificateRecord record = hcm.approveHostCertifcate(id, CertificateSignatureAlgorithm.SHA2);
 			validateAfterCertificateApproval(hcm, id, OWNER, req, record);
-			HostCertificateRecord renewed = hcm.renewHostCertificate(id);
+			HostCertificateRecord renewed = hcm.renewHostCertificate(id, CertificateSignatureAlgorithm.SHA2);
 			assertEquals(record.getId(), renewed.getId());
 			assertEquals(record.getHost(), renewed.getHost());
 			assertEquals(record.getOwner(), renewed.getOwner());
@@ -98,7 +98,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			validateAfterCertificateRequest(hcm, req, id);
 
 			try {
-				hcm.renewHostCertificate(id);
+				hcm.renewHostCertificate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed");
 			} catch (InvalidHostCertificateException f) {
 
@@ -109,14 +109,14 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 
 			setHostCertificateStatus(hcm, id, HostCertificateStatus.SUSPENDED);
 			try {
-				hcm.renewHostCertificate(id);
+				hcm.renewHostCertificate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed");
 			} catch (InvalidHostCertificateException f) {
 			}
 
 			setHostCertificateStatus(hcm, id, HostCertificateStatus.COMPROMISED);
 			try {
-				hcm.renewHostCertificate(id);
+				hcm.renewHostCertificate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed");
 			} catch (InvalidHostCertificateException f) {
 			}
@@ -125,7 +125,7 @@ public class TestHostCertificateManager extends TestCase implements Publisher {
 			id = hcm.requestHostCertifcate(OWNER, req);
 			setHostCertificateStatus(hcm, id, HostCertificateStatus.REJECTED);
 			try {
-				hcm.renewHostCertificate(id);
+				hcm.renewHostCertificate(id, CertificateSignatureAlgorithm.SHA2);
 				fail("Should have failed");
 			} catch (InvalidHostCertificateException f) {
 			}
