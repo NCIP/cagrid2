@@ -285,8 +285,8 @@ public class DorianImpl implements Dorian {
 	}
 
 	@Override
-	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
-		return ifm.renewHostCertificate(callerGridId, recordId);
+	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId, CertificateSignatureAlgorithm algorithm) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException {
+		return ifm.renewHostCertificate(callerGridId, recordId, algorithm);
 	}
 
 	@Override

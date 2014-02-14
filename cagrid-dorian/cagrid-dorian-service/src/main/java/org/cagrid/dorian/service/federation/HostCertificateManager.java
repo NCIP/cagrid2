@@ -77,7 +77,7 @@ public class HostCertificateManager {
 
 	}
 
-	public synchronized HostCertificateRecord renewHostCertificate(long id) throws DorianInternalException, InvalidHostCertificateException {
+	public synchronized HostCertificateRecord renewHostCertificate(long id, CertificateSignatureAlgorithm algorithm) throws DorianInternalException, InvalidHostCertificateException {
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
 		if (!record.getStatus().equals(HostCertificateStatus.ACTIVE)) {
 			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class, "Only active host certificates may be renewed.");
@@ -95,7 +95,7 @@ public class HostCertificateManager {
 			if (end.after(ca.getCACertificate().getNotAfter())) {
 				end = ca.getCACertificate().getNotAfter();
 			}
-			java.security.cert.X509Certificate cert = ca.signHostCertificate(record.getHost(), key, start, end, CertificateSignatureAlgorithm.SHA2);
+			java.security.cert.X509Certificate cert = ca.signHostCertificate(record.getHost(), key, start, end, algorithm);
 			record.setSerialNumber(cert.getSerialNumber().longValue());
 			record.setSubject(cert.getSubjectDN().getName());
 			X509Certificate x509 = new X509Certificate();

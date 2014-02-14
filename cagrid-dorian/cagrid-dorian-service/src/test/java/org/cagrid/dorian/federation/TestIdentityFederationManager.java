@@ -1117,7 +1117,7 @@ public class TestIdentityFederationManager extends TestCase {
 			assertTrue(userHostCerts >= 1);
 
 			X509Certificate oldHostCert = CertUtil.loadCertificate(list.get(0).getHostCertificates().get(0).getCertificate().getCertificateAsString());
-			HostCertificateRecord hcr = ifs.renewHostCertificate(adminGridId, list.get(0).getHostCertificates().get(0).getId());
+			HostCertificateRecord hcr = ifs.renewHostCertificate(adminGridId, list.get(0).getHostCertificates().get(0).getId(), CertificateSignatureAlgorithm.SHA2);
 			assertEquals(list.get(0).getHostCertificates().get(0).getId(), hcr.getId());
 			X509Certificate newHostCert = CertUtil.loadCertificate(hcr.getCertificate().getCertificateAsString());
 			crl = getDefaultCRL(ifs);
@@ -1456,20 +1456,20 @@ public class TestIdentityFederationManager extends TestCase {
 			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			try {
-				ifs.renewHostCertificate(usr2.getGridId(), record.getId());
+				ifs.renewHostCertificate(usr2.getGridId(), record.getId(), CertificateSignatureAlgorithm.SHA2);
 				fail("Only admins should be able to renew a host certificate.");
 			} catch (PermissionDeniedException e) {
 
 			}
 
 			try {
-				ifs.renewHostCertificate(usr.getGridId(), record.getId());
+				ifs.renewHostCertificate(usr.getGridId(), record.getId(), CertificateSignatureAlgorithm.SHA2);
 				fail("Only admins should be able to renew a host certificate.");
 			} catch (PermissionDeniedException e) {
 
 			}
 
-			ifs.renewHostCertificate(adminGridId, record.getId());
+			ifs.renewHostCertificate(adminGridId, record.getId(), CertificateSignatureAlgorithm.SHA2);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1504,15 +1504,15 @@ public class TestIdentityFederationManager extends TestCase {
 			HostCertificateRecord record = ifs.requestHostCertificate(usr.getGridId(), req, CertificateSignatureAlgorithm.SHA2);
 
 			try {
-				ifs.renewHostCertificate(usr2.getGridId(), record.getId());
+				ifs.renewHostCertificate(usr2.getGridId(), record.getId(), CertificateSignatureAlgorithm.SHA2);
 				fail("Only admins and owners should be able to renew a host certificate.");
 			} catch (PermissionDeniedException e) {
 
 			}
 
-			ifs.renewHostCertificate(usr.getGridId(), record.getId());
+			ifs.renewHostCertificate(usr.getGridId(), record.getId(), CertificateSignatureAlgorithm.SHA2);
 
-			ifs.renewHostCertificate(adminGridId, record.getId());
+			ifs.renewHostCertificate(adminGridId, record.getId(), CertificateSignatureAlgorithm.SHA2);
 
 		} catch (Exception e) {
 			e.printStackTrace();

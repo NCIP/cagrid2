@@ -50,9 +50,7 @@ import org.cagrid.gaards.authentication.Credential;
 import org.cagrid.gaards.authentication.faults.AuthenticationProviderException;
 import org.cagrid.gaards.authentication.faults.CredentialNotSupportedException;
 import org.cagrid.gaards.authentication.faults.InvalidCredentialException;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
-import gov.nih.nci.cagrid.metadata.security.ServiceSecurityMetadata;
-import org.cagrid.wsrf.properties.ResourceHome;
+
 
 public interface Dorian {
 
@@ -117,7 +115,7 @@ public interface Dorian {
 
 	public void updateHostCertificateRecord(String callerGridId, HostCertificateUpdate update) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException;
 
-	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException;
+	public HostCertificateRecord renewHostCertificate(String callerGridId, long recordId, CertificateSignatureAlgorithm algorithm) throws DorianInternalException, InvalidHostCertificateException, PermissionDeniedException;
 
 	public boolean doesLocalUserExist(String userId) throws DorianInternalException;
 
