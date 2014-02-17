@@ -1,11 +1,17 @@
 package org.cagrid.trust.service.core;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.cagrid.core.xml.XMLUtils;
+import org.cagrid.security.ssl.proxy.trust.ProxyTrustManager;
 import org.cagrid.trust.model.SyncDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class TrustService implements org.cagrid.trust.service.TrustService {
 
@@ -13,7 +19,11 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 
 	private String syncDescription;
 
-	private TrustServiceTrustManager trustManager;
+    private RevocationDisabledTrustManager revocationDisabledTrustManager;
+    private RevocationEnabledTrustManager revocationEnabledTrustManager;
+    private TrustedCAManager trustedCAManager;
+
+	private X509TrustManager[] trustManagers;
 
 	private Object syncMutex = new Object();
 
@@ -21,6 +31,11 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 
 	public TrustService() {
 		log = LoggerFactory.getLogger(this.getClass().getName());
+        this.revocationDisabledTrustManager = new RevocationDisabledTrustManager();
+        this.revocationEnabledTrustManager = new RevocationEnabledTrustManager();
+        trustManagers = new X509TrustManager[2];
+        trustManagers[0] = new ProxyTrustManager(new TrustManager[] {this.revocationEnabledTrustManager});
+        trustManagers[1] = new ProxyTrustManager(new TrustManager[] {this.revocationDisabledTrustManager});
 	}
 
 	public Synchronizer getSynchronizer() {
@@ -39,13 +54,18 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 		this.syncDescription = syncDescription;
 	}
 
-	public TrustServiceTrustManager getTrustManager() {
-		return trustManager;
+    public TrustedCAManager getTrustedCAManager() {
+        return trustedCAManager;
+    }
+
+    public void setTrustedCAManager(TrustedCAManager trustedCAManager) {
+        this.trustedCAManager = trustedCAManager;
+    }
+
+    public X509TrustManager[] getTrustManagers() {
+        return trustManagers;
 	}
 
-	public void setTrustManager(TrustServiceTrustManager trustManager) {
-		this.trustManager = trustManager;
-	}
 
 	public void syncWithTrustFabric() {
 		long start = System.currentTimeMillis();
@@ -60,18 +80,33 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 				} else {
 					log.warn("Cannot sync with the trust fabric, no sync description file configured");
 				}
-
-				if (getTrustManager() != null) {
-					getTrustManager().reloadTrustManager();
-				} else {
-					log.warn("No trust manager configured for the trust service");
-				}
+                reloadTrustManagers();
 			}
 		} else {
 			log.warn("No synchronizer configured for the trust service.");
 		}
 
 		long end = System.currentTimeMillis();
-		log.info("Successfull synced with the trust fabric in " + (end - start) + " milliseconds.");
+		log.info("Successfully synced with the trust fabric in " + (end - start) + " milliseconds.");
 	}
+
+    protected void reloadTrustManagers(){
+        if (getTrustedCAManager() != null) {
+            List<TrustedCAEntry> list = getTrustedCAManager().getTrustedCertificateAuthorities();
+            List<TrustedCAEntry> revocationEnabled = new ArrayList<TrustedCAEntry>();
+            List<TrustedCAEntry> revocationDisabled = new ArrayList<TrustedCAEntry>();
+            for(TrustedCAEntry ca : list){
+                if(ca.getCRL()==null){
+                    revocationDisabled.add(ca);
+                }else{
+                    revocationEnabled.add(ca);
+                }
+            }
+            this.revocationEnabledTrustManager.reload(revocationEnabled);
+            this.revocationDisabledTrustManager.reload(revocationDisabled);
+
+        } else {
+            log.warn("No Trusted CA Manager configured for the trust service");
+        }
+    }
 }

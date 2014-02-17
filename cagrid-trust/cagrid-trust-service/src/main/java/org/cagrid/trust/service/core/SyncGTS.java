@@ -171,7 +171,7 @@ public class SyncGTS implements Synchronizer {
 				}
 			}
 
-			// Create a list of exclude certificate authorites and remove
+			// Create a list of exclude certificate authorities and remove
 			// all excluded certificates from the master list.
 			Set<String> excluded = new HashSet<String>();
 			ExcludedCAs ex = description.getExcludedCAs();
