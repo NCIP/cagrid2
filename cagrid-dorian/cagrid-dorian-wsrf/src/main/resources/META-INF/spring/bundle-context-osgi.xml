@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
-	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                         http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
                         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
-	<osgix:cm-properties id="preProps" persistent-id="cagrid.dorian.wsrf">
+    <osgix:cm-properties id="preProps" persistent-id="cagrid.dorian.wsrf">
 
-		<prop key="cagrid.dorian.wsrf.host">localhost</prop>
-		<prop key="cagrid.dorian.wsrf.port">7734</prop>
+        <prop key="cagrid.dorian.wsrf.host">localhost</prop>
+        <prop key="cagrid.dorian.wsrf.port">7734</prop>
 
-		<prop key="cagrid.dorian.wsrf.path">dorian</prop>
-		<prop key="cagrid.dorian.wsrf.url">https://${cagrid.dorian.wsrf.host}:${cagrid.dorian.wsrf.port}/${cagrid.dorian.wsrf.path}</prop>
-		<prop key="cagrid.dorian.wsrf.trusted.idp.mapping">Dorian,${cagrid.dorian.wsrf.url},/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian2.sha2.bazinga.cagrid.org;</prop>
-		<prop key="cagrid.dorian.wsrf.keystore.path">${karaf.base}/etc/dorian/dorian-host.jks</prop>
-		<prop key="cagrid.dorian.wsrf.keystore.password">changeit</prop>
-		<prop key="cagrid.dorian.wsrf.keystore.alias">host</prop>
-		<prop key="cagrid.dorian.wsrf.key.password">changeit</prop>
-		<prop key="cagrid.dorian.wsrf.truststore.path">${karaf.base}/etc/dorian/truststore.jks</prop>
-		<prop key="cagrid.dorian.wsrf.truststore.password">changeit</prop>
-		<prop key="cagrid.dorian.wsrf.cipher-suites">SSL_RSA_WITH_RC4_128_MD5,SSL_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
-			TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA,
-			SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,
-			SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,
-			SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA,TLS_EMPTY_RENEGOTIATION_INFO_SCSV,SSL_RSA_WITH_NULL_MD5</prop>
-		
-		<prop key="cagrid.dorian.legacy-wsrf.host">localhost</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.port">8443</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.path">wsrf/services/cagrid/Dorian</prop>	
-		<prop key="cagrid.dorian.legacy-wsrf.url">https://${cagrid.dorian.legacy-wsrf.host}:${cagrid.dorian.legacy-wsrf.port}/${cagrid.dorian.legacy-wsrf.path}</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.trusted.idp.mapping">Dorian,${cagrid.dorian.legacy-wsrf.url},/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian1.sha1.bazinga.cagrid.org;</prop>
-	
-		<prop key="cagrid.dorian.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-dorian/dorian-host.jks</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.keystore.password">changeit</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.keystore.alias">host</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.key.password">changeit</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.truststore.path">${karaf.base}/etc/cagrid-dorian/truststore.jks</prop>
-		<prop key="cagrid.dorian.legacy-wsrf.truststore.password">changeit</prop>
-		<prop key="cagrid.dorian.wsrf.legacy-endpoint">dorianLegacyWSRF</prop>
-		<prop key="cagrid.dorian.wsrf.metadata.url">file://${karaf.base}/etc/cagrid-dorian/serviceMetadata.xml</prop>
-		<prop key="cagrid.dorian.wsrf.security.metadata.url">file://${karaf.base}/etc/cagrid-dorian/serviceSecurityMetadata.xml</prop>
-		<prop key="cagrid.dorian.wsrf.registration.on">false</prop>
-		<prop key="cagrid.dorian.wsrf.registration.legacy.on">false</prop>
-		<prop key="cagrid.dorian.wsrf.registration.registrant.url">${cagrid.dorian.wsrf.url}</prop>
-		<prop key="cagrid.dorian.wsrf.registration.registrant.legacy.url">${cagrid.dorian.legacy-wsrf.url}</prop>
-		<prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/cagrid-dorian/registration.xml</prop>
-		<prop key="cagrid.dorian.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
-	</osgix:cm-properties>
+        <prop key="cagrid.dorian.wsrf.path">dorian</prop>
+        <prop key="cagrid.dorian.wsrf.ssl.context.factory.bean">proxySslContextFactory</prop>
+        <prop key="cagrid.dorian.wsrf.trusted.idp.mapping">
+            Dorian,${cagrid.dorian.wsrf.url},/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian2.sha2.bazinga.cagrid.org;
+        </prop>
+        <prop key="cagrid.dorian.wsrf.keystore.path">${karaf.base}/etc/dorian/dorian-host.jks</prop>
+        <prop key="cagrid.dorian.wsrf.keystore.password">changeit</prop>
+        <prop key="cagrid.dorian.wsrf.keystore.alias">host</prop>
+        <prop key="cagrid.dorian.wsrf.key.password">changeit</prop>
+        <prop key="cagrid.dorian.wsrf.truststore.path">${karaf.base}/etc/dorian/truststore.jks</prop>
+        <prop key="cagrid.dorian.wsrf.truststore.password">changeit</prop>
+        <prop key="cagrid.dorian.wsrf.cipher-suites">
+            SSL_RSA_WITH_RC4_128_MD5,SSL_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
+            TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA,
+            SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,SSL_RSA_WITH_DES_CBC_SHA,SSL_DHE_RSA_WITH_DES_CBC_SHA,
+            SSL_DHE_DSS_WITH_DES_CBC_SHA,SSL_RSA_EXPORT_WITH_RC4_40_MD5,SSL_RSA_EXPORT_WITH_DES40_CBC_SHA,SSL_DHE_RSA_EXPORT_WITH_DES40_CBC_SHA,
+            SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA,TLS_EMPTY_RENEGOTIATION_INFO_SCSV,SSL_RSA_WITH_NULL_MD5
+        </prop>
 
-	<ctx:property-placeholder properties-ref="preProps" />
+        <prop key="cagrid.dorian.legacy-wsrf.host">localhost</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.port">8443</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.path">wsrf/services/cagrid/Dorian</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.url">
+            https://${cagrid.dorian.legacy-wsrf.host}:${cagrid.dorian.legacy-wsrf.port}/${cagrid.dorian.legacy-wsrf.path}
+        </prop>
+        <prop key="cagrid.dorian.legacy-wsrf.trusted.idp.mapping">
+            Dorian,${cagrid.dorian.legacy-wsrf.url},/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian1.sha1.bazinga.cagrid.org;
+        </prop>
 
-	<osgi:reference id="dorianService" cardinality="0..1"
-		interface="org.cagrid.dorian.service.Dorian" />
+        <prop key="cagrid.dorian.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-dorian/dorian-host.jks</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.keystore.password">changeit</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.keystore.alias">host</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.key.password">changeit</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.truststore.path">${karaf.base}/etc/cagrid-dorian/truststore.jks</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.truststore.password">changeit</prop>
+        <prop key="cagrid.dorian.wsrf.legacy-endpoint">dorianLegacyWSRF</prop>
+        <prop key="cagrid.dorian.wsrf.metadata.url">file://${karaf.base}/etc/cagrid-dorian/serviceMetadata.xml</prop>
+        <prop key="cagrid.dorian.wsrf.security.metadata.url">
+            file://${karaf.base}/etc/cagrid-dorian/serviceSecurityMetadata.xml
+        </prop>
+        <prop key="cagrid.dorian.wsrf.registration.on">false</prop>
+        <prop key="cagrid.dorian.wsrf.registration.legacy.on">false</prop>
+        <prop key="cagrid.dorian.wsrf.registration.registrant.url">${cagrid.dorian.wsrf.url}</prop>
+        <prop key="cagrid.dorian.wsrf.registration.registrant.legacy.url">${cagrid.dorian.legacy-wsrf.url}</prop>
+        <prop key="cagrid.dorian.wsrf.registration.xml">${karaf.base}/etc/cagrid-dorian/registration.xml</prop>
+        <prop key="cagrid.dorian.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService
+        </prop>
+    </osgix:cm-properties>
+
+    <ctx:property-placeholder properties-ref="preProps"/>
+
+    <osgi:reference id="dorianService" cardinality="0..1" interface="org.cagrid.dorian.service.Dorian"/>
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
 </beans>

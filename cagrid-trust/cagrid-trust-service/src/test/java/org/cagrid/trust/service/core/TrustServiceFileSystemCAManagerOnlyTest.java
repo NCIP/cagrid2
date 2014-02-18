@@ -110,15 +110,15 @@ public class TrustServiceFileSystemCAManagerOnlyTest {
     }
 
     private boolean isClientTrusted(X509Certificate[] chain) {
-        X509TrustManager[] tms = this.trustService.getTrustManagers();
-        for (X509TrustManager tm : tms) {
-            try {
-                tm.checkClientTrusted(chain, "RSA");
-                return true;
-            } catch (CertificateException e) {
+        X509TrustManager tm = this.trustService.getTrustManager();
 
-            }
+        try {
+            tm.checkClientTrusted(chain, "RSA");
+            return true;
+        } catch (CertificateException e) {
+
         }
+
 
         return false;
     }
@@ -128,15 +128,15 @@ public class TrustServiceFileSystemCAManagerOnlyTest {
     }
 
     private boolean isServerTrusted(X509Certificate[] chain) {
-        X509TrustManager[] tms = this.trustService.getTrustManagers();
-        for (X509TrustManager tm : tms) {
-            try {
-                tm.checkServerTrusted(chain, "RSA");
-                return true;
-            } catch (CertificateException e) {
+        X509TrustManager tm = this.trustService.getTrustManager();
 
-            }
+        try {
+            tm.checkServerTrusted(chain, "RSA");
+            return true;
+        } catch (CertificateException e) {
+
         }
+
 
         return false;
     }

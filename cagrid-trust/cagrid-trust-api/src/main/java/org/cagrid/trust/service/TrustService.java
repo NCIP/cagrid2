@@ -4,6 +4,6 @@ import javax.net.ssl.TrustManager;
 
 public interface TrustService {
 
-	public TrustManager[] getTrustManagers();
+    public TrustManager getTrustManager();
 
 }
