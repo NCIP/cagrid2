@@ -61,6 +61,19 @@
 			<artifactId>com.springsource.slf4j.log4j</artifactId>
 		</dependency>
 
+        <!-- Test Scope -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 	</dependencies>
 
 </project>

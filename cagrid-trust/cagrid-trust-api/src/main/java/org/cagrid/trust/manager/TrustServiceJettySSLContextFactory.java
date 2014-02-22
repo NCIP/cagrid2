@@ -34,18 +34,14 @@ public class TrustServiceJettySSLContextFactory extends SslContextFactory {
 
 	@Override
 	protected TrustManager[] getTrustManagers(KeyStore trustStore, Collection<? extends CRL> crls) throws Exception {
-
 		if (getTrustService() == null) {
 			log.warn("A trust service was not specified, using the default trust managers");
 			return super.getTrustManagers(trustStore, crls);
-		} else if (getTrustService().getTrustManager() == null) {
+		} else if (getTrustService().getTrustManagers() == null) {
 			log.warn("The trust service did NOT provide a trust manager to use, using the default trust managers");
 			return super.getTrustManagers(trustStore, crls);
 		} else {
-
-			TrustManager[] tms = new TrustManager[1];
-
-			tms[0] = getTrustService().getTrustManager();
+            TrustManager[] tms = getTrustService().getTrustManagers();
 			ProxyTrustManager proxyTrustManager = new ProxyTrustManager(tms);
 			return new TrustManager[] { proxyTrustManager };
 		}

@@ -48,10 +48,11 @@ public class TrustServiceTrustManager implements X509TrustManager {
 			if (log.isDebugEnabled()) {
 				log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + " is trusted.");
 			}
-		} catch (Exception e) {
+		} catch (CertificateException e) {
 			if (log.isDebugEnabled()) {
 				log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + " is NOT trusted: " + e.getMessage(), e);
 			}
+            throw e;
 
 		}
 	}
@@ -65,10 +66,11 @@ public class TrustServiceTrustManager implements X509TrustManager {
 			if (log.isDebugEnabled()) {
 				log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + " is trusted.");
 			}
-		} catch (Exception e) {
+		} catch (CertificateException e) {
 			if (log.isDebugEnabled()) {
 				log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + " is NOT trusted: " + e.getMessage(), e);
 			}
+            throw e;
 		}
 	}
 

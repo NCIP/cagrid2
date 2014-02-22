@@ -10,8 +10,8 @@
 
 	<osgix:cm-properties id="preProps" persistent-id="cagrid.gridgrouper.service">
 		<prop key="cagrid.gridgrouper.service.name">grouper</prop>
-		<prop key="cagrid.gridgrouper.service.metadata.url">file://${karaf.base}/etc/cagrid-grid-grouper/serviceMetadata.xml</prop>
-        <prop key="cagrid.gridgrouper.service.security.metadata.url">file://${karaf.base}/etc/cagrid-grid-grouper/serviceSecurityMetadata.xml</prop>
+		<prop key="cagrid.gridgrouper.service.metadata.url">file://${karaf.base}/etc/cagrid-gridgrouper/serviceMetadata.xml</prop>
+        <prop key="cagrid.gridgrouper.service.security.metadata.url">file://${karaf.base}/etc/cagrid-gridgrouper/serviceSecurityMetadata.xml</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
