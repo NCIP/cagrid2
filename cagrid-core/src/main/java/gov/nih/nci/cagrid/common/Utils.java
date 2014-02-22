@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -25,10 +24,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.globus.common.CoGProperties;
 import org.globus.gsi.CertificateRevocationLists;
@@ -294,16 +289,8 @@ public class Utils {
 	 *            A stream containing the WSDD configuration. This may be null.
 	 * @throws Exception
 	 */
-	public static void serializeObject(Object obj, QName qname, Writer writer,
-			InputStream wsdd) throws Exception {
-		JAXBContext jaxbContext = JAXBContext.newInstance(obj.getClass());
-		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-        
-		// output pretty printed
-		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
- 
-		jaxbMarshaller.marshal(obj, writer);
-	}
+//	public static void serializeObject(Object obj, QName qname, Writer writer,
+//			InputStream wsdd) throws Exception {
 //		// derive a message element for the object
 //		MessageElement element = (MessageElement) ObjectSerializer
 //				.toSOAPElement(obj, qname);
@@ -354,10 +341,10 @@ public class Utils {
 	 *            a file writer is used, be sure to close it!
 	 * @throws Exception
 	 */
-	public static void serializeObject(Object obj, QName qname, Writer writer)
-			throws Exception {
-		serializeObject(obj, qname, writer, null);
-	}
+//	public static void serializeObject(Object obj, QName qname, Writer writer)
+//			throws Exception {
+//		serializeObject(obj, qname, writer, null);
+//	}
 
 	/**
 	 * Deserializes XML into an object

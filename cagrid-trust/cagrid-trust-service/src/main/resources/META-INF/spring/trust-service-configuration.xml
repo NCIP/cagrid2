@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="trustService" class="org.cagrid.trust.service.core.TrustService">
-		<property name="synchronizer" ref="synchronizer" />
-		<property name="syncDescription" value="${cagrid.trust.service.sync.description.file}" />
-		<property name="trustManager" ref="trustManager" />
-	</bean>
+    <bean id="trustService" class="org.cagrid.trust.service.core.TrustService">
+        <property name="synchronizer" ref="synchronizer" />
+        <property name="syncDescription" value="${cagrid.trust.service.sync.description.file}" />
+        <property name="trustedCAManager" ref="trustedCAManager" />
+    </bean>
 
-	<bean id="synchronizer" class="org.cagrid.trust.service.core.SyncGTS">
-		<property name="historyManager" ref="historyManager" />
-		<property name="truststore" ref="truststore" />
-		<property name="trustedCertificatesDirectory"
-			value="${cagrid.trust.service.certificates.directory}" />
-	</bean>
-	
-	
-	<bean id="trustManager" class="org.cagrid.trust.service.core.TrustServiceTrustManager">
-		<constructor-arg index="0" value="${cagrid.trust.service.certificates.directory}"/>
-	</bean>
+    <bean id="synchronizer" class="org.cagrid.trust.service.core.SyncGTS">
+        <property name="historyManager" ref="historyManager" />
+        <property name="truststore" ref="truststore" />
+        <property name="trustedCertificatesDirectory"
+                  value="${cagrid.trust.service.certificates.directory}" />
+    </bean>
 
-	<bean id="historyManager" class="org.cagrid.trust.service.core.DefaultHistoryManager">
-		<constructor-arg index="0"
-			value="${cagrid.trust.service.history.directory}" />
-	</bean>
+    <bean id="trustedCAManager" class="org.cagrid.trust.service.core.FileSystemTrustedCAManager">
+        <constructor-arg index="0" value="${cagrid.trust.service.certificates.directory}"/>
+    </bean>
 
-	<bean id="truststore" class="org.apache.cxf.configuration.security.KeyStoreType">
-		<property name="file" value="${cagrid.trust.service.truststore.file}" />
-		<property name="password" value="${cagrid.trust.service.truststore.password}" />
-	</bean>
+    <bean id="historyManager" class="org.cagrid.trust.service.core.DefaultHistoryManager">
+        <constructor-arg index="0"
+                         value="${cagrid.trust.service.history.directory}" />
+    </bean>
+
+    <bean id="truststore" class="org.apache.cxf.configuration.security.KeyStoreType">
+        <property name="file" value="${cagrid.trust.service.truststore.file}" />
+        <property name="password" value="${cagrid.trust.service.truststore.password}" />
+    </bean>
 
 </beans>

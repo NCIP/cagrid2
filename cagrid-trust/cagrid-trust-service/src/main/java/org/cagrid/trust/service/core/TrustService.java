@@ -1,77 +1,93 @@
 package org.cagrid.trust.service.core;
 
-import java.io.File;
-
 import org.cagrid.core.xml.XMLUtils;
 import org.cagrid.trust.model.SyncDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.X509TrustManager;
+import java.io.File;
+import java.util.List;
+
 public class TrustService implements org.cagrid.trust.service.TrustService {
 
-	private Synchronizer synchronizer;
+    private Synchronizer synchronizer;
 
-	private String syncDescription;
+    private String syncDescription;
 
-	private TrustServiceTrustManager trustManager;
 
-	private Object syncMutex = new Object();
+    private TrustedCAManager trustedCAManager;
 
-	private Logger log;
+    private TrustServiceTrustManager trustManager;
 
-	public TrustService() {
-		log = LoggerFactory.getLogger(this.getClass().getName());
-	}
+    private Object syncMutex = new Object();
 
-	public Synchronizer getSynchronizer() {
-		return synchronizer;
-	}
+    private Logger log;
 
-	public void setSynchronizer(Synchronizer synchronizer) {
-		this.synchronizer = synchronizer;
-	}
+    public TrustService() {
+        log = LoggerFactory.getLogger(this.getClass().getName());
+        this.trustManager = new TrustServiceTrustManager();
 
-	public String getSyncDescription() {
-		return syncDescription;
-	}
+    }
 
-	public void setSyncDescription(String syncDescription) {
-		this.syncDescription = syncDescription;
-	}
+    public Synchronizer getSynchronizer() {
+        return synchronizer;
+    }
 
-	public TrustServiceTrustManager getTrustManager() {
-		return trustManager;
-	}
+    public void setSynchronizer(Synchronizer synchronizer) {
+        this.synchronizer = synchronizer;
+    }
 
-	public void setTrustManager(TrustServiceTrustManager trustManager) {
-		this.trustManager = trustManager;
-	}
+    public String getSyncDescription() {
+        return syncDescription;
+    }
 
-	public void syncWithTrustFabric() {
-		long start = System.currentTimeMillis();
-		log.info("Syncing with the trust fabric.....");
-		if (getSynchronizer() != null) {
-			synchronized (syncMutex) {
-				File syncDescriptionFile = null;
-				if (getSyncDescription() != null) {
-					syncDescriptionFile = new File(getSyncDescription());
-					SyncDescription des = (SyncDescription) XMLUtils.fromXMLFile(SyncDescription.class, syncDescriptionFile);
-					getSynchronizer().sync(des);
-				} else {
-					log.warn("Cannot sync with the trust fabric, no sync description file configured");
-				}
+    public void setSyncDescription(String syncDescription) {
+        this.syncDescription = syncDescription;
+    }
 
-				if (getTrustManager() != null) {
-					getTrustManager().reloadTrustManager();
-				} else {
-					log.warn("No trust manager configured for the trust service");
-				}
-			}
-		} else {
-			log.warn("No synchronizer configured for the trust service.");
-		}
+    public TrustedCAManager getTrustedCAManager() {
+        return trustedCAManager;
+    }
 
-		long end = System.currentTimeMillis();
-		log.info("Successfull synced with the trust fabric in " + (end - start) + " milliseconds.");
-	}
+    public void setTrustedCAManager(TrustedCAManager trustedCAManager) {
+        this.trustedCAManager = trustedCAManager;
+    }
+
+    public X509TrustManager getTrustManager() {
+        return trustManager;
+    }
+
+
+    public void syncWithTrustFabric() {
+        long start = System.currentTimeMillis();
+        log.info("Syncing with the trust fabric.....");
+        if (getSynchronizer() != null) {
+            synchronized (syncMutex) {
+                File syncDescriptionFile = null;
+                if (getSyncDescription() != null) {
+                    syncDescriptionFile = new File(getSyncDescription());
+                    SyncDescription des = (SyncDescription) XMLUtils.fromXMLFile(SyncDescription.class, syncDescriptionFile);
+                    getSynchronizer().sync(des);
+                } else {
+                    log.warn("Cannot sync with the trust fabric, no sync description file configured");
+                }
+                reloadTrustManagers();
+            }
+        } else {
+            log.warn("No synchronizer configured for the trust service.");
+        }
+
+        long end = System.currentTimeMillis();
+        log.info("Successfully synced with the trust fabric in " + (end - start) + " milliseconds.");
+    }
+
+    protected void reloadTrustManagers() {
+        if (getTrustedCAManager() != null) {
+            List<TrustedCAEntry> list = getTrustedCAManager().getTrustedCertificateAuthorities();
+            this.trustManager.reload(list);
+        } else {
+            log.warn("No Trusted CA Manager configured for the trust service");
+        }
+    }
 }

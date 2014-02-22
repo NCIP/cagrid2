@@ -1,66 +1,79 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.cagrid</groupId>
-		<artifactId>cagrid-trust</artifactId>
-		<version>2.1.0-SNAPSHOT</version>
-	</parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.cagrid</groupId>
+        <artifactId>cagrid-trust</artifactId>
+        <version>2.1.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>cagrid-trust-service</artifactId>
-	<name>caGrid Trust Service</name>
-	<packaging>bundle</packaging>
+    <artifactId>cagrid-trust-service</artifactId>
+    <name>caGrid Trust Service</name>
+    <packaging>bundle</packaging>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Export-Package />
-						<Private-Package>org.cagrid.trust.service.core</Private-Package>
-						<Import-Package>org.quartz.simpl,*</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Export-Package />
+                        <Private-Package>org.cagrid.trust.service.core</Private-Package>
+                        <Import-Package>org.quartz.simpl,*</Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>org.cagrid</groupId>
-			<artifactId>cagrid-trust-api</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.cagrid</groupId>
+            <artifactId>cagrid-trust-api</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.cagrid</groupId>
-			<artifactId>cagrid-gts-soap-client</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.cagrid</groupId>
+            <artifactId>cagrid-gts-soap-client</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.jvnet.jaxb2_commons</groupId>
-			<artifactId>jaxb2-basics-runtime</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jvnet.jaxb2_commons</groupId>
-			<artifactId>jaxb2-basics</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics</artifactId>
+        </dependency>
 
-		<!-- Logging -->
+        <!-- Logging -->
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>com.springsource.slf4j.log4j</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>com.springsource.slf4j.log4j</artifactId>
+        </dependency>
 
-	</dependencies>
+        <!-- Test Scope -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
