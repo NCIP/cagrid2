@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core" xmlns:wsa="http://cxf.apache.org/ws/addressing"
-    xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration" xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
-	                    http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+
 	                    http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
-	                    http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
-                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
->
+	                    http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
     <bean id="defaultPropertiesPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:META-INF/spring/dorian-wsrf.properties"/>
@@ -42,7 +41,17 @@
         <constructor-arg index="3" value="${cagrid.dorian.wsrf.registration.index.url}"></constructor-arg>
     </bean>
 
-    
+
+    <bean id="trustServiceSSLContextFactory" class="org.cagrid.trust.service.TrustServiceJettySSLContextFactory ">
+        <property name="trustService" ref="trustService"/>
+        <property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.dorian.wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.dorian.wsrf.key.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.dorian.wsrf.cipher-suites}"/>
+    </bean>
+
 
     <bean id="proxySslContextFactory" class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
         <property name="keyStorePath" value="${cagrid.dorian.wsrf.keystore.path}"/>
@@ -67,9 +76,9 @@
     </bean>
     
     <jaxws:endpoint xmlns:e="https://cagrid.nci.nih.gov/Dorian/service" xmlns:s="http://cagrid.nci.nih.gov/Dorian/service" id="dorianWSRFEP" implementor="#dorianWSRF" bus="cxf"
-        endpointName="e:DorianPortTypePort" serviceName="s:DorianService" address="${cagrid.dorian.wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl"
-    >
-        <jaxws:inInterceptors>
+                    endpointName="e:DorianPortTypePort" serviceName="s:DorianService"
+                    address="${cagrid.dorian.wsrf.url}" wsdlLocation="schema/org/cagrid/dorian/Dorian_service.wsdl">
+    <jaxws:inInterceptors>
         <!--  <ref bean="logIn"/> -->     
             <!-- <ref bean="inboundSamlCanonicalizerInterceptor"/> -->
         </jaxws:inInterceptors>
@@ -131,7 +140,7 @@
             <httpj:tlsServerParameters/>
             <httpj:connector>
                 <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-                    <constructor-arg index="0" ref="proxySslContextFactory"/>
+                    <constructor-arg index="0" ref="${cagrid.dorian.wsrf.ssl.context.factory.bean}"/>
                     <property name="port" value="${cagrid.dorian.wsrf.port}"/>
                 </bean>
             </httpj:connector>
