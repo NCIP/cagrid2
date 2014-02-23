@@ -1,5 +1,6 @@
 package org.cagrid.dorian.service.federation;
 
+import gov.nih.nci.cagrid.common.Runner;
 import gov.nih.nci.cagrid.common.ThreadManager;
 import gov.nih.nci.cagrid.common.Utils;
 import gov.nih.nci.cagrid.opensaml.SAMLAssertion;
@@ -979,107 +980,67 @@ public class IdentityFederationManager implements Publisher {
 
                 logger.debug("publishCRL() - Publishing CRL(s)....");
 
-                final List<String> services = conf.getCRLPublishingList();
-                final X509Credential credential = conf.getCredentialManager().getCredential();
-                final KeyStoreType truststore = conf.getCredentialManager().getTruststore();
 
-                try {
-                    logger.debug("Getting CRL(s) to publish....");
-                    Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
-                    logger.debug("Found " + crls.size() + " to publish.");
-                    Iterator<String> itr = crls.keySet().iterator();
-                    while (itr.hasNext()) {
-                        String issuer = itr.next();
-                        X509CRL crl = crls.get(issuer);
-                        org.cagrid.gts.model.X509CRL x509 = new org.cagrid.gts.model.X509CRL();
 
-                        x509.setCrlEncodedString(CertUtil.writeCRL(crl));
-                        for (int i = 0; i < services.size(); i++) {
-                            String uri = services.get(i);
+                Runner runner = new Runner() {
+                    public void execute() {
+                        logger.debug("publishCRL() -  CRL runner started and waiting on mutex....");
+                        synchronized (mutex) {
+                            logger.debug("publishCRL() - Publishing CRL(s)....");
+                            final List<String> services = conf.getCRLPublishingList();
+                            final X509Credential credential = conf.getCredentialManager().getCredential();
+                            final KeyStoreType truststore = conf.getCredentialManager().getTruststore();
                             try {
-                                logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
-                                GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
-                                UpdateCRLRequest req = new UpdateCRLRequest();
-                                req.setTrustedAuthorityName(issuer);
-                                UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();
-                                val.setX509CRL(x509);
-                                req.setCrl(val);
-                                client.updateCRL(req);
-                                logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
-                                eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");
-                            } catch (Exception ex) {
-                                String msg = "Error publishing the CRL for the CA " + issuer + " to the GTS " + uri + "!!!";
-                                logger.error(msg, ex);
-                                eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + ex.getMessage());
-                            }
+                                logger.debug("publishCRL() - Getting CRL(s) to publish...");
+                                Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
+                                logger.debug("Found "+crls.size()+" to publish.");
+                                Iterator<String> itr = crls.keySet().iterator();
+                                while (itr.hasNext()) {
+                                    String issuer = itr.next();
+                                    X509CRL crl = crls.get(issuer);
+                                    org.cagrid.gts.model.X509CRL x509 = new org.cagrid.gts.model.X509CRL();
 
+                                    x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+                                    for (int i = 0; i < services.size(); i++) {
+                                        String uri = services.get(i);
+                                        try {
+                                            logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
+                                            GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
+                                            UpdateCRLRequest req = new UpdateCRLRequest();
+                                            req.setTrustedAuthorityName(issuer);
+                                            UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();
+                                            val.setX509CRL(x509);
+                                            req.setCrl(val);
+                                            client.updateCRL(req);
+                                            logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
+                                            eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");
+                                        } catch (Exception ex) {
+                                            String msg = "Error publishing the CRL for the CA " + issuer + " to the GTS " + uri + "!!!";
+                                            logger.error(msg, ex);
+                                            eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + ex.getMessage());
+                                        }
+
+                                    }
+                                }
+
+                            } catch (Exception e) {
+                                String msg = "Unexpected Error publishing the CRL!!!";
+                                logger.error(msg, e);
+                                eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + e.getMessage());
+                            }
                         }
                     }
-
-                } catch (Exception e) {
-                    String msg = "Unexpected Error publishing the CRL!!!";
-                    logger.error(msg, e);
-                    eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + e.getMessage());
+                };
+                try {
+                    logger.debug("publishCRL() - Executing runner...");
+                    threadManager.executeInBackground(runner);
+                } catch (Exception t) {
+                    t.getMessage();
                 }
             }
         }
     }
 
-
-/*
-				Runner runner = new Runner() {
-					public void execute() {
-                        logger.debug("publishCRL() -  CRL runner started and waiting on mutex....");
-						synchronized (mutex) {
-                            logger.debug("publishCRL() - Publishing CRL(s)....");
-
-							try {
-								Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
-                                logger.debug("Found "+crls.size()+" to publish.");
-								Iterator<String> itr = crls.keySet().iterator();
-								while (itr.hasNext()) {
-									String issuer = itr.next();
-									X509CRL crl = crls.get(issuer);
-									org.cagrid.gts.model.X509CRL x509 = new org.cagrid.gts.model.X509CRL();
-
-									x509.setCrlEncodedString(CertUtil.writeCRL(crl));
-									for (int i = 0; i < services.size(); i++) {
-										String uri = services.get(i);
-										try {
-											logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
-											GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
-											UpdateCRLRequest req = new UpdateCRLRequest();
-											req.setTrustedAuthorityName(issuer);
-											UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();
-											val.setX509CRL(x509);
-											req.setCrl(val);
-											client.updateCRL(req);
-											logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
-											eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");
-										} catch (Exception ex) {
-											String msg = "Error publishing the CRL for the CA " + issuer + " to the GTS " + uri + "!!!";
-											logger.error(msg, ex);
-											eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + ex.getMessage());
-										}
-
-									}
-								}
-
-							} catch (Exception e) {
-								String msg = "Unexpected Error publishing the CRL!!!";
-								logger.error(msg, e);
-								eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + e.getMessage());
-							}
-						}
-					}
-				};
-				try {
-                    logger.debug("publishCRL() - Executing runner...");
-                            threadManager.executeInBackground(runner);
-				} catch (Exception t) {
-					t.getMessage();
-				}
-				*/
 
 
 
@@ -1104,11 +1065,16 @@ public class IdentityFederationManager implements Publisher {
     public Map<String, X509CRL> getCRL(CertificateSignatureAlgorithm sa) throws DorianInternalException {
 
         Map<String, Map<Long, CRLEntry>> crls = new HashMap<String, Map<Long, CRLEntry>>();
+        logger.debug("getCRL() - Getting disabled users...");
         Set<String> users = this.um.getDisabledUsers();
+
+        logger.debug("getCRL() - Found "+users.size()+" disabled users.");
         Iterator<String> itr = users.iterator();
         while (itr.hasNext()) {
             String gid = itr.next();
+            logger.debug("getCRL() - Getting Active user certificates for the user "+gid);
             List<BigInteger> userCerts = this.userCertificateManager.getActiveCertificates(gid);
+            logger.debug("getCRL() - Found "+userCerts.size()+" user certificates for the user "+gid);
             for (BigInteger sn : userCerts) {
                 try {
                     UserCertificateRecord record = this.userCertificateManager.getUserCertificateRecord(sn.longValue());
@@ -1119,7 +1085,9 @@ public class IdentityFederationManager implements Publisher {
                 }
             }
 
+            logger.debug("getCRL() - Getting host certificates for the user "+gid);
             List<Long> hostCerts = this.hostManager.getHostCertificateRecordsSerialNumbers(gid);
+            logger.debug("getCRL() - Found "+hostCerts.size()+" host certificates for the user "+gid);
             for (Long sn : hostCerts) {
                 try {
                     HostCertificateRecord record = this.hostManager.getHostCertificateRecordBySerialNumber(sn);
@@ -1131,7 +1099,9 @@ public class IdentityFederationManager implements Publisher {
             }
         }
 
+        logger.debug("getCRL() - Getting compromised user certificates.");
         List<BigInteger> compromisedUserCerts = this.userCertificateManager.getCompromisedCertificates();
+        logger.debug("getCRL() - Found "+compromisedUserCerts.size()+" user certificates.");
         for (BigInteger sn : compromisedUserCerts) {
             try {
                 UserCertificateRecord record = this.userCertificateManager.getUserCertificateRecord(sn.longValue());
@@ -1141,8 +1111,9 @@ public class IdentityFederationManager implements Publisher {
                 logger.error("An unexpected error occured loading the user certificate, " + sn.longValue() + ": " + e.getMessage(), e);
             }
         }
-
+        logger.debug("getCRL() - Getting disabled host certificates.");
         List<Long> hosts = this.hostManager.getDisabledHostCertificatesSerialNumbers();
+        logger.debug("getCRL() - Found "+ hosts.size()+" disabled host certificates.");
         for (Long sn : hosts) {
             try {
                 HostCertificateRecord record = this.hostManager.getHostCertificateRecordBySerialNumber(sn);
@@ -1153,7 +1124,11 @@ public class IdentityFederationManager implements Publisher {
             }
         }
 
+        logger.debug("getCRL() - Getting blacklist...");
+
         List<Long> blist = this.blackList.getBlackList();
+
+        logger.debug("getCRL() - Found "+blist.size()+" certificates in the blacklist.");
 
         for (Long sn : blist) {
             try {
