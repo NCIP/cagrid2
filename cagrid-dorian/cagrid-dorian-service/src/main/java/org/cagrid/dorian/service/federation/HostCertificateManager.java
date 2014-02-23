@@ -77,7 +77,7 @@ public class HostCertificateManager {
 
 	}
 
-	public synchronized HostCertificateRecord renewHostCertificate(long id, CertificateSignatureAlgorithm algorithm) throws DorianInternalException, InvalidHostCertificateException {
+	public HostCertificateRecord renewHostCertificate(long id, CertificateSignatureAlgorithm algorithm) throws DorianInternalException, InvalidHostCertificateException {
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
 		if (!record.getStatus().equals(HostCertificateStatus.ACTIVE)) {
 			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class, "Only active host certificates may be renewed.");
@@ -122,7 +122,7 @@ public class HostCertificateManager {
 		}
 	}
 
-	public synchronized HostCertificateRecord approveHostCertifcate(long id, CertificateSignatureAlgorithm alg) throws DorianInternalException, InvalidHostCertificateException {
+	public HostCertificateRecord approveHostCertifcate(long id, CertificateSignatureAlgorithm alg) throws DorianInternalException, InvalidHostCertificateException {
 		Connection c = null;
 		HostCertificateRecord record = this.getHostCertificateRecord(id);
 
@@ -171,7 +171,7 @@ public class HostCertificateManager {
 		return record;
 	}
 
-	public synchronized long requestHostCertifcate(String owner, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException {
+	public long requestHostCertifcate(String owner, HostCertificateRequest req) throws DorianInternalException, InvalidHostCertificateRequestException {
 
 		if (Utils.clean(req.getHostname()) == null) {
 			InvalidHostCertificateRequestException fault = FaultHelper.createFaultException(InvalidHostCertificateRequestException.class, "No host specified.");
@@ -589,7 +589,7 @@ public class HostCertificateManager {
 		return record;
 	}
 
-	public synchronized void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianInternalException, InvalidHostCertificateException {
+	public void updateHostCertificateRecord(HostCertificateUpdate update) throws DorianInternalException, InvalidHostCertificateException {
 
 		if (!determineIfRecordExistById(update.getId())) {
 			InvalidHostCertificateException fault = FaultHelper.createFaultException(InvalidHostCertificateException.class,
