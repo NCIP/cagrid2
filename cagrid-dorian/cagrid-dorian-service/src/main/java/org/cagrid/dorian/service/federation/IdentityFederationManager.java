@@ -1037,6 +1037,53 @@ public class IdentityFederationManager implements Publisher {
                 final X509Credential credential = conf.getCredentialManager().getCredential();
                 final KeyStoreType truststore = conf.getCredentialManager().getTruststore();
                 logger.debug("publishCRL() - Creating runner to publish CRL to "+conf.getCRLPublishingList().size()+" service(s).");
+
+                Thread t = new Thread() {
+                    public void run() {
+                        logger.debug("publishCRL() - Publishing CRL(s)....");
+
+                        try {
+                            Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
+                            logger.debug("Found "+crls.size()+" to publish.");
+                            Iterator<String> itr = crls.keySet().iterator();
+                            while (itr.hasNext()) {
+                                String issuer = itr.next();
+                                X509CRL crl = crls.get(issuer);
+                                org.cagrid.gts.model.X509CRL x509 = new org.cagrid.gts.model.X509CRL();
+
+                                x509.setCrlEncodedString(CertUtil.writeCRL(crl));
+                                for (int i = 0; i < services.size(); i++) {
+                                    String uri = services.get(i);
+                                    try {
+                                        logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
+                                        GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
+                                        UpdateCRLRequest req = new UpdateCRLRequest();
+                                        req.setTrustedAuthorityName(issuer);
+                                        UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();
+                                        val.setX509CRL(x509);
+                                        req.setCrl(val);
+                                        client.updateCRL(req);
+                                        logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
+                                        eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");
+                                    } catch (Exception ex) {
+                                        String msg = "Error publishing the CRL for the CA " + issuer + " to the GTS " + uri + "!!!";
+                                        logger.error(msg, ex);
+                                        eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + ex.getMessage());
+                                    }
+
+                                }
+                            }
+
+                        } catch (Exception e) {
+                            String msg = "Unexpected Error publishing the CRL!!!";
+                            logger.error(msg, e);
+                            eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + e.getMessage());
+                        }
+                    }
+                };
+                t.start();
+
+/*
 				Runner runner = new Runner() {
 					public void execute() {
                         logger.debug("publishCRL() -  CRL runner started and waiting on mutex....");
@@ -1089,6 +1136,7 @@ public class IdentityFederationManager implements Publisher {
 				} catch (Exception t) {
 					t.getMessage();
 				}
+				*/
 			}
 		}
 	}
