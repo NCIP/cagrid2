@@ -1030,10 +1030,14 @@ public class IdentityFederationManager implements Publisher {
 	public void publishCRL() {
     logger.debug("publishCRL() called.");
 		if (publishCRL) {
+            logger.debug("publishCRL() - CRL Publishing Enabled.");
 			if ((conf.getCRLPublishingList() != null) && (conf.getCRLPublishingList().size() > 0)) {
+                logger.debug("publishCRL() - Creating runner to publish CRL to "+conf.getCRLPublishingList().size()+" service(s).");
 				Runner runner = new Runner() {
 					public void execute() {
+                        logger.debug("publishCRL() -  CRL runner started and waiting on mutex....");
 						synchronized (mutex) {
+                            logger.debug("publishCRL() - Publishing CRL(s)....");
 							List<String> services = conf.getCRLPublishingList();
 							X509Credential credential = conf.getCredentialManager().getCredential();
 							KeyStoreType truststore = conf.getCredentialManager().getTruststore();
@@ -1078,7 +1082,8 @@ public class IdentityFederationManager implements Publisher {
 					}
 				};
 				try {
-					threadManager.executeInBackground(runner);
+                    logger.debug("publishCRL() - Executing runner...");
+                            threadManager.executeInBackground(runner);
 				} catch (Exception t) {
 					t.getMessage();
 				}
