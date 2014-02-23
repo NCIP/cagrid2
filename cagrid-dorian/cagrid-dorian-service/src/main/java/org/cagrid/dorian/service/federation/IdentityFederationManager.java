@@ -1022,6 +1022,8 @@ public class IdentityFederationManager implements Publisher {
                     eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.INTERNAL_ERROR.value(), msg + "\n" + e.getMessage());
                 }
             }
+        }
+    }
 
 
 /*
@@ -1078,10 +1080,9 @@ public class IdentityFederationManager implements Publisher {
 					t.getMessage();
 				}
 				*/
-        }
-    }
 
-}
+
+
 
     private void addToCRLList(Map<String, Map<Long, CRLEntry>> crls, String issuer, BigInteger serialNumber) {
 
