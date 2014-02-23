@@ -197,9 +197,21 @@ public class IdentityFederationManager implements Publisher {
 			throw fault;
 		}
 		if (!ignoreCRL) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("CRL publishing ENABLED, CRLs will be published to:\n");
+            if(this.conf.getCRLPublishingList()!=null){
+                for(String crlURL : conf.getCRLPublishingList()){
+                    sb.append(crlURL+"\n");
+                }
+            }else{
+                sb.append("CRL LIST NULL!!!");
+            }
+            logger.info(sb.toString());
 			publishCRL = true;
 			publishCRL();
-		}
+		}else{
+            logger.info("CRL Publishing is DISABLED!!!!");
+        }
 	}
 
 	private void initializeEventManager() throws DorianInternalException {
@@ -1016,7 +1028,7 @@ public class IdentityFederationManager implements Publisher {
 	}
 
 	public void publishCRL() {
-
+    logger.debug("publishCRL() called.");
 		if (publishCRL) {
 			if ((conf.getCRLPublishingList() != null) && (conf.getCRLPublishingList().size() > 0)) {
 				Runner runner = new Runner() {
@@ -1027,6 +1039,7 @@ public class IdentityFederationManager implements Publisher {
 							KeyStoreType truststore = conf.getCredentialManager().getTruststore();
 							try {
 								Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
+                                logger.debug("Found "+crls.size()+" to publish.");
 								Iterator<String> itr = crls.keySet().iterator();
 								while (itr.hasNext()) {
 									String issuer = itr.next();

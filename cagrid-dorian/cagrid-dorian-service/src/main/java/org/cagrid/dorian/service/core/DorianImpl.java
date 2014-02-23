@@ -81,6 +81,7 @@ import org.cagrid.tools.database.DatabaseException;
 import org.cagrid.tools.events.EventManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.util.logging.resources.logging;
 
 public class DorianImpl implements Dorian {
 
@@ -471,6 +472,10 @@ public class DorianImpl implements Dorian {
 				}
 			}
 		}
+
+        if(ignoreCRL){
+            log.info("No CRLS configured, ignoring CRL publishing");
+        }
 
 		ifm = new IdentityFederationManager(ifsConfiguration, db, propertyManager, caManager, this.eventManager, defaults, ignoreCRL);
 
