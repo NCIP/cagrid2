@@ -1032,15 +1032,17 @@ public class IdentityFederationManager implements Publisher {
 		if (publishCRL) {
             logger.debug("publishCRL() - CRL Publishing Enabled.");
 			if ((conf.getCRLPublishingList() != null) && (conf.getCRLPublishingList().size() > 0)) {
+                logger.debug("publishCRL() - Found publishing list of "+conf.getCRLPublishingList().size()+" service(s).");
+                final List<String> services = conf.getCRLPublishingList();
+                final X509Credential credential = conf.getCredentialManager().getCredential();
+                final KeyStoreType truststore = conf.getCredentialManager().getTruststore();
                 logger.debug("publishCRL() - Creating runner to publish CRL to "+conf.getCRLPublishingList().size()+" service(s).");
 				Runner runner = new Runner() {
 					public void execute() {
                         logger.debug("publishCRL() -  CRL runner started and waiting on mutex....");
 						synchronized (mutex) {
                             logger.debug("publishCRL() - Publishing CRL(s)....");
-							List<String> services = conf.getCRLPublishingList();
-							X509Credential credential = conf.getCredentialManager().getCredential();
-							KeyStoreType truststore = conf.getCredentialManager().getTruststore();
+
 							try {
 								Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
                                 logger.debug("Found "+crls.size()+" to publish.");
