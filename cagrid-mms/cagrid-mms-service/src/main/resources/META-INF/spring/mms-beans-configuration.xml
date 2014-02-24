@@ -22,31 +22,6 @@
 		</constructor-arg>
 	</bean>
 
-
-	<!-- This specifies the caDSR-based implementation -->
-	<bean id="mms" class="org.cagrid.mms.service.impl.cadsr.CaDSRMMSImpl">
-		<!-- Used to specify the MMS metadata constructed below -->
-		<constructor-arg>
-			<ref bean="metadata" />
-		</constructor-arg>
-		<!-- These keys represent the sourceIDs that are supported, and the caDSR 
-			ApplicationService remote URL which will be used for the corresponding sourceID -->
-		<constructor-arg>
-			<map>
-				<entry key="caDSR Production" value="http://cadsrapi.nci.nih.gov/cadsrapi40/" />
-			</map>
-		</constructor-arg>
-		<constructor-arg>
-			<value>${cagrid.mms.service.application.config.client.url}</value>
-		</constructor-arg>
-	</bean>
-
-
-	<!-- The metadata defines the default source, and the list of supported 
-		sources -->
-	<bean id="metadata" class="org.cagrid.mms.service.impl.cadsr.CaDSRModelSourceMetadata">
-	</bean>
-
 	<bean id="mmsService" class="org.cagrid.mms.service.impl.MetadataModelServiceImpl" init-method="initialize">
 		<constructor-arg ref="mms" />
 		<constructor-arg ref="jaxbResourceProperties" />

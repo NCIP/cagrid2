@@ -125,6 +125,7 @@
 
 	<modules>
 		<module>cagrid-mms-api</module>
+		<module>cagrid-mms-cadsr-impl</module>
 		<module>cagrid-mms-service</module>
 		<module>cagrid-mms-wsrf</module>
 		<module>cagrid-mms-systest</module>

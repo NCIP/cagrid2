@@ -4,11 +4,13 @@ import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.ops4j.pax.exam.CoreOptions.maven;
 import gov.nih.nci.cagrid.metadata.dataservice.DomainModel;
+import gov.nih.nci.cagrid.metadata.dataservice.UMLClass;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ssl.KeyManager;
@@ -26,6 +28,7 @@ import org.cagrid.core.common.security.X509Credential;
 import org.cagrid.core.soapclient.SingleEntityKeyManager;
 import org.cagrid.mms.model.UMLProjectIdentifer;
 import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
+import org.cagrid.mms.service.MMS;
 import org.cagrid.mms.service.MetadataModelService;
 import org.cagrid.mms.soapclient.MMSSoapClientFactory;
 import org.cagrid.mms.test.utils.MMSTestUtils;
@@ -87,9 +90,13 @@ public class MMSFunctionalTest extends CaGridTestSupport {
         try {
             System.err.println(executeCommand("features:list"));
             assertBundleInstalled("cagrid-mms-api");
+            assertBundleInstalled("cagrid-mms-cadsr-impl");
             assertBundleInstalled("cagrid-mms-service");
             assertBundleInstalled("cagrid-mms-wsrf");
 
+            MMS mmsImpl = getOsgiService(MMS.class, 30000L);
+            assertNotNull(mmsImpl);
+//     
             MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
             assertNotNull(mmsService);
 
@@ -98,19 +105,53 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 //            assertNotNull(mms);
             
             //make sure we can generate domain models and annotate metadata
-            UMLProjectIdentifer project = new UMLProjectIdentifer();
+			UMLProjectIdentifer project = new UMLProjectIdentifer();
 			project.setIdentifier("caCORE 3.2");
 			project.setVersion("3.2");
+
+			System.out.println("Creating domain model for project: "
+					+ project.getIdentifier() + " (version:"
+					+ project.getVersion() + ")");
+
+
+			// UNCOMMENT FOR: a single package
+			DomainModel domainModel = null;
 			try {
-				DomainModel model = mmsService.generateDomainModelForPackages(
+				domainModel = mmsImpl
+						.generateDomainModelForPackages(
+								project,
+								(List<String>) Arrays
+										.asList(new String[] { "gov.nih.nci.cabio.domain" }));
+				System.out.println("FOUND A DOMAIN MODEL" + domainModel.getProjectLongName());
+				for (Iterator iterator = domainModel.getExposedUMLClassCollection().getUMLClass().iterator(); iterator.hasNext();) {
+					UMLClass type = (UMLClass) iterator.next();
+					System.out.println("\t" + type.getClassName());
+					
+				}
+			} catch (InvalidUMLProjectIndentifier e) {
+				e.printStackTrace();
+			}
+			
+			assertNotNull(domainModel);
+			
+			DomainModel model = null;
+			
+			try {
+				model = mmsService.generateDomainModelForPackages(
 						project,
 						new String[] { "gov.nih.nci.cabio.domain" });
 				System.out.println(model.getProjectLongName());
+				for (Iterator iterator = model.getExposedUMLClassCollection().getUMLClass().iterator(); iterator.hasNext();) {
+					UMLClass type = (UMLClass) iterator.next();
+					System.out.println("\t" + type.getClassName());
+					
+				}
 			} catch (InvalidUMLProjectIndentifier e) {
 				e.printStackTrace();
 				 fail(ExceptionUtils.getFullStackTrace(e));
 			}
             
+			assertNotNull(model);
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));
         }

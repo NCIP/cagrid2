@@ -12,14 +12,14 @@
         <bundle>mvn:com.mysql.jdbc/com.springsource.com.mysql.jdbc/${com.mysql.jdbc/com.springsource.com.mysql.jdbc/version}</bundle>
         <bundle>mvn:org.jvnet.jaxb2_commons/jaxb2-basics-runtime/${org.jvnet.jaxb2_commons/jaxb2-basics-runtime/version}</bundle>
         <!-- hibernate -->
-       <!--  <bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
+      	<bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate/${org.hibernate/com.springsource.org.hibernate/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations/${org.hibernate/com.springsource.org.hibernate.annotations/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/${org.hibernate/com.springsource.org.hibernate.annotations.common/version}</bundle>
         <bundle>mvn:org.antlr/com.springsource.antlr/${org.antlr/com.springsource.antlr/version}</bundle>
         <bundle>mvn:org.jboss.javassist/com.springsource.javassist/${org.jboss.javassist/com.springsource.javassist/version}</bundle>
         <bundle>mvn:org.jgroups/com.springsource.org.jgroups/${org.jgroups/com.springsource.org.jgroups/version}</bundle>
- -->    
+
  	</feature>
 
 
@@ -175,19 +175,14 @@
     
      <!-- mms -->
     <feature name="cagrid-mms" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-mms/application-config-client.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/applicationConfigClient</configfile>
+    	<configfile finalname="/etc/cagrid-mms/application-config-client.xml">mvn:${project.groupId}/cagrid-mms-cadsr-impl/${project.version}/xml/applicationConfigClient</configfile>
     	<configfile finalname="/etc/cagrid-mms/serviceMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceMetadata</configfile>
     	<configfile finalname="/etc/cagrid-mms/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-mms/registration.xml">mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-gaards</feature>
-      	<bundle>mvn:org.springframework/spring-aspects/3.0.7.RELEASE</bundle>
-      	<bundle>mvn:org.springframework/spring-web/3.0.7.RELEASE</bundle>
-      	<!-- <bundle>wrap:mvn:log4j/log4j/1.2.5</bundle> -->
-       <!--  <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.1_3_7</bundle>
-        <bundle>wrap:mvn:gov.nih.nci.caintegrator2/caDSR-beans/4.0</bundle> -->
-        <!-- <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/2.1_3_7</bundle> -->
         <bundle>mvn:${project.groupId}/cagrid-mms-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-mms-cadsr-impl/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-soap-client/${project.version}</bundle>

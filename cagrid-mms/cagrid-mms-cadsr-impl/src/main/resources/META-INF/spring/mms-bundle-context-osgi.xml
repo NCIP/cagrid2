@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.mms.impl.service">
+		<prop key="cagrid.mms.service.impl.application.config.client.url">file://${karaf.base}/etc/cagrid-mms/application-config-client.xml</prop>
+	</osgix:cm-properties>
+
+	<ctx:property-placeholder properties-ref="preProps" />
+
+	<osgi:service ref="mms" interface="org.cagrid.mms.service.MMS"/>
+
+</beans>

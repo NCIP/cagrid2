@@ -10,6 +10,7 @@ import java.io.File;
 
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
+import org.cagrid.mms.service.MMS;
 import org.cagrid.mms.service.MetadataModelService;
 import org.cagrid.mms.test.utils.MMSTestUtils;
 import org.junit.Assert;
@@ -44,11 +45,15 @@ public class MMSInstallTest extends CaGridTestSupport {
         installAndAssertFeature("cagrid-mms", 30000L);
         System.err.println(executeCommand("features:list"));
         assertBundleInstalled("cagrid-mms-api");
+        assertBundleInstalled("cagrid-mms-cadsr-impl");
         assertBundleInstalled("cagrid-mms-service");
         assertBundleInstalled("cagrid-mms-wsrf");
         //System.out.println(executeCommand("log:display"));
-        //System.out.println(executeCommand("package:export | grep com.nanthealth.mms"));
+        System.out.println(executeCommand("packages:export | grep "+ MMS.class.getPackage().getName()));
 
+        MMS mmsImpl = getOsgiService(MMS.class, 30000L);
+        assertNotNull(mmsImpl);
+        
         MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
         assertNotNull(mmsService);
 

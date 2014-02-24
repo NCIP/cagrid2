@@ -18,7 +18,6 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.cagrid.core.common.FaultHelper;
 import org.cagrid.core.resource.JAXBResourceProperties;
 import org.cagrid.core.resource.JAXBResourcePropertySupport;
 import org.cagrid.core.resource.ResourceImpl;
@@ -29,6 +28,8 @@ import org.cagrid.mms.model.NamespaceToProjectMapping;
 import org.cagrid.mms.model.UMLAssociationExclude;
 import org.cagrid.mms.model.UMLProjectIdentifer;
 import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
+import org.cagrid.mms.service.MMS;
+import org.cagrid.mms.service.MMSGeneralException;
 import org.cagrid.mms.service.MetadataModelService;
 import org.cagrid.mms.wsrf.stubs.MetadataModelServiceResourceProperties;
 import org.cagrid.wsrf.properties.ResourceHome;
