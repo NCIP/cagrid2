@@ -47,7 +47,7 @@
         <prop key="cagrid.cds.wsrf.registration.legacy.on">true</prop>
 		<prop key="cagrid.cds.wsrf.registration.registrant.url">${cagrid.cds.wsrf.url}</prop>
 		<prop key="cagrid.cds.wsrf.registration.registrant.legacy.url">${cagrid.cds.legacy-wsrf.url}</prop>
-		<prop key="cagrid.cds.wsrf.registration.xml">${karaf.base}/etc/cds/registration.xml</prop>
+		<prop key="cagrid.cds.wsrf.registration.xml">${karaf.base}/etc/cagrid-cds/registration.xml</prop>
 		<prop key="cagrid.cds.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
 	</osgix:cm-properties>
 
