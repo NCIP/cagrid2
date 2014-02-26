@@ -11,7 +11,7 @@ public class Driver {
 		try {
 			SpringUtils utils = new SpringUtils();
 			Synchronizer gts = utils.getSynchronizer();
-			SyncDescription des = (SyncDescription) XMLUtils.fromXMLFile(SyncDescription.class, new File("/Users/langella/Desktop/trust/sync-description.xml"));
+			SyncDescription des = (SyncDescription) XMLUtils.fromXMLFile(SyncDescription.class, new File("/Users/langella/ext/smx-trust/etc/cagrid-trust/sync-description.xml"));
 			gts.sync(des);
 		} catch (Exception e) {
 			e.printStackTrace();

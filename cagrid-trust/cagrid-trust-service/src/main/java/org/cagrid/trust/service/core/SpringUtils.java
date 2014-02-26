@@ -10,7 +10,7 @@ import org.springframework.core.io.FileSystemResource;
 
 public class SpringUtils {
 
-	private static final ClassPathResource CONFIGURATION = new ClassPathResource("META-INF/spring/trust-service-configuration.xml");
+	private static final FileSystemResource CONFIGURATION = new FileSystemResource("src/main/resources/META-INF/spring/trust-service-configuration.xml");
 	private static final FileSystemResource PROPERTIES = new FileSystemResource("src/test/resources/trust.properties");
 	private static final String SYNCHRONIZER = "synchronizer";
 	private XmlBeanFactory context;
