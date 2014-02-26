@@ -120,29 +120,29 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
 
             // test the soap end point
             assertBundleActive("cagrid-gts-wsrf");
-            GTSPortType legacyClient = getGTSSoapClient(LEGACY_GTS_URL);
-
-            ServiceSecurityMetadata securityMetadata2 = legacyClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest())
-                    .getServiceSecurityMetadata();
-
-            // TODO: add the equals methods to this
-            // assertEquals(securityMetadata.getOperations(), securityMetadata2);
-            assertEquals(securityMetadata.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata2.getDefaultCommunicationMechanism()
-                    .isAnonymousPermitted());
+//            GTSPortType legacyClient = getGTSSoapClient(LEGACY_GTS_URL);
+//
+//            ServiceSecurityMetadata securityMetadata2 = legacyClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest())
+//                    .getServiceSecurityMetadata();
+//
+//            // TODO: add the equals methods to this
+//            // assertEquals(securityMetadata.getOperations(), securityMetadata2);
+//            assertEquals(securityMetadata.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata2.getDefaultCommunicationMechanism()
+//                    .isAnonymousPermitted());
 
             GTSPortType newClient = getGTSSoapClient(NEW_GTS_URL);
             ServiceSecurityMetadata securityMetadata3 = newClient.getServiceSecurityMetadata(new GetServiceSecurityMetadataRequest())
                     .getServiceSecurityMetadata();
-            // TODO: add the equals methods to this
-            assertEquals(securityMetadata2.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata3.getDefaultCommunicationMechanism()
-                    .isAnonymousPermitted());
+//            // TODO: add the equals methods to this
+//            assertEquals(securityMetadata2.getDefaultCommunicationMechanism().isAnonymousPermitted(), securityMetadata3.getDefaultCommunicationMechanism()
+//                    .isAnonymousPermitted());
 
             FindPermissionsRequest fpReq = new FindPermissionsRequest();
             FindPermissionsRequest.Filter filter = new FindPermissionsRequest.Filter();
             filter.setPermissionFilter(new PermissionFilter());
             fpReq.setFilter(filter);
             try {
-                legacyClient.findPermissions(fpReq);
+                newClient.findPermissions(fpReq);
                 Assert.fail("Should not be able to find permissions, no admin permission are configured.");
             } catch (PermissionDeniedFaultFaultMessage pd) {
                 // expected
@@ -155,6 +155,7 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
             // newClient.addPermission(parameters)
 
         } catch (Exception e) {
+            e.printStackTrace();
             Assert.fail("Unexpected fault(" + e.getClass().getCanonicalName() + ") was raised:" + e.getMessage());
         }
 
