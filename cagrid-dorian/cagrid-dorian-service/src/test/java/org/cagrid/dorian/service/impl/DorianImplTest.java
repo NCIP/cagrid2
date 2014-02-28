@@ -64,22 +64,5 @@ public class DorianImplTest {
 		System.out.println();
 		X509Certificate certificate = dorian.requestUserCertificate(samlAssertionX, keyPair.getPublic(), lifetime, CertificateSignatureAlgorithm.SHA2);
 		Assert.assertNotNull(certificate);
-
-		// Test round-trip through AssertionType
-		AssertionType assertion = JAXBUtils.unmarshal(AssertionType.class, samlXML);
-		Assert.assertNotNull(assertion);
-		String assertionXML = JAXBUtils.marshal(assertion, SAMLUtils.ASSERTION_QNAME);
-		System.out.println("assertionXML");
-		System.out.println(assertionXML);
-		System.out.println();
-		Element assertionElement = JAXBUtils.marshalToElement(assertion, SAMLUtils.ASSERTION_QNAME);
-		_samlAssertionX = new SAMLAssertion(assertionElement);
-		samlAssertionX = SAMLUtils.canonicalizeSAMLAssertion(_samlAssertionX);
-		Assert.assertNotSame(_samlAssertionX, samlAssertionX);
-		System.out.println("samlXML canonicalized via Assertion");
-		System.out.println(samlAssertionX);
-		System.out.println();
-		certificate = dorian.requestUserCertificate(samlAssertionX, keyPair.getPublic(), lifetime, CertificateSignatureAlgorithm.SHA2);
-		Assert.assertNotNull(certificate);
 	}
 }
