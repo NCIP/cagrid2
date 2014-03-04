@@ -33,6 +33,8 @@ import org.cagrid.mms.service.MetadataModelService;
 import org.cagrid.mms.soapclient.MMSSoapClientFactory;
 import org.cagrid.mms.test.utils.MMSTestUtils;
 import org.cagrid.mms.wsrf.stubs.GenerateDomainModelForClassesRequest;
+import org.cagrid.mms.wsrf.stubs.GenerateDomainModelForPackagesRequest;
+import org.cagrid.mms.wsrf.stubs.GenerateDomainModelForPackagesResponse;
 import org.cagrid.mms.wsrf.stubs.MetadataModelServicePortType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,13 +98,13 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 
             MMS mmsImpl = getOsgiService(MMS.class, 30000L);
             assertNotNull(mmsImpl);
-//     
+     
             MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
             assertNotNull(mmsService);
 
-            // get mms soap client
-//            MetadataModelServicePortType mms = getMMSSoapClient();
-//            assertNotNull(mms);
+            //get mms soap client
+            MetadataModelServicePortType mmsSoap = getMMSSoapClient();
+            assertNotNull(mmsSoap);
             
             //make sure we can generate domain models and annotate metadata
 			UMLProjectIdentifer project = new UMLProjectIdentifer();
@@ -114,7 +116,7 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 					+ project.getVersion() + ")");
 
 
-			// UNCOMMENT FOR: a single package
+			//TEST THE MMS CADSR IMPL
 			DomainModel domainModel = null;
 			try {
 				domainModel = mmsImpl
@@ -134,8 +136,8 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 			
 			assertNotNull(domainModel);
 			
+			//TEST THE MMS OSGI SERVICE
 			DomainModel model = null;
-			
 			try {
 				model = mmsService.generateDomainModelForPackages(
 						project,
@@ -152,6 +154,11 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 			}
             
 			assertNotNull(model);
+			
+			GenerateDomainModelForPackagesRequest request = new GenerateDomainModelForPackagesRequest();
+			request.setUmlProjectIdentifer(new UmlProjectIdentifer());
+			GenerateDomainModelForPackagesResponse response = mmsSoap.generateDomainModelForPackages(request);
+			
         } catch(Exception e) {
             fail(ExceptionUtils.getFullStackTrace(e));
         }

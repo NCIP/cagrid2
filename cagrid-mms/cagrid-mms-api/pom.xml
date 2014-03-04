@@ -67,6 +67,8 @@
 												<extraarg>-nexclude</extraarg>
 												<extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service</extraarg>
 												<extraarg>-nexclude</extraarg>
+												<extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.dataservice=gov.nih.nci.cagrid.metadata.dataservice</extraarg>
+												<extraarg>-nexclude</extraarg>
 												<extraarg>http://schemas.xmlsoap.org/ws/2004/03/addressing</extraarg>
 												<extraarg>-nexclude</extraarg>
 												<extraarg>http://www.w3.org/2000/09/xmldsig#</extraarg>
