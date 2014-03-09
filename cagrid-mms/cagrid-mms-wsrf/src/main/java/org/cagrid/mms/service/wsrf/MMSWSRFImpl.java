@@ -185,11 +185,14 @@ public class MMSWSRFImpl implements MetadataModelServicePortType {
 		LOG.debug("Executing operation generateDomainModelForClassesWithExcludes");
 
 		try {
+			String[] classNames = new String[parameters.getFullyQualifiedClassNames().size()];
+			UMLAssociationExclude[] excludes = new UMLAssociationExclude[parameters.getUmlAssociationExclude()
+			   							.getUMLAssociationExclude().size()];
 			DomainModel model = mms.generateDomainModelForClassesWithExcludes(parameters
 					.getUmlProjectIdentifer().getUMLProjectIdentifer(),
-					(String[]) parameters.getFullyQualifiedClassNames().toArray(),
+					(String[]) parameters.getFullyQualifiedClassNames().toArray(classNames),
 					(UMLAssociationExclude[]) parameters.getUmlAssociationExclude()
-							.getUMLAssociationExclude().toArray());
+							.getUMLAssociationExclude().toArray(excludes));
 			GenerateDomainModelForClassesWithExcludesResponse response =  new GenerateDomainModelForClassesWithExcludesResponse();
 			response.setDomainModel(model);
 			return response;
@@ -260,9 +263,10 @@ public class MMSWSRFImpl implements MetadataModelServicePortType {
 		LOG.debug("Executing operation generateDomainModelForClasses");
 
 		try {
+			String[] classNames = new String[parameters.getFullyQualifiedClassNames().size()];
 			DomainModel model = mms.generateDomainModelForClasses(parameters
 					.getUmlProjectIdentifer().getUMLProjectIdentifer(),
-					(String[]) parameters.getFullyQualifiedClassNames().toArray());
+					(String[]) parameters.getFullyQualifiedClassNames().toArray(classNames));
 			GenerateDomainModelForClassesResponse response =  new GenerateDomainModelForClassesResponse();
 			response.setDomainModel(model);
 			return response;
@@ -280,9 +284,10 @@ public class MMSWSRFImpl implements MetadataModelServicePortType {
 		LOG.debug("Executing operation generateDomainModelForPackages");
 
 		try {
+			String[] packageNames = new String[parameters.getPackageNames().size()];
 			DomainModel model = mms.generateDomainModelForPackages(parameters
 					.getUmlProjectIdentifer().getUMLProjectIdentifer(),
-					(String[]) parameters.getPackageNames().toArray());
+					(String[]) parameters.getPackageNames().toArray(packageNames));
 			GenerateDomainModelForPackagesResponse response =  new GenerateDomainModelForPackagesResponse();
 			response.setDomainModel(model);
 			return response;

@@ -68,7 +68,6 @@ public class MetadataModelServiceImpl implements MetadataModelService {
 		return this.mms;
 	}
 
-	@Override
 	public ResourceHome getResourceHome() {
 		return resourceHome;
 	}
