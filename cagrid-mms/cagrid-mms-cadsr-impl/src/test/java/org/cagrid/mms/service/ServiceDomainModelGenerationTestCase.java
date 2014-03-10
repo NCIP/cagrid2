@@ -13,7 +13,6 @@ import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
@@ -22,11 +21,8 @@ import org.cagrid.mms.model.UMLProjectIdentifer;
 import org.cagrid.mms.test.SpringTestApplicationContextConstants;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 public class ServiceDomainModelGenerationTestCase{
@@ -54,11 +50,6 @@ public class ServiceDomainModelGenerationTestCase{
 					+ project.getIdentifier() + " (version:"
 					+ project.getVersion() + ")");
 
-			// UNCOMMENT FOR: Whole project
-			// DomainModel domainModel =
-			// mms.generateDomainModelForProject(project);
-
-			// UNCOMMENT FOR: a single package
 			DomainModel domainModel = null;
 			try {
 				domainModel = mms
@@ -76,36 +67,28 @@ public class ServiceDomainModelGenerationTestCase{
 			// DomainModel domainModel =
 			// mms.generateDomainModelForClasses(project, classNames);
 
-			// UNCOMMENT FOR: a specific set of classes, with excluded
-			// associations
-			// String classNames[] = new String[]{Gene.class.getName(),
-			// Chromosome.class.getName(), Taxon.class.getName(),
-			// Tissue.class.getName()};
-			// UMLAssociationExclude exclude1 = new
-			// UMLAssociationExclude(Chromosome.class.getName(), "chromosome",
-			// Gene.class.getName(), "geneCollection");
-			// UMLAssociationExclude exclude2 = new
-			// UMLAssociationExclude(Tissue.class.getName(), "*", "*", "*");
-			// UMLAssociationExclude associationExcludes[] = new
-			// UMLAssociationExclude[]{exclude1, exclude2};
-			// DomainModel domainModel =
-			// mms.generateDomainModelForClassesWithExcludes(project,
-			// classNames,
-			// associationExcludes);
+////			 UNCOMMENT FOR: a specific set of classes, with excluded
+////			 associations
+//			 String classNames[] = new String[]{Gene.class.getName(),
+//			 Chromosome.class.getName(), Taxon.class.getName(),
+//			 Tissue.class.getName()};
+//			 UMLAssociationExclude exclude1 = new
+//			 UMLAssociationExclude(Chromosome.class.getName(), "chromosome",
+//			 Gene.class.getName(), "geneCollection");
+//			 UMLAssociationExclude exclude2 = new
+//			 UMLAssociationExclude(Tissue.class.getName(), "*", "*", "*");
+//			 UMLAssociationExclude associationExcludes[] = new
+//			 UMLAssociationExclude[]{exclude1, exclude2};
+//			 DomainModel domainModel =
+//			 mms.generateDomainModelForClassesWithExcludes(project,
+//			 classNames,
+//			 associationExcludes);
 
 			// work around for people getting the "illegal character" problem
 			// for smart quotes
 			replaceIllegalCharacters(domainModel);
 
-			// Writer writer = new
-			// FileWriter(project.getIdentifier().replace(" ", "_") + "-" +
-			// project.getVersion()
-			// + "_DomainModel.xml");
 			OutputStreamWriter writer = new OutputStreamWriter(System.out);
-			// MetadataUtils.serializeDomainModel(domainModel, writer);
-			// JAXBElement<DomainModel> element = new
-			// JAXBElement<DomainModel>(MetadataConstants.CAGRID_DATA_MD_QNAME,
-			// domainModel.getClass(), domainModel);
 			JAXBContext jaxbContext = JAXBContext.newInstance(domainModel
 					.getClass());
 			JAXBElement<DomainModel> el = new ObjectFactory()
@@ -114,9 +97,7 @@ public class ServiceDomainModelGenerationTestCase{
 
 			// output pretty printed
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
 			jaxbMarshaller.marshal(el, writer);
-
 			writer.close();
 
 			double duration = (System.currentTimeMillis() - start) / 1000.0;

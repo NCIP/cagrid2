@@ -30,9 +30,9 @@ import org.cagrid.mms.model.UMLProjectIdentifer;
 import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
 import org.cagrid.mms.service.MMS;
 import org.cagrid.mms.service.MetadataModelService;
+import org.cagrid.mms.soapclient.MMSSoapClient;
 import org.cagrid.mms.soapclient.MMSSoapClientFactory;
 import org.cagrid.mms.test.utils.MMSTestUtils;
-import org.cagrid.mms.wsrf.stubs.GenerateDomainModelForClassesRequest;
 import org.cagrid.mms.wsrf.stubs.MetadataModelServicePortType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,65 +46,93 @@ import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
 public class MMSFunctionalTest extends CaGridTestSupport {
 
-    private static final String MMS_URL = "https://localhost:8080/mms";
+	private static final String MMS_URL = "https://localhost:8080/mms";
 
-    private static final String HOST = "etc/cagrid-mms/host.jks";
-    private static final String TRUSTSTORE = "etc/cagrid-mms/truststore.jks";
-    private static final String TRUSTSTORETYPE = "JKS";
-    private static final String KEYALIAS = "tomcat";
-    private static final String TRUSTSTOREPASSWORD = "inventrio";
-    private static final String KEYSTOREPASSWORD = "inventrio";
-    private static final String KEYPASSWORD = "inventrio";
+	private static final String HOST = "etc/cagrid-mms/host.jks";
+	private static final String TRUSTSTORE = "etc/cagrid-mms/truststore.jks";
+	private static final String TRUSTSTORETYPE = "JKS";
+	private static final String KEYALIAS = "tomcat";
+	private static final String TRUSTSTOREPASSWORD = "inventrio";
+	private static final String KEYSTOREPASSWORD = "inventrio";
+	private static final String KEYPASSWORD = "inventrio";
 
+	@Override
+	@Configuration
+	public Option[] config() {
+		Option[] options = new Option[] {
+				// Install MMS feature
+				new KarafDistributionConfigurationFileExtendOption(
+						"etc/org.apache.karaf.features.cfg",
+						"featuresRepositories", ","
+								+ maven().groupId("org.cagrid")
+										.artifactId("cagrid-features")
+										.versionAsInProject()
+										.classifier("features").type("xml")
+										.getURL()),
+				new KarafDistributionConfigurationFileExtendOption(
+						"etc/org.apache.karaf.features.cfg", "featuresBoot",
+						",cagrid-mms"),
 
-    @Override
-    @Configuration
-    public Option[] config() {
-        Option[] options = new Option[] {
-                // Install MMS feature
-                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresRepositories", "," + maven().groupId("org.cagrid").artifactId("cagrid-features").versionAsInProject().classifier("features").type("xml").getURL()),
-                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",cagrid-mms"),
+				// Get our resource files to the "etc" area
+				new KarafDistributionConfigurationFileReplacementOption(
+						"etc/cagrid.mms.wsrf.cfg", new File(
+								"src/test/resources/cagrid.mms.wsrf.cfg")),
+				new KarafDistributionConfigurationFileReplacementOption(HOST,
+						new File("src/test/resources/host.jks")),
+				new KarafDistributionConfigurationFileReplacementOption(
+						TRUSTSTORE, new File(
+								"src/test/resources/truststore.jks")),
+				new KarafDistributionConfigurationFileReplacementOption(
+						MMSTestUtils.SERVICEMETADATA, new File(
+								"src/test/resources/serviceMetadata.xml")),
+				new KarafDistributionConfigurationFileReplacementOption(
+						MMSTestUtils.SERVICESECURITYMETADATA,
+						new File(
+								"src/test/resources/serviceSecurityMetadata.xml"))
 
-                // Get our resource files to the "etc" area
-                new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.mms.wsrf.cfg", new File("src/test/resources/cagrid.mms.wsrf.cfg")),
-                new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/host.jks")),
-                new KarafDistributionConfigurationFileReplacementOption(TRUSTSTORE, new File("src/test/resources/truststore.jks")),
-                new KarafDistributionConfigurationFileReplacementOption(MMSTestUtils.SERVICEMETADATA, new File("src/test/resources/serviceMetadata.xml")),
-                new KarafDistributionConfigurationFileReplacementOption(MMSTestUtils.SERVICESECURITYMETADATA, new File("src/test/resources/serviceSecurityMetadata.xml"))
+				// seeing once in a while an spurious linkage error:
+				// java.lang.LinkageError: loader constraint violation: loader
+				// (instance of <bootloader>) previously initiated loading for a
+				// different type with name "javax/xml/soap/SOAPFault"
+				// adding this to get some info:
+				// System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
+				// System.err.println(executeCommand("osgi:list"));
+				// it seems there could be a conflict between the one included
+				// with the jre and the saaj feature in
+				// servicemix, both jars have this class
+				// (javax.xml.soap.SOAPFault)
+				,
+				new KarafDistributionConfigurationFileExtendOption(
+						"etc/jre.properties", "jre-1.6",
+						",javax.xml.soap;version=\"1.3\""),
+				new KarafDistributionConfigurationFileExtendOption(
+						"etc/jre.properties", "jre-1.7",
+						",javax.xml.soap;version=\"1.3\"") };
+		return CaGridTestSupport.concatAll(super.config(), options);
+	}
 
-                // seeing once in a while an spurious linkage error:
-                // java.lang.LinkageError: loader constraint violation: loader (instance of <bootloader>) previously initiated loading for a different type with name "javax/xml/soap/SOAPFault"
-                // adding this to get some info:
-                // System.err.println(executeCommand("packages:exports | grep javax.xml.soap"));
-                // System.err.println(executeCommand("osgi:list"));
-                // it seems there could be a conflict between the one included with the jre and the saaj feature in
-                // servicemix, both jars have this class (javax.xml.soap.SOAPFault)
-                , new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.6", ",javax.xml.soap;version=\"1.3\"")
-                , new KarafDistributionConfigurationFileExtendOption("etc/jre.properties", "jre-1.7", ",javax.xml.soap;version=\"1.3\"")
-        };
-        return CaGridTestSupport.concatAll(super.config(), options);
-    }
+	@Test
+	public void testFunctionalMMS() {
+		try {
+			System.err.println(executeCommand("features:list"));
+			assertBundleInstalled("cagrid-mms-api");
+			assertBundleInstalled("cagrid-mms-cadsr-impl");
+			assertBundleInstalled("cagrid-mms-service");
+			assertBundleInstalled("cagrid-mms-wsrf");
 
-    @Test
-    public void testFunctionalMMS() {
-        try {
-            System.err.println(executeCommand("features:list"));
-            assertBundleInstalled("cagrid-mms-api");
-            assertBundleInstalled("cagrid-mms-cadsr-impl");
-            assertBundleInstalled("cagrid-mms-service");
-            assertBundleInstalled("cagrid-mms-wsrf");
+			MMS mmsImpl = getOsgiService(MMS.class, 30000L);
+			assertNotNull(mmsImpl);
 
-            MMS mmsImpl = getOsgiService(MMS.class, 30000L);
-            assertNotNull(mmsImpl);
-//     
-            MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
-            assertNotNull(mmsService);
+			MetadataModelService mmsService = getOsgiService(
+					MetadataModelService.class, 30000L);
+			assertNotNull(mmsService);
 
-            // get mms soap client
-//            MetadataModelServicePortType mms = getMMSSoapClient();
-//            assertNotNull(mms);
-            
-            //make sure we can generate domain models and annotate metadata
+			// get mms soap client
+			MetadataModelServicePortType mmsSoap = getMMSSoapClient();
+			assertNotNull(mmsSoap);
+			MMS mmsSoapClient = new MMSSoapClient(mmsSoap);
+
+			// make sure we can generate domain models and annotate metadata
 			UMLProjectIdentifer project = new UMLProjectIdentifer();
 			project.setIdentifier("caCORE 3.2");
 			project.setVersion("3.2");
@@ -113,71 +141,89 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 					+ project.getIdentifier() + " (version:"
 					+ project.getVersion() + ")");
 
-
-			// UNCOMMENT FOR: a single package
+			// TEST THE MMS CADSR IMPL
 			DomainModel domainModel = null;
+//			try {
+//				domainModel = mmsImpl
+//						.generateDomainModelForPackages(
+//								project,
+//								(List<String>) Arrays
+//										.asList(new String[] { "gov.nih.nci.cabio.domain" }));
+//				System.out.println("FOUND A DOMAIN MODEL"
+//						+ domainModel.getProjectLongName());
+//				for (Iterator iterator = domainModel
+//						.getExposedUMLClassCollection().getUMLClass()
+//						.iterator(); iterator.hasNext();) {
+//					UMLClass type = (UMLClass) iterator.next();
+//					System.out.println("\t" + type.getClassName());
+//
+//				}
+//			} catch (InvalidUMLProjectIndentifier e) {
+//				e.printStackTrace();
+//			}
+//
+//			assertNotNull(domainModel);
+//
+//			// TEST THE MMS OSGI SERVICE
+//			DomainModel model = null;
+//			try {
+//				model = mmsService.generateDomainModelForPackages(project,
+//						new String[] { "gov.nih.nci.cabio.domain" });
+//				System.out.println(model.getProjectLongName());
+//				for (Iterator iterator = model.getExposedUMLClassCollection()
+//						.getUMLClass().iterator(); iterator.hasNext();) {
+//					UMLClass type = (UMLClass) iterator.next();
+//					System.out.println("\t" + type.getClassName());
+//
+//				}
+//			} catch (InvalidUMLProjectIndentifier e) {
+//				e.printStackTrace();
+//				fail(ExceptionUtils.getFullStackTrace(e));
+//			}
+//
+//			assertNotNull(model);
+
+			// TEST THE MMS OSGI SERVICE
+			DomainModel dmodel = null;
 			try {
-				domainModel = mmsImpl
-						.generateDomainModelForPackages(
-								project,
-								(List<String>) Arrays
-										.asList(new String[] { "gov.nih.nci.cabio.domain" }));
-				System.out.println("FOUND A DOMAIN MODEL" + domainModel.getProjectLongName());
-				for (Iterator iterator = domainModel.getExposedUMLClassCollection().getUMLClass().iterator(); iterator.hasNext();) {
+				dmodel = mmsSoapClient.generateDomainModelForPackages(project,
+						Arrays.asList(new String[] { "gov.nih.nci.cabio.domain" }));
+				System.out.println(dmodel.getProjectLongName());
+				for (Iterator iterator = dmodel.getExposedUMLClassCollection()
+						.getUMLClass().iterator(); iterator.hasNext();) {
 					UMLClass type = (UMLClass) iterator.next();
 					System.out.println("\t" + type.getClassName());
-					
+
 				}
 			} catch (InvalidUMLProjectIndentifier e) {
 				e.printStackTrace();
+				fail(ExceptionUtils.getFullStackTrace(e));
 			}
-			
-			assertNotNull(domainModel);
-			
-			DomainModel model = null;
-			
-			try {
-				model = mmsService.generateDomainModelForPackages(
-						project,
-						new String[] { "gov.nih.nci.cabio.domain" });
-				System.out.println(model.getProjectLongName());
-				for (Iterator iterator = model.getExposedUMLClassCollection().getUMLClass().iterator(); iterator.hasNext();) {
-					UMLClass type = (UMLClass) iterator.next();
-					System.out.println("\t" + type.getClassName());
-					
-				}
-			} catch (InvalidUMLProjectIndentifier e) {
-				e.printStackTrace();
-				 fail(ExceptionUtils.getFullStackTrace(e));
-			}
-            
-			assertNotNull(model);
-        } catch(Exception e) {
-            fail(ExceptionUtils.getFullStackTrace(e));
-        }
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(ExceptionUtils.getFullStackTrace(e));
+		}
+	}
 
-    private MetadataModelServicePortType getMMSSoapClient() throws GeneralSecurityException, IOException {
-        KeyStoreType truststore = new KeyStoreType();
-        truststore.setFile(TRUSTSTORE);
-        truststore.setType(TRUSTSTORETYPE);
-        truststore.setPassword(TRUSTSTOREPASSWORD);
+	private MetadataModelServicePortType getMMSSoapClient()
+			throws GeneralSecurityException, IOException {
+		KeyStoreType truststore = new KeyStoreType();
+		truststore.setFile(TRUSTSTORE);
+		truststore.setType(TRUSTSTORETYPE);
+		truststore.setPassword(TRUSTSTOREPASSWORD);
 
-        X509Credential credential = CredentialFactory.getCredential(
-                HOST,
-                KEYSTOREPASSWORD,
-                KEYALIAS,
-                KEYPASSWORD);
+		X509Credential credential = CredentialFactory.getCredential(HOST,
+				KEYSTOREPASSWORD, KEYALIAS, KEYPASSWORD);
 
-        KeyManager keyManager = new SingleEntityKeyManager(KEYALIAS, credential);
+		KeyManager keyManager = new SingleEntityKeyManager(KEYALIAS, credential);
 
-        MetadataModelServicePortType mmsPort = MMSSoapClientFactory.createSoapClient(MMS_URL, truststore, keyManager);
-        Client client = ClientProxy.getClient(mmsPort);
-        client.getInInterceptors().add(new LoggingInInterceptor());
-        client.getOutInterceptors().add(new LoggingOutInterceptor()); 
- 
-        return mmsPort;
-    }
+		MetadataModelServicePortType mmsPort = MMSSoapClientFactory
+				.createSoapClient(MMS_URL, truststore, keyManager);
+		Client client = ClientProxy.getClient(mmsPort);
+		client.getInInterceptors().add(new LoggingInInterceptor());
+		client.getOutInterceptors().add(new LoggingOutInterceptor());
 
+		return mmsPort;
+	}
 
 }

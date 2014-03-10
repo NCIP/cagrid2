@@ -76,7 +76,6 @@ public class ModelSourceMetadataTestCase{
 			for (Iterator iterator = model.getExposedUMLClassCollection().getUMLClass().iterator(); iterator.hasNext();) {
 				UMLClass type = (UMLClass) iterator.next();
 				System.out.println("\t" + type.getClassName());
-				
 			}
 		} catch (MMSGeneralException e) {
 			e.printStackTrace();
