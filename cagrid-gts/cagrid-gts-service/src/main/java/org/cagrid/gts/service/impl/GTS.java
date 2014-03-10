@@ -1,11 +1,6 @@
 package org.cagrid.gts.service.impl;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -66,6 +61,8 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
     private GTSAuthorityManager authority;
 
+    private Map<String, GTSPortType> gtsClientCache;
+
     private Log log;
 
     private Database db;
@@ -77,6 +74,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         this.gtsURI = gtsURI;
         this.syncAuthorities = syncAuthorities;
         this.credmanager = credmanager;
+        this.gtsClientCache = new HashMap<String, GTSPortType>();
         log = LogFactory.getLog(this.getClass().getName());
 
         DBManager dbManager = new MySQLManager(new MySQLDatabase(this.conf.getConnectionManager(), this.conf.getGTSInternalId()));
@@ -121,6 +119,8 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         chain[0] = cert;
         return this.validate(chain, filter);
     }
+
+
 
     public boolean validate(X509Certificate[] chain, TrustedAuthorityFilter filter) throws GTSInternalException, CertificateValidationException {
         GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Operation no longer supported!");
@@ -582,6 +582,18 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         }
     }
 
+    private GTSPortType getGTSClient(String url) throws Exception{
+        if(this.gtsClientCache.containsKey(url)){
+            return this.gtsClientCache.get(url);
+        }else{
+            X509Credential credential = this.credmanager.getCredential();
+            KeyStoreType truststore = this.credmanager.getTruststore();
+            GTSPortType client = GTSSoapClientFactory.createSoapClient(url, truststore, credential);
+            this.gtsClientCache.put(url,client);
+            return client;
+        }
+    }
+
     private void synchronizeWithAuthorities() {
         if (conf.getAuthoritySyncTime() != null) {
             long sleep = (conf.getAuthoritySyncTime().getSeconds() * 1000) + (conf.getAuthoritySyncTime().getMinutes() * 1000 * 60)
@@ -609,15 +621,8 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
                         List<TrustLevel> levels = null;
                         TrustedAuthority[] trusted = null;
                         try {
-                            // TODO:MIGRATE: need to explicitly configure this to use credentials; as globus code just used them by default if needed
-                            GTSPortType client = GTSSoapClientFactory.createSoapClient(auths[i].getServiceURI(), truststore, credential);
-                            // TODO:MIGRATE: do we need to validate the identity of the authority?
-                            // if (auths[i].isPerformAuthorization()) {
-                            // IdentityAuthorization ia = new IdentityAuthorization(auths[i].getServiceIdentity());
-                            // client.setAuthorization(ia);
-                            // }
-                            // levels = client.getTrustLevels();
-                            // trusted = client.findTrustedAuthorities(filter);
+                           GTSPortType client = getGTSClient(auths[i].getServiceURI());
+
                             log.debug("Getting trust levels from authority: " + auths[i].getServiceURI());
                             levels = client.getTrustLevels(new GetTrustLevelsRequest()).getTrustLevel();
                             log.debug("Found (" + levels.size() + ") trust levels from authority: " + auths[i].getServiceURI());

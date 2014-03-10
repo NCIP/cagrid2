@@ -26,6 +26,7 @@ import org.cagrid.gts.service.exception.IllegalAuthorityException;
 import org.cagrid.gts.service.exception.InvalidAuthorityException;
 import org.cagrid.gts.service.impl.db.AuthorityTable;
 import org.cagrid.gts.service.impl.db.DBManager;
+import org.cagrid.gts.wsrf.stubs.AddAuthorityRequest;
 
 /**
  * @author <A href="mailto:langella@bmi.osu.edu">Stephen Langella </A>
@@ -53,13 +54,16 @@ public class GTSAuthorityManager {
     public synchronized AuthorityGTS getAuthority(String gtsURI) throws GTSInternalException, InvalidAuthorityException {
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select * from " + AuthorityTable.TABLE_NAME + " where " + AuthorityTable.GTS_URI + "= ?");
+            s = c.prepareStatement("select * from " + AuthorityTable.TABLE_NAME + " where " + AuthorityTable.GTS_URI + "= ?");
             s.setString(1, gtsURI);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
+            AuthorityGTS gts = null;
             if (rs.next()) {
-                AuthorityGTS gts = new AuthorityGTS();
+                gts = new AuthorityGTS();
                 gts.setServiceURI(rs.getString(AuthorityTable.GTS_URI));
                 gts.setPerformAuthorization(rs.getBoolean(AuthorityTable.PERFORM_AUTH));
                 gts.setPriority(rs.getInt(AuthorityTable.PRIORITY));
@@ -70,15 +74,34 @@ public class GTSAuthorityManager {
                 ttl.setMinutes(rs.getInt(AuthorityTable.TTL_MINUTES));
                 ttl.setSeconds(rs.getInt(AuthorityTable.TTL_SECONDS));
                 gts.setTimeToLive(ttl);
+            }
+
+            if(gts != null){
                 return gts;
             }
-            rs.close();
-            s.close();
+
+
         } catch (Exception e) {
             this.log.fatal("Unexpected database error incurred in obtaining the authority, " + gtsURI + ", the following statement generated the error: \n", e);
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error obtaining the authority " + gtsURI);
             throw fault;
         } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+
             try {
                 db.releaseConnection(c);
             } catch (Exception exception) {
@@ -177,8 +200,9 @@ public class GTSAuthorityManager {
         if (!doesAuthorityExist(uri)) {
 
         } else {
+            PreparedStatement update = null;
             try {
-                PreparedStatement update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET " + AuthorityTable.PRIORITY + " = ? WHERE "
+                update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET " + AuthorityTable.PRIORITY + " = ? WHERE "
                         + AuthorityTable.GTS_URI + " = ?");
                 update.setInt(1, priority);
                 update.setString(2, uri);
@@ -189,6 +213,15 @@ public class GTSAuthorityManager {
                 GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class,
                         "Unexpected error occurred in updating the priority for the authority, " + uri + ".");
                 throw fault;
+            }finally {
+
+                if (update != null) {
+                    try {
+                        update.close();
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
             }
         }
 
@@ -218,10 +251,11 @@ public class GTSAuthorityManager {
         }
 
         Connection c = null;
+        PreparedStatement update = null;
         try {
             c = db.getConnection();
             if (!gts.equals(curr)) {
-                PreparedStatement update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET " + AuthorityTable.PRIORITY + " = ?, "
+                update = c.prepareStatement("UPDATE " + AuthorityTable.TABLE_NAME + " SET " + AuthorityTable.PRIORITY + " = ?, "
                         + AuthorityTable.SYNC_TRUST_LEVELS + " = ?, " + AuthorityTable.TTL_HOURS + " = ?, " + AuthorityTable.TTL_MINUTES + " = ?, "
                         + AuthorityTable.TTL_SECONDS + " = ?, " + AuthorityTable.PERFORM_AUTH + " = ?, " + AuthorityTable.GTS_IDENTITY + " = ? WHERE "
                         + AuthorityTable.GTS_URI + " = ?");
@@ -242,6 +276,14 @@ public class GTSAuthorityManager {
                     "Unexpected error in updating the authority " + gts.getServiceURI() + "!!!");
             throw fault;
         } finally {
+
+            if (update != null) {
+                try {
+                    update.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             try {
                 db.releaseConnection(c);
             } catch (Exception exception) {
@@ -255,18 +297,18 @@ public class GTSAuthorityManager {
         this.buildDatabase();
 
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         List<String> list = new ArrayList<String>();
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select " + AuthorityTable.GTS_URI + " from " + AuthorityTable.TABLE_NAME + " WHERE "
+            s = c.prepareStatement("select " + AuthorityTable.GTS_URI + " from " + AuthorityTable.TABLE_NAME + " WHERE "
                     + AuthorityTable.PRIORITY + ">= ? ORDER BY " + AuthorityTable.PRIORITY + "");
             s.setInt(1, priority);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             while (rs.next()) {
                 list.add(rs.getString(AuthorityTable.GTS_URI));
             }
-            rs.close();
-            s.close();
 
             AuthorityGTS[] gts = new AuthorityGTS[list.size()];
             for (int i = 0; i < gts.length; i++) {
@@ -280,6 +322,20 @@ public class GTSAuthorityManager {
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error occurred in getting the authorities.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             try {
                 db.releaseConnection(c);
             } catch (Exception exception) {
@@ -293,18 +349,18 @@ public class GTSAuthorityManager {
         this.buildDatabase();
 
         Connection c = null;
+        Statement s = null;
+        ResultSet rs = null;
         List<String> list = new ArrayList<String>();
         StringBuffer sql = new StringBuffer();
         try {
             c = db.getConnection();
-            Statement s = c.createStatement();
+            s = c.createStatement();
             sql.append("select " + AuthorityTable.GTS_URI + " from " + AuthorityTable.TABLE_NAME + " ORDER BY " + AuthorityTable.PRIORITY + "");
-            ResultSet rs = s.executeQuery(sql.toString());
+            rs = s.executeQuery(sql.toString());
             while (rs.next()) {
                 list.add(rs.getString(AuthorityTable.GTS_URI));
             }
-            rs.close();
-            s.close();
 
             AuthorityGTS[] gts = new AuthorityGTS[list.size()];
             for (int i = 0; i < gts.length; i++) {
@@ -319,6 +375,20 @@ public class GTSAuthorityManager {
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error occurred in getting the authorities.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             try {
                 db.releaseConnection(c);
             } catch (Exception exception) {
@@ -331,18 +401,19 @@ public class GTSAuthorityManager {
     public synchronized int getAuthorityCount() throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        Statement s = null;
+        ResultSet rs = null;
         StringBuffer sql = new StringBuffer();
         try {
             c = db.getConnection();
-            Statement s = c.createStatement();
+            s = c.createStatement();
             sql.append("select COUNT(*) from " + AuthorityTable.TABLE_NAME);
-            ResultSet rs = s.executeQuery(sql.toString());
+            rs = s.executeQuery(sql.toString());
             int count = 0;
             if (rs.next()) {
                 count = rs.getInt(1);
             }
-            rs.close();
-            s.close();
+
             return count;
         } catch (Exception e) {
             this.log.error(
@@ -352,6 +423,20 @@ public class GTSAuthorityManager {
                     "Unexpected error occurred in getting the authority count.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
 
@@ -394,6 +479,7 @@ public class GTSAuthorityManager {
         }
 
         Connection c = null;
+        PreparedStatement insert = null;
         try {
             c = db.getConnection();
             c.setAutoCommit(false);
@@ -403,7 +489,7 @@ public class GTSAuthorityManager {
                 this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() + 1));
             }
 
-            PreparedStatement insert = c.prepareStatement("INSERT INTO " + AuthorityTable.TABLE_NAME + " SET " + AuthorityTable.GTS_URI + " = ?, "
+            insert = c.prepareStatement("INSERT INTO " + AuthorityTable.TABLE_NAME + " SET " + AuthorityTable.GTS_URI + " = ?, "
                     + AuthorityTable.PRIORITY + " = ?, " + AuthorityTable.SYNC_TRUST_LEVELS + " = ?, " + AuthorityTable.TTL_HOURS + " = ?, "
                     + AuthorityTable.TTL_MINUTES + " = ?, " + AuthorityTable.TTL_SECONDS + " = ?, " + AuthorityTable.PERFORM_AUTH + " = ?, "
                     + AuthorityTable.GTS_IDENTITY + " = ?");
@@ -437,6 +523,16 @@ public class GTSAuthorityManager {
             } catch (Exception e) {
 
             }
+
+
+            if (insert != null) {
+                try {
+                    insert.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+
             db.releaseConnection(c);
         }
 
@@ -446,6 +542,7 @@ public class GTSAuthorityManager {
         this.buildDatabase();
         AuthorityGTS gts = getAuthority(uri);
         Connection c = null;
+        PreparedStatement s = null;
         try {
             c = db.getConnection();
             c.setAutoCommit(false);
@@ -455,9 +552,9 @@ public class GTSAuthorityManager {
                 this.updateAuthorityPriority(c, list[i].getServiceURI(), (list[i].getPriority() - 1));
             }
 
-            PreparedStatement ps = c.prepareStatement("DELETE FROM " + AuthorityTable.TABLE_NAME + " WHERE " + AuthorityTable.GTS_URI + " = ?");
-            ps.setString(1, uri);
-            ps.executeUpdate();
+           s = c.prepareStatement("DELETE FROM " + AuthorityTable.TABLE_NAME + " WHERE " + AuthorityTable.GTS_URI + " = ?");
+           s.setString(1, uri);
+           s.executeUpdate();
             c.commit();
         } catch (Exception e) {
             if (c != null) {
@@ -479,6 +576,14 @@ public class GTSAuthorityManager {
             } catch (Exception e) {
 
             }
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
 
@@ -487,11 +592,12 @@ public class GTSAuthorityManager {
     public synchronized boolean doesAuthorityExist(String gtsURI) throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
         boolean exists = false;
         try {
             c = db.getConnection();
 
-            PreparedStatement s = c.prepareStatement("select count(*) from " + AuthorityTable.TABLE_NAME + " where " + AuthorityTable.GTS_URI + "= ?");
+            s = c.prepareStatement("select count(*) from " + AuthorityTable.TABLE_NAME + " where " + AuthorityTable.GTS_URI + "= ?");
             s.setString(1, gtsURI);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
@@ -509,6 +615,14 @@ public class GTSAuthorityManager {
                     + gtsURI + " exists.");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         return exists;
