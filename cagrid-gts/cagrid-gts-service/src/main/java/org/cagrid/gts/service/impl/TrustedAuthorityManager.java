@@ -1,32 +1,23 @@
 package org.cagrid.gts.service.impl;
 
-import java.security.cert.X509CRL;
-import java.security.cert.X509Certificate;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.gaards.pki.CertUtil;
-import org.cagrid.gts.model.Lifetime;
-import org.cagrid.gts.model.Status;
-import org.cagrid.gts.model.TrustLevels;
-import org.cagrid.gts.model.TrustedAuthority;
-import org.cagrid.gts.model.TrustedAuthorityFilter;
+import org.cagrid.gts.model.*;
 import org.cagrid.gts.service.exception.GTSInternalException;
 import org.cagrid.gts.service.exception.IllegalTrustedAuthorityException;
 import org.cagrid.gts.service.exception.InvalidTrustedAuthorityException;
 import org.cagrid.gts.service.impl.db.DBManager;
 import org.cagrid.gts.service.impl.db.TrustedAuthorityTable;
 import org.cagrid.gts.service.impl.db.TrustedAuthorityTrustLevelsTable;
+
+import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -60,6 +51,8 @@ public class TrustedAuthorityManager {
 
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         List<TrustedAuthority> authorities = new ArrayList<TrustedAuthority>();
         TrustedAuthoritySelectStatement select = new TrustedAuthoritySelectStatement();
         select.addSelectField("*");
@@ -105,8 +98,8 @@ public class TrustedAuthorityManager {
             }
 
             c = db.getConnection();
-            PreparedStatement s = select.prepareStatement(c);
-            ResultSet rs = s.executeQuery();
+            s = select.prepareStatement(c);
+            rs = s.executeQuery();
 
             while (rs.next()) {
                 String name = rs.getString(TrustedAuthorityTable.NAME);
@@ -161,6 +154,20 @@ public class TrustedAuthorityManager {
                     "Unexpected error occurred in finding Trusted Authorities");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -278,7 +285,7 @@ public class TrustedAuthorityManager {
 
         if ((ta.getTrustLevels() != null)
                 && (!this.areTrustLevelEquals(ta.getTrustLevels().getTrustLevel().toArray(new String[ta.getTrustLevels().getTrustLevel().size()]), curr
-                        .getTrustLevels().getTrustLevel().toArray(new String[curr.getTrustLevels().getTrustLevel().size()])))) {
+                .getTrustLevels().getTrustLevel().toArray(new String[curr.getTrustLevels().getTrustLevel().size()])))) {
             needsUpdate = true;
             updateTrustLevels = true;
         }
@@ -286,13 +293,14 @@ public class TrustedAuthorityManager {
         if (!ta.equals(curr)) {
             if (needsUpdate) {
                 Connection c = null;
+                PreparedStatement s = null;
                 try {
                     Calendar cal = new GregorianCalendar();
                     ta.setLastUpdated(cal.getTimeInMillis());
                     update.addField(TrustedAuthorityTable.LAST_UPDATED, Long.valueOf(ta.getLastUpdated()));
                     update.addWhereField(TrustedAuthorityTable.NAME, "=", ta.getName());
                     c = db.getConnection();
-                    PreparedStatement s = update.prepareUpdateStatement(c);
+                    s = update.prepareUpdateStatement(c);
                     s.execute();
                     s.close();
                 } catch (Exception e) {
@@ -303,6 +311,13 @@ public class TrustedAuthorityManager {
                             "Unexpected error occurred in updating " + ta.getName() + ".");
                     throw fault;
                 } finally {
+                    if (s != null) {
+                        try {
+                            s.close();
+                        } catch (Exception e) {
+                            log.error(e.getMessage(), e);
+                        }
+                    }
                     if (c != null) {
                         db.releaseConnection(c);
                     }
@@ -325,13 +340,16 @@ public class TrustedAuthorityManager {
 
     public synchronized TrustedAuthority getTrustedAuthority(String name) throws GTSInternalException, InvalidTrustedAuthorityException {
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select * from " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME + "= ?");
+            s = c.prepareStatement("select * from " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME + "= ?");
             s.setString(1, name);
-            ResultSet rs = s.executeQuery();
+            TrustedAuthority ta = null;
+            rs = s.executeQuery();
             if (rs.next()) {
-                TrustedAuthority ta = new TrustedAuthority();
+                ta = new TrustedAuthority();
                 ta.setName(rs.getString(TrustedAuthorityTable.NAME));
                 ta.setTrustLevels(getTrustLevels(name));
                 ta.setStatus(Status.fromValue(rs.getString(TrustedAuthorityTable.STATUS)));
@@ -349,16 +367,31 @@ public class TrustedAuthorityManager {
                     x509crl.setCrlEncodedString(crl);
                     ta.setCRL(x509crl);
                 }
+
+            }
+            if (ta != null) {
                 return ta;
             }
-            rs.close();
-            s.close();
         } catch (Exception e) {
             this.log.error("Unexpected database error incurred in obtaining the Trusted Authority, " + name + ":\n", e);
             GTSInternalException fault = FaultHelper
                     .createFaultException(GTSInternalException.class, "Unexpected error obtaining the TrustedAuthority " + name);
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         InvalidTrustedAuthorityException fault = FaultHelper.createFaultException(InvalidTrustedAuthorityException.class, "The TrustedAuthority " + name
@@ -369,13 +402,15 @@ public class TrustedAuthorityManager {
     public synchronized boolean doesTrustedAuthorityExist(String name) throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         boolean exists = false;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select count(*) from " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME
+            s = c.prepareStatement("select count(*) from " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME
                     + "= ?");
             s.setString(1, name);
-            ResultSet rs = s.executeQuery();
+           rs = s.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
                 if (count > 0) {
@@ -390,6 +425,20 @@ public class TrustedAuthorityManager {
                     "Unexpected error in determining if the TrustedAuthority " + name + " exists.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         return exists;
@@ -398,10 +447,11 @@ public class TrustedAuthorityManager {
     public synchronized void removeTrustedAuthority(String name) throws GTSInternalException, InvalidTrustedAuthorityException {
         if (doesTrustedAuthorityExist(name)) {
             Connection c = null;
+            PreparedStatement s = null;
             try {
                 this.removeTrustedAuthoritysTrustLevels(name);
                 c = db.getConnection();
-                PreparedStatement s = c.prepareStatement("delete FROM " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME + "= ?");
+                s = c.prepareStatement("delete FROM " + TrustedAuthorityTable.TABLE_NAME + " where " + TrustedAuthorityTable.NAME + "= ?");
                 s.setString(1, name);
                 s.execute();
                 s.close();
@@ -413,6 +463,14 @@ public class TrustedAuthorityManager {
                         + name);
                 throw fault;
             } finally {
+
+                if (s != null) {
+                    try {
+                        s.close();
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
                 db.releaseConnection(c);
             }
         } else {
@@ -425,10 +483,11 @@ public class TrustedAuthorityManager {
     public synchronized void removeLevelFromTrustedAuthorities(String level) throws GTSInternalException {
         buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
 
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("delete FROM " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
+            s = c.prepareStatement("delete FROM " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
                     + TrustedAuthorityTrustLevelsTable.TRUST_LEVEL + "= ?");
             s.setString(1, level);
             s.execute();
@@ -440,6 +499,14 @@ public class TrustedAuthorityManager {
                     + " from the trusted authorites!!!");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -448,6 +515,7 @@ public class TrustedAuthorityManager {
         StringBuffer insert = new StringBuffer();
         buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
         try {
 
             Calendar cal = new GregorianCalendar();
@@ -461,7 +529,7 @@ public class TrustedAuthorityManager {
                 insert.append("," + TrustedAuthorityTable.CRL + "= ?");
             }
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(insert.toString());
+            s = c.prepareStatement(insert.toString());
             s.setString(1, ta.getName());
             s.setString(2, cert.getSubjectDN().toString());
             s.setString(3, ta.getStatus().value());
@@ -489,6 +557,14 @@ public class TrustedAuthorityManager {
                     "Unexpected error adding the Trusted Authority, " + ta.getName() + "!!!");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -604,22 +680,23 @@ public class TrustedAuthorityManager {
 
     public boolean hasTrustLevels(String name, String level) throws GTSInternalException, InvalidTrustedAuthorityException {
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         try {
             boolean hasLevel = false;
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select count(*) from " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
+            s = c.prepareStatement("select count(*) from " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
                     + TrustedAuthorityTrustLevelsTable.NAME + "= ? AND " + TrustedAuthorityTrustLevelsTable.TRUST_LEVEL + "= ?");
             s.setString(1, name);
             s.setString(2, level);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
                 if (count > 0) {
                     hasLevel = true;
                 }
             }
-            rs.close();
-            s.close();
+
             return hasLevel;
         } catch (Exception e) {
             this.log.error("Unexpected database error incurred in determining if the Trusted Authority, " + name + " has the trust level " + level + ":\n", e);
@@ -627,19 +704,35 @@ public class TrustedAuthorityManager {
                     "Unexpected database error incurred in determining if the Trusted Authority, " + name + " has the trust level " + level + "!!!");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
 
     public synchronized TrustLevels getTrustLevels(String name) throws GTSInternalException, InvalidTrustedAuthorityException {
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         try {
             List<String> list = new ArrayList<String>();
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select * from " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
+            s = c.prepareStatement("select * from " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
                     + TrustedAuthorityTrustLevelsTable.NAME + "= ?");
             s.setString(1, name);
-            ResultSet rs = s.executeQuery();
+           rs = s.executeQuery();
             while (rs.next()) {
                 list.add(rs.getString(TrustedAuthorityTrustLevelsTable.TRUST_LEVEL));
             }
@@ -657,6 +750,20 @@ public class TrustedAuthorityManager {
                     "Unexpected database error incurred in getting the trust levels for the Trusted Authority, " + name + "!!!");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -681,12 +788,24 @@ public class TrustedAuthorityManager {
                 try {
                     c = db.getConnection();
                     for (String level : levels) {
-                        PreparedStatement s = c.prepareStatement("INSERT INTO " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " SET "
+                        PreparedStatement s = null;
+                        try{
+                        s = c.prepareStatement("INSERT INTO " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " SET "
                                 + TrustedAuthorityTrustLevelsTable.NAME + "= ?, " + TrustedAuthorityTrustLevelsTable.TRUST_LEVEL + "= ?");
                         s.setString(1, name);
                         s.setString(2, level);
                         s.execute();
                         s.close();
+                        }finally {
+
+                            if (s != null) {
+                                try {
+                                    s.close();
+                                } catch (Exception e) {
+                                    log.error(e.getMessage(), e);
+                                }
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     this.log.error("Unexpected database error incurred in adding the trust levels for the Trusted Authority, " + name + ": " + e.getMessage(),
@@ -700,6 +819,7 @@ public class TrustedAuthorityManager {
                             + name);
                     throw fault;
                 } finally {
+
                     db.releaseConnection(c);
                 }
             }
@@ -708,9 +828,10 @@ public class TrustedAuthorityManager {
 
     public synchronized void removeTrustedAuthoritysTrustLevels(String name) throws GTSInternalException, InvalidTrustedAuthorityException {
         Connection c = null;
+        PreparedStatement s = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("delete FROM " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
+            s = c.prepareStatement("delete FROM " + TrustedAuthorityTrustLevelsTable.TABLE_NAME + " where "
                     + TrustedAuthorityTrustLevelsTable.NAME + "= ?");
             s.setString(1, name);
             s.execute();
@@ -721,6 +842,13 @@ public class TrustedAuthorityManager {
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error removing the TrustedAuthority " + name);
             throw fault;
         } finally {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }

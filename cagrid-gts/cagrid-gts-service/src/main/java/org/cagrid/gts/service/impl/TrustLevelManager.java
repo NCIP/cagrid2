@@ -109,9 +109,10 @@ public class TrustLevelManager {
                 + TrustLevelTable.IS_AUTHORITY + "= ?," + TrustLevelTable.AUTHORITY_GTS + "= ?," + TrustLevelTable.SOURCE_GTS + "= ?,"
                 + TrustLevelTable.LAST_UPDATED + "= ?");
         Connection c = null;
+        PreparedStatement s = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(insert.toString());
+            s = c.prepareStatement(insert.toString());
             s.setString(1, level.getName());
             s.setString(2, level.getDescription());
             s.setString(3, String.valueOf(level.isIsAuthority()));
@@ -119,7 +120,6 @@ public class TrustLevelManager {
             s.setString(5, level.getSourceGTS());
             s.setLong(6, level.getLastUpdated());
             s.execute();
-            s.close();
         } catch (Exception e) {
             this.log.error("Unexpected database error incurred in adding the Trust Level, " + level.getName()
                     + ", the following statement generated the error: \n" + insert.toString() + "\n", e);
@@ -127,6 +127,14 @@ public class TrustLevelManager {
                     "Unexpected error adding the Trust Level, " + level.getName() + "!!!");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -134,15 +142,18 @@ public class TrustLevelManager {
     public synchronized TrustLevel[] getTrustLevels() throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        Statement s = null;
+        ResultSet rs = null;
+
         List<TrustLevel> levels = new ArrayList<TrustLevel>();
         StringBuffer sql = new StringBuffer();
         try {
             c = db.getConnection();
-            Statement s = c.createStatement();
+            s = c.createStatement();
 
             sql.append("select * from " + TrustLevelTable.TABLE_NAME);
 
-            ResultSet rs = s.executeQuery(sql.toString());
+            rs = s.executeQuery(sql.toString());
             while (rs.next()) {
                 TrustLevel level = new TrustLevel();
                 level.setName(rs.getString(TrustLevelTable.NAME));
@@ -168,6 +179,20 @@ public class TrustLevelManager {
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error occurred in getting trust levels.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -175,13 +200,15 @@ public class TrustLevelManager {
     public synchronized TrustLevel[] getTrustLevels(String gtsSourceURI) throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         List<TrustLevel> levels = new ArrayList<TrustLevel>();
         StringBuffer sql = new StringBuffer();
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement("select * from " + TrustLevelTable.TABLE_NAME + " WHERE " + TrustLevelTable.SOURCE_GTS + "= ?");
+             s = c.prepareStatement("select * from " + TrustLevelTable.TABLE_NAME + " WHERE " + TrustLevelTable.SOURCE_GTS + "= ?");
             s.setString(1, gtsSourceURI);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             while (rs.next()) {
                 TrustLevel level = new TrustLevel();
                 level.setName(rs.getString(TrustLevelTable.NAME));
@@ -207,6 +234,20 @@ public class TrustLevelManager {
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error occurred in getting trust levels.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -214,11 +255,13 @@ public class TrustLevelManager {
     public synchronized TrustLevel getTrustLevel(String name) throws GTSInternalException, InvalidTrustLevelException {
         String sql = "select * from " + TrustLevelTable.TABLE_NAME + " where " + TrustLevelTable.NAME + "= ? ";
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql);
+            s = c.prepareStatement(sql);
             s.setString(1, name);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             if (rs.next()) {
                 TrustLevel level = new TrustLevel();
                 level.setName(rs.getString(TrustLevelTable.NAME));
@@ -229,14 +272,27 @@ public class TrustLevelManager {
                 level.setLastUpdated(rs.getLong(TrustLevelTable.LAST_UPDATED));
                 return level;
             }
-            rs.close();
-            s.close();
+
         } catch (Exception e) {
             this.log.error("Unexpected database error incurred in obtaining the trust level, " + name + ", the following statement generated the error: \n"
                     + sql + "\n", e);
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error obtaining the trust level " + name);
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         InvalidTrustLevelException fault = FaultHelper.createFaultException(InvalidTrustLevelException.class, "The trust level " + name + " does not exist.");
@@ -304,6 +360,7 @@ public class TrustLevelManager {
             }
         }
         Connection c = null;
+        PreparedStatement s = null;
         try {
             if (!level.equals(curr)) {
                 if (needsUpdate) {
@@ -312,7 +369,7 @@ public class TrustLevelManager {
                     level.setLastUpdated(cal.getTimeInMillis());
                     update.addField(TrustLevelTable.LAST_UPDATED, Long.valueOf(level.getLastUpdated()));
                     update.addWhereField(TrustLevelTable.NAME, "=", level.getName());
-                    PreparedStatement s = update.prepareUpdateStatement(c);
+                    s = update.prepareUpdateStatement(c);
                     s.execute();
                     s.close();
                 }
@@ -324,6 +381,13 @@ public class TrustLevelManager {
                     + level.getName() + ".");
             throw fault;
         } finally {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             if (c != null) {
                 db.releaseConnection(c);
             }
@@ -335,9 +399,10 @@ public class TrustLevelManager {
             this.status.removeAssociatedTrustedAuthorities(name);
             String sql = "delete FROM " + TrustLevelTable.TABLE_NAME + " where " + TrustLevelTable.NAME + "= ?";
             Connection c = null;
+            PreparedStatement s = null;
             try {
                 c = db.getConnection();
-                PreparedStatement s = c.prepareStatement(sql);
+                s = c.prepareStatement(sql);
                 s.setString(1, name);
                 s.execute();
                 s.close();
@@ -347,6 +412,14 @@ public class TrustLevelManager {
                 GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error removing the trust level " + name);
                 throw fault;
             } finally {
+
+                if (s != null) {
+                    try {
+                        s.close();
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
+                }
                 db.releaseConnection(c);
             }
         } else {
@@ -360,10 +433,11 @@ public class TrustLevelManager {
         this.buildDatabase();
         String sql = "select count(*) from " + TrustLevelTable.TABLE_NAME + " where " + TrustLevelTable.NAME + "= ?";
         Connection c = null;
+        PreparedStatement s = null;
         boolean exists = false;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql);
+            s = c.prepareStatement(sql);
             s.setString(1, name);
             ResultSet rs = s.executeQuery();
             if (rs.next()) {
@@ -381,6 +455,13 @@ public class TrustLevelManager {
                     + name + " exists.");
             throw fault;
         } finally {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         return exists;
