@@ -1,35 +1,12 @@
 package org.cagrid.gts.service.impl;
 
-import java.util.*;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.configuration.security.KeyStoreType;
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.core.common.security.X509Credential;
-import org.cagrid.gts.model.AuthorityGTS;
-import org.cagrid.gts.model.AuthorityPriorityUpdate;
-import org.cagrid.gts.model.Lifetime;
-import org.cagrid.gts.model.Permission;
-import org.cagrid.gts.model.PermissionFilter;
-import org.cagrid.gts.model.Status;
-import org.cagrid.gts.model.TrustLevel;
-import org.cagrid.gts.model.TrustLevels;
-import org.cagrid.gts.model.TrustedAuthority;
-import org.cagrid.gts.model.TrustedAuthorityFilter;
-import org.cagrid.gts.model.X509CRL;
-import org.cagrid.gts.model.X509Certificate;
-import org.cagrid.gts.service.exception.CertificateValidationException;
-import org.cagrid.gts.service.exception.GTSInternalException;
-import org.cagrid.gts.service.exception.IllegalAuthorityException;
-import org.cagrid.gts.service.exception.IllegalPermissionException;
-import org.cagrid.gts.service.exception.IllegalTrustLevelException;
-import org.cagrid.gts.service.exception.IllegalTrustedAuthorityException;
-import org.cagrid.gts.service.exception.InvalidAuthorityException;
-import org.cagrid.gts.service.exception.InvalidPermissionException;
-import org.cagrid.gts.service.exception.InvalidTrustLevelException;
-import org.cagrid.gts.service.exception.InvalidTrustedAuthorityException;
-import org.cagrid.gts.service.exception.PermissionDeniedException;
+import org.cagrid.gts.model.*;
+import org.cagrid.gts.service.exception.*;
 import org.cagrid.gts.service.impl.db.DBManager;
 import org.cagrid.gts.service.impl.db.mysql.MySQLManager;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
@@ -37,7 +14,8 @@ import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesResponse;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
 import org.cagrid.gts.wsrf.stubs.GetTrustLevelsRequest;
-import org.projectmobius.common.MobiusRunnable;
+
+import java.util.*;
 
 /**
  * @author <A HREF="MAILTO:langella@bmi.osu.edu">Stephen Langella </A>
@@ -46,8 +24,6 @@ import org.projectmobius.common.MobiusRunnable;
  * @version $Id: TrustedAuthorityManager.java,v 1.1 2006/03/08 19:48:46 langella Exp $
  */
 public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
-
-    public boolean syncAuthorities = true;
 
     private Configuration conf;
 
@@ -63,16 +39,17 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
     private Map<String, GTSPortType> gtsClientCache;
 
+    private Object gtsClientCacheMutex = new Object();
+
     private Log log;
 
     private Database db;
 
     private CredentialManager credmanager = null;
 
-    public GTS(Configuration conf, String gtsURI, boolean syncAuthorities, CredentialManager credmanager) {
+    public GTS(Configuration conf, String gtsURI, CredentialManager credmanager) {
         this.conf = conf;
         this.gtsURI = gtsURI;
-        this.syncAuthorities = syncAuthorities;
         this.credmanager = credmanager;
         this.gtsClientCache = new HashMap<String, GTSPortType>();
         log = LogFactory.getLog(this.getClass().getName());
@@ -83,21 +60,6 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         trustLevelManager = new TrustLevelManager(this.gtsURI, this, dbManager);
         permissions = new PermissionManager(dbManager);
         authority = new GTSAuthorityManager(gtsURI, conf.getAuthoritySyncTime(), dbManager);
-        if (this.syncAuthorities) {
-            MobiusRunnable runner = new MobiusRunnable() {
-                public void execute() {
-                    synchronizeWithAuthorities();
-                }
-            };
-
-            try {
-                Thread t = new Thread(runner);
-                t.setDaemon(true);
-                t.start();
-            } catch (Exception e) {
-                log.error(e);
-            }
-        }
     }
 
     protected Database getDatabase() {
@@ -119,7 +81,6 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         chain[0] = cert;
         return this.validate(chain, filter);
     }
-
 
 
     public boolean validate(X509Certificate[] chain, TrustedAuthorityFilter filter) throws GTSInternalException, CertificateValidationException {
@@ -370,7 +331,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         this.trust.removeLevelFromTrustedAuthorities(trustLevel);
     }
 
-    void synchronizeTrustLevels(String authorityServiceURI, List<TrustLevel> levels) {
+    protected void synchronizeTrustLevels(String authorityServiceURI, List<TrustLevel> levels) {
         // Synchronize the Trust Level
 
         // We need to get a list of all the Trusted Authorities provided
@@ -582,81 +543,70 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         }
     }
 
-    private GTSPortType getGTSClient(String url) throws Exception{
-        if(this.gtsClientCache.containsKey(url)){
-            return this.gtsClientCache.get(url);
-        }else{
-            X509Credential credential = this.credmanager.getCredential();
-            KeyStoreType truststore = this.credmanager.getTruststore();
-            GTSPortType client = GTSSoapClientFactory.createSoapClient(url, truststore, credential);
-            this.gtsClientCache.put(url,client);
-            return client;
+    private GTSPortType getGTSClient(String url) throws Exception {
+        synchronized (this.gtsClientCacheMutex) {
+            if (this.gtsClientCache.containsKey(url)) {
+                return this.gtsClientCache.get(url);
+            } else {
+                X509Credential credential = this.credmanager.getCredential();
+                KeyStoreType truststore = this.credmanager.getTruststore();
+                GTSPortType client = GTSSoapClientFactory.createSoapClient(url, truststore, credential);
+                this.gtsClientCache.put(url, client);
+                return client;
+            }
         }
     }
 
-    private void synchronizeWithAuthorities() {
-        if (conf.getAuthoritySyncTime() != null) {
-            long sleep = (conf.getAuthoritySyncTime().getSeconds() * 1000) + (conf.getAuthoritySyncTime().getMinutes() * 1000 * 60)
-                    + (conf.getAuthoritySyncTime().getHours() * 1000 * 60 * 60);
-            log.info("Will sync with authorities every (" + sleep / 1000 + ") seconds.");
-            while (true) {
-                log.debug("Syncing with authorities.");
-                AuthorityGTS[] auths = null;
+    public void synchronizeWithAuthorities() {
+
+        log.info("Syncing with authorities.");
+        AuthorityGTS[] auths = null;
+        try {
+            auths = this.getAuthorities();
+        } catch (Exception ex) {
+            this.log.error("Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
+        }
+
+        if (auths != null) {
+            TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
+            filter.setStatus(Status.TRUSTED);
+            filter.setLifetime(Lifetime.VALID);
+
+            X509Credential credential = this.credmanager.getCredential();
+            KeyStoreType truststore = this.credmanager.getTruststore();
+
+            for (int i = 0; i < auths.length; i++) {
+                log.info("Syncing with authority: " + auths[i].getServiceURI());
+                List<TrustLevel> levels = null;
+                TrustedAuthority[] trusted = null;
                 try {
-                    auths = this.getAuthorities();
+                    GTSPortType client = getGTSClient(auths[i].getServiceURI());
+
+                    log.debug("Getting trust levels from authority: " + auths[i].getServiceURI());
+                    levels = client.getTrustLevels(new GetTrustLevelsRequest()).getTrustLevel();
+                    log.debug("Found (" + levels.size() + ") trust levels from authority: " + auths[i].getServiceURI());
+                    FindTrustedAuthoritiesRequest parameters = new FindTrustedAuthoritiesRequest();
+                    FindTrustedAuthoritiesRequest.Filter filterReq = new FindTrustedAuthoritiesRequest.Filter();
+                    filterReq.setTrustedAuthorityFilter(filter);
+                    parameters.setFilter(filterReq);
+                    log.debug("Getting trusted authorities from authority: " + auths[i].getServiceURI());
+                    FindTrustedAuthoritiesResponse taResp = client.findTrustedAuthorities(parameters);
+                    trusted = taResp.getTrustedAuthority().toArray(new TrustedAuthority[]{});
+                    log.debug("Found (" + trusted.length + ")  trusted authorities from authority: " + auths[i].getServiceURI());
                 } catch (Exception ex) {
-                    this.log.error("Error synchronizing with the authorities, could not obtain a list of authorities!!!", ex);
+                    log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": " + ex.getMessage(), ex);
+                    continue;
                 }
 
-                if (auths != null) {
-                    TrustedAuthorityFilter filter = new TrustedAuthorityFilter();
-                    filter.setStatus(Status.TRUSTED);
-                    filter.setLifetime(Lifetime.VALID);
+                // Synchronize the Trust Levels
+                this.synchronizeTrustLevels(auths[i].getServiceURI(), levels);
 
-                    X509Credential credential = this.credmanager.getCredential();
-                    KeyStoreType truststore = this.credmanager.getTruststore();
-
-                    for (int i = 0; i < auths.length; i++) {
-                        log.debug("Syncing with authority: " + auths[i].getServiceURI());
-                        List<TrustLevel> levels = null;
-                        TrustedAuthority[] trusted = null;
-                        try {
-                           GTSPortType client = getGTSClient(auths[i].getServiceURI());
-
-                            log.debug("Getting trust levels from authority: " + auths[i].getServiceURI());
-                            levels = client.getTrustLevels(new GetTrustLevelsRequest()).getTrustLevel();
-                            log.debug("Found (" + levels.size() + ") trust levels from authority: " + auths[i].getServiceURI());
-                            FindTrustedAuthoritiesRequest parameters = new FindTrustedAuthoritiesRequest();
-                            FindTrustedAuthoritiesRequest.Filter filterReq = new FindTrustedAuthoritiesRequest.Filter();
-                            filterReq.setTrustedAuthorityFilter(filter);
-                            parameters.setFilter(filterReq);
-                            log.debug("Getting trusted authorities from authority: " + auths[i].getServiceURI());
-                            FindTrustedAuthoritiesResponse taResp = client.findTrustedAuthorities(parameters);
-                            trusted = taResp.getTrustedAuthority().toArray(new TrustedAuthority[] {});
-                            log.debug("Found (" + trusted.length + ")  trusted authorities from authority: " + auths[i].getServiceURI());
-                        } catch (Exception ex) {
-                            log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": " + ex.getMessage(), ex);
-                            continue;
-                        }
-
-                        // Synchronize the Trust Levels
-                        this.synchronizeTrustLevels(auths[i].getServiceURI(), levels);
-
-                        // Synchronize the Trusted Authorities
-                        this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
-                    }
-                } else {
-                    log.info("No authorities to sync with.");
-                }
-
-                try {
-                    Thread.sleep(sleep);
-                } catch (Exception e) {
-                    log.error(e);
-                }
+                // Synchronize the Trusted Authorities
+                this.synchronizeTrustedAuthorities(auths[i].getServiceURI(), trusted);
             }
         } else {
-            log.info("Not syncing with authorities, as no sync time specified in configuration.");
+            log.info("No authorities to sync with.");
         }
+
     }
 }
