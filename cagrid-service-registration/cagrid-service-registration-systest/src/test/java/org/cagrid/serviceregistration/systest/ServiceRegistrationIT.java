@@ -52,11 +52,6 @@ public class ServiceRegistrationIT extends TestBase {
 		} finally {
 			dorianTestBootstrapper.close();
 		}
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -73,9 +68,6 @@ public class ServiceRegistrationIT extends TestBase {
 		String featureURL = "mvn:org.cagrid/cagrid-features/" + featureVersion
 				+ "/xml/features";
 		options.add(features(featureURL, "cagrid-dorian"));
-		options.add(new SystemPropertyOption(
-				"org.ops4j.pax.url.mvn.localRepository")
-				.value("/Users/hastings/.m2/repository"));
 
 		return options;
 	}
