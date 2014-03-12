@@ -81,6 +81,7 @@ import org.cagrid.dorian.service.util.AddressValidator;
 import org.cagrid.gaards.pki.CRLEntry;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
+import org.cagrid.gts.ws.client.GTSClient;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
 import org.cagrid.gts.wsrf.stubs.UpdateCRLRequest;
 import org.cagrid.tools.database.Database;
@@ -1023,8 +1024,6 @@ public class IdentityFederationManager implements Publisher {
 					public void execute() {
 						synchronized (mutex) {
 							List<String> services = conf.getCRLPublishingList();
-							X509Credential credential = conf.getCredentialManager().getCredential();
-							KeyStoreType truststore = conf.getCredentialManager().getTruststore();
 							try {
 								Map<String, X509CRL> crls = getCRL(CertificateSignatureAlgorithm.SHA1);
 								Iterator<String> itr = crls.keySet().iterator();
@@ -1038,13 +1037,8 @@ public class IdentityFederationManager implements Publisher {
 										String uri = services.get(i);
 										try {
 											logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
-											GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, truststore, credential);
-											UpdateCRLRequest req = new UpdateCRLRequest();
-											req.setTrustedAuthorityName(issuer);
-											UpdateCRLRequest.Crl val = new UpdateCRLRequest.Crl();
-											val.setX509CRL(x509);
-											req.setCrl(val);
-											client.updateCRL(req);
+                                            GTSClient client = conf.getCredentialManager().getGTSClient(uri);
+                                            client.updateCRL(issuer, x509);
 											logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
 											eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");
 										} catch (Exception ex) {

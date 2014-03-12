@@ -30,8 +30,8 @@ public class KeyStoreCreator {
 			String keyPassword = "changeit";
 			String keyStoreAlias = "host";
 			File keyStoreFile = new File("/Users/langella/Desktop/legacy-cds-host.jks");
-			PrivateKey key = KeyUtil.loadPrivateKey(new File("/Users/langella/Documents/caGrid/environments/Training/training-grid-configuration/Services/cds.training.cagrid.org/cds.training.cagrid.org-key.pem"), null);
-			X509Certificate cert = CertUtil.loadCertificate(new File("/Users/langella/Documents/caGrid/environments/Training/training-grid-configuration/Services/cds.training.cagrid.org/cds.training.cagrid.org-cert.pem"));
+			PrivateKey key = KeyUtil.loadPrivateKey(new File("/Users/langella/Downloads/certs/cagrid-cds-qa.nci.nih.gov-key.pem"), null);
+			X509Certificate cert = CertUtil.loadCertificate(new File("/Users/langella/Downloads/certs/cagrid-cds-qa.nci.nih.gov-cert.pem"));
 			KeyStore hks = KeyStore.getInstance("jks");
 			hks.load(null);
 			java.security.cert.Certificate[] hostCertChain = { cert };

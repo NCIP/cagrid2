@@ -296,6 +296,9 @@
 			value="${cagrid.dorian.service.client.truststore.file}" />
 		<property name="truststorePassword"
 			value="${cagrid.dorian.service.client.truststore.password}" />
+        <property name="trustService" ref="trustService" />
+        <property name="useTrustService"
+                  value="${cagrid.dorian.service.client.enable.trust.service}" />
 	</bean>
 
 </beans>
