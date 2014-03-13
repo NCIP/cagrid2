@@ -8,7 +8,7 @@
                         http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
                         http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
-	<osgix:cm-properties id="preProps" persistent-id="cagrid.dorian.service">
+	<osgix:cm-properties id="preProps" persistent-id="cagrid.trust.service">
 		<prop key="cagrid.trust.service.sync.description.file">${karaf.base}/etc/cagrid-trust/sync-description.xml
 		</prop>
 		<prop key="cagrid.trust.service.history.directory">${karaf.base}/etc/cagrid-trust/history</prop>
@@ -17,6 +17,7 @@
 		<prop key="cagrid.trust.service.truststore.password">changeit</prop>
 		<prop key="cagrid.trust.service.sync.start.delay">30000</prop>
 		<prop key="cagrid.trust.service.sync.repeat.interval">300000</prop>
+        <prop key="cagrid.trust.service.client.configurer">truststoreClientConfigurer</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />

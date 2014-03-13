@@ -30,7 +30,7 @@ public class TruststoreClientConfigurer extends AbstractTrustClientConfigurer {
         if (truststore == null) {
             if (getTruststoreFile() != null) {
                 if (log.isDebugEnabled()) {
-                    log.debug("Loading the truststore " + getKeystoreFile());
+                    log.debug("Loading the truststore " + getTruststoreFile());
                 }
                 truststore = new KeyStoreType();
                 truststore.setPassword(this.getTruststorePassword());

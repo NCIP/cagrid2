@@ -2,6 +2,7 @@ package org.cagrid.trust.service.core;
 
 import org.cagrid.core.xml.XMLUtils;
 import org.cagrid.trust.model.SyncDescription;
+import org.cagrid.trust.service.TrustServiceClientConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,6 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
     public TrustService() {
         log = LoggerFactory.getLogger(this.getClass().getName());
         this.trustManager = new TrustServiceTrustManager();
-
     }
 
     public Synchronizer getSynchronizer() {
@@ -35,7 +35,17 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
     }
 
     public void setSynchronizer(Synchronizer synchronizer) {
-        this.synchronizer = synchronizer;
+    this.synchronizer = synchronizer;
+        if(this.synchronizer.getClientConfigurer()!=null){
+            if(this.synchronizer.getClientConfigurer() instanceof TrustServiceClientConfigurer){
+                TrustServiceClientConfigurer cc = (TrustServiceClientConfigurer) this.getSynchronizer().getClientConfigurer();
+                cc.setTrustService(this);
+                if(log.isDebugEnabled()){
+                    log.debug("Updated the client configurer to use this trust service.");
+                }
+            }
+        }
+
     }
 
     public String getSyncDescription() {
@@ -52,6 +62,7 @@ public class TrustService implements org.cagrid.trust.service.TrustService {
 
     public void setTrustedCAManager(TrustedCAManager trustedCAManager) {
         this.trustedCAManager = trustedCAManager;
+        this.reloadTrustManagers();
     }
 
     public X509TrustManager getTrustManager() {
