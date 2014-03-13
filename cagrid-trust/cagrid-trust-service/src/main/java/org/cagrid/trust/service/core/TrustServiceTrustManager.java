@@ -36,13 +36,13 @@ public class TrustServiceTrustManager implements X509TrustManager {
         try {
             this.revocationEnabledTrustManager.checkClientTrusted(chain, authType);
             if (log.isDebugEnabled()) {
-                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + " is trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ").");
+                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + "] is trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ").");
             }
             return;
         } catch (CertificateException e) {
 
             if (log.isDebugEnabled()) {
-                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + " is NOT trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
+                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + "] is NOT trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
             }
             reasons.append("(1) " + e.getMessage() + "\n");
         }
@@ -51,16 +51,16 @@ public class TrustServiceTrustManager implements X509TrustManager {
         try {
             this.revocationDisabledTrustManager.checkClientTrusted(chain, authType);
             if (log.isDebugEnabled()) {
-                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + " is trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ").");
+                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + "] is trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ").");
             }
             return;
         } catch (CertificateException e) {
             if (log.isDebugEnabled()) {
-                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + " is NOT trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
+                log.debug("checkClientTrusted() - The chain [" + chainToString(chain) + "] is NOT trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
             }
             reasons.append("(2) " + e.getMessage() + "\n");
         }
-        throw new CertificateException("The certificate chain  [" + chainToString(chain) + " could not be validated: \n" + reasons.toString());
+        throw new CertificateException("The certificate chain  [" + chainToString(chain) + "] could not be validated: \n" + reasons.toString());
     }
 
     public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -73,13 +73,13 @@ public class TrustServiceTrustManager implements X509TrustManager {
         try {
             this.revocationEnabledTrustManager.checkServerTrusted(chain, authType);
             if (log.isDebugEnabled()) {
-                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + " is trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ").");
+                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + "] is trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ").");
             }
             return;
         } catch (CertificateException e) {
 
             if (log.isDebugEnabled()) {
-                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + " is NOT trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
+                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + "] is NOT trusted (" + this.revocationEnabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
             }
             reasons.append("(1) " + e.getMessage() + "\n");
         }
@@ -88,16 +88,16 @@ public class TrustServiceTrustManager implements X509TrustManager {
         try {
             this.revocationDisabledTrustManager.checkClientTrusted(chain, authType);
             if (log.isDebugEnabled()) {
-                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + " is trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ").");
+                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + "] is trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ").");
             }
             return;
         } catch (CertificateException e) {
             if (log.isDebugEnabled()) {
-                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + " is NOT trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
+                log.debug("checkServerTrusted() - The chain [" + chainToString(chain) + "] is NOT trusted (" + this.revocationDisabledTrustManager.getClass().getName() + ": " + e.getMessage(), e);
             }
             reasons.append("(2) " + e.getMessage() + "\n");
         }
-        throw new CertificateException("The certificate chain  [" + chainToString(chain) + " could not be validated: \n" + reasons.toString());
+        throw new CertificateException("The certificate chain  [" + chainToString(chain) + "] could not be validated: \n" + reasons.toString());
     }
 
     public X509Certificate[] getAcceptedIssuers() {

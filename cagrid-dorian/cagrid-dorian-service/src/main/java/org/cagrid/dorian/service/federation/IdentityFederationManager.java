@@ -1037,7 +1037,8 @@ public class IdentityFederationManager implements Publisher {
 										String uri = services.get(i);
 										try {
 											logger.debug("Publishing CRL for the CA " + issuer + " to the GTS " + uri);
-                                            GTSClient client = conf.getCredentialManager().getGTSClient(uri);
+                                            GTSClient client = new GTSClient(uri);
+                                            conf.getClientConfigurer().configureClient(client);
                                             client.updateCRL(issuer, x509);
 											logger.debug("Published CRL for the CA " + issuer + " to the GTS " + uri);
 											eventManager.logEvent(AuditConstants.SYSTEM_ID, AuditConstants.SYSTEM_ID, FederationAudit.CRL_PUBLISHED.value(), "Published CRL to the GTS " + uri + ".");

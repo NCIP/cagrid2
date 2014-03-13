@@ -46,6 +46,10 @@ public abstract class AbstractSoapClient<S, P> {
         this.portTypeClass = portTypeClass;
     }
 
+    public String getURL(){
+        return this.url;
+    }
+
     public void configureTruststore(String location, String password) {
         this.truststore = new KeyStoreType();
         this.truststore.setPassword(password);
@@ -169,10 +173,6 @@ public abstract class AbstractSoapClient<S, P> {
 
     public void setKeystore(KeyManagersType keystore) {
         this.keystore = keystore;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public void setUrl(String url) {
