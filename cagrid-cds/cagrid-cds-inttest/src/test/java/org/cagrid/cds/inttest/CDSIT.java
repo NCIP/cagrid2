@@ -162,7 +162,7 @@ public class CDSIT extends TestBase {
 
         String karafBase = System.getProperty(ContextLoader.KARAF_BASE_KEY);
         KeyStoreType truststore = new KeyStoreType();
-        truststore.setFile(karafBase + "/etc/dorian/truststore.jks");
+        truststore.setFile(karafBase + "/etc/cagrid-orian/truststore.jks");
         truststore.setType("JKS");
         truststore.setPassword("changeit");
 

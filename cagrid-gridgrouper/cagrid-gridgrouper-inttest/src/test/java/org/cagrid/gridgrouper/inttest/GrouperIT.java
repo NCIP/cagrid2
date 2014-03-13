@@ -108,7 +108,7 @@ public class GrouperIT extends TestBase {
 
 		String karafBase = System.getProperty(ContextLoader.KARAF_BASE_KEY);
 		KeyStoreType truststore = new KeyStoreType();
-		truststore.setFile(karafBase + "/etc/dorian/truststore.jks");
+		truststore.setFile(karafBase + "/etc/cagrid-dorian/truststore.jks");
 		truststore.setType("JKS");
 		truststore.setPassword("changeit");
 
