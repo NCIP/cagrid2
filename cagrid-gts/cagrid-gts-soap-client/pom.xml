@@ -17,8 +17,8 @@
 				<configuration>
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-						<Export-Package> org.cagrid.gts.soapclient</Export-Package>
-						<Import-Package> org.cagrid.gts.soapclient,*</Import-Package>
+						<Export-Package>org.cagrid.gts.soapclient, org.cagrid.gts.ws.client</Export-Package>
+						<Import-Package>org.cagrid.gts.soapclient,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

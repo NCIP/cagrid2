@@ -16,10 +16,12 @@ import java.util.Set;
 
 import org.apache.cxf.configuration.security.KeyManagersType;
 import org.apache.cxf.configuration.security.KeyStoreType;
+import org.cagrid.core.soapclient.ClientConfigurer;
 import org.cagrid.core.xml.XMLUtils;
 import org.cagrid.gaards.pki.CertUtil;
 import org.cagrid.gts.model.Status;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
+import org.cagrid.gts.ws.client.GTSClient;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest.Filter;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesResponse;
@@ -58,7 +60,8 @@ public class SyncGTS implements Synchronizer {
     private List<Message> messages;
     private HistoryManager historyManager;
     private File trustedCertificatesDirectory;
-    private KeyStoreType truststore;
+    private ClientConfigurer clientConfigurer;
+
 
     public SyncGTS() {
         this.trustedCertificatesDirectory = new File(".");
@@ -77,13 +80,7 @@ public class SyncGTS implements Synchronizer {
         this.historyManager = historyManager;
     }
 
-    public KeyStoreType getTruststore() {
-        return truststore;
-    }
 
-    public void setTruststore(KeyStoreType truststore) {
-        this.truststore = truststore;
-    }
 
     private void reset() {
         this.caListings = null;
@@ -114,22 +111,9 @@ public class SyncGTS implements Synchronizer {
                 for (TrustedAuthorityFilter f : filters) {
                     filterCount = filterCount + 1;
                     try {
-
-                        GTSPortType client = GTSSoapClientFactory.createSoapClient(uri, getTruststore(), (KeyManagersType) null);
-
-                        // TODO: Perform authorization
-                        // if (des[i].isPerformAuthorization()) {
-                        // IdentityAuthorization ia = new
-                        // IdentityAuthorization(des[i].getGTSIdentity());
-                        // client.setAuthorization(ia);
-                        // }
-
-                        FindTrustedAuthoritiesRequest req = new FindTrustedAuthoritiesRequest();
-                        Filter requestFilter = new Filter();
-                        requestFilter.setTrustedAuthorityFilter(convert(f));
-                        req.setFilter(requestFilter);
-                        FindTrustedAuthoritiesResponse res = client.findTrustedAuthorities(req);
-                        List<org.cagrid.gts.model.TrustedAuthority> tas = res.getTrustedAuthority();
+                        GTSClient client = new GTSClient(uri);
+                        getClientConfigurer().configureClient(client);
+                         List<org.cagrid.gts.model.TrustedAuthority> tas = client.findTrustedAuthorities(convert(f));
                         int length = 0;
 
                         this.log.debug("Successfully synced with " + uri + " using filter " + filterCount + " the search found " + length + " Trusted Authority(s)!!!");
@@ -584,4 +568,12 @@ public class SyncGTS implements Synchronizer {
         return filter;
     }
 
+
+    public ClientConfigurer getClientConfigurer() {
+        return clientConfigurer;
+    }
+
+    public void setClientConfigurer(ClientConfigurer clientConfigurer) {
+        this.clientConfigurer = clientConfigurer;
+    }
 }

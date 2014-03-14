@@ -32,7 +32,6 @@ public class TrustServiceJettySSLContextFactory extends SslContextFactory {
 
     @Override
     protected TrustManager[] getTrustManagers(KeyStore trustStore, Collection<? extends CRL> crls) throws Exception {
-        System.out.println("getTrustManagers() - CALLED ON " + new Date());
         if (getTrustService() == null) {
             log.warn("A trust service was not specified, using the default trust managers");
             return super.getTrustManagers(trustStore, crls);

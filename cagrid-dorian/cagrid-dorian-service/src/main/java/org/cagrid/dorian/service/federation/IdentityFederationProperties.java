@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.cagrid.core.common.FaultHelper;
+import org.cagrid.core.soapclient.ClientConfigurer;
 import org.cagrid.dorian.common.Lifetime;
 import org.cagrid.dorian.model.exceptions.DorianInternalException;
 import org.cagrid.dorian.policy.HostCertificateRenewalPolicy;
@@ -33,7 +34,7 @@ public class IdentityFederationProperties {
 	private SearchPolicyType hostSearchPolicy;
 	private SearchPolicyType userSearchPolicy;
 	private HostCertificateRenewalPolicy hostCertificateRenewalPolicy;
-	private CredentialManager credentialManager;
+	private ClientConfigurer clientConfigurer;
 
 	public IdentityFederationProperties() {
 		this.identityAssignmentPolicy = IdentityAssignmentPolicy.NAME;
@@ -206,12 +207,11 @@ public class IdentityFederationProperties {
 		}
 	}
 
-	public CredentialManager getCredentialManager() {
-		return credentialManager;
-	}
+    public ClientConfigurer getClientConfigurer() {
+        return clientConfigurer;
+    }
 
-	public void setCredentialManager(CredentialManager credentialManager) {
-		this.credentialManager = credentialManager;
-	}
-
+    public void setClientConfigurer(ClientConfigurer clientConfigurer) {
+        this.clientConfigurer = clientConfigurer;
+    }
 }

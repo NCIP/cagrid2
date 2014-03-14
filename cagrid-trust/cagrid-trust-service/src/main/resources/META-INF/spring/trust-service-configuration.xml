@@ -11,7 +11,7 @@
 
     <bean id="synchronizer" class="org.cagrid.trust.service.core.SyncGTS">
         <property name="historyManager" ref="historyManager" />
-        <property name="truststore" ref="truststore" />
+        <property name="clientConfigurer" ref="${cagrid.trust.service.client.configurer}" />
         <property name="trustedCertificatesDirectory"
                   value="${cagrid.trust.service.certificates.directory}" />
     </bean>
@@ -29,5 +29,12 @@
         <property name="file" value="${cagrid.trust.service.truststore.file}" />
         <property name="password" value="${cagrid.trust.service.truststore.password}" />
     </bean>
+
+    <bean id="truststoreClientConfigurer" class="org.cagrid.core.soapclient.TruststoreClientConfigurer">
+       <property name="truststoreFile" value="${cagrid.trust.service.truststore.file}" />
+        <property name="truststorePassword" value="${cagrid.trust.service.truststore.password}" />
+    </bean>
+
+    <bean id="trustServiceClientConfigurer" class="org.cagrid.trust.service.TrustServiceClientConfigurer"/>
 
 </beans>

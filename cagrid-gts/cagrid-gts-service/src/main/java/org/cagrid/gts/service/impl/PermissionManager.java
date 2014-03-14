@@ -80,11 +80,12 @@ public class PermissionManager {
 
         StringBuffer insert = new StringBuffer();
         Connection c = null;
+        PreparedStatement s = null;
         try {
             insert.append("INSERT INTO " + PermissionsTable.TABLE_NAME + " SET " + PermissionsTable.GRID_IDENTITY + "= ?," + PermissionsTable.ROLE + "= ?,"
                     + PermissionsTable.TRUSTED_AUTHORITY + "= ?");
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(insert.toString());
+            s = c.prepareStatement(insert.toString());
             s.setString(1, p.getGridIdentity());
             s.setString(2, p.getRole().value());
             s.setString(3, p.getTrustedAuthorityName());
@@ -97,6 +98,13 @@ public class PermissionManager {
                     + formatPermission(p) + "!!!");
             throw fault;
         } finally {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }
@@ -112,9 +120,10 @@ public class PermissionManager {
         String sql = "delete from " + PermissionsTable.TABLE_NAME + " where " + PermissionsTable.GRID_IDENTITY + "= ? AND " + PermissionsTable.ROLE
                 + "= ? AND " + PermissionsTable.TRUSTED_AUTHORITY + "= ?";
         Connection c = null;
+        PreparedStatement s = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql);
+            s = c.prepareStatement(sql);
             s.setString(1, p.getGridIdentity());
             s.setString(2, p.getRole().value());
             s.setString(3, p.getTrustedAuthorityName());
@@ -128,6 +137,14 @@ public class PermissionManager {
                     + " exists.");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
 
@@ -138,9 +155,10 @@ public class PermissionManager {
 
         String sql = "delete from " + PermissionsTable.TABLE_NAME + " where " + PermissionsTable.TRUSTED_AUTHORITY + "= ?";
         Connection c = null;
+        PreparedStatement s = null;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql);
+            s = c.prepareStatement(sql);
             s.setString(1, trustedAuthorityName);
             s.execute();
             s.close();
@@ -150,6 +168,14 @@ public class PermissionManager {
                     "Unexpected database error incurred in removing the permissions for the trusted authority " + trustedAuthorityName + ".");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
 
@@ -159,10 +185,11 @@ public class PermissionManager {
         String sql = "select count(*) from " + PermissionsTable.TABLE_NAME + " where " + PermissionsTable.GRID_IDENTITY + "= ? AND " + PermissionsTable.ROLE
                 + "= ?  AND " + PermissionsTable.TRUSTED_AUTHORITY + "= ?";
         Connection c = null;
+        PreparedStatement s = null;
         boolean exists = false;
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql);
+            s = c.prepareStatement(sql);
             s.setString(1, p.getGridIdentity());
             s.setString(2, p.getRole().value());
             s.setString(3, p.getTrustedAuthorityName());
@@ -183,6 +210,14 @@ public class PermissionManager {
                     + perm + " exists.");
             throw fault;
         } finally {
+
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         return exists;
@@ -191,6 +226,8 @@ public class PermissionManager {
     public boolean isUserTrustServiceAdmin(String gridIdentity) throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null ;
+        ResultSet rs = null;
         boolean isAdmin = false;
         StringBuffer sql = new StringBuffer();
         sql.append("select count(*) from " + PermissionsTable.TABLE_NAME);
@@ -199,18 +236,15 @@ public class PermissionManager {
         sql.append(PermissionsTable.TRUSTED_AUTHORITY + " = '" + Constants.ALL_TRUST_AUTHORITIES + "'");
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql.toString());
+            s = c.prepareStatement(sql.toString());
             s.setString(1, gridIdentity);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
                 if (count > 0) {
                     isAdmin = true;
                 }
             }
-            rs.close();
-            s.close();
-
         } catch (Exception e) {
             this.log.error("Unexpected database error incurred in determining whether or not the user " + gridIdentity
                     + "  is a trust service administrator, the following statement generated the error: \n" + sql.toString() + "\n", e);
@@ -218,6 +252,20 @@ public class PermissionManager {
                     "Unexpected error occurred in determining whether or not the user " + gridIdentity + "  is a trust service administrator.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         return isAdmin;
@@ -226,6 +274,8 @@ public class PermissionManager {
     public boolean isUserTrustedAuthorityAdmin(String authority, String gridIdentity) throws GTSInternalException {
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         boolean isAdmin = false;
         StringBuffer sql = new StringBuffer();
         sql.append("select count(*) from " + PermissionsTable.TABLE_NAME);
@@ -234,17 +284,16 @@ public class PermissionManager {
         sql.append(PermissionsTable.TRUSTED_AUTHORITY + " = '" + authority + "'");
         try {
             c = db.getConnection();
-            PreparedStatement s = c.prepareStatement(sql.toString());
+           s = c.prepareStatement(sql.toString());
             s.setString(1, gridIdentity);
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
                 if (count > 0) {
                     isAdmin = true;
                 }
             }
-            rs.close();
-            s.close();
+
 
         } catch (Exception e) {
             this.log.error("Unexpected database error incurred in determining whether or not the user " + gridIdentity
@@ -253,6 +302,20 @@ public class PermissionManager {
                     "Unexpected error occurred in determining whether or not the user " + gridIdentity + "  is a trust service administrator.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
         return isAdmin;
@@ -262,12 +325,14 @@ public class PermissionManager {
 
         this.buildDatabase();
         Connection c = null;
+        PreparedStatement s = null;
+        ResultSet rs = null;
         List<Permission> permissions = new ArrayList<Permission>();
         StringBuffer sql = new StringBuffer();
 
         try {
             c = db.getConnection();
-            PreparedStatement s = null;
+            s = null;
             if (filter != null) {
                 s = c.prepareStatement("select * from " + PermissionsTable.TABLE_NAME + " WHERE " + PermissionsTable.GRID_IDENTITY + " LIKE ? AND "
                         + PermissionsTable.ROLE + " LIKE ? AND " + PermissionsTable.TRUSTED_AUTHORITY + " LIKE ?");
@@ -293,7 +358,7 @@ public class PermissionManager {
                 s = c.prepareStatement("select * from " + PermissionsTable.TABLE_NAME);
             }
 
-            ResultSet rs = s.executeQuery();
+            rs = s.executeQuery();
             while (rs.next()) {
                 Permission p = new Permission();
                 p.setGridIdentity(rs.getString(PermissionsTable.GRID_IDENTITY));
@@ -301,8 +366,7 @@ public class PermissionManager {
                 p.setTrustedAuthorityName(clean(rs.getString(PermissionsTable.TRUSTED_AUTHORITY)));
                 permissions.add(p);
             }
-            rs.close();
-            s.close();
+
 
             Permission[] list = new Permission[permissions.size()];
             for (int i = 0; i < list.length; i++) {
@@ -316,6 +380,20 @@ public class PermissionManager {
             GTSInternalException fault = FaultHelper.createFaultException(GTSInternalException.class, "Unexpected error occurred in finding permissions.");
             throw fault;
         } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
             db.releaseConnection(c);
         }
     }

@@ -16,6 +16,7 @@
         <prop key="cagrid.dorian.wsrf.path">dorian</prop>
         <prop key="cagrid.dorian.wsrf.url">https://${cagrid.dorian.wsrf.host}:${cagrid.dorian.wsrf.port}/${cagrid.dorian.wsrf.path}</prop>
         <prop key="cagrid.dorian.wsrf.ssl.context.factory.bean">proxySslContextFactory</prop>
+        <prop key="cagrid.dorian.legacy-wsrf.ssl.context.factory.bean">legacyProxySslContextFactory</prop>
         <prop key="cagrid.dorian.wsrf.trusted.idp.mapping">
             Dorian,${cagrid.dorian.wsrf.url},/O=caBIG/OU=caGrid/OU=Training/OU=Services/CN=dorian2.sha2.bazinga.cagrid.org;
         </prop>

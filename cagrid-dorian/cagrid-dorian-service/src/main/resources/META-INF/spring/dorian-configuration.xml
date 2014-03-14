@@ -114,7 +114,7 @@
 			value="${cagrid.dorian.service.federation.host.search.policy}" />
 		<property name="hostCertificateRenewalPolicy"
 			value="${cagrid.dorian.service.federation.host.certificate.renewal.policy}" />
-		<property name="credentialManager" ref="credentialManager" />
+		<property name="clientConfigurer" ref="${cagrid.dorian.service.client.configurer}" />
 	</bean>
 
 
@@ -285,7 +285,8 @@
 
 
 
-	<bean id="credentialManager" class="org.cagrid.dorian.service.core.CredentialManager">
+
+	<bean id="truststoreClientConfigurer" class="org.cagrid.core.soapclient.TruststoreClientConfigurer">
 		<property name="keystoreFile"
 			value="${cagrid.dorian.service.client.keystore.file}" />
 		<property name="keystorePassword"
