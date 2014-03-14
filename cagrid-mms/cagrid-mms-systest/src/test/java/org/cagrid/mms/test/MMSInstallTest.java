@@ -48,8 +48,6 @@ public class MMSInstallTest extends CaGridTestSupport {
         assertBundleInstalled("cagrid-mms-cadsr-impl");
         assertBundleInstalled("cagrid-mms-service");
         assertBundleInstalled("cagrid-mms-wsrf");
-        //System.out.println(executeCommand("log:display"));
-        System.out.println(executeCommand("packages:export | grep "+ MMS.class.getPackage().getName()));
 
         MMS mmsImpl = getOsgiService(MMS.class, 30000L);
         assertNotNull(mmsImpl);
@@ -57,11 +55,11 @@ public class MMSInstallTest extends CaGridTestSupport {
         MetadataModelService mmsService = getOsgiService(MetadataModelService.class, 30000L);
         assertNotNull(mmsService);
 
-//        // grab its metadata
-//        ServiceServiceMetadata metadata = mmsService.getServiceSecurityMetadata();
-//        Assert.assertNotNull(metadata);
-//        assertEquals("Service metadata name was not as expected.", "MetadataModelService", metadata.getServiceDescription().getService().getName());
-//        ServiceSecurityMetadata securityMetadata = mmsService.getServiceSecurityMetadata();
-//        Assert.assertNotNull(securityMetadata);
+        // grab its metadata
+        ServiceMetadata metadata = mmsService.getServiceMetadata();
+        Assert.assertNotNull(metadata);
+        assertEquals("Service metadata name was not as expected.", "MetadataModelService", metadata.getServiceDescription().getService().getName());
+        ServiceSecurityMetadata securityMetadata = mmsService.getServiceSecurityMetadata();
+        Assert.assertNotNull(securityMetadata);
     }
 }
