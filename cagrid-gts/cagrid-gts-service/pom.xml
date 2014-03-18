@@ -63,9 +63,12 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Embed-Dependency>mobius_tools|mobius_common_client</Embed-Dependency>
                         <Export-Package>org.cagrid.gts.tools.service</Export-Package>
-                        <DynamicImport-Package>com.mysql.jdbc</DynamicImport-Package>
+                       <!-- <DynamicImport-Package>org.quartz,com.mysql.jdbc</DynamicImport-Package> -->
+                        <DynamicImport-Package>*</DynamicImport-Package>
                         <Import-Package>
+                            org.quartz,
                             org.quartz.simpl,
+                            org.quartz.spi,
                             EDU.oswego.cs.dl.util.concurrent;resolution:=optional,
                             org.projectmobius.common,
                             org.projectmobius*;resolution:=optional,
@@ -113,6 +116,7 @@
         </plugins>
     </build>
     <dependencies>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-gts-api</artifactId>
@@ -147,6 +151,12 @@
             <groupId>${wsrf.group}</groupId>
             <artifactId>wsrf-properties-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.quartz</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
