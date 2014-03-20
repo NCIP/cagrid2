@@ -16,6 +16,7 @@ import org.cagrid.core.resource.JAXBResourcePropertySupport;
 import org.cagrid.core.resource.ResourceImpl;
 import org.cagrid.core.resource.ResourcePropertyDescriptor;
 import org.cagrid.core.resource.SingletonResourceHomeImpl;
+import org.cagrid.core.soapclient.ClientConfigurer;
 import org.cagrid.gts.model.AuthorityGTS;
 import org.cagrid.gts.model.AuthorityPriorityUpdate;
 import org.cagrid.gts.model.Permission;
@@ -51,12 +52,12 @@ public class GTSImpl implements org.cagrid.gts.service.GTS {
     private final ResourceHome resourceHome = new SingletonResourceHomeImpl(resource);
 
     public GTSImpl(Map<String, String> jaxbResourcePropertiesMap, SimpleResourceManager srm, String gtsURI,
-            CredentialManager credmanager) throws GTSInternalException {
+            ClientConfigurer configurer) throws GTSInternalException {
         // EndpointReferenceType type = AddressingUtils.createEndpointReference(null);
         // String configFileEnd = (String) MessageContext.getCurrentContext().getProperty(GTS_CONFIG);
         // String configFile = ContainerConfig.getBaseDirectory() + File.separator + configFileEnd;
         Configuration conf = (Configuration) srm.getResource(Configuration.RESOURCE);
-        this.gts = new GTS(conf, gtsURI, credmanager);
+        this.gts = new GTS(conf, gtsURI, configurer);
         this.jaxbResourcePropertiesMap = jaxbResourcePropertiesMap;
     }
 

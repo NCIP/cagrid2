@@ -5,11 +5,13 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.configuration.security.KeyStoreType;
 import org.cagrid.core.common.FaultHelper;
 import org.cagrid.core.common.security.X509Credential;
+import org.cagrid.core.soapclient.ClientConfigurer;
 import org.cagrid.gts.model.*;
 import org.cagrid.gts.service.exception.*;
 import org.cagrid.gts.service.impl.db.DBManager;
 import org.cagrid.gts.service.impl.db.mysql.MySQLManager;
 import org.cagrid.gts.soapclient.GTSSoapClientFactory;
+import org.cagrid.gts.ws.client.GTSClient;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesRequest;
 import org.cagrid.gts.wsrf.stubs.FindTrustedAuthoritiesResponse;
 import org.cagrid.gts.wsrf.stubs.GTSPortType;
@@ -37,7 +39,7 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
     private GTSAuthorityManager authority;
 
-    private Map<String, GTSPortType> gtsClientCache;
+    private Map<String, GTSClient> gtsClientCache;
 
     private Object gtsClientCacheMutex = new Object();
 
@@ -45,13 +47,13 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
 
     private Database db;
 
-    private CredentialManager credmanager = null;
+    private ClientConfigurer configurer= null;
 
-    public GTS(Configuration conf, String gtsURI, CredentialManager credmanager) {
+    public GTS(Configuration conf, String gtsURI, ClientConfigurer configurer) {
         this.conf = conf;
         this.gtsURI = gtsURI;
-        this.credmanager = credmanager;
-        this.gtsClientCache = new HashMap<String, GTSPortType>();
+       this.configurer = configurer;
+        this.gtsClientCache = new HashMap<String, GTSClient>();
         log = LogFactory.getLog(this.getClass().getName());
 
         DBManager dbManager = new MySQLManager(new MySQLDatabase(this.conf.getConnectionManager(), this.conf.getGTSInternalId()));
@@ -543,14 +545,13 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
         }
     }
 
-    private GTSPortType getGTSClient(String url) throws Exception {
+    private GTSClient getGTSClient(String url) throws Exception {
         synchronized (this.gtsClientCacheMutex) {
             if (this.gtsClientCache.containsKey(url)) {
                 return this.gtsClientCache.get(url);
             } else {
-                X509Credential credential = this.credmanager.getCredential();
-                KeyStoreType truststore = this.credmanager.getTruststore();
-                GTSPortType client = GTSSoapClientFactory.createSoapClient(url, truststore, credential);
+               GTSClient client = new GTSClient(url);
+                configurer.configureClient(client);
                 this.gtsClientCache.put(url, client);
                 return client;
             }
@@ -572,26 +573,20 @@ public class GTS implements TrustedAuthorityLevelRemover, TrustLevelLookup {
             filter.setStatus(Status.TRUSTED);
             filter.setLifetime(Lifetime.VALID);
 
-            X509Credential credential = this.credmanager.getCredential();
-            KeyStoreType truststore = this.credmanager.getTruststore();
 
             for (int i = 0; i < auths.length; i++) {
                 log.info("Syncing with authority: " + auths[i].getServiceURI());
                 List<TrustLevel> levels = null;
-                TrustedAuthority[] trusted = null;
+               TrustedAuthority[] trusted = null;
                 try {
-                    GTSPortType client = getGTSClient(auths[i].getServiceURI());
+                    GTSClient client = getGTSClient(auths[i].getServiceURI());
 
                     log.debug("Getting trust levels from authority: " + auths[i].getServiceURI());
-                    levels = client.getTrustLevels(new GetTrustLevelsRequest()).getTrustLevel();
+                    levels = client.getTrustLevels();
                     log.debug("Found (" + levels.size() + ") trust levels from authority: " + auths[i].getServiceURI());
-                    FindTrustedAuthoritiesRequest parameters = new FindTrustedAuthoritiesRequest();
-                    FindTrustedAuthoritiesRequest.Filter filterReq = new FindTrustedAuthoritiesRequest.Filter();
-                    filterReq.setTrustedAuthorityFilter(filter);
-                    parameters.setFilter(filterReq);
+
                     log.debug("Getting trusted authorities from authority: " + auths[i].getServiceURI());
-                    FindTrustedAuthoritiesResponse taResp = client.findTrustedAuthorities(parameters);
-                    trusted = taResp.getTrustedAuthority().toArray(new TrustedAuthority[]{});
+                    trusted = client.findTrustedAuthorities(filter).toArray(new TrustedAuthority[]{});
                     log.debug("Found (" + trusted.length + ")  trusted authorities from authority: " + auths[i].getServiceURI());
                 } catch (Exception ex) {
                     log.error("Error synchronizing with the authority " + auths[i].getServiceURI() + ": " + ex.getMessage(), ex);

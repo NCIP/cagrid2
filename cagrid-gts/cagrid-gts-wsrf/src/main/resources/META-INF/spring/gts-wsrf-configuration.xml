@@ -44,6 +44,16 @@
 		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
 	</bean>
 
+    <bean id="trustServiceSSLContextFactory" class="org.cagrid.trust.service.TrustServiceJettySSLContextFactory ">
+        <property name="trustService" ref="trustService"/>
+        <property name="keyStorePath" value="${cagrid.gts.wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.gts.wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.gts.wsrf.key.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}"/>
+    </bean>
+
 	
 
 
@@ -72,9 +82,7 @@
 		wsdlLocation="schema/org/cagrid/gts/GTS_service.wsdl">
 	</jaxws:endpoint>
 
-	
-	  <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
-	  <!--  
+
 	
 	<bean id="legacyregistrator" class="org.cagrid.serviceregistration.ServiceGroupRegistrator" destroy-method="terminate">
 		<constructor-arg index="0" value="${cagrid.gts.wsrf.registration.legacy.on}"></constructor-arg>
@@ -94,6 +102,16 @@
 		<property name="needClientAuth" value="false" />
 		<property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}" />
 	</bean>
+
+	  <bean id="legacyTrustServiceSSLContextFactory" class="org.cagrid.trust.service.TrustServiceJettySSLContextFactory ">
+        <property name="trustService" ref="trustService"/>
+        <property name="keyStorePath" value="${cagrid.gts.legacy-wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.gts.legacy-wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.gts.legacy-wsrf.key.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.gts.wsrf.cipher-suites}"/>
+    </bean>
 	
 	<bean id="legacyGTSWSRF" class="org.cagrid.gts.service.wsrf.GTSWSRFImpl">
 		<constructor-arg index="0" ref="gtsService" />
@@ -105,30 +123,28 @@
 		serviceName="s:GTSService" address="${cagrid.gts.legacy-wsrf.url}"
 		wsdlLocation="schema/org/cagrid/gts/GTS_service.wsdl">
 	</jaxws:endpoint>
-	
-	-->
+
 		<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.gts.wsrf.port}">
 			<httpj:tlsServerParameters />
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<constructor-arg index="0" ref="${cagrid.gts.wsrf.ssl.context.factory.bean}" />
 					<property name="port" value="${cagrid.gts.wsrf.port}" />
 				</bean>
 			</httpj:connector>
 		</httpj:engine>
-      <!-- UNCOMMENT TO ADD SUPPORT FOR A LEGACY WSRF ENDPOINT -->
-	  <!--
+
 		<httpj:engine port="${cagrid.gts.legacy-wsrf.port}">
 			<httpj:tlsServerParameters />
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="legacyProxySslContextFactory" />
+					<constructor-arg index="0" ref="${cagrid.gts.legacy-wsrf.ssl.context.factory.bean}" />
 					<property name="port" value="${cagrid.gts.legacy-wsrf.port}" />
 				</bean>
 			</httpj:connector>
 		</httpj:engine>		
-		-->
+
 	</httpj:engine-factory>
 	
 </beans>

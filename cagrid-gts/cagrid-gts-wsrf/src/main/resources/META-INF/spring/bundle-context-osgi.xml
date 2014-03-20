@@ -12,10 +12,10 @@
 
 		<prop key="cagrid.gts.wsrf.host">localhost</prop>
 		<prop key="cagrid.gts.wsrf.port">4443</prop>
-
 		<prop key="cagrid.gts.wsrf.path">gts</prop>
-		<prop key="cagrid.gts.wsrf.url">https://${cagrid.gts.wsrf.host}:${cagrid.gts.wsrf.port}/${cagrid.gts.wsrf.path}
-		</prop>
+		<prop key="cagrid.gts.wsrf.url">https://${cagrid.gts.wsrf.host}:${cagrid.gts.wsrf.port}/${cagrid.gts.wsrf.path}</prop>
+        <prop key="cagrid.gts.wsrf.ssl.context.factory.bean">proxySslContextFactory</prop>
+        <prop key="cagrid.gts.legacy-wsrf.ssl.context.factory.bean">legacyProxySslContextFactory</prop>
 		<prop key="cagrid.gts.wsrf.keystore.path">${karaf.base}/etc/cagrid-gts/gts-host.jks</prop>
 		<prop key="cagrid.gts.wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.gts.wsrf.keystore.alias">host</prop>
@@ -52,4 +52,6 @@
 
 	<osgi:reference id="gtsService" cardinality="0..1"
 		interface="org.cagrid.gts.service.GTS" />
+
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
 </beans>

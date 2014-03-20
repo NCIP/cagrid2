@@ -24,13 +24,24 @@
         <prop key="cagrid.gts.service.client.truststore.password">changeit</prop>
         <prop key="cagrid.gts.service.sync.start.delay">30000</prop>
         <prop key="cagrid.gts.service.sync.repeat.interval">300000</prop>
+        <prop key="cagrid.gts.service.client.configurer">truststoreClientConfigurer</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps"/>
 	<osgi:service ref="gts" interface="org.cagrid.gts.service.GTS"/>
 
 
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
 
+    <bean id="trustServiceClientConfigurer" class="org.cagrid.trust.service.TrustServiceClientConfigurer">
+        <property name="keystoreFile"
+                  value="${cagrid.gts.service.client.keystore.file}" />
+        <property name="keystorePassword"
+                  value="${cagrid.gts.service.client.keystore.password}" />
+        <property name="keyAlias" value="${cagrid.gts.service.client.key.alias}" />
+        <property name="keyPassword" value="${cagrid.gts.service.client.key.password}" />
+        <property name="trustService" ref="trustService" />
+    </bean>
 
 
     <bean id="scheduledSync" class="org.springframework.scheduling.quartz.SimpleTriggerBean">

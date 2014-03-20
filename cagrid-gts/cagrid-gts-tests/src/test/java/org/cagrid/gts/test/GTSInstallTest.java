@@ -2,6 +2,7 @@ package org.cagrid.gts.test;
 
 import java.io.File;
 
+import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileExtendOption;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFilePutOption;
 import org.apache.karaf.tooling.exam.options.KarafDistributionConfigurationFileReplacementOption;
 import org.cagrid.gts.service.GTS;
@@ -26,7 +27,8 @@ public class GTSInstallTest extends CaGridTestSupport {
     @Configuration
     public Option[] config() {
         Option[] options = new Option[] {
-                // Get our resource files to the "etc" area
+                // Get our resource files to the "etc" are
+                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",servicemix-quartz"),
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gts.wsrf.cfg", new File("src/test/resources/cagrid.gts.wsrf.cfg")),
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gts.service.cfg", new File("src/test/resources/cagrid.gts.service.cfg")),
                 new KarafDistributionConfigurationFileReplacementOption(HOST, new File("src/test/resources/gts-host.jks")),
@@ -38,7 +40,7 @@ public class GTSInstallTest extends CaGridTestSupport {
     public void testGTS() throws Exception {
         // see if we have our expected service URLs
         System.err.println(executeCommand("features:listurl"));
-
+        System.err.println(executeCommand("features:list"));
         // install the GTS and make sure the service starts
         installAndAssertFeature("cagrid-gts", TIMEOUT);
         System.err.println(executeCommand("features:list"));

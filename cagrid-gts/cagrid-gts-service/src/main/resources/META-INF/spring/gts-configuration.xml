@@ -21,15 +21,20 @@
         <constructor-arg ref="jaxbResourceProperties"/>
         <constructor-arg ref="srm"/>
         <constructor-arg value="${cagrid.gts.service.url}"/>
-        <constructor-arg ref="credentialManager"/>
+        <constructor-arg ref="${cagrid.gts.service.client.configurer}" />
     </bean>
 
-    <bean id="credentialManager" class="org.cagrid.gts.service.impl.CredentialManager">
-        <property name="keystoreFile" value="${cagrid.gts.service.client.keystore.file}"/>
-        <property name="keystorePassword" value="${cagrid.gts.service.client.keystore.password}"/>
-        <property name="keyAlias" value="${cagrid.gts.service.client.key.alias}"/>
-        <property name="keyPassword" value="${cagrid.gts.service.client.key.password}"/>
-        <property name="truststoreFile" value="${cagrid.gts.service.client.truststore.file}"/>
-        <property name="truststorePassword" value="${cagrid.gts.service.client.truststore.password}"/>
+    <bean id="truststoreClientConfigurer" class="org.cagrid.core.soapclient.TruststoreClientConfigurer">
+        <property name="keystoreFile"
+                  value="${cagrid.gts.service.client.keystore.file}" />
+        <property name="keystorePassword"
+                  value="${cagrid.gts.service.client.keystore.password}" />
+        <property name="keyAlias" value="${cagrid.gts.service.client.key.alias}" />
+        <property name="keyPassword" value="${cagrid.gts.service.client.key.password}" />
+        <property name="truststoreFile"
+                  value="${cagrid.gts.service.client.truststore.file}" />
+        <property name="truststorePassword"
+                  value="${cagrid.gts.service.client.truststore.password}" />
     </bean>
+
 </beans>

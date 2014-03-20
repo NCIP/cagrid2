@@ -59,6 +59,7 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
     private static final String KEYSTOREPASSWORD = "inventrio";
     private static final String KEYPASSWORD = "inventrio";
 
+
     @Override
     @Configuration
     public Option[] config() {
@@ -66,7 +67,8 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
                 // Make sure the GTS feature is installed before the test probe runs (the install process is actually tested by the GTSInstallTest test
                 new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresRepositories", ","
                         + maven().groupId("org.cagrid").artifactId("cagrid-features").versionAsInProject().classifier("features").type("xml").getURL()),
-                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",cagrid-gts"),
+                new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",servicemix-quartz"),
+                //new KarafDistributionConfigurationFileExtendOption("etc/org.apache.karaf.features.cfg", "featuresBoot", ",cagrid-gts"),
 
                 // Get our resource files to the "etc" area
                 new KarafDistributionConfigurationFileReplacementOption("etc/cagrid.gts.wsrf.cfg", new File("src/test/resources/cagrid.gts.wsrf.cfg")),
@@ -84,8 +86,10 @@ public class GTSFunctionalityTest extends CaGridTestSupport {
     public void testGTS() throws Exception {
         try {
             // see if we have our expected service URLs
-            System.err.println(executeCommand("features:listurl"));
-            System.err.println(executeCommand("features:list"));
+            System.err.println("testGTS() - "+executeCommand("features:listurl"));
+            System.err.println("testGTS() - "+executeCommand("features:list"));
+
+            installAndAssertFeature("cagrid-gts", TIMEOUT);
 
             assertBundleActive("cagrid-gts-service");
             GTS gts = getOsgiService(GTS.class, TIMEOUT);
