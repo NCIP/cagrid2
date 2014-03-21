@@ -77,8 +77,8 @@
     	<configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/registration.xml">mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}/xml/registration</configfile>
+        <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
         <feature version="${project.version}">cagrid-service-registration</feature>
-    
         <feature version="${project.version}">cagrid-gaards</feature>
         <!-- client -->
         <bundle>mvn:${project.groupId}/cagrid-gridgrouper-api/${project.version}</bundle>

@@ -13,11 +13,13 @@
 		<prop key="cagrid.gridgrouper.wsrf.port">7738</prop>
 		<prop key="cagrid.gridgrouper.wsrf.path">gridgrouper</prop>
 		<prop key="cagrid.gridgrouper.wsrf.url">https://${cagrid.gridgrouper.wsrf.host}:${cagrid.gridgrouper.wsrf.port}/${cagrid.gridgrouper.wsrf.path}</prop>
-		<prop key="cagrid.gridgrouper.wsrf.keystore.path">${karaf.base}/etc/gridgrouper/host.jks</prop>
+        <prop key="cagrid.gridgrouper.wsrf.ssl.context.factory.bean">proxySslContextFactory</prop>
+        <prop key="cagrid.gridgrouper.legacy-wsrf.ssl.context.factory.bean">legacyProxySslContextFactory</prop>
+		<prop key="cagrid.gridgrouper.wsrf.keystore.path">${karaf.base}/etc/cagrid-grid-grouper/host.jks</prop>
 		<prop key="cagrid.gridgrouper.wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.gridgrouper.wsrf.keystore.alias">host</prop>
 		<prop key="cagrid.gridgrouper.wsrf.key.password">changeit</prop>
-		<prop key="cagrid.gridgrouper.wsrf.truststore.path">${karaf.base}/etc/gridgrouper/truststore.jks</prop>
+		<prop key="cagrid.gridgrouper.wsrf.truststore.path">${karaf.base}/etc/cagrid-grid-grouper/truststore.jks</prop>
 		<prop key="cagrid.gridgrouper.wsrf.truststore.password">changeit</prop>
 		<prop key="cagrid.gridgrouper.wsrf.cipher-suites">SSL_RSA_WITH_RC4_128_MD5,SSL_RSA_WITH_RC4_128_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,
 			TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_DSS_WITH_AES_128_CBC_SHA,TLS_DHE_DSS_WITH_AES_256_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA,
@@ -31,11 +33,11 @@
         <prop key="cagrid.gridgrouper.legacy-wsrf.port">8443</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.url">https://${cagrid.gridgrouper.legacy-wsrf.host}:${cagrid.gridgrouper.legacy-wsrf.port}/${cagrid.gridgrouper.legacy-wsrf.path}</prop>
        
-        <prop key="cagrid.gridgrouper.legacy-wsrf.keystore.path">${karaf.base}/etc/gridgrouper/host.jks</prop>
+        <prop key="cagrid.gridgrouper.legacy-wsrf.keystore.path">${karaf.base}/etc/cagrid-grid-grouper/host.jks</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.keystore.password">changeit</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.keystore.alias">host</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.key.password">changeit</prop>
-        <prop key="cagrid.gridgrouper.legacy-wsrf.truststore.path">${karaf.base}/etc/gridgrouper/truststore.jks</prop>
+        <prop key="cagrid.gridgrouper.legacy-wsrf.truststore.path">${karaf.base}/etc/cagrid-grid-grouper/truststore.jks</prop>
         <prop key="cagrid.gridgrouper.legacy-wsrf.truststore.password">changeit</prop>
         <prop key="cagrid.gridgrouper.wsrf.registration.on">true</prop>
         <prop key="cagrid.gridgrouper.wsrf.registration.legacy.on">true</prop>
@@ -49,4 +51,6 @@
 	<ctx:property-placeholder properties-ref="preProps" />
 
 	<osgi:reference id="gridGrouperService" interface="org.cagrid.gridgrouper.service.GridGrouperService" />
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
+
 </beans>
