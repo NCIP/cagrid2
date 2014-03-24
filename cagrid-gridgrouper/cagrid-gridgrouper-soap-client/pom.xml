@@ -19,11 +19,13 @@
 					<instructions>
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Export-Package>
-							org.cagrid.gridgrouper.soapclient
+							org.cagrid.gridgrouper.soapclient,
+                            org.cagrid.gridgrouper.ws.client
 						</Export-Package>
                         <Private-Package>
                         </Private-Package>
 						<Import-Package>
+                            org.cagrid.gridgrouper.client,
                             *
 						</Import-Package>
 					</instructions>

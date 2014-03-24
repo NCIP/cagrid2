@@ -19,11 +19,9 @@
     </bean>
     -->
 
-    <bean id="gridGrouperClient" class="org.cagrid.gridgrouper.client.GridGrouperClient">
-        <constructor-arg>
-            <bean factory-method="createMock" class="org.easymock.EasyMock">
-                <constructor-arg value="org.cagrid.gridgrouper.wsrf.stubs.GridGrouperPortType" />
-            </bean>
-        </constructor-arg>
+    <bean id="gridGrouperClient" factory-method="createMock" class="org.easymock.EasyMock">
+        <constructor-arg value="org.cagrid.gridgrouper.client.GridGrouperClient" />
     </bean>
+
+
 </beans>

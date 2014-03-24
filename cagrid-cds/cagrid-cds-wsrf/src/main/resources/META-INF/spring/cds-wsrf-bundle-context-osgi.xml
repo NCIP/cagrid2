@@ -49,10 +49,13 @@
 		<prop key="cagrid.cds.wsrf.registration.registrant.legacy.url">${cagrid.cds.legacy-wsrf.url}</prop>
 		<prop key="cagrid.cds.wsrf.registration.xml">${karaf.base}/etc/cagrid-cds/registration.xml</prop>
 		<prop key="cagrid.cds.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
+        <prop key="cagrid.cds.wsrf.ssl.context.factory.bean">proxySslContextFactory</prop>
+        <prop key="cagrid.cds.legacy-wsrf.ssl.context.factory.bean">legacyProxySslContextFactory</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
 	<osgi:reference id="cds" interface="org.cagrid.cds.service.CredentialDelegationService" />
     <osgi:reference id="delegatedCredentialService" interface="org.cagrid.delegatedcredential.service.DelegatedCredentialService" />
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
 </beans>

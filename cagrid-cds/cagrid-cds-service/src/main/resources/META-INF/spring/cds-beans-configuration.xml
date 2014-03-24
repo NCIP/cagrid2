@@ -10,6 +10,9 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
+
+   
+
 	<bean id="database" class="org.cagrid.tools.database.Database">
 		<constructor-arg value="${cagrid.cds.service.db.host}" />
 		<constructor-arg value="${cagrid.cds.service.db.port}" />
