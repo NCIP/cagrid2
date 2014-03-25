@@ -49,6 +49,16 @@
 		<property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}" />
 	</bean>
 
+    <bean id="trustServiceSSLContextFactory" class="org.cagrid.trust.service.TrustServiceJettySSLContextFactory ">
+        <property name="trustService" ref="trustService"/>
+        <property name="keyStorePath" value="${cagrid.gme.wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.gme.wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.gme.wsrf.key.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}"/>
+    </bean>
+
     <bean id="legacyProxySslContextFactory"
           class="org.cagrid.security.ssl.proxy.trust.JettySslContextFactory">
         <property name="keyStorePath" value="${cagrid.gme.legacy-wsrf.keystore.path}" />
@@ -61,13 +71,23 @@
         <property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}" />
     </bean>
 
+    <bean id="legacyTrustServiceSSLContextFactory" class="org.cagrid.trust.service.TrustServiceJettySSLContextFactory ">
+        <property name="trustService" ref="trustService"/>
+        <property name="keyStorePath" value="${cagrid.gme.legacy-wsrf.keystore.path}"/>
+        <property name="keyStorePassword" value="${cagrid.gme.legacy-wsrf.keystore.password}"/>
+        <property name="keyManagerPassword" value="${cagrid.gme.legacy-wsrf.key.password}"/>
+        <property name="wantClientAuth" value="true"/>
+        <property name="needClientAuth" value="false"/>
+        <property name="includeCipherSuites" value="${cagrid.gme.wsrf.cipher-suites}"/>
+    </bean>
+
 <!-- Cannot use SslSelectChannelConnector yet, see https://issues.apache.org/jira/browse/CXF-4806 -->
 	<httpj:engine-factory bus="cxf">
 		<httpj:engine port="${cagrid.gme.wsrf.port}">
 			<httpj:tlsServerParameters />
 			<httpj:connector>
 				<bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-					<constructor-arg index="0" ref="proxySslContextFactory" />
+					<constructor-arg index="0" ref="${cagrid.gme.wsrf.ssl.context.factory.bean}" />
 					<property name="port" value="${cagrid.gme.wsrf.port}" />
 				</bean>
 			</httpj:connector>
@@ -77,7 +97,7 @@
             <httpj:tlsServerParameters />
             <httpj:connector>
                 <bean class="org.eclipse.jetty.server.ssl.SslSocketConnector">
-                    <constructor-arg index="0" ref="legacyProxySslContextFactory" />
+                    <constructor-arg index="0" ref="${cagrid.gme.legacy-wsrf.ssl.context.factory.bean}" />
                     <property name="port" value="${cagrid.gme.legacy-wsrf.port}" />
                 </bean>
             </httpj:connector>

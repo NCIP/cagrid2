@@ -12,10 +12,8 @@
 
 		<prop key="cagrid.gme.wsrf.host">localhost</prop>
 		<prop key="cagrid.gme.wsrf.port">7742</prop>
-
 		<prop key="cagrid.gme.wsrf.path">gme</prop>
-		<prop key="cagrid.gme.wsrf.url">https://${cagrid.gme.wsrf.host}:${cagrid.gme.wsrf.port}/${cagrid.gme.wsrf.path}
-		</prop>
+		<prop key="cagrid.gme.wsrf.url">https://${cagrid.gme.wsrf.host}:${cagrid.gme.wsrf.port}/${cagrid.gme.wsrf.path}</prop>
 		<prop key="cagrid.gme.wsrf.keystore.path">${karaf.base}/etc/cagrid-gme/host.jks</prop>
 		<prop key="cagrid.gme.wsrf.keystore.password">changeit</prop>
 		<prop key="cagrid.gme.wsrf.keystore.alias">host</prop>
@@ -43,10 +41,12 @@
 		<prop key="cagrid.gme.wsrf.registration.registrant.legacy.url">${cagrid.gme.legacy-wsrf.url}</prop>
 		<prop key="cagrid.gme.wsrf.registration.xml">${karaf.base}/etc/cagrid-gme/registration.xml</prop>
 		<prop key="cagrid.gme.wsrf.registration.index.url">http://localhost:8080/wsrf/services/DefaultIndexService</prop>
-	
+        <prop key="cagrid.gme.wsrf.ssl.context.factory.bean">proxySslContextFactory</prop>
+        <prop key="cagrid.gme.legacy-wsrf.ssl.context.factory.bean">legacyProxySslContextFactory</prop>
 	</osgix:cm-properties>
 
 	<ctx:property-placeholder properties-ref="preProps" />
 
 	<osgi:reference id="gmeService" cardinality="0..1" interface="org.cagrid.gme.service.GlobalModelExchangeService" />
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
 </beans>

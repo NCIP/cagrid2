@@ -55,6 +55,11 @@
 									<type>xml</type>
 									<classifier>registration</classifier>
 								</artifact>
+                                <artifact>
+                                    <file>src/main/resources/serviceSecurityMetadata.xml</file>
+                                    <type>xml</type>
+                                    <classifier>serviceSecurityMetadata</classifier>
+                                </artifact>
 							</artifacts>
 						</configuration>
 					</execution>
