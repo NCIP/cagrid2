@@ -108,7 +108,8 @@
 	<modules>
 		<module>cagrid-trust-api</module>
 		<module>cagrid-trust-service</module>
-	</modules>
+        <module>cagrid-trust-tools</module>
+    </modules>
 	<build>
 		<pluginManagement>
 			<plugins>

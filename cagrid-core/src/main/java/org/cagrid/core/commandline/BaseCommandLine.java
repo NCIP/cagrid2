@@ -191,6 +191,14 @@ public abstract class BaseCommandLine {
 		return sb.toString();
 	}
 
+    public boolean getBooleanValue(String prompt, String property) {
+        String val = getValue(prompt, property);
+        while ((val == null) || ((!val.equalsIgnoreCase("true")) && (!val.equalsIgnoreCase("false")))) {
+            val = getValue(prompt, property);
+        }
+        return Boolean.valueOf(val).booleanValue();
+    }
+
 	public boolean alwaysPrompt() {
 		try {
 			if (getProperties().containsKey(PROMPT)) {

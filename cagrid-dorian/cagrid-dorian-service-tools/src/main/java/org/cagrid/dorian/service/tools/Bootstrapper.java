@@ -283,13 +283,7 @@ public class Bootstrapper extends BaseCommandLine {
 		return truststorePassword;
 	}
 
-	private boolean getBooleanValue(String prompt, String property) {
-		String val = getValue(prompt, property);
-		while ((val == null) || ((!val.equalsIgnoreCase("true")) && (!val.equalsIgnoreCase("false")))) {
-			val = getValue(prompt, property);
-		}
-		return Boolean.valueOf(val).booleanValue();
-	}
+
 
 	@Override
 	public void execute() throws Exception {

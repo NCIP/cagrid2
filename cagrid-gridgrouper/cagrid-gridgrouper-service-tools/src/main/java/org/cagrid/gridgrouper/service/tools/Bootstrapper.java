@@ -247,14 +247,6 @@ public class Bootstrapper extends BaseCommandLine {
 		props.store(new FileOutputStream(wsrfConfig), "GridGrouper WSRF Service Configuration saved by bootstrapper on " + new Date());
 	}
 
-	private boolean getBooleanValue(String prompt, String property) {
-		String val = getValue(prompt, property);
-		while ((val == null) || ((!val.equalsIgnoreCase("true")) && (!val.equalsIgnoreCase("false")))) {
-			val = getValue(prompt, property);
-		}
-		return Boolean.valueOf(val).booleanValue();
-	}
-
 	public void configureLegacyWSRFCredentials() throws Exception {
 		if (configureLegacyWSRF()) {
 			String hostCertificate = getValue(LEGACY_WSRF_CERTIFICATE_PROMPT, LEGACY_WSRF_CERTIFICATE_PROPERTY);
