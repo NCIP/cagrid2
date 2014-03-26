@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -51,13 +52,19 @@ public class Bootstrapper extends BaseCommandLine {
     private static final String GTS_EXPIRATION_SECONDS_PROMPT = "Please enter the number of seconds a certificate authority should be trusted for without getting an update from the GTS";
     private static final String GTS_EXPIRATION_SECONDS_PROPERTY = "cagrid.trust.service.gts.expiration.seconds";
 
+    private static final String GTS_NEXT_SYNC_PROMPT = "Please enter how often (milliseconds) the trust service should syn with the GTS";
+    private static final String GTS_NEXT_SYNC_PROPERTY = "cagrid.trust.service.sync.repeat.interval";
+
+    private static final String CONFIGURER_PROMPT = "Please specifiy a client configurer to use (truststoreClientConfigurer OR trustServiceClientConfigurer)";
+    private static final String CONFIGURER_PROPERTY = "cagrid.trust.service.client.configurer";
+
 
     private List<X509Certificate> certificates;
 
     private File trustEtcDir;
 
 
-    private Properties properties;
+    private Properties serviceProperties;
 
     public Bootstrapper(File propertiesFile) throws Exception {
         super(propertiesFile);
@@ -85,13 +92,27 @@ public class Bootstrapper extends BaseCommandLine {
         System.out.println("*                Trust Service Bootstrapper                 *");
         System.out.println("*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*");
         System.out.println("");
-        this.properties = new Properties();
+        serviceProperties = new Properties();
         trustEtcDir = new File(getServiceMixEtc().getAbsolutePath() + File.separator + TRUST_SERVICE_DIR);
         trustEtcDir.mkdirs();
         buildTrustList();
         createAndConfigureTruststore();
         writeTrustedCertificates();
         writeSyncDescription();
+
+        String nextSync = getValue(GTS_NEXT_SYNC_PROMPT, GTS_NEXT_SYNC_PROPERTY);
+        serviceProperties.setProperty(GTS_NEXT_SYNC_PROPERTY, nextSync);
+
+        configureConfigurer();
+
+        File config = new File(getServiceMixEtc(), TRUST_SERVICE_CFG);
+        serviceProperties.store(new FileOutputStream(config), "Trust Service Configuration saved by bootstrapper on " + new Date());
+
+    }
+
+    private void configureConfigurer() {
+        String configurer = getValue(CONFIGURER_PROMPT, CONFIGURER_PROPERTY);
+        serviceProperties.setProperty(CONFIGURER_PROPERTY, configurer);
     }
 
     private void writeSyncDescription() {
@@ -184,8 +205,8 @@ public class Bootstrapper extends BaseCommandLine {
             keyStore.store(fos, password.toCharArray());
             fos.close();
 
-            properties.setProperty(TRUSTSTORE_LOCATION_PROPERTY, TRUSTSTORE_LOCATION_PROPERTY_VALUE);
-            properties.setProperty(TRUSTSTORE_PASSWORD_PROPERTY, password);
+            serviceProperties.setProperty(TRUSTSTORE_LOCATION_PROPERTY, TRUSTSTORE_LOCATION_PROPERTY_VALUE);
+            serviceProperties.setProperty(TRUSTSTORE_PASSWORD_PROPERTY, password);
 
             System.out.println("Truststore created at " + f.getAbsolutePath());
         } catch (Exception e) {
