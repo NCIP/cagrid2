@@ -61,11 +61,24 @@ public class SyncGTS implements Synchronizer {
     private HistoryManager historyManager;
     private File trustedCertificatesDirectory;
     private ClientConfigurer clientConfigurer;
+    private Map<String, GTSClient> clients;
 
 
     public SyncGTS() {
         this.trustedCertificatesDirectory = new File(".");
         log = LoggerFactory.getLogger(this.getClass().getName());
+        this.clients = new HashMap<String, GTSClient>();
+    }
+
+    private GTSClient getClient(String url){
+        if(this.clients.containsKey(url)){
+            return this.clients.get(url);
+        }else{
+            GTSClient client = new GTSClient(url);
+            getClientConfigurer().configureClient(client);
+            this.clients.put(url,client);
+            return client;
+        }
     }
 
     public HistoryManager getHistoryManager() {
@@ -111,8 +124,7 @@ public class SyncGTS implements Synchronizer {
                 for (TrustedAuthorityFilter f : filters) {
                     filterCount = filterCount + 1;
                     try {
-                        GTSClient client = new GTSClient(uri);
-                        getClientConfigurer().configureClient(client);
+                        GTSClient client = getClient(uri);
                          List<org.cagrid.gts.model.TrustedAuthority> tas = client.findTrustedAuthorities(convert(f));
                         int length = 0;
 
