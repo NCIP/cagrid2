@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="cluster-configwrapper" targetNamespace="null/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="null/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="null/bindings" location="cluster-configwrapper_bindings.wsdl"/>
+  <wsdl:service name="cluster-configwrapperService">
+  </wsdl:service>
+</wsdl:definitions>

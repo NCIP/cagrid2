@@ -1,0 +1,75 @@
+<!--
+    This is a sample cluster configuration file.  It's a way for a
+    site administrator to logically define subclusters within a
+    cluster and specify attributes that should be common to the
+    subcluster.
+-->
+<cfg:ClusterConfiguration
+    xmlns:cfg="http://mds.globus.org/2005/09/cluster-config"
+    xmlns:ce="http://mds.globus.org/glue/ce/1.1" >
+
+  <cfg:Cluster cfg:Name="MyClusterName" cfg:UniqueID="MyClusterID">
+
+    <cfg:SubCluster cfg:Name="FastMachineSubCluster" cfg:UniqueID="FAST">
+
+      <cfg:HostNames>
+         <cfg:HostName cfg:Name="host1" cfg:UniqueID="hostId1" />
+         <cfg:HostName cfg:Name="host2" cfg:UniqueID="hostId2" />
+         <cfg:HostName cfg:Name="host3" cfg:UniqueID="hostId3" />
+         <cfg:HostName cfg:Name="host4" cfg:UniqueID="hostId4" />
+      </cfg:HostNames>
+
+      <!-- NOTE:
+           specifying an empty tag here has a distinct purpose.  it
+           explicitly tells the organizer code to use the information
+           from the first host in this subcluster rather than fixed
+           values.  if you specify the parameterized values, they will
+           take precedence over all others and be used.  if no tag is
+           specified at all, that tag is never bubbled up to the
+           subcluster level and all of that tag's information will
+           remain at the per-host level.
+
+           in this case, the MainMemory, OperatingSystem, and
+           StorageDevice information is all dynamically pulled from
+           host1 (i.e. the first host specified in the subcluster).
+           While the Processor and Architecture information is also
+           pulled dynamically, the specified InstructionSet,
+           PlatformType and SMPSize will override any dynamic values.
+           this is useful for many reasons, but mostly when some
+           fields are not specified or cannot be retrieved
+           dynamically.
+        -->
+      <cfg:MainMemory />
+      <cfg:OperatingSystem />
+      <cfg:StorageDevice />
+      <cfg:Processor ce:InstructionSet="IA-64" />
+      <cfg:Architecture ce:PlatformType="Intel" ce:SMPSize="2" />
+
+    </cfg:SubCluster>
+
+    <cfg:SubCluster cfg:Name="SlowMachineSubCluster" cfg:UniqueID="SLOW">
+
+      <cfg:HostNames>
+         <cfg:HostName cfg:Name="host5" cfg:UniqueID="hostId5" />
+         <cfg:HostName cfg:Name="host6" cfg:UniqueID="hostId6" />
+         <cfg:HostName cfg:Name="host7" cfg:UniqueID="hostId7" />
+         <cfg:HostName cfg:Name="host8" cfg:UniqueID="hostId8" />
+      </cfg:HostNames>
+
+      <!--
+           this syntax just dynamically pulls all information from
+           host5 (i.e. the first host in the subcluster) and uses it
+           to represent the summary information for the entire
+           subcluster.
+      -->
+      <cfg:MainMemory />
+      <cfg:OperatingSystem />
+      <cfg:StorageDevice />
+      <cfg:Processor />
+      <cfg:Architecture />
+
+    </cfg:SubCluster>
+
+  </cfg:Cluster>
+
+</cfg:ClusterConfiguration>

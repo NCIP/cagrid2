@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Portions of this file Copyright 1999-2005 University of Chicago
+Portions of this file Copyright 1999-2005 The University of Southern California.
+
+This file or a portion of this file is licensed under the
+terms of the Globus Toolkit Public License, found at
+http://www.globus.org/toolkit/download/license.html.
+If you redistribute this file, with or without
+modifications, you must include this notice in the file.
+-->
+
+<!-- $Id: rpprovider.xsd,v 1.4.4.1 2007/03/09 20:54:07 mdarcy Exp $ -->
+
+<schema targetNamespace="http://mds.globus.org/rpprovider/2005/08"
+             xmlns:rpp="http://mds.globus.org/rpprovider/2005/08"
+             attributeFormDefault="qualified"
+             elementFormDefault="qualified"
+             xmlns="http://www.w3.org/2001/XMLSchema"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xml:lang="en" >
+
+<complexType name="ResourcePropertyProviderConfigArray">
+  <sequence>
+    <element name="configArray" type="rpp:resourcePropertyProviderConfig" minOccurs="0" maxOccurs="unbounded"/>
+  </sequence>
+</complexType>
+    
+ <complexType name="resourcePropertyProviderConfig">
+  <annotation><documentation>
+    A configuration element describing resource property provider paramters.  This entry contains the necessary information required to create a dynamic resource property using the RP Provider component.
+  </documentation></annotation>
+  <sequence>
+    <element name="resourcePropertyName" type="xsd:QName" isNilable="false">
+      <annotation><documentation>
+        The QName of the resource property which this provider will generate data for.
+      </documentation></annotation>
+    </element>
+    <element name="resourcePropertyImpl" type="xsd:string" minOccurs="0" maxOccurs="1">
+      <annotation><documentation>
+      A string value representing a fully qualified Java class name (implementing the ResourceProperty interface) which will serve as the runtime implementation for this resource property.
+      </documentation></annotation>
+    </element>       
+    <element name="resourcePropertyElementProducers" type="rpp:resourcePropertyElementProducerConfig" minOccurs="0" maxOccurs="unbounded">
+      <annotation><documentation>
+      An optional array of resourcePropertyElementProducerConfig objects.  These configuration entries are used to specify parameters for resourcePropertyElementProducers that can be used to generate independent XML elements for resource property values.
+      </documentation></annotation>
+    </element>       
+   </sequence>
+ </complexType>
+
+ <complexType name="resourcePropertyElementProducerConfig">
+  <annotation><documentation>
+    A configuration element describing a ResourcePropertyElementProducer configuration entry.  This entry contains the necessary information to run a class implementing the ResourcePropertyElementProducer interface.
+  </documentation></annotation> 
+  <sequence>  
+    <element name="className" type="xsd:string">
+      <annotation><documentation>
+      A string which represents the fully qualified Java class name of the ResourcePropertyElementProducer to run.  
+      </documentation></annotation>
+    </element>
+    <element name="arguments" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+      <annotation><documentation>
+      A string array which represents an optional argument vector that may be passed to the ResourcePropertyElementProducer getElement method.    
+      </documentation></annotation>
+    </element>
+    <element name="transformClass" type="xsd:string">
+      <annotation><documentation>
+      An optional string which represents the fully qualified Java class name of a class implementing the ResourcePropertyElementTransform interface.  The ResourcePropertyElementTransform.transformElement method of this class will be called as a post-processing step of the ResourcePropertyElementProducer.getElement method.  
+      </documentation></annotation>
+    </element> 
+    <element name="transformArguments" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+      <annotation><documentation>
+      A string array which represents an optional argument vector that may be passed to the ResourcePropertyElementTransform transformElement method.    
+      </documentation></annotation>
+    </element>           
+    <element name="period" type="xsd:int" minOccurs="0" maxOccurs="1">
+      <annotation><documentation>
+      An optional integer value representing the frequency in seconds that the provider is executed. If this value is not specified or equals 0, the provider should executed at most once asynchronously.
+      </documentation></annotation>
+    </element>
+  </sequence>
+ </complexType>
+    
+</schema>
+
+

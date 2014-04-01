@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BigIndex" targetNamespace="http://mds.globus.org/bigindex/2008/11/24" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:tns="http://mds.globus.org/bigindex/2008/11/24" xmlns:wsrlw="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:asgw="http://mds.globus.org/aggregator" xmlns:wsntw="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" xmlns:gtwsdl0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:bit="http://mds.globus.org/bigindex/2008/11/24/types" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../../wsrf/faults/WS-BaseFaults.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" location="../../wsrf/lifetime/WS-ResourceLifetime.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../../wsrf/properties/WS-ResourceProperties.wsdl"/>
+  <import namespace="http://mds.globus.org/aggregator" location="../aggregator/aggregator_service_group_port_type.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" location="../../wsrf/servicegroup/WS-ServiceGroup.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.wsdl" location="../../wsrf/notification/WS-BaseN.wsdl"/>
+  <types>
+    <xsd:schema targetNamespace="http://mds.globus.org/bigindex/2008/11/24" xmlns:rpns0="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd" xmlns:rpns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd" xmlns:rpns2="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" xmlns:rpns3="http://mds.globus.org/aggregator/types" xmlns:tns="http://mds.globus.org/bigindex/2008/11/24" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="../../ws/addressing/WS-Addressing.xsd"/>
+
+<xsd:import namespace="http://mds.globus.org/aggregator/types" schemaLocation="../aggregator/aggregator-types.xsd"/>
+
+<xsd:import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="../../wsrf/lifetime/WS-ResourceLifetime.xsd"/>
+
+<xsd:import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd" schemaLocation="../../wsrf/servicegroup/WS-ServiceGroup.xsd"/>
+
+<xsd:import namespace="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01.xsd" schemaLocation="../../wsrf/notification/WS-BaseN.xsd"/>
+
+              
+        <xsd:include schemaLocation="./big_index_types.xsd"/>
+      
+        <xsd:element name="GetContentRequest" type="bit:BigIndexContentIDList"/>                    
+                               
+        <xsd:element name="GetContentResponse">
+            <xsd:complexType>        
+                <xsd:sequence>        
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="BigIndexContent" type="bit:BigIndexContent"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+
+
+        <xsd:complexType name="QueryType">
+            <xsd:sequence>
+                <xsd:element maxOccurs="1" minOccurs="1" name="queryString" type="xsd:string"/>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" name="namespaces" type="xsd:string"/>                                  
+            </xsd:sequence>
+        </xsd:complexType>
+                
+        <xsd:element name="QueryRequest" type="tns:QueryType"/>     
+                             
+        <xsd:element name="QueryResponse">
+           <xsd:complexType mixed="true">
+               <xsd:sequence>
+                 <xsd:any maxOccurs="unbounded" minOccurs="1" processContents="lax"/>
+               </xsd:sequence>
+           </xsd:complexType>
+        </xsd:element>
+                                                                                 
+        <xsd:element name="BigIndexResourceProperties"><xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="1" ref="rpns0:Topic"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="1" ref="rpns0:TopicExpressionDialects"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" ref="rpns1:Entry"/>
+            <xsd:element maxOccurs="1" minOccurs="1" ref="rpns2:TerminationTime"/>
+            <xsd:element maxOccurs="unbounded" minOccurs="0" ref="rpns1:MembershipContentRule"/>
+            <xsd:element maxOccurs="1" minOccurs="1" ref="rpns3:RegistrationCount"/>
+            <xsd:element maxOccurs="1" minOccurs="1" ref="rpns2:CurrentTime"/>
+            <xsd:element maxOccurs="1" minOccurs="1" ref="rpns0:FixedTopicSet"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+              
+      </xsd:schema>
+  </types>
+  <message name="QueryOutputMessage">
+    <part name="queryResponse" element="tns:QueryResponse"/>
+  </message>
+  <message name="QueryInputMessage">
+    <part name="queryRequest" element="tns:QueryRequest"/>
+  </message>
+  <message name="GetContentInputMessage">
+    <part name="getContentRequest" element="tns:GetContentRequest"/>
+  </message>
+  <message name="GetContentOutputMessage">
+    <part name="getContentResponse" element="tns:GetContentResponse"/>
+  </message>
+  <portType name="BigIndexPortType" wsrp:ResourceProperties="tns:BigIndexResourceProperties">
+    <operation name="GetContent">
+      <input message="tns:GetContentInputMessage"/>
+      <output message="tns:GetContentOutputMessage"/>
+    </operation>
+    <operation name="Query">
+      <input message="tns:QueryInputMessage"/>
+      <output message="tns:QueryOutputMessage"/>
+    </operation>
+    <operation name="SetTerminationTime">
+      <input message="wsrlw:SetTerminationTimeRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/SetTerminationTime"/>
+      <output message="wsrlw:SetTerminationTimeResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/SetTerminationTimeResponse"/>
+      <fault name="UnableToSetTerminationTimeFault" message="wsrlw:UnableToSetTerminationTimeFault"/>
+      <fault name="ResourceUnknownFault" message="wsrlw:ResourceUnknownFault"/>
+      <fault name="TerminationTimeChangeRejectedFault" message="wsrlw:TerminationTimeChangeRejectedFault"/>
+    </operation>
+    <operation name="Destroy">
+      <input message="wsrlw:DestroyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/Destroy"/>
+      <output message="wsrlw:DestroyResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/DestroyResponse"/>
+      <fault name="ResourceNotDestroyedFault" message="wsrlw:ResourceNotDestroyedFault"/>
+      <fault name="ResourceUnknownFault" message="wsrlw:ResourceUnknownFault"/>
+    </operation>
+    <operation name="QueryResourceProperties">
+      <input name="QueryResourcePropertiesRequest" message="gtwsdl0:QueryResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+      <output name="QueryResourcePropertiesResponse" message="gtwsdl0:QueryResourcePropertiesResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="gtwsdl0:InvalidResourcePropertyQNameFault"/>
+      <fault name="InvalidQueryExpressionFault" message="gtwsdl0:InvalidQueryExpressionFault"/>
+      <fault name="QueryEvaluationErrorFault" message="gtwsdl0:QueryEvaluationErrorFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl0:ResourceUnknownFault"/>
+      <fault name="UnknownQueryExpressionDialectFault" message="gtwsdl0:UnknownQueryExpressionDialectFault"/>
+    </operation>
+    <operation name="GetMultipleResourceProperties">
+      <input name="GetMultipleResourcePropertiesRequest" message="gtwsdl0:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+      <output name="GetMultipleResourcePropertiesResponse" message="gtwsdl0:GetMultipleResourcePropertiesResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourcePropertiesResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="gtwsdl0:InvalidResourcePropertyQNameFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl0:ResourceUnknownFault"/>
+    </operation>
+    <operation name="GetResourceProperty">
+      <input name="GetResourcePropertyRequest" message="gtwsdl0:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+      <output name="GetResourcePropertyResponse" message="gtwsdl0:GetResourcePropertyResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="gtwsdl0:InvalidResourcePropertyQNameFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl0:ResourceUnknownFault"/>
+    </operation>
+    <operation name="Add">
+      <input name="AddRequest" message="gtwsdl1:AddRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2/Add"/>
+      <output name="AddResponse" message="gtwsdl1:AddResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2/AddResponse"/>
+      <fault name="ContentCreationFailedFault" message="gtwsdl1:ContentCreationFailedFault"/>
+      <fault name="UnsupportedMemberInterfaceFault" message="gtwsdl1:UnsupportedMemberInterfaceFault"/>
+      <fault name="AddRefusedFault" message="gtwsdl1:AddRefusedFault"/>
+    </operation>
+    <operation name="Subscribe">
+      <input message="wsntw:SubscribeRequest" wsa:Action="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification/Subscribe"/>
+      <output message="wsntw:SubscribeResponse" wsa:Action="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification/SubscribeResponse"/>
+      <fault name="TopicNotSupportedFault" message="wsntw:TopicNotSupportedFault"/>
+      <fault name="InvalidTopicExpressionFault" message="wsntw:InvalidTopicExpressionFault"/>
+      <fault name="SubscribeCreationFailedFault" message="wsntw:SubscribeCreationFailedFault"/>
+      <fault name="ResourceUnknownFault" message="wsntw:ResourceUnknownFault"/>
+      <fault name="TopicPathDialectUnknownFault" message="wsntw:TopicPathDialectUnknownFault"/>
+    </operation>
+    <operation name="GetCurrentMessage">
+      <input message="wsntw:GetCurrentMessageRequest" wsa:Action="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification/GetCurrentMessage"/>
+      <output message="wsntw:GetCurrentMessageResponse" wsa:Action="http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification/GetCurrentMessageResponse"/>
+      <fault name="TopicNotSupportedFault" message="wsntw:TopicNotSupportedFault"/>
+      <fault name="InvalidTopicExpressionFault" message="wsntw:InvalidTopicExpressionFault"/>
+      <fault name="NoCurrentMessageOnTopicFault" message="wsntw:NoCurrentMessageOnTopicFault"/>
+      <fault name="ResourceUnknownFault" message="wsntw:ResourceUnknownFault"/>
+    </operation>
+  </portType>
+</definitions>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ServiceGroupRegistrations
+  xmlns="http://mds.globus.org/servicegroup/client" 
+  xmlns:sgc="http://mds.globus.org/servicegroup/client" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing"
+  xmlns:agg="http://mds.globus.org/aggregator/types">
+
+<!-- 
+     This is a sample registration file that can be used to test the 
+     mds-servicegroup-add command or the ServiceGroupRegistrationClient library.
+         
+     Note that both the defaultRegistrantEPR and defaultServiceGroupEPR elements 
+     below needs to be changed to match the actual address and port number of 
+     the services used.
+     
+     Also note that when using the mds-servicegroup-add command, that the EPR 
+     specified on the command-line will be overridden by the defaultServiceGroupEPR 
+     element below. 
+-->
+
+<sgc:defaultServiceGroupEPR>
+   <wsa:Address>http://localhost:8080/wsrf/services/BigIndexService</wsa:Address>
+</sgc:defaultServiceGroupEPR>
+
+<sgc:defaultRegistrantEPR>
+   <wsa:Address>http://localhost:8080/wsrf/services/DefaultIndexService</wsa:Address>
+</sgc:defaultRegistrantEPR>
+
+<sgc:ServiceGroupRegistrationParameters>
+
+   <sgc:RefreshIntervalSecs>120</sgc:RefreshIntervalSecs>
+
+   <sgc:Content xsi:type="agg:AggregatorContent" xmlns:agg="http://mds.globus.org/aggregator/types">
+      <agg:AggregatorConfig xsi:type="agg:AggregatorConfig">
+         <agg:GetResourcePropertyPollType>
+            <agg:PollIntervalMillis>120000</agg:PollIntervalMillis>
+             <agg:ResourcePropertyName xmlns:mdsmd="http://mds.globus.org/metadata/2005/02">
+		mdsmd:ServiceMetaDataInfo
+            </agg:ResourcePropertyName>
+         </agg:GetResourcePropertyPollType>
+      </agg:AggregatorConfig>
+      <agg:AggregatorData/>
+   </sgc:Content>
+
+</sgc:ServiceGroupRegistrationParameters>
+
+</ServiceGroupRegistrations>
+

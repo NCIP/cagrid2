@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Sample configuration file for GLUECE resource property provider.
+    
+    This sample configures the provider to generate cluster information using 
+    Ganglia on the localhost with the default Ganglia port, and configures PBS 
+    as the scheduler information provider.  The period of execution is set to 
+    300 seconds for each information provider, but may be configured seperately 
+    if desired.
+    
+    Also note if the arguments to the GangliaElementProducer are ommitted or 
+    removed, the code will assume the default values of 'localhost' and '8649' 
+    for the Ganglia host and port.
+-->
+
+<ns1:ResourcePropertyProviderConfigArray xsi:type="ns1:ResourcePropertyProviderConfigArray" xmlns:ns1="http://mds.globus.org/rpprovider/2005/08" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <ns1:configArray xsi:type="ns1:resourcePropertyProviderConfig">
+  <ns1:resourcePropertyName xsi:type="xsd:QName" xmlns:mds="http://mds.globus.org/glue/ce/1.1">mds:GLUECE</ns1:resourcePropertyName>
+  <ns1:resourcePropertyImpl xsi:type="xsd:string">org.globus.mds.usefulrp.rpprovider.GLUEResourceProperty</ns1:resourcePropertyImpl>
+  <ns1:resourcePropertyElementProducers xsi:type="ns1:resourcePropertyElementProducerConfig">
+    <ns1:className xsi:type="xsd:string">org.globus.mds.usefulrp.glue.GangliaElementProducer</ns1:className>
+    <ns1:arguments xsi:type="xsd:string">localhost</ns1:arguments>
+    <ns1:arguments xsi:type="xsd:string">8649</ns1:arguments>
+    <ns1:period xsi:type="xsd:int">300</ns1:period>
+    <ns1:transformClass xsi:type="xsd:string">org.globus.mds.usefulrp.rpprovider.transforms.GLUEComputeElementTransform</ns1:transformClass>
+  </ns1:resourcePropertyElementProducers>
+  <ns1:resourcePropertyElementProducers xsi:type="ns1:resourcePropertyElementProducerConfig">
+    <ns1:className xsi:type="xsd:string">org.globus.mds.usefulrp.rpprovider.producers.SchedulerInfoElementProducer</ns1:className>
+    <ns1:arguments xsi:type="xsd:string">libexec/globus-scheduler-provider-pbs</ns1:arguments>
+    <ns1:transformClass xsi:type="xsd:string">org.globus.mds.usefulrp.rpprovider.transforms.GLUESchedulerElementTransform</ns1:transformClass>
+    <ns1:period xsi:type="xsd:int">300</ns1:period>
+  </ns1:resourcePropertyElementProducers>
+ </ns1:configArray>
+</ns1:ResourcePropertyProviderConfigArray>

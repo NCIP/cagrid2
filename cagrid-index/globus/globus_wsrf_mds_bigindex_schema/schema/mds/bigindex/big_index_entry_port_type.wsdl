@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BigIndexEntry" targetNamespace="http://mds.globus.org/bigindex/2008/11/24" xmlns:wsrp="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.xsd" xmlns:tns="http://mds.globus.org/bigindex/2008/11/24" xmlns:wsdlpp="http://www.globus.org/namespaces/2004/10/WSDLPreprocessor" xmlns:gtwsdl1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/03/addressing" xmlns:asge="http://mds.globus.org/aggregator" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gtwsdl0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../../wsrf/faults/WS-BaseFaults.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" location="../../wsrf/lifetime/WS-ResourceLifetime.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../../wsrf/properties/WS-ResourceProperties.wsdl"/>
+  <import namespace="http://mds.globus.org/aggregator" location="../../mds/aggregator/aggregator_service_group_entry_port_type.wsdl"/>
+  <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" location="../../wsrf/servicegroup/WS-ServiceGroup.wsdl"/>
+  <types>
+    <schema targetNamespace="http://mds.globus.org/bigindex/2008/11/24" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rpns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" xmlns:rpns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd" xmlns:tns="http://mds.globus.org/bigindex/2008/11/24" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<import namespace="http://schemas.xmlsoap.org/ws/2004/03/addressing" schemaLocation="../../ws/addressing/WS-Addressing.xsd"/>
+
+<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd" schemaLocation="../../wsrf/servicegroup/WS-ServiceGroup.xsd"/>
+
+<import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" schemaLocation="../../wsrf/lifetime/WS-ResourceLifetime.xsd"/>
+
+                                                  
+        <element name="BigIndexEntryResourceProperties"><complexType>
+          <sequence>
+            <element maxOccurs="1" minOccurs="1" ref="rpns0:TerminationTime"/>
+            <element maxOccurs="1" minOccurs="1" ref="rpns1:MemberEPR"/>
+            <element maxOccurs="1" minOccurs="1" ref="rpns1:Content"/>
+            <element maxOccurs="1" minOccurs="1" ref="rpns0:CurrentTime"/>
+            <element maxOccurs="1" minOccurs="1" ref="rpns1:ServiceGroupEPR"/>
+          </sequence>
+        </complexType>
+      </element>
+              
+      </schema>
+  </types>
+  <portType name="BigIndexEntryPortType" wsrp:ResourceProperties="tns:BigIndexEntryResourceProperties">
+    <operation name="SetTerminationTime">
+      <input message="gtwsdl0:SetTerminationTimeRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/SetTerminationTime"/>
+      <output message="gtwsdl0:SetTerminationTimeResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime/SetTerminationTimeResponse"/>
+      <fault name="UnableToSetTerminationTimeFault" message="gtwsdl0:UnableToSetTerminationTimeFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl0:ResourceUnknownFault"/>
+      <fault name="TerminationTimeChangeRejectedFault" message="gtwsdl0:TerminationTimeChangeRejectedFault"/>
+    </operation>
+    <operation name="QueryResourceProperties">
+      <input name="QueryResourcePropertiesRequest" message="gtwsdl1:QueryResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourceProperties"/>
+      <output name="QueryResourcePropertiesResponse" message="gtwsdl1:QueryResourcePropertiesResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/QueryResourcePropertiesResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="gtwsdl1:InvalidResourcePropertyQNameFault"/>
+      <fault name="InvalidQueryExpressionFault" message="gtwsdl1:InvalidQueryExpressionFault"/>
+      <fault name="QueryEvaluationErrorFault" message="gtwsdl1:QueryEvaluationErrorFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl1:ResourceUnknownFault"/>
+      <fault name="UnknownQueryExpressionDialectFault" message="gtwsdl1:UnknownQueryExpressionDialectFault"/>
+    </operation>
+    <operation name="GetMultipleResourceProperties">
+      <input name="GetMultipleResourcePropertiesRequest" message="gtwsdl1:GetMultipleResourcePropertiesRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourceProperties"/>
+      <output name="GetMultipleResourcePropertiesResponse" message="gtwsdl1:GetMultipleResourcePropertiesResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetMultipleResourcePropertiesResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="gtwsdl1:InvalidResourcePropertyQNameFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl1:ResourceUnknownFault"/>
+    </operation>
+    <operation name="GetResourceProperty">
+      <input name="GetResourcePropertyRequest" message="gtwsdl1:GetResourcePropertyRequest" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourceProperty"/>
+      <output name="GetResourcePropertyResponse" message="gtwsdl1:GetResourcePropertyResponse" wsa:Action="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties/GetResourcePropertyResponse"/>
+      <fault name="InvalidResourcePropertyQNameFault" message="gtwsdl1:InvalidResourcePropertyQNameFault"/>
+      <fault name="ResourceUnknownFault" message="gtwsdl1:ResourceUnknownFault"/>
+    </operation>
+  </portType>
+</definitions>

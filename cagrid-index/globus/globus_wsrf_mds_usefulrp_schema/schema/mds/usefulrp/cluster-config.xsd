@@ -1,0 +1,93 @@
+<!--
+
+Portions of this file Copyright 1999-2005 University of Chicago
+Portions of this file Copyright 1999-2005 The University of Southern
+California.
+
+This file or a portion of this file is licensed under the terms of the
+Globus Toolkit Public License, found at
+http://www.globus.org/toolkit/download/license.html.  If you
+redistribute this file, with or without modifications, you must
+include this notice in the file.
+
+-->
+
+<schema targetNamespace="http://mds.globus.org/2005/09/cluster-config"
+        xmlns:cfg="http://mds.globus.org/2005/09/cluster-config"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        attributeFormDefault="qualified"
+        elementFormDefault="qualified"
+        xmlns:ce="http://mds.globus.org/glue/ce/1.1"
+        xml:lang="en" >
+
+<xsd:import namespace="http://mds.globus.org/glue/ce/1.1"
+            schemaLocation="ce.xsd" />
+
+<complexType name="ClusterConfiguration">
+  <annotation><documentation>
+    this configuration is meant to describe your cluster and
+    subclusters for reporting the GLUE schema through the MDS4.  this
+    is a way to create organizational mappings that otherwise can't be
+    determined automatically.  system administrators must specify
+    these definitions.  for now, only one cluster may be defined with
+    an arbitrary number of subclusters within it
+  </documentation></annotation>
+  <sequence>
+    <element name="Cluster" type="cfg:ClusterDefinitionType"
+             minOccurs="1" maxOccurs="1" />
+  </sequence>
+</complexType>
+
+
+<complexType name="ClusterDefinitionType">
+   <attribute name="Name" type="xsd:string" />
+   <attribute name="UniqueID" type="xsd:string" />
+   <sequence>
+    <element name="SubCluster" type="cfg:SubClusterDefinitionType" 
+             minOccurs="1" maxOccurs="unbounded" />
+   </sequence>
+</complexType>
+
+
+<complexType name="SubClusterDefinitionType">
+   <attribute name="Name" type="xsd:string" />
+   <attribute name="UniqueID" type="xsd:string" />
+   <sequence>
+     <element name="HostNames" type="cfg:HostNameArrayDefinitionType" minOccurs="1" />
+
+     <element name="MainMemory" type="ce:MainMemoryType" minOccurs="0" />
+     <element name="Processor" type="ce:ProcessorType" minOccurs="0" />
+     <element name="OperatingSystem" type="ce:OperatingSystemType" minOccurs="0" />
+     <element name="StorageDevice" type="ce:StorageDeviceType" maxOccurs="unbounded" minOccurs="0" />
+     <element name="Architecture" type="ce:ArchitectureType" minOccurs="0" />
+   </sequence>
+</complexType>
+
+
+<complexType name="HostNameArrayDefinitionType">
+   <sequence>
+      <any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+      <element name="HostName" type="cfg:HostNameDefinitionType"
+               minOccurs="0" maxOccurs="unbounded"/>
+   </sequence>
+   <anyAttribute namespace="##other"/>
+</complexType>
+
+
+<complexType name="HostNameDefinitionType">
+   <attribute name="Name" type="xsd:string" />
+   <attribute name="UniqueID" type="xsd:string" />
+</complexType>
+
+
+<complexType name="HostExtType">
+  <sequence>
+    <any namespace="##other" minOccurs="0" maxOccurs="unbounded"/>
+  </sequence>
+  <attribute name="Name" type="xsd:string"/>
+  <attribute name="NodeProperties" type="xsd:string"/>
+  <anyAttribute namespace="##other"/>
+</complexType>
+
+</schema>

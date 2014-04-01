@@ -1,0 +1,7 @@
+<!-- useful for overriding the Info fields only -->
+
+<ce:ComputingElementType xmlns:ce="http://mds.globus.org/glue/ce/1.1" >
+
+ <ce:Info ce:LRMSType="PBS-Torque" ce:LRMSVersion="1.2.0p5" ce:GRAMVersion="4.0.6" ce:HostName="http://127.0.0.1:20202/wsrf/services/ManagedJobFactoryService" ce:GatekeeperPort="2019" ce:TotalCPUs="128" />
+
+</ce:ComputingElementType>
