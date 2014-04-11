@@ -3,7 +3,7 @@
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-01.wsdl" location="../wsrf/faults/WS-BaseFaults.wsdl"/>
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl" location="../wsrf/lifetime/WS-ResourceLifetime.wsdl"/>
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl" location="../wsrf/properties/WS-ResourceProperties.wsdl"/>
-  <import namespace="http://mds.globus.org/aggregator" location="../mds/aggregator/aggregator_service_group_entry_port_type.wsdl"/>
+  <import namespace="http://mds.globus.org/aggregator" location="./aggregator/aggregator_service_group_entry_port_type.wsdl"/>
   <import namespace="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.wsdl" location="../wsrf/servicegroup/WS-ServiceGroup.wsdl"/>
   <types>
     <schema targetNamespace="http://mds.globus.org/bigindex/2008/11/24" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:rpns0="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.xsd" xmlns:rpns1="http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ServiceGroup-1.2-draft-01.xsd" xmlns:tns="http://mds.globus.org/bigindex/2008/11/24" xmlns:xsd="http://www.w3.org/2001/XMLSchema">

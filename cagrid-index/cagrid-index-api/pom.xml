@@ -37,30 +37,14 @@
                                                 <extraarg>http://mds.globus.org/bigindex/2008/11/24=org.cagrid.index.wsrf.stubs</extraarg>
                                                 <extraarg>-p</extraarg>
                                                 <extraarg>http://mds.globus.org/bigindex/2008/11/24/types=org.cagrid.index.types</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://mds.globus.org/aggregator/types=org.cagrid.index.aggregator.types</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://mds.globus.org/metrics/2004/09=org.cagrid.index.metrics.types</extraarg>
 
                                                 <!-- Exclusions -->
                                                 <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://authentication.gaards.cagrid.org/AuthenticationService=org.cagrid.gaards.authentication</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://gaards.cagrid.org/authentication-faults=org.cagrid.gaards.authentication.faults</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://gaards.cagrid.org/authentication/lockout=org.cagrid.gaards.authentication.lockout</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://cagrid.nci.nih.gov/1/authentication-service=org.cagrid.gaards.authentication.service</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://authentication.gaards.cagrid.org/AuthenticationService/types=org.cagrid.gaards.authentication.types</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=org.cagrid.gaards.security.servicesecurity</extraarg>
-                                                <extraarg>-nexclude</extraarg>
                                                 <extraarg>urn:oasis:names:tc:SAML:1.0:assertion=org.oasis.names.tc.saml.assertion</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service</extraarg>
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://schemas.xmlsoap.org/ws/2004/03/addressing</extraarg>
                                                 <extraarg>-nexclude</extraarg>
@@ -70,13 +54,17 @@
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01</extraarg>
                                                 <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl</extraarg>
-                                                <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://docs.oasis-open.org/wsn/2004/06/wsn-WS-BaseNotification-1.2-draft-01</extraarg>
+                                                <extraarg>-nexclude</extraarg>
+                                                <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceProperties-1.2-draft-01.wsdl</extraarg>
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01</extraarg>
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl</extraarg>
+                                                <extraarg>-nexclude</extraarg>
+                                                <extraarg>http://mds.globus.org/aggregator</extraarg>
+                                                <extraarg>-nexclude</extraarg>
+                                                <extraarg>http://mds.globus.org/aggregator/types</extraarg>
                                             </extraargs>
                                             <bindingFiles>
                                                 <bindingFile>work/schema/jaxb-binding.xjb</bindingFile>
@@ -96,29 +84,14 @@
                                                 <extraarg>http://mds.globus.org/bigindex/2008/11/24=org.cagrid.index.wsrf.stubs</extraarg>
                                                 <extraarg>-p</extraarg>
                                                 <extraarg>http://mds.globus.org/bigindex/2008/11/24/types=org.cagrid.index.types</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://mds.globus.org/aggregator/types=org.cagrid.index.aggregator.types</extraarg>
+                                                <extraarg>-p</extraarg>
+                                                <extraarg>http://mds.globus.org/metrics/2004/09=org.cagrid.index.metrics.types</extraarg>
 
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://authentication.gaards.cagrid.org/AuthenticationService=org.cagrid.gaards.authentication</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://gaards.cagrid.org/authentication-faults=org.cagrid.gaards.authentication.faults</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://gaards.cagrid.org/authentication/lockout=org.cagrid.gaards.authentication.lockout</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://cagrid.nci.nih.gov/1/authentication-service=org.cagrid.gaards.authentication.service</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://authentication.gaards.cagrid.org/AuthenticationService/types=org.cagrid.gaards.authentication.types</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>http://security.introduce.cagrid.nci.nih.gov/ServiceSecurity=org.cagrid.gaards.security.servicesecurity</extraarg>
+                                                <!-- Exclusions -->
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>urn:oasis:names:tc:SAML:1.0:assertion=org.oasis.names.tc.saml.assertion</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata=gov.nih.nci.cagrid.metadata</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.common=gov.nih.nci.cagrid.metadata.common</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.security=gov.nih.nci.cagrid.metadata.security</extraarg>
-                                                <extraarg>-nexclude</extraarg>
-                                                <extraarg>gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata.service=gov.nih.nci.cagrid.metadata.service</extraarg>
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://schemas.xmlsoap.org/ws/2004/03/addressing</extraarg>
                                                 <extraarg>-nexclude</extraarg>
@@ -135,7 +108,10 @@
                                                 <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01</extraarg>
                                                 <extraarg>-nexclude</extraarg>
                                                 <extraarg>http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-ResourceLifetime-1.2-draft-01.wsdl</extraarg>
-                                                <!-- TODO: exclude servicegroup nses? -->
+                                                <extraarg>-nexclude</extraarg>
+                                                <extraarg>http://mds.globus.org/aggregator</extraarg>
+                                                <extraarg>-nexclude</extraarg>
+                                                <extraarg>http://mds.globus.org/aggregator/types</extraarg>
                                             </extraargs>
                                             <bindingFiles>
                                                 <bindingFile>work/schema/jaxb-binding.xjb</bindingFile>
@@ -265,6 +241,14 @@
                                     <outputDirectory>work</outputDirectory>
                                     <includes>schema/**/*.xsd,schema/**/*.wsdl</includes>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>cagrid-index-aggregator-api</artifactId>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>work</outputDirectory>
+                                    <includes>schema/**/*.xsd,schema/**/*.wsdl</includes>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -301,14 +285,13 @@
     </build>
 
     <dependencies>
-<!--         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>cagrid-gaards-api</artifactId>
-        </dependency>
+        <!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>cagrid-gaards-api</artifactId> </dependency> <dependency> <groupId>${project.groupId}</groupId> <artifactId>cagrid-metadata-model</artifactId> 
+            </dependency> -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>cagrid-metadata-model</artifactId>
-        </dependency> -->
+            <artifactId>cagrid-index-aggregator-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>cagrid-core</artifactId>
@@ -332,10 +315,6 @@
         <dependency>
             <groupId>${wsrf.group}</groupId>
             <artifactId>wsrf-servicegroup-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${wsrf.group}</groupId>
-            <artifactId>wsrf-notification-api</artifactId>
         </dependency>
         <dependency>
             <groupId>${wsrf.group}</groupId>
