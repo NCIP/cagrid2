@@ -263,17 +263,9 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>
                             schema.org.cagrid.index,
-                            org.cagrid.index.service,
-                            org.cagrid.index.service.exception,
-                            org.cagrid.index.model,
                             org.cagrid.index.types,
-                            org.cagrid.index.util,
                             org.cagrid.index.wsrf.service,
-                            org.cagrid.index.wsrf.stubs,
-                            org.cagrid.index.entry.service,
-                            org.cagrid.index.entry.types,
-                            org.cagrid.index.entry.wsrf.service,
-                            org.cagrid.index.entry.wsrf.stubs
+                            org.cagrid.index.wsrf.stubs
                         </Export-Package>
                         <Import-Package>
                             *
