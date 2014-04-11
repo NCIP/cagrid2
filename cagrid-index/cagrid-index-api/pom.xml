@@ -22,6 +22,9 @@
                                 <id>generate-sources</id>
                                 <phase>generate-sources</phase>
                                 <configuration>
+                                    <defaultOptions>
+                                        <frontEnd>jaxws21</frontEnd>
+                                    </defaultOptions>
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>work/schema/org/cagrid/index/big_index_service.wsdl</wsdl>
