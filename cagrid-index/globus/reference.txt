@@ -1,0 +1,8 @@
+impl
+http://cvs.cogkit.org/viewcvs.cgi/ws-mds/bigindex/?sortby=date&pathrev=caGRID_release
+
+entry point:
+http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexService?wsdl
+
+returned from entry point:
+http://cagrid-index.nci.nih.gov:8080/wsrf/services/DefaultIndexServiceEntry?wsdl
