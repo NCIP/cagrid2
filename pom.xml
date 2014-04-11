@@ -503,5 +503,6 @@
 		<module>cagrid-systest</module>
 		<module>cagrid-trust</module>
 		<module>cagrid-mms</module>
+		<module>cagrid-index</module>
 	</modules>
 </project>
