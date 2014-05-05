@@ -130,5 +130,6 @@
 		<module>cagrid-mms-wsrf</module>
 		<module>cagrid-mms-systest</module>
 		<module>cagrid-mms-soap-client</module>
+		<module>cagrid-mms-service-tools</module>
 	</modules>
 </project>

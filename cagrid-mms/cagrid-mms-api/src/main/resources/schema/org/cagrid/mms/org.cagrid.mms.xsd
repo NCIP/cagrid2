@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caGrid.caBIG/2.0/org.cagrid.mms.domain"
-  xmlns:tns="gme://caGrid.caBIG/2.0/org.cagrid.mms.domain" targetNamespace="gme://caGrid.caBIG/2.0/org.cagrid.mms.domain"
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"
+  xmlns:tns="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain" targetNamespace="gme://caGrid.caBIG/1.0/org.cagrid.mms.domain"
   elementFormDefault="qualified">
 
   <xs:element name="UMLAssociationExclude" type="tns:UMLAssociationExclude" />
@@ -72,19 +72,17 @@
       </xs:documentation>
     </xs:annotation>
     <xs:sequence>
-     <xs:element ref="SupportedProjectProperties"></xs:element>
-    </xs:sequence>
-    <xs:attribute name="identifier" type="xs:string" />
-    <xs:attribute name="description" type="xs:string" />
-  </xs:complexType>
-  
-   <xs:element name="SupportedProjectProperties">
+      <xs:element name="SupportedProjectProperties">
         <xs:complexType>
           <xs:sequence>
             <xs:element ref="tns:PropertyDescriptor" minOccurs="0" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" />
+    <xs:attribute name="description" type="xs:string" />
+  </xs:complexType>
 
   <xs:element name="PropertyDescriptor" type="tns:PropertyDescriptor" />
   <xs:complexType name="PropertyDescriptor">

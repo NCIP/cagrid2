@@ -34,19 +34,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link InvalidUMLProjectIndentifier }
-     * 
-     */
-    public InvalidUMLProjectIndentifier createInvalidUMLProjectIndentifier() {
-        return new InvalidUMLProjectIndentifier();
-    }
-
-    /**
      * Create an instance of {@link MetadataModelServiceReference }
      * 
      */
     public MetadataModelServiceReference createMetadataModelServiceReference() {
         return new MetadataModelServiceReference();
+    }
+
+    /**
+     * Create an instance of {@link InvalidUMLProjectIndentifier }
+     * 
+     */
+    public InvalidUMLProjectIndentifier createInvalidUMLProjectIndentifier() {
+        return new InvalidUMLProjectIndentifier();
     }
 
     /**

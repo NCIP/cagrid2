@@ -48,15 +48,7 @@ import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
 @ExamReactorStrategy(AllConfinedStagedReactorFactory.class)
 public class MMSFunctionalTest extends CaGridTestSupport {
 
-	private static final String MMS_URL = "https://localhost:8080/mms";
-
-	private static final String HOST = "etc/cagrid-mms/host.jks";
-	private static final String TRUSTSTORE = "etc/cagrid-mms/truststore.jks";
-	private static final String TRUSTSTORETYPE = "JKS";
-	private static final String KEYALIAS = "tomcat";
-	private static final String TRUSTSTOREPASSWORD = "inventrio";
-	private static final String KEYSTOREPASSWORD = "inventrio";
-	private static final String KEYPASSWORD = "inventrio";
+	private static final String MMS_URL = "http://localhost:8080/mms";
 
 	@Override
 	@Configuration
@@ -79,11 +71,11 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 				new KarafDistributionConfigurationFileReplacementOption(
 						"etc/cagrid.mms.wsrf.cfg", new File(
 								"src/test/resources/cagrid.mms.wsrf.cfg")),
-				new KarafDistributionConfigurationFileReplacementOption(HOST,
-						new File("src/test/resources/host.jks")),
-				new KarafDistributionConfigurationFileReplacementOption(
-						TRUSTSTORE, new File(
-								"src/test/resources/truststore.jks")),
+//				new KarafDistributionConfigurationFileReplacementOption(HOST,
+//						new File("src/test/resources/host.jks")),
+//				new KarafDistributionConfigurationFileReplacementOption(
+//						TRUSTSTORE, new File(
+//								"src/test/resources/truststore.jks")),
 				new KarafDistributionConfigurationFileReplacementOption(
 						MMSTestUtils.SERVICEMETADATA, new File(
 								"src/test/resources/serviceMetadata.xml")),
@@ -274,18 +266,9 @@ public class MMSFunctionalTest extends CaGridTestSupport {
 
 	private MetadataModelServicePortType getMMSSoapClient()
 			throws GeneralSecurityException, IOException {
-		KeyStoreType truststore = new KeyStoreType();
-		truststore.setFile(TRUSTSTORE);
-		truststore.setType(TRUSTSTORETYPE);
-		truststore.setPassword(TRUSTSTOREPASSWORD);
-
-		X509Credential credential = CredentialFactory.getCredential(HOST,
-				KEYSTOREPASSWORD, KEYALIAS, KEYPASSWORD);
-
-		KeyManager keyManager = new SingleEntityKeyManager(KEYALIAS, credential);
 
 		MetadataModelServicePortType mmsPort = MMSSoapClientFactory
-				.createSoapClient(MMS_URL, truststore, keyManager);
+				.createSoapClient(MMS_URL);
 		Client client = ClientProxy.getClient(mmsPort);
 		client.getInInterceptors().add(new LoggingInInterceptor());
 		client.getOutInterceptors().add(new LoggingOutInterceptor());

@@ -4,11 +4,13 @@ package org.cagrid.mms.wsrf.stubs;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
 import org.cagrid.mms.model.NamespaceToProjectMapping;
 
 
@@ -38,7 +40,7 @@ import org.cagrid.mms.model.NamespaceToProjectMapping;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element ref="{gme://caGrid.caBIG/2.0/org.cagrid.mms.domain}NamespaceToProjectMapping" maxOccurs="unbounded"/>
+ *                   &lt;element ref="{gme://caGrid.caBIG/1.0/org.cagrid.mms.domain}NamespaceToProjectMapping" maxOccurs="unbounded"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -126,7 +128,7 @@ public class AnnotateServiceMetadataRequest
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element ref="{gme://caGrid.caBIG/2.0/org.cagrid.mms.domain}NamespaceToProjectMapping" maxOccurs="unbounded"/>
+     *         &lt;element ref="{gme://caGrid.caBIG/1.0/org.cagrid.mms.domain}NamespaceToProjectMapping" maxOccurs="unbounded"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -143,7 +145,7 @@ public class AnnotateServiceMetadataRequest
         implements Serializable
     {
 
-        @XmlElement(name = "NamespaceToProjectMapping", namespace = "gme://caGrid.caBIG/2.0/org.cagrid.mms.domain", required = true)
+        @XmlElement(name = "NamespaceToProjectMapping", namespace = "gme://caGrid.caBIG/1.0/org.cagrid.mms.domain", required = true)
         protected List<NamespaceToProjectMapping> namespaceToProjectMapping;
 
         /**

@@ -10,7 +10,6 @@ import java.util.Map;
 import org.cagrid.mms.model.ModelSourceMetadata;
 import org.cagrid.mms.model.UMLAssociationExclude;
 import org.cagrid.mms.model.UMLProjectIdentifer;
-import org.cagrid.mms.service.InvalidUMLProjectIndentifier;
 
 
 public interface MMS {

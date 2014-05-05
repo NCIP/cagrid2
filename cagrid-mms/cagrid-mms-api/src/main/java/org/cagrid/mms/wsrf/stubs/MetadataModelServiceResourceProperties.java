@@ -1,13 +1,16 @@
 
 package org.cagrid.mms.wsrf.stubs;
 
+import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+
 import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import gov.nih.nci.cagrid.metadata.ServiceMetadata;
+
 import org.cagrid.mms.model.ModelSourceMetadata;
 
 
@@ -22,7 +25,7 @@ import org.cagrid.mms.model.ModelSourceMetadata;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element ref="{gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata}ServiceMetadata"/>
- *         &lt;element ref="{gme://caGrid.caBIG/2.0/org.cagrid.mms.domain}ModelSourceMetadata"/>
+ *         &lt;element ref="{gme://caGrid.caBIG/1.0/org.cagrid.mms.domain}ModelSourceMetadata"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -43,7 +46,7 @@ public class MetadataModelServiceResourceProperties
 
     @XmlElement(name = "ServiceMetadata", namespace = "gme://caGrid.caBIG/1.0/gov.nih.nci.cagrid.metadata", required = true)
     protected ServiceMetadata serviceMetadata;
-    @XmlElement(name = "ModelSourceMetadata", namespace = "gme://caGrid.caBIG/2.0/org.cagrid.mms.domain", required = true)
+    @XmlElement(name = "ModelSourceMetadata", namespace = "gme://caGrid.caBIG/1.0/org.cagrid.mms.domain", required = true)
     protected ModelSourceMetadata modelSourceMetadata;
 
     /**
