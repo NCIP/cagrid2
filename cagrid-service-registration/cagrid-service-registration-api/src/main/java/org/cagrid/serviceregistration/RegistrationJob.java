@@ -235,8 +235,8 @@ public class RegistrationJob implements StatefulJob {
 							new Holder<Calendar>(term), new Holder<Calendar>(
 									new GregorianCalendar()));
 
-					logger.info("Successfully Renewed registration " + registrantEPR.getAddress()
-							+ " to servicegroup at " + epr.getAddress() + " until: " + term.getTime());
+					logger.info("Successfully Renewed registration " + registrantEPR.getAddress().getValue()
+							+ " to servicegroup at " + epr.getAddress().getValue() + " until: " + term.getTime());
 					/*
 					 * if we get this far without exception, then we have
 					 * successfully renewed lifetime.
@@ -246,7 +246,7 @@ public class RegistrationJob implements StatefulJob {
 
 				} catch (Exception e) {
 					logger.warn("Exception renewing entry lifetime of a registration for "
-									+ entryEPR.getAddress() + " - " + e);
+									+ entryEPR.getAddress().getValue() + " - " + e);
 				}
 			}
 
@@ -262,8 +262,8 @@ public class RegistrationJob implements StatefulJob {
 				 * 
 				 * (TODO: we should perhaps perform some kind of backoff?)
 				 */
-				logger.info("Attempting to add new registration for " + registrantEPR.getAddress()
-							+ " to servicegroup at " + epr.getAddress());
+				logger.info("Attempting to add new registration for " + registrantEPR.getAddress().getValue()
+							+ " to servicegroup at " + epr.getAddress().getValue());
 
 				Add request = new Add();
 				request.setMemberEPR(registrantEPR);
@@ -293,16 +293,16 @@ public class RegistrationJob implements StatefulJob {
 				// }
 				String msg;
 
-				msg = "Successfully registered " + registrantEPR.getAddress()
-						+ " to servicegroup at " + epr.getAddress();
+				msg = "Successfully registered " + registrantEPR.getAddress().getValue()
+						+ " to servicegroup at " + epr.getAddress().getValue();
 				logger.info(msg);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg;
 
-			msg = "Warning: Could not register " + registrantEPR.getAddress()
-					+ " to servicegroup at " + epr.getAddress()
+			msg = "Warning: Could not register " + registrantEPR.getAddress().getValue()
+					+ " to servicegroup at " + epr.getAddress().getValue()
 					+ " -- check the URL and that the remote service is up. "
 					+ " Remote exception was " + e.getMessage();
 			logger.warn(msg);
