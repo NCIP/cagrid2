@@ -187,6 +187,7 @@
                         <Export-Package>
                             schema.org.cagrid.index.aggregator,
                             schema.org.cagrid.index.metrics,
+                            org.cagrid.index.aggregator.utils,
                             org.cagrid.index.aggregator.types,
                             org.cagrid.index.metrics.types
                         </Export-Package>
