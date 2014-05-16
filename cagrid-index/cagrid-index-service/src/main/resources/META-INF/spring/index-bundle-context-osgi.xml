@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd"
+>
+
+    <osgix:cm-properties id="preProps" persistent-id="cagrid.index.service">
+        <!-- TODO: test that these work as null, as index won't have credentials -->
+        <prop key="cagrid.index.service.client.keystorefile"></prop>
+        <prop key="cagrid.index.service.client.keystorepassword"></prop>
+        <prop key="cagrid.index.service.client.keyalias"></prop>
+        <prop key="cagrid.index.service.client.keypassword"></prop>
+        <prop key="cagrid.index.service.client.truststoreLocation"></prop>
+        <prop key="cagrid.index.service.client.truststorePassword"></prop>
+        <prop key="cagrid.index.service.client.configurer">truststoreClientConfigurer</prop>
+    </osgix:cm-properties>
+
+    <ctx:property-placeholder properties-ref="preProps"/>
+
+    <osgi:service ref="index" interface="org.cagrid.index.service.IndexService"/>
+    <osgi:service ref="indexEntry" interface="org.cagrid.index.service.IndexEntryService"/>
+    
+    <osgi:reference id="trustService" cardinality="0..1" interface="org.cagrid.trust.service.TrustService"/>
+
+
+    <!-- TODO: create wsrf-rp client for get getMultiple and query, using the configurer -->
+    <!-- <bean id="gridGrouperClient" factory-method="getClient" class="org.cagrid.gridgrouper.ws.client.GridGrouperClientFactory" lazy-init="true"> <constructor-arg index="0" value="${cagrid.index.service.client.gridgrouper.url}"/> 
+        <constructor-arg index="1" ref="${cagrid.index.service.client.configurer}"/> </bean> -->
+
+    <bean id="truststoreClientConfigurer" class="org.cagrid.core.soapclient.TruststoreClientConfigurer">
+        <property name="keystoreFile" value="${cagrid.index.service.client.keystorefile}"/>
+        <property name="keystorePassword" value="${cagrid.index.service.client.keystorepassword}"/>
+        <property name="keyAlias" value="${cagrid.index.service.client.keyalias}"/>
+        <property name="keyPassword" value="${cagrid.index.service.client.keypassword}"/>
+        <property name="truststoreFile" value="${cagrid.index.service.client.truststoreLocation}"/>
+        <property name="truststorePassword" value="${cagrid.index.service.client.truststorePassword}"/>
+    </bean>
+
+    <bean id="trustServiceClientConfigurer" class="org.cagrid.trust.service.TrustServiceClientConfigurer">
+        <property name="keystoreFile" value="${cagrid.index.service.client.keystorefile}"/>
+        <property name="keystorePassword" value="${cagrid.index.service.client.keystorepassword}"/>
+        <property name="keyAlias" value="${cagrid.index.service.client.keyalias}"/>
+        <property name="keyPassword" value="${cagrid.index.service.client.keypassword}"/>
+        <property name="trustService" ref="trustService"/>
+    </bean>
+
+</beans>

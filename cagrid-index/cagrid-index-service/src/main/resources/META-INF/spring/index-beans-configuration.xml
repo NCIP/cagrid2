@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="defaultPropertiesPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:META-INF/spring/cagrid.index.properties"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+    </bean>
+
+    <bean id="index" class="org.cagrid.index.service.impl.IndexServiceImpl">
+    </bean>
+
+    <bean id="indexEntry" class="org.cagrid.index.service.impl.IndexEntryServiceImpl">
+        <!-- TODO: pass wsrf-rp client -->
+    </bean>
+</beans>

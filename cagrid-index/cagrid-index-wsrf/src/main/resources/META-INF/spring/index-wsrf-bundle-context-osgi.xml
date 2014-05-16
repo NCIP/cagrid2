@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:ctx="http://www.springframework.org/schema/context" xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+                        http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd"
+>
+
+    <osgix:cm-properties id="preProps" persistent-id="cagrid.index.wsrf">
+        <prop key="cagrid.index.wsrf.host">localhost</prop>
+        <prop key="cagrid.index.wsrf.port">8080</prop>
+        <prop key="cagrid.index.wsrf.path">wsrf/services/DefaultIndexService</prop>
+        <!-- NOTE: for now, this must be the same format as the index.wsrf.path, but end in DefaultIndexServiceEntry -->
+        <prop key="cagrid.index.delegated.wsrf.path">wsrf/services/DefaultIndexServiceEntry</prop>
+        <prop key="cagrid.index.wsrf.url">http://${cagrid.index.wsrf.host}:${cagrid.index.wsrf.port}/${cagrid.index.wsrf.path}</prop>
+        <prop key="cagrid.index.delegated.wsrf.url">http://${cagrid.index.wsrf.host}:${cagrid.index.wsrf.port}/${cagrid.index.delegated.wsrf.path}</prop>
+    </osgix:cm-properties>
+
+    <ctx:property-placeholder properties-ref="preProps"/>
+
+    <osgi:reference id="index" interface="org.cagrid.index.service.IndexService"/>
+    <osgi:reference id="indexEntry" interface="org.cagrid.index.service.IndexEntryService"/>
+
+</beans>

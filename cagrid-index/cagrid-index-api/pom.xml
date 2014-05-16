@@ -266,6 +266,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>
                             schema.org.cagrid.index,
+                            org.cagrid.index.service,
                             org.cagrid.index.types,
                             org.cagrid.index.wsrf.service,
                             org.cagrid.index.wsrf.stubs

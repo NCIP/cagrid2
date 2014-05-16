@@ -13,6 +13,22 @@
         <dependencies>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-index-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-index-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>cagrid-index-wsrf</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>cagrid-metadata-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -95,9 +111,9 @@
     <modules>
         <module>cagrid-index-aggregator-api</module>
         <module>cagrid-index-api</module>
-        <!--
         <module>cagrid-index-service</module>
         <module>cagrid-index-wsrf</module>
-         <module>cagrid-index-soap-client</module> <module>cagrid-index-systest</module> <module>cagrid-index-service-tools</module> -->
+        <module>cagrid-index-systest</module>
+        <!-- <module>cagrid-index-soap-client</module> <module>cagrid-index-service-tools</module> -->
     </modules>
 </project>

@@ -12,7 +12,7 @@
         <bundle>mvn:com.mysql.jdbc/com.springsource.com.mysql.jdbc/${com.mysql.jdbc/com.springsource.com.mysql.jdbc/version}</bundle>
         <bundle>mvn:org.jvnet.jaxb2_commons/jaxb2-basics-runtime/${org.jvnet.jaxb2_commons/jaxb2-basics-runtime/version}</bundle>
         <!-- hibernate -->
-      	<bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
+        <bundle>mvn:javax.persistence/com.springsource.javax.persistence/${javax.persistence/com.springsource.javax.persistence/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate/${org.hibernate/com.springsource.org.hibernate/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations/${org.hibernate/com.springsource.org.hibernate.annotations/version}</bundle>
         <bundle>mvn:org.hibernate/com.springsource.org.hibernate.annotations.common/${org.hibernate/com.springsource.org.hibernate.annotations.common/version}</bundle>
@@ -37,15 +37,15 @@
         <feature version="${project.version}">cagrid-base</feature>
         <bundle>mvn:${project.groupId}/cagrid-gaards-api/${project.version}</bundle>
     </feature>
-    
+
 
     <!-- GTS -->
     <feature name="cagrid-gts" version="${project.version}">
-   		<configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gts/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-gts/registration.xml">mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}/xml/registration</configfile>
         <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
         <feature version="${project.version}">cagrid-service-registration</feature>
-    
+
         <feature version="${project.version}">cagrid-gts-client</feature>
         <!-- Install the default config file; it won't overwrite if it already exists -->
         <configfile finalname="/etc/cagrid-gts/gts-conf.xml">mvn:${project.groupId}/cagrid-gts-service/${project.version}/xml/gts-config</configfile>
@@ -54,16 +54,16 @@
         <bundle>mvn:${project.groupId}/cagrid-gts-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gts-wsrf/${project.version}</bundle>
     </feature>
-    
-    
-    
+
+
+
     <feature name="cagrid-gts-client" version="${project.version}">
         <feature version="${project.version}">cagrid-gaards</feature>
         <bundle>mvn:${project.groupId}/cagrid-gts-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gts-soap-client/${project.version}</bundle>
     </feature>
-    
-     <!-- Trust -->
+
+    <!-- Trust -->
     <feature name="cagrid-trust" version="${project.version}">
         <feature version="${project.version}">cagrid-gaards</feature>
         <feature version="${project.version}">cagrid-gts-client</feature>
@@ -74,7 +74,7 @@
 
     <!-- GridGrouper -->
     <feature name="cagrid-gridgrouper" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-grid-grouper/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gridgrouper-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-grid-grouper/registration.xml">mvn:${project.groupId}/cagrid-gridgrouper-wsrf/${project.version}/xml/registration</configfile>
         <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
@@ -112,10 +112,10 @@
 
     <!-- CDS -->
     <feature name="cagrid-cds" version="${project.version}">
-     	<configfile finalname="/etc/cagrid-cds/serviceMetadata.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-cds/serviceMetadata.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-cds/registration.xml">mvn:${project.groupId}/cagrid-cds-wsrf/${project.version}/xml/registration</configfile>
         <configfile finalname="/etc/cagrid-cds/CredentialDelegationService-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/CredentialDelegationService-security-metadata</configfile>
-		<configfile finalname="/etc/cagrid-cds/DelegatedCredential-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/DelegatedCredential-security-metadata</configfile>
+        <configfile finalname="/etc/cagrid-cds/DelegatedCredential-security-metadata.xml">mvn:${project.groupId}/cagrid-cds-service/${project.version}/xml/DelegatedCredential-security-metadata</configfile>
         <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-cds-client</feature>
@@ -138,7 +138,7 @@
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-dorian-client</feature>
         <feature version="${project.version}">cagrid-gts-client</feature>
-         <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-dorian-service/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-dorian-wsrf/${project.version}</bundle>
     </feature>
@@ -151,8 +151,8 @@
 
     <!-- ServiceRegistrationAPI -->
     <feature name="cagrid-service-registration" version="${project.version}">
-    	<feature version="${project.version}">cagrid-base</feature>
-       <!-- <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.quartz/1.8.5_1</bundle> -->
+        <feature version="${project.version}">cagrid-base</feature>
+        <!-- <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.quartz/1.8.5_1</bundle> -->
 
         <bundle>mvn:${project.groupId}/cagrid-service-registration-api/${project.version}</bundle>
     </feature>
@@ -160,7 +160,7 @@
 
     <!-- GME -->
     <feature name="cagrid-gme" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-gme/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-gme/serviceMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceMetadata</configfile>
         <configfile finalname="/etc/cagrid-gme/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-gme/registration.xml">mvn:${project.groupId}/cagrid-gme-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
@@ -176,13 +176,13 @@
         <bundle>mvn:${project.groupId}/cagrid-gme-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-gme-soap-client/${project.version}</bundle>
     </feature>
-    
-    
-     <!-- mms -->
+
+
+    <!-- mms -->
     <feature name="cagrid-mms" version="${project.version}">
-    	<configfile finalname="/etc/cagrid-mms/application-config-client.xml">mvn:${project.groupId}/cagrid-mms-cadsr-impl/${project.version}/xml/applicationConfigClient</configfile>
-    	<configfile finalname="/etc/cagrid-mms/serviceMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceMetadata</configfile>
-    	<configfile finalname="/etc/cagrid-mms/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceSecurityMetadata</configfile>
+        <configfile finalname="/etc/cagrid-mms/application-config-client.xml">mvn:${project.groupId}/cagrid-mms-cadsr-impl/${project.version}/xml/applicationConfigClient</configfile>
+        <configfile finalname="/etc/cagrid-mms/serviceMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceMetadata</configfile>
+        <configfile finalname="/etc/cagrid-mms/serviceSecurityMetadata.xml">mvn:${project.groupId}/cagrid-mms-service/${project.version}/xml/serviceSecurityMetadata</configfile>
         <configfile finalname="/etc/cagrid-mms/registration.xml">mvn:${project.groupId}/cagrid-mms-wsrf/${project.version}/xml/registration</configfile>
         <feature version="${project.version}">cagrid-service-registration</feature>
         <feature version="${project.version}">cagrid-gaards</feature>
@@ -196,5 +196,15 @@
         <feature version="${project.version}">cagrid-gaards</feature>
         <bundle>mvn:${project.groupId}/cagrid-mms-api/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/cagrid-mms-soap-client/${project.version}</bundle>
+    </feature>
+
+    <!-- Index -->
+    <feature name="cagrid-index" version="${project.version}">
+        <feature version="${project.version}">cagrid-base</feature>
+        <bundle>mvn:${project.groupId}/cagrid-trust-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-index-aggregator-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-index-api/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-index-service/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/cagrid-index-wsrf/${project.version}</bundle>
     </feature>
 </features>

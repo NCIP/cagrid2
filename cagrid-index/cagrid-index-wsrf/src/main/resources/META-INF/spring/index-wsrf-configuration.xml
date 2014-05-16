@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core"
+	xmlns:wsa="http://cxf.apache.org/ws/addressing" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+	                    http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+	                    http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+	                    http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+                        http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<bean id="defaultPropertiesPlaceholder"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location"
+			value="classpath:META-INF/spring/cagrid-index-wsrf.properties" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+
+
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+		<property name="marshallerProperties" ref="propertiesMap" />
+	</bean>
+	<util:map id="propertiesMap">
+		<entry key="jaxb.formatted.output">
+			<value type="java.lang.Boolean">true</value>
+		</entry>
+	</util:map>
+
+  <!-- Index Service -->
+	<bean id="indexWSRF" class="org.cagrid.index.service.wsrf.IndexWSRFImpl">
+		<constructor-arg index="0" ref="index" />
+	</bean>
+	<jaxws:endpoint xmlns:e="http://mds.globus.org/bigindex/2008/11/24/service"
+		xmlns:s="http://mds.globus.org/bigindex/2008/11/24/service" id="indexWSRFEP"
+		implementor="#indexWSRF" bus="cxf" endpointName="e:BigIndexPortTypePort"
+		serviceName="s:BigIndexService" address="${cagrid.index.wsrf.url}"
+		wsdlLocation="schema/org/cagrid/index/big_index_service.wsdl">
+	</jaxws:endpoint>
+
+
+    <!-- Index Entry Service -->
+    <bean id="indexEntryWSRF" class="org.cagrid.index.service.wsrf.IndexEntryWSRFImpl">
+        <constructor-arg index="0" ref="indexEntry" />
+    </bean>
+    <jaxws:endpoint xmlns:e="http://mds.globus.org/bigindex/2008/11/24/service"
+                    xmlns:s="http://mds.globus.org/bigindex/2008/11/24/service" id="indexEntryWSRFEP"
+                    implementor="#indexEntryWSRF" bus="cxf" endpointName="e:BigIndexEntryPortTypePort"
+                    serviceName="s:BigIndexEntryService" address="${cagrid.index.delegated.wsrf.url}"
+		            wsdlLocation="schema/org/cagrid/index/big_index_entry_service.wsdl">
+    </jaxws:endpoint>
+
+</beans>
