@@ -1,14 +1,18 @@
 package org.cagrid.core.stress;
 
+import gov.nih.nci.cagrid.common.Utils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
 public class ThreadStressTestDriver {
-    
-/*
- * On Mac this dies with Out of Memory Error around 2000 threads, based on this setting:
- * % sysctl kern.num_taskthreads
- * kern.num_taskthreads: 2048
- * 
- */
-    
+
+    /*
+     * On Mac this dies with Out of Memory Error around 2000 threads, based on this setting: % sysctl
+     * kern.num_taskthreads kern.num_taskthreads: 2048
+     */
+
     public static void main(final String[] args) {
         Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             public void uncaughtException(final Thread t, final Throwable e) {
@@ -23,7 +27,7 @@ public class ThreadStressTestDriver {
 
         for (int i = 0; i < numThreads; i++) {
             try {
-                Thread t = new Thread(new SleeperThread(i));
+                Thread t = new Thread(new WorkerThread(i));
                 t.start();
                 // sleep briefly to get more precise on which thread dies
                 Thread.sleep(5);
@@ -35,19 +39,23 @@ public class ThreadStressTestDriver {
         }
     }
 
-    private static class SleeperThread implements Runnable {
+    private static class WorkerThread implements Runnable {
         private final int i;
 
-        private SleeperThread(final int i) {
+        private WorkerThread(final int i) {
             this.i = i;
         }
 
         public void run() {
             try {
-                System.out.format("Thread %d about to sleep\n", this.i);
-                Thread.sleep(Long.MAX_VALUE);
-            } catch (final InterruptedException e) {
-                throw new RuntimeException(e);
+                File f = File.createTempFile(getClass().getSimpleName() + "-" + i + "-", ".txt");
+                System.out.format("Thread %d about to work using file %s\n", this.i, f.getCanonicalPath());
+                while (true) {
+                    String uuid = UUID.randomUUID().toString();
+                    Utils.stringBufferToFile(new StringBuffer(uuid), f);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
