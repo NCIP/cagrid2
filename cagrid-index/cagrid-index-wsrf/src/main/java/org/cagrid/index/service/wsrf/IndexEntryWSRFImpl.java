@@ -18,6 +18,5 @@ public class IndexEntryWSRFImpl extends BigIndexEntryPortTypeImpl {
 
     public IndexEntryWSRFImpl(IndexEntryService entryService) {
         this.entryService = entryService;
-
     }
 }

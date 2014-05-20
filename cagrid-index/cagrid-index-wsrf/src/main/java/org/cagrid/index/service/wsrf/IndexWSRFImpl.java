@@ -1,6 +1,7 @@
 package org.cagrid.index.service.wsrf;
 
 import java.util.Calendar;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,7 @@ import org.xmlsoap.schemas.ws._2004._03.addressing.ReferencePropertiesType;
 
 public class IndexWSRFImpl extends BigIndexPortTypeImpl {
     static public final QName KEY = new QName("http://mds.globus.org/inmemoryservicegroup", "ServiceGroupKey");
-    private ResourceKey key = new SimpleResourceKey(KEY, String.valueOf(hashCode()));
+    private ResourceKey key = new SimpleResourceKey(KEY, UUID.randomUUID().toString());
 
     private static final Logger LOG = Logger.getLogger(IndexWSRFImpl.class.getName());
 
@@ -71,7 +72,6 @@ public class IndexWSRFImpl extends BigIndexPortTypeImpl {
     @Override
     public EndpointReferenceType add(Add addRequest) throws ContentCreationFailedFault,
             UnsupportedMemberInterfaceFault, AddRefusedFault {
-        // TODO Auto-generated method stub
         EndpointReferenceType memberEPR = addRequest.getMemberEPR();
         Calendar termTime = addRequest.getInitialTerminationTime();
         Object content = addRequest.getContent();
@@ -183,7 +183,7 @@ public class IndexWSRFImpl extends BigIndexPortTypeImpl {
     private ResourceKey getResourceKey(String entryId) {
         PairedKeyType pk = new PairedKeyType();
         pk.setGroupKey((String) this.getKey().getValue());
-        pk.setEntryKey(String.valueOf(this.hashCode()));
+        pk.setEntryKey(entryId);
         return new SimpleResourceKey(IndexEntryWSRFImpl.ENTRY_KEY, pk);
 
     }
@@ -192,10 +192,6 @@ public class IndexWSRFImpl extends BigIndexPortTypeImpl {
         return key;
     }
 
-    // private ResourceKey getResourceKey(String entryId) throws Exception {
-    // ResourceKey key = new SimpleResourceKey(IndexEntryWSRFImpl.ENTRY_KEY, entryId);
-    // return key;
-    // }
 
     private void setAny(ReferencePropertiesType object, SOAPElement value) {
         if (value == null || object == null) {
